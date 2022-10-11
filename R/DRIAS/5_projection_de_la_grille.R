@@ -52,16 +52,6 @@
 # Un exemple :
 #
 # variables:
-#     double lon(y, x) ;
-#         lon:standard_name = "longitude" ;
-#         lon:long_name = "longitude coordinate" ;
-#         lon:units = "degrees_east" ;
-#         lon:_CoordinateAxisType = "Lon" ;
-#     double lat(y, x) ;
-#         lat:standard_name = "latitude" ;
-#         lat:long_name = "latitude coordinate" ;
-#         lat:units = "degrees_north" ;
-#         lat:_CoordinateAxisType = "Lat" ;
 #     int LambertParisII ;
 #         LambertParisII:grid_mapping_name = "lambert_conformal_conic_1SP" ;
 #         LambertParisII:latitude_of_origin = 52.f ;
@@ -71,4 +61,3 @@
 #         LambertParisII:false_northing = 2200000.f ;
 #         LambertParisII:epsg = "27572" ;
 #         LambertParisII:references = "https://spatialreference.org/ref/epsg/ntf-paris-lambert-zone-ii/" ;
-
