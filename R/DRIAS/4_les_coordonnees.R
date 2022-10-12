@@ -54,61 +54,24 @@
 # - units, spécifie l’unité de la variable coordonnée.
 # - _CoordinateAxisType ou axis, spécifie s’il s’agit d’une coordonnée
 #   spatiale (et laquelle) ou temporelle.
-#
-#
-# Un exemple :
-#
-# variables:
-#     double lon(y, x) ;
-#         lon:standard_name = "longitude" ;
-#         lon:long_name = "longitude coordinate" ;
-#         lon:units = "degrees_east" ;
-#         lon:_CoordinateAxisType = "Lon" ;
-#     double lat(y, x) ;
-#         lat:standard_name = "latitude" ;
-#         lat:long_name = "latitude coordinate" ;
-#         lat:units = "degrees_north" ;
-#         lat:_CoordinateAxisType = "Lat" ;
-#
-#
-# S’il existe une variable de coordonnée verticale, elle sera définie
-# selon l’axe ‘z’, elle doit toujours inclure explicitement l’attribut
-# units, car il n’y a pas de valeur par défaut.
-# L’attribut ‘positive’, indique la direction dans laquelle les
-# valeurs des coordonnées augmentent, qu’elle soit ascendante ou
-# descendante (valeur up ou down). L’attribut units est une chaîne de
-# caractères et les unités attendues sont :
-# unité de longueur : alt:units = "meter" ;       :units = "m" ;
-# unité de pression : depth:units = "pascal" ;    :units = "Pa" ;
-#
-# Naturellement les valeurs des dimensions sont croissantes et n’ont
-# pas de valeur manquante.
-#
-#
-# Un exemple pour exprimer des niveaux d’altitude :
-#
-# variables:
-#     double alt(z) ;
-#         alt:standard_name = “height”;
-#         alt:long_name = "height above mean sea level" ;
-#         alt:units = "meter" ;
-#         alt:positive = "up" ;
-#         alt:axis = "Z"
-#
-# Ou pour exprimer des niveaux souterrains :
-# variables:
-#     double depth(z) ;
-#         depth:standard_name = “depth”;
-#         depth:long_name = "depth_below_geoid" ;
-#         depth:units = "pascal" ;
-#         depth:positive = "down" ;
-#         depth:axis = "Z"
 
 
-# Si il y a un axe Z, donc Z n'est pas fixé à NULL
-what_is_Z =
-    "niveaux d’altitude"
-    # "niveaux souterrains"
+## 1. LONGITUDE ______________________________________________________
+lon.name = "lon"
+lon.dimension = "y, x"
+lon.standard_name = "longitude"
+lon.long_name = "longitude coordinate"
+lon.units = "degrees_east"
+lon.precision = "double"
+lon.value = matrix(rep(x.value, length(y.value)),
+                   ncol=length(x.value), byrow=TRUE)
 
-    
-
+## 2. LATITUDE _______________________________________________________
+lat.name = "lat"
+lat.dimension = "y, x"
+lat.standard_name = "latitude"
+lat.long_name = "latitude coordinate"
+lat.units = "degrees_north"
+lat.precision = "double"
+lat.value = matrix(rep(y.value, length(x.value)),
+                   ncol=length(x.value), byrow=FALSE)

@@ -24,7 +24,7 @@
 #    _    _    _         _  _           _       
 #   /_\  | |_ | |_  _ _ (_)| |__  _  _ | |_  ___
 #  / _ \ |  _||  _|| '_|| || '_ \| || ||  _|(_-<
-# /_/ \_\ \__| \__||_|  |_||_.__/ \_,_| \__|/__/                                
+# /_/ \_\ \__| \__||_|  |_||_.__/ \_,_| \__|/__/
 #   ___  _       _                     
 #  / __|| | ___ | |__  __ _  _  _ __ __
 # | (_ || |/ _ \| '_ \/ _` || || |\ \ /
@@ -35,180 +35,142 @@
 # traçabilité. Il est demandé de recopier sans modifier les entrées.
 # Les informations concernant la modélisation hydrologique : le
 # modèle, l’institut, la date de mise en œuvre, les références, ...
-# seront spécifiées par de nouveaux attributs avec le préfixe “hy_"
-# (attributs repérés en vert).
+# seront spécifiées par de nouveaux attributs avec le préfixe “hy_".
 #
-# Les attributs globaux attendus concernent, en bleu le couplage
-# GCM/RCM, en orange la correction de biais atmosphérique et en vert
-# la modélisation hydrologique :
+# Trois catégories d'attributs globaux sont attendus à propos :
+# du couplage GCM/RCM, la correction de biais atmosphérique et la
+# modélisation hydrologique :
 
 
 ## 1. COUPLAGE GCM/RCM _______________________________________________
 ### 1.1. projet_id ___________________________________________________
 # Identification du projet
-project_id =
-    "DRIAS-2020"
+global.project_id = "DRIAS-2020"
 
 ### 1.2. forcing _____________________________________________________
 # Une chaîne de caractères indiquant le modèle de forçage de cette
 # simulation
-forcing =
-    "ALADIN63 with CNRM-CM5 forcing data"
+global.forcing = "ALADIN63 with CNRM-CM5 forcing data"
 
 ### 1.3. driving_* ___________________________________________________
 # Des chaînes de caractères caractérisant le modèle forçeur dans la
 # descente d’échelle dynamique
-driving_model_id =
-    "CNRM-CERFACS-CNRM-CM5"
-driving_model_ensemble_member =
-    "r1i1p1"
-driving_experiment_name =
-    "rcp85"
-driving_experiment =
-    "CNRM-CERFACS-CNRM-CM5, rcp85, r1i1p1"
+global.driving_model_id = "CNRM-CERFACS-CNRM-CM5"
+global.driving_model_ensemble_member = "r1i1p1"
+global.driving_experiment_name = "rcp85"
+global.driving_experiment = "CNRM-CERFACS-CNRM-CM5, rcp85, r1i1p1"
 
 ### 1.4. institute_id ________________________________________________
 # Un nom court du centre de modélisation contribuant aux données avant
 # correction
-institution =
-    "CNRM (Centre National de Recherches Meteorologiques, Toulouse 31057, France)"
-institute_id =
-    "CNRM"
+global.institution = "CNRM (Centre National de Recherches Meteorologiques, Toulouse 31057, France)"
+global.institute_id = "CNRM"
 
 ### 1.5. model_id ____________________________________________________
 # Un acronyme qui identifie le modèle utilisé pour générer les
 # données avant correction
-model_id =
-    "CNRM-ALADIN63"
-rcm_version_id =
-    "v2"
+global.model_id = "CNRM-ALADIN63"
+global.rcm_version_id = "v2"
 
 ### 1.6. experiment_id _______________________________________________
 # Un nom d’identification court de l’expérience (scénario ou historique)
-experiment =
-    "RCP8.5 run with GCM forcing"
-experiment_id =
-    "rcp85"
+global.experiment = "RCP8.5 run with GCM forcing"
+global.experiment_id = "rcp85"
 
 ### 1.7. frequency ___________________________________________________
 # L’intervalle de temps d’échantillonnage de la série de données
-frequency =
-    "day"
+global.frequency = "day"
 
 ### 1.8. contact _____________________________________________________
 # Fournit l’adresse électronique de la personne responsable des
 # données
-contact =
-    "contact.aladin-cordex@meteo.fr"
+global.contact = "contact.aladin-cordex@meteo.fr"
 
 ### 1.9. creation_date _______________________________________________
 # La date à laquelle la simulation a été réalisée
-creation_date =
-    "2018-11-19T14:35:23Z"
+global.creation_date = "2018-11-19T14:35:23Z"
 
 ### 1.10. comment ____________________________________________________
 # Informations sur l’initialisation de la simulation ou fournit des
 # références littéraires
-comment =
-    "CORDEX Europe EUR-11 CNRM-ALADIN 6.3 L91 CNRM-CERFACS-CNRM-CM5: EUC12v63-3.02. Reference : Daniel M., Lemonsu A., Déqué M., Somot S., Alias A., Masson V. (2018) Benefits of explicit urban parametrization in regional climate modelling to study climate and city interactions. Climate Dynamics, 1-20, doi:10.1007/s00382-018-4289-x"
-driving_experiment_comment =
-    "Known issue correction: this simulation (named v2) is not affected by the error previously identified in the lateral boundary conditions files of CNRM-CERFACS-CNRM-CM5"
+global.comment = "CORDEX Europe EUR-11 CNRM-ALADIN 6.3 L91 CNRM-CERFACS-CNRM-CM5: EUC12v63-3.02. Reference : Daniel M., Lemonsu A., Déqué M., Somot S., Alias A., Masson V. (2018) Benefits of explicit urban parametrization in regional climate modelling to study climate and city interactions. Climate Dynamics, 1-20, doi:10.1007/s00382-018-4289-x"
+global.driving_experiment_comment = "Known issue correction: this simulation (named v2) is not affected by the error previously identified in the lateral boundary conditions files of CNRM-CERFACS-CNRM-CM5"
 
 ## 2. CORRECTION DE BIAIS ATMOSPHÉRIQUE ______________________________
 ### 2.1. bc_institute_id _____________________________________________
 # Un nom d’identification court du centre qui a mis en œuvre la
 # correction de biais
-bc_institute_id =
-    "Meteo-France"
+global.bc_institute_id = "Meteo-France"
 
 ### 2.2. bc_contact_id _______________________________________________
 # Fournit l’adresse électronique de la personne responsable des données
-bc_contact =
-    "driascontact@meteo.fr"
+global.bc_contact = "driascontact@meteo.fr"
 
 ### 2.3. bc_creation_date ____________________________________________
 # La date à laquelle la correction de biais a été faite
-bc_creation_date =
-    "2022-01-26T17:59:46Z"
+global.bc_creation_date = "2022-01-26T17:59:46Z"
 
 ### 2.4. bc_method_id ________________________________________________
 # Une chaîne de caractères indiquant la méthode de correction de biais
-bc_method =
-    "ADAMONT method - Verfaillie, D., Déqué, M., Morin, S., and Lafaysse, M. : The method ADAMONT v1.0 for statistical adjustment of climate projections applicable to energy balance land surface models, Geosci. Model Dev., 10, 4257-4283, https://doi.org/10.5194/gmd-10-4257-2017, 2017."
-bc_method_id =
-    "ADAMONT-France"
+global.bc_method = "ADAMONT method - Verfaillie, D., Déqué, M., Morin, S., and Lafaysse, M. : The method ADAMONT v1.0 for statistical adjustment of climate projections applicable to energy balance land surface models, Geosci. Model Dev., 10, 4257-4283, https://doi.org/10.5194/gmd-10-4257-2017, 2017."
+global.bc_method_id = "ADAMONT-France"
 
 ### 2.5. bc_observation_id ___________________________________________
 # Une chaîne de caractères de la base d’observation utilisée pour
 # corriger les données
-bc_observation =
-    "SAFRAN-France and SAFRAN-Montagne Quintana-Segui P., Le Moigne P., Durand Y., Martin E., Habets F., Baillon M., Canellas C., Franchisteguy L., Morel S., 2008, Analysis of Near-Surface Atmospheric Variables : Validation of the SAFRAN Analysis over France, Journal of Applied Meteorology and Climatology, 47, 92-107. https://doi.org/10.1175/2007JAMC1636.1"
-bc_observation_id =
-    "SAFRAN-France-2016"
+global.bc_observation = "SAFRAN-France and SAFRAN-Montagne Quintana-Segui P., Le Moigne P., Durand Y., Martin E., Habets F., Baillon M., Canellas C., Franchisteguy L., Morel S., 2008, Analysis of Near-Surface Atmospheric Variables : Validation of the SAFRAN Analysis over France, Journal of Applied Meteorology and Climatology, 47, 92-107. https://doi.org/10.1175/2007JAMC1636.1"
+global.bc_observation_id = "SAFRAN-France-2016"
 
 ### 2.6. bc_domain ___________________________________________________
 # Une chaîne de caractères indiquant le domaine d’application de la
 # méthode de correction
-bc_domain =
-    "FR-France"
+global.bc_domain = "FR-France"
 
 ### 2.7. bc_period ___________________________________________________
 # Période sur laquelle a été appliqué la phase d’apprentissage de la
 # méthode de correction
-bc_period_ref =
-    "1980-2011"
-bc_period_rcm =
-    "1974-2005"
+global.bc_period_ref = "1980-2011"
+global.bc_period_rcm = "1974-2005"
 
 ### 2.8. bc_info _____________________________________________________
 # Une compilation des attributs : bc_institute_id "-" bc_method_id
 # "-" bc_observation_id en accord avec Bc-Inst-Method
-bc_info =
-    "Météo-France-ADAMONT-France_SAFRAN-France-2016"
+global.bc_info = "Météo-France-ADAMONT-France_SAFRAN-France-2016"
 
 ### 2.9. bc_comment __________________________________________________
 # Complément d’information sur la méthode de correction ou fournit
 # des références littéraires
-bc_comment =
-    "Weather Regime dependant BC methode"
-Conventions =
-    "CF-1.6"
+global.bc_comment = "Weather Regime dependant BC methode"
+global.Conventions = "CF-1.6"
 
 
 ## 3. MODÉLISATION HYDROLOGIQUE ______________________________________
 ### 3.1. product _____________________________________________________
 # Une chaîne de caractères indiquant la méthodologie pour créer cet
 # ensemble de données
-product =
-    "hydro-climatique"
+global.product = "hydro-climatique"
 
 ### 3.2. hy_projet_id ________________________________________________
 # Identification du projet
-hy_projet_id =
-    "EXPLORE2-2021"
+global.hy_projet_id = "EXPLORE2-2021"
 
 ### 3.3. hy_institute_id _____________________________________________
 # Un nom d’identification court du centre de modélisation contribuant
 # aux données
-hy_institute_id =
-    "Meteo-France"
+global.hy_institute_id = "Meteo-France"
 
 ### 3.4. hy_model_id _________________________________________________
 # Un acronyme qui identifie le modèle hydrologique
-hy_model_id =
-    "SIM2"
+global.hy_model_id = "SIM2"
 
 ### 3.5. hy_version_id _______________________________________________
-hy_version_id =
-    "V8F"
+global.hy_version_id = "V8F"
 
 ### 3.6. hy_creation_date ____________________________________________
 # La date à laquelle la simulation a été réalisée
-hy_creation_date =
-    "2021-01-20T17:53:28Z"
+global.hy_creation_date = "2021-01-20T17:53:28Z"
 
 ### 3.7. hy_contact __________________________________________________
 # Fournit le nom ou l’adresse électronique de la personne responsable
 # des données
-hy_contact =
-    "driascontact@meteo.fr"
+global.hy_contact = "driascontact@meteo.fr"

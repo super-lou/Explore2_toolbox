@@ -76,36 +76,19 @@
 # elle est divisible par 4 mais pas par 100 ou (ii) elle est
 # divisible par 400.
 #
-#
-# Un exemple :
-#
-# dimensions:
-#     time = UNLIMITED ; // (34698 currently)
-#     x = 143 ;
-#     y = 134 ;
-# variables:
-#     double time(time) ;
-#         time:standard_name = "time" ;
-#         time:long_name = "time" ;
-#         time:units = "days since 1950-01-01 00:00:00" ;
-#         time:calendar = "standard" ;
-#         time:axis = "T" ;
-#     double x(x) ;
-#         x:standard_name = "projection_x_coordinate" ;
-#         x:long_name = "x coordinate of projection" ;
-#         x:units = "m" ;
-#         x:axis = "X" ;
-#     double y(y) ;
-#         y:standard_name = "projection_y_coordinate" ;
-#         y:long_name = "y coordinate of projection" ;
-#         y:units = "m" ;
-#         y:axis = "Y" ;
+# S’il existe une dimension verticale, elle sera définie selon l’axe
+# ‘z’, elle doit toujours inclure explicitement l’attribut units,
+# car il n’y a pas de valeur par défaut. L’attribut ‘positive’,
+# indique la direction dans laquelle les valeurs augmentent, qu’elle
+# soit ascendante ou descendante (valeur up ou down). L’attribut units
+# est une chaîne de caractères et les unités attendues sont :
+# unité de longueur : alt:units = "meter" ;       :units = "m" ;
+# unité de pression : depth:units = "pascal" ;    :units = "Pa" ;
 
 
 ## 1. LE TEMPS _______________________________________________________
-# Paramètre du vecteur temps
-date_de_debut = "1950-01-01"
-date_de_fin = "2005-12-31"
+date_de_debut = "2000-01-01"
+date_de_fin = "2000-01-31"
 fuseau_horaire = "UTC"
 pas_de_temps =
     # "hours"
@@ -116,21 +99,48 @@ pas_de_temps =
     # "3 weeks"
     # "months"
 
+from = as.POSIXct(date_de_debut, tz=fuseau_horaire)
+to = as.POSIXct(date_de_fin, tz=fuseau_horaire)
+time = seq.POSIXt(from=from, to=to, by=pas_de_temps)
+time = as.numeric(time - from) / 86400
+
+time.name = "time"
+time.standard_name = "time"
+time.long_name = "time"
+time.units = paste0(pas_de_temps, " since ", from)
+time.calendar = "standard"
+time.value = time
+
+
 ## 2. L'AXE X ________________________________________________________
-# Vecteur de données et son unité
-X = seq(from=0, to=100, by=1)
-unite_de_X = "m"
+x.name = "x"
+x.standard_name = "projection_x_coordinate"
+x.long_name = "x coordinate of projection"
+x.units = "m"
+x.value =  seq(from=0, to=9, by=1)
+
 
 ## 3. L'AXE Y ________________________________________________________
-# Vecteur de données et son unité
-Y = seq(from=0, to=100, by=1)
-unite_de_Y = "m"
+y.name = "y"
+y.standard_name = "projection_y_coordinate"
+y.long_name = "y coordinate of projection"
+y.units = "m"
+y.value =  seq(from=0, to=9, by=1)
 
-## 4. L'AXE Z ________________________________________________________
-# Vecteur de données et son unité (si il y a aucun vecteur Z,
-# sélectionner 'NULL' pour 'Z')
-Z =
-    NULL
-    # c(0, 10, 100)
-    # seq(from=0, to=100, by=1)
-unite_de_Z = "m" 
+
+## 4. L'ALTITUDE _____________________________________________________
+alt.name = "alt"
+alt.standard_name = "height"
+alt.long_name = "height above mean sea level"
+alt.units = "meter"
+alt.positive = "up"
+alt.value = seq(from=0, to=9, by=1)
+
+
+## 5. LA PROFONDEUR __________________________________________________
+depth.name = "depth"
+depth.standard_name = "depth"
+depth.long_name = "depth_below_geoid"
+depth.units = "pascal"
+depth.positive = "down"
+depth.value = seq(from=0, to=9, by=1)

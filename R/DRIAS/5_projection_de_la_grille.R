@@ -47,17 +47,16 @@
 # privilégier – sinon veuillez contacter le service DRIAS) contient
 # les paramètres de mappage en tant qu’attributs, et est associée à la
 # variable Température via son attribut grid_mapping.
-#
-#
-# Un exemple :
-#
-# variables:
-#     int LambertParisII ;
-#         LambertParisII:grid_mapping_name = "lambert_conformal_conic_1SP" ;
-#         LambertParisII:latitude_of_origin = 52.f ;
-#         LambertParisII:central_meridian = 0.f ;
-#         LambertParisII:scale_factor = 0.9998774f ;
-#         LambertParisII:false_easting = 600000.f ;
-#         LambertParisII:false_northing = 2200000.f ;
-#         LambertParisII:epsg = "27572" ;
-#         LambertParisII:references = "https://spatialreference.org/ref/epsg/ntf-paris-lambert-zone-ii/" ;
+
+
+LambertParisII.name = "LambertParisII"
+LambertParisII.dimension = ""
+LambertParisII.grid_mapping_name = "lambert_conformal_conic_1SP"
+LambertParisII.latitude_of_origin = "52.f"
+LambertParisII.central_meridian = "0.f"
+LambertParisII.scale_factor = "0.9998774f"
+LambertParisII.false_easting = "600000.f"
+LambertParisII.false_northing = "2200000.f"
+LambertParisII.epsg = "27572"
+LambertParisII.references = "https://spatialreference.org/ref/epsg/ntf-paris-lambert-zone-ii/"
+LambertParisII.precision = "integer"
