@@ -22,10 +22,10 @@ Exemple de variables hydrologiques :
 | debit     | debit  | Debit Modcou | m3.s-1 | time:sum     |
 
 Voir aussi :
-> [CF Standard Name Table](http://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html)<\br>
-> [IPCC Standard Output from Coupled Ocean-Atmosphere GCMs]( https://pcmdi.llnl.gov/mips/cmip3/variableList.html)<\br>
-> [CMIP5-CMOR-Tables]( https://wcrp-cmip.github.io/WGCM_Infrastructure_Panel//cmor_and_mip_tables.html)<\br>
-> [Data Reference Syntax (DRS) for bias-adjusted CORDEX](http://is-enes-data.github.io/CORDEX_adjust_drs.pdf)<\br>
+> [CF Standard Name Table](http://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html)</br>
+> [IPCC Standard Output from Coupled Ocean-Atmosphere GCMs]( https://pcmdi.llnl.gov/mips/cmip3/variableList.html)</br>
+> [CMIP5-CMOR-Tables]( https://wcrp-cmip.github.io/WGCM_Infrastructure_Panel//cmor_and_mip_tables.html)</br>
+> [Data Reference Syntax (DRS) for bias-adjusted CORDEX](http://is-enes-data.github.io/CORDEX_adjust_drs.pdf)</br>
 
 ## Mise en garde
 Le code développé ici n'est pas "cloisonné". C'est-à-dire qu'il n'est pas contenu dans une fonction et que son objectif est de rechercher des variables R dont il reconnait le format. Son exécution est donc directement réalisée dans l'environnement globale de votre session R et peut par conséquent intéragir avec votre travail en cours. Plus particulièrement :
