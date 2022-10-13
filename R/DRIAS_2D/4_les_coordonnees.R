@@ -3,20 +3,20 @@
 #
 # *1   INRAE, France
 #
-# This file is part of Ex2D R package.
+# This file is part of Ex2D R toolbox.
 #
-# Ex2D R package is free software: you can redistribute it and/or
+# Ex2D R toolbox is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
 #
-# Ex2D R package is distributed in the hope that it will be useful,
+# Ex2D R toolbox is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Ex2D R package.
+# along with Ex2D R toolbox.
 # If not, see <https://www.gnu.org/licenses/>.
 # ///
 
@@ -25,10 +25,10 @@
 # | |    ___  ___
 # | |__ / -_)(_-<
 # |____|\___|/__/
-#   ___                    _                           
-#  / __| ___  ___  _ _  __| | ___  _ _   _ _   ___  ___
-# | (__ / _ \/ _ \| '_|/ _` |/ _ \| ' \ | ' \ / -_)(_-<
-#  \___|\___/\___/|_|  \__,_|\___/|_||_||_||_|\___|/__/ ______________
+#   ___                    _                                
+#  / __| ___  ___  _ _  __| | ___  _ _   _ _   ___  ___  ___
+# | (__ / _ \/ _ \| '_|/ _` |/ _ \| ' \ | ' \ / -_)/ -_)(_-<
+#  \___|\___/\___/|_|  \__,_|\___/|_||_||_||_|\___|\___|/__/ _________
 # Les coordonnées spatiales acceptées :
 # • en 2 ou 3 dimensions : lat(y, x) lon(y, x) / lat(z, y, x)
 #                          lon(z, y, x) alt(z, y, x) →
@@ -44,34 +44,41 @@
 # toujours inclure explicitement l’attribut units ; il n’y a pas de
 # valeur par défaut. L’attribut units est une chaîne de caractères et
 # les unités attendues sont les suivantes : lat:units =
-# "degrees_north" ; lon:units = "degrees_east" ;
+# "degrees_north" ; lon:units = "degrees_east".
 #
-# Naturellement les valeurs des dimensions sont croissantes et n’ont
-# pas de valeur manquante.
 #
-# Les attributs des coordonnées attendus :
-# - standard_name, un nom d’identification court de la coordonnée.
-# - units, spécifie l’unité de la variable coordonnée.
-# - _CoordinateAxisType ou axis, spécifie s’il s’agit d’une coordonnée
-#   spatiale (et laquelle) ou temporelle.
+# Paramètres :
+#         standard_name : Un nom d’identification court de la
+#                         coordonnée
+#
+#             long_name : Un nom d’identification long de la
+#                         coordonnée
+#
+#                 units : Spécifie l’unité de la variable coordonnée
+#
+#     CoordinateAxisType: Spécifie s’il s’agit d’une coordonnée
+#                         spatiale (et laquelle) ou temporelle
 
 
 ## 1. LONGITUDE ______________________________________________________
 lon.name = "lon"
 lon.dimension = "y, x"
-lon.standard_name = "longitude"
-lon.long_name = "longitude coordinate"
-lon.units = "degrees_east"
 lon.precision = "double"
 lon.value = matrix(rep(x.value, length(y.value)),
                    ncol=length(x.value), byrow=TRUE)
+lon.01.standard_name = "longitude"
+lon.02.long_name = "longitude coordinate"
+lon.03.units = "degrees_east"
+lon.04.CoordinateAxisType = "Lon"
+
 
 ## 2. LATITUDE _______________________________________________________
 lat.name = "lat"
 lat.dimension = "y, x"
-lat.standard_name = "latitude"
-lat.long_name = "latitude coordinate"
-lat.units = "degrees_north"
 lat.precision = "double"
 lat.value = matrix(rep(y.value, length(x.value)),
                    ncol=length(x.value), byrow=FALSE)
+lat.01.standard_name = "latitude"
+lat.02.long_name = "latitude coordinate"
+lat.03.units = "degrees_north"
+lat.04.CoordinateAxisType = "Lat"
