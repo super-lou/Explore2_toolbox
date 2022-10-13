@@ -20,7 +20,7 @@ remotes::install_github('super-lou/Ex2D_toolbox')
 
 ## Documentation
 ### DRIAS NetCDF exportation
-You can find the usefull part of the code in the [R]() directory. Here you will have the [DRIAS_export]() directory which includes 2 subdirectories, one for [1D data exportation]() and the other for [2D data exportation](). 
+You can find the usefull part of the code in the [R](https://github.com/super-lou/Ex2D_toolbox/tree/main/R) directory. Here you will have the [DRIAS_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/R/DRIAS_export) directory which includes 2 subdirectories, one for [1D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/R/DRIAS_export/DRIAS_export_1D) and the other for [2D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/R/DRIAS_export/DRIAS_export_2D). 
 
 
 ## FAQ
