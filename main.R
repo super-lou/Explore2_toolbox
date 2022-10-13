@@ -1,19 +1,29 @@
+# \\\
+# Copyright 2022 Louis Héraut (louis.heraut@inrae.fr)*1
+#
+# *1   INRAE, France
+#
+# This file is part of Ex2D R toolbox.
+#
+# Ex2D R toolbox is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# Ex2D R toolbox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ex2D R toolbox.
+# If not, see <https://www.gnu.org/licenses/>.
+# ///
 
 
-# Import ashes
-dev_path = file.path(dirname(dirname(getwd())),
-                     'ashes_project', 'ashes', 'R')
-if (file.exists(dev_path)) {
-    print('Loading ashes from local directory')
-    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
-    for (path in list_path) {
-        source(path, encoding='UTF-8')    
-    }
-} else {
-    print('Loading ashes from package')
-    library(ashes)
-}
 
+## 1. INITIALISATION _________________________________________________
+### 1.1. Importation _________________________________________________
 # Import Ex2D
 dev_path = file.path(dirname(getwd()),
                      'Ex2D', 'R')
@@ -28,54 +38,24 @@ if (file.exists(dev_path)) {
     library(Ex2D)
 }
 
-
-library(dplyr)
-library(ncdf4)
-library(stringr)
-
+### 1.2. Files structure _____________________________________________
 data_dir = "data"
+results_dir = "results"
 
+
+## 2. DATA IMPORTATION _______________________________________________
 # dataJ2K_file = "DATA_DIAGNOSTIC_EXPLORE2_J2000_v0.Rdata"
-# dataJ2K = loadRData(file.path(data_dir, dataJ2K_file))
+# dataJ2K_path = file.path(data_dir, dataJ2K_file)
+# dataJ2K = loadRData(dataJ2K_path)
 # dataJ2K = convert_J2K(dataJ2K)
 
 # dataSMASH_file = "SMASH_20220921.Rdata"
-# dataSMASH = loadRData(file.path(data_dir, dataSMASH_file))
-# Code = rle(dataSMASH$Code)$value
-# /!\ length(levels(factor(dataSMASH$Date))) /!\ #
+# dataSMASH_path file.path(data_dir, dataSMASH_file)
+# dataSMASH = loadRData(dataSMASH_path)
 
-
-NetCDF_to_tibble = function (NetCDF_path) {
-        
-    NCdata = nc_open(NetCDF_path)
-
-    print(NCdata)
-    
-    Date = as.Date(ncvar_get(NCdata, "time"),
-               origin=as.Date(str_extract(ncatt_get(NCdata,
-                                                    "time")$units,
-                                          "[0-9]+-[0-9]+-[0-9]+")))
-    CodeRaw = ncvar_get(NCdata, "code_hydro")
-    QRaw = ncvar_get(NCdata, "debit")
-    nc_close(NCdata)
-    
-    CodeOrder = order(CodeRaw)
-    Code = CodeRaw[CodeOrder]
-    Q = QRaw[CodeOrder,]
-    nCode = length(Code)
-    nDate = length(Date)
-    
-    data = tibble(
-        Code=rep(Code, each=nDate),
-        Date=rep(Date, times=nCode),
-        Q=c(t(Q))
-    )
-    return (data)
-}
-
-dataSIM2_file = "Debits_modcou_19580801_20210731_day_METADATA.nc"
-dataSIM2_path = file.path(data_dir, dataSIM2_file)
-dataSIM2 = NetCDF_to_tibble(dataSIM2_path)
+# dataSIM2_file = "Debits_modcou_19580801_20210731_day_METADATA.nc"
+# dataSIM2_path = file.path(data_dir, dataSIM2_file)
+# dataSIM2 = NetCDF_to_tibble(dataSIM2_path)
 
 
 
