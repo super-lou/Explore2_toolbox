@@ -2,7 +2,7 @@
 ## Avant propos
 L'objectif de ce code est de simplifier l'export de donnée [NetCDF](https://fr.wikipedia.org/wiki/NetCDF) pour le portail [DRIAS](http://www.drias-climat.fr/accompagnement/sections/311) des données hydro-climatiques de [Explore2](https://professionnels.ofb.fr/fr/node/1244). 
 
-L'ensemble de ce code et des informations qu'il contient on été tiré du pdf [Format_NetCDF_1D_Hydro_Portail-DRIAS_v2022.08.pdf]() fourni dans le cadre du projet [Explore2](https://professionnels.ofb.fr/fr/node/1244). L'organisation du document a été modifié pour rendre son appréhension la plus aisée possible compte tenu de sa transformation en code R.
+L'ensemble de ce code et des informations qu'il contient on été tiré du pdf [Format_NetCDF_1D_Hydro_Portail-DRIAS_v2022.08.pdf](https://github.com/super-lou/Ex2D_toolbox/blob/main/resources/Format_NetCDF_1D_Hydro_Portail-DRIAS_v2022.08.pdf) fourni dans le cadre du projet [Explore2](https://professionnels.ofb.fr/fr/node/1244). L'organisation du document a été modifié pour rendre son appréhension la plus aisée possible compte tenu de sa transformation en code R.
 
 Il peut évidemment se trouver des incohérences donc il ne faut pas hésiter à me contacter (Louis Héraut). Pour des problèmes de compréhesion, il est aussi possible que Flore Tocquer soit plus à même de donner des éléments de réponse.
 
@@ -22,10 +22,10 @@ Exemple de variables hydrologiques :
 | debit     | debit  | Debit Modcou | m3.s-1 | time:sum     |
 
 Voir aussi :
-> [CF Standard Name Table](http://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html)
-> [IPCC Standard Output from Coupled Ocean-Atmosphere GCMs]( https://pcmdi.llnl.gov/mips/cmip3/variableList.html)
-> [CMIP5-CMOR-Tables]( https://wcrp-cmip.github.io/WGCM_Infrastructure_Panel//cmor_and_mip_tables.html)
-> [Data Reference Syntax (DRS) for bias-adjusted CORDEX](http://is-enes-data.github.io/CORDEX_adjust_drs.pdf)
+> [CF Standard Name Table](http://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html)<\br>
+> [IPCC Standard Output from Coupled Ocean-Atmosphere GCMs]( https://pcmdi.llnl.gov/mips/cmip3/variableList.html)<\br>
+> [CMIP5-CMOR-Tables]( https://wcrp-cmip.github.io/WGCM_Infrastructure_Panel//cmor_and_mip_tables.html)<\br>
+> [Data Reference Syntax (DRS) for bias-adjusted CORDEX](http://is-enes-data.github.io/CORDEX_adjust_drs.pdf)<\br>
 
 ## Mise en garde
 Le code développé ici n'est pas "cloisonné". C'est-à-dire qu'il n'est pas contenu dans une fonction et que son objectif est de rechercher des variables R dont il reconnait le format. Son exécution est donc directement réalisée dans l'environnement globale de votre session R et peut par conséquent intéragir avec votre travail en cours. Plus particulièrement :
