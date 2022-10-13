@@ -43,6 +43,7 @@ for (path in list_path) {
 
 
 ## 2. NOM DU FICHIER _________________________________________________
+### 2.1. Création du nom de fichier __________________________________
 if (Adjust) {
     Variable = paste0(Variable, "Adjust")
 }
@@ -54,6 +55,13 @@ if (Suffix != "") {
     filename = paste0(filename, "_", Suffix)
 }
 filename = paste0(filename, ".nc")
+
+### 2.2. Création du dossier de donnée _______________________________
+data_dir = "data_NetCDF"
+if (!(file.exists(data_dir))) {
+  dir.create(data_dir)
+}
+filename = file.path(data_dir, filename)
 
 
 ## 3. RASSEMBLEMENT DES INFORMATIONS _________________________________
