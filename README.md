@@ -10,22 +10,34 @@
 
 This project was carried out for National Research Institute for Agriculture, Food and the Environment (Institut National de Recherche pour l’Agriculture, l’Alimentation et l’Environnement, [INRAE](https://agriculture.gouv.fr/inrae-linstitut-national-de-recherche-pour-lagriculture-lalimentation-et-lenvironnement) in french).
 
-## Installation
 
+## Installation
 For latest development version
 
 ``` r
 remotes::install_github('super-lou/Ex2D_toolbox')
 ```
 
-## Documentation
-### DRIAS NetCDF exportation
-You can find the usefull part of the code in the [R](https://github.com/super-lou/Ex2D_toolbox/tree/main/R) directory. Here you will have the [DRIAS_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/R/DRIAS_export) directory which includes 2 subdirectories, one for [1D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/R/DRIAS_export/DRIAS_export_1D) and the other for [2D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/R/DRIAS_export/DRIAS_export_2D).
+## Tools organisation
+You can find all the tools part of the code in the [Rtools](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools) directory.
+
+#### Help
+##### DRIAS NetCDF exportation
+Here you will have the [DRIAS_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export) directory which includes 2 subdirectories, one for [1D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export/DRIAS_export_1D) and the other for [2D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export/DRIAS_export_2D).
 
 You can find a README in each subdirectory.
 
-## FAQ
+##### Formatted Rdata exportation
+In [Rdata_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/Rdata_export), there is an example of what formatted data for Explore2 looks like.
 
+
+## Main execution
+In the principal directory of this toolbox you will find the [main.R](https://github.com/super-lou/Ex2D_toolbox/tree/main/main.R) script which is dedicated to fast global execution of the Explore2 diagnostic by using [Ex2D](https://github.com/super-lou/Ex2D) R package.
+
+*in construction*
+
+
+## FAQ
 *I have a question.*
 
 -   **Solution**: Search existing issue list and if no one has a similar question create a new issue.
@@ -38,5 +50,4 @@ You can find a README in each subdirectory.
 
 
 ## Code of Conduct
-
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
