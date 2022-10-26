@@ -9,6 +9,75 @@ L'ensemble de ce code et des informations qu'il contient on été tiré du pdf [
 Il peut évidemment se trouver des incohérences donc il ne faut pas hésiter à me contacter (Louis Héraut). Pour des problèmes de compréhesion, il est aussi possible que Flore Tocquer soit plus à même de donner des éléments de réponse.
 
 
+### Les différentes simulations
+L'ensemble des simulations à produire par modèle est résumé dans le tableau ci-dessous. Ces données sont particulièrement utiles pour générer correctement le nom du fichier NetCDF.
+
+| GCM-Inst-Model        | Experiment | RCM-Inst-Model        | Member  | Version | StartTime | EndTime  | Project   |
+|-----------------------|------------|-----------------------|---------|---------|-----------|----------|-----------|
+| MPI-M-MPI-ESM-LR      | HISTORICAL | CLMcom-CCLM4-8-17     | r1i1p1  | v1      | 19500101  | 20051231 | DRIAS2020 |
+| MPI-M-MPI-ESM-LR      | RCP26      | CLMcom-BTU-CCLM4-8-17 | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| MPI-M-MPI-ESM-LR      | RCP45      | CLMcom-CCLM4-8-17     | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| MPI-M-MPI-ESM-LR      | RCP85      | CLMcom-CCLM4-8-17     | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | HISTORICAL | SMHI-RCA4             | r12i1p1 | v1      | 19700101  | 20051231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | RCP26      | SMHI-RCA4             | r12i1p1 | v1      | 20060101  | 21001231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | RCP45      | SMHI-RCA4             | r12i1p1 | v1      | 20060101  | 21001231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | RCP85      | SMHI-RCA4             | r12i1p1 | v1      | 20060101  | 21001231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | HISTORICAL | KNMI-RACMO22E         | r12i1p1 | v1      | 19500101  | 20051231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | RCP26      | KNMI-RACMO22E         | r12i1p1 | v1      | 20060101  | 21001231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | RCP45      | KNMI-RACMO22E         | r12i1p1 | v1      | 20060101  | 21001231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | RCP85      | KNMI-RACMO22E         | r12i1p1 | v1      | 20060101  | 21001231 | DRIAS2020 |
+| IPSL-IPSL-CM5A-MR     | HISTORICAL | SMHI-RCA4             | r1i1p1  | v1      | 19700101  | 20051231 | DRIAS2020 |
+| IPSL-IPSL-CM5A-MR     | RCP45      | SMHI-RCA4             | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| IPSL-IPSL-CM5A-MR     | RCP85      | SMHI-RCA4             | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | HISTORICAL | KNMI-RACMO22E         | r1i1p1  | v2      | 19500101  | 20051231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | RCP26      | KNMI-RACMO22E         | r1i1p1  | v2      | 20060101  | 21001231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | RCP45      | KNMI-RACMO22E         | r1i1p1  | v2      | 20060101  | 21001231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | RCP85      | KNMI-RACMO22E         | r1i1p1  | v2      | 20060101  | 21001231 | DRIAS2020 |
+| NCC-NorESM1-M         | HISTORICAL | GERICS-REMO2015       | r1i1p1  | v1      | 19500101  | 20051231 | DRIAS2020 |
+| NCC-NorESM1-M         | RCP26      | GERICS-REMO2015       | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| NCC-NorESM1-M         | RCP85      | GERICS-REMO2015       | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | HISTORICAL | CNRM-ALADIN63         | r1i1p1  | v2      | 19510101  | 20051231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | RCP26      | CNRM-ALADIN63         | r1i1p1  | v2      | 20060101  | 21001231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | RCP45      | CNRM-ALADIN63         | r1i1p1  | v2      | 20060101  | 21001231 | DRIAS2020 |
+| CNRM-CERFACS-CNRM-CM5 | RCP85      | CNRM-ALADIN63         | r1i1p1  | v2      | 20060101  | 21001231 | DRIAS2020 |
+| NCC-NorESM1-M         | HISTORICAL | DMI-HIRHAM5           | r1i1p1  | v3      | 19510101  | 20051231 | DRIAS2020 |
+| NCC-NorESM1-M         | RCP45      | DMI-HIRHAM5           | r1i1p1  | v3      | 20060101  | 21001231 | DRIAS2020 |
+| NCC-NorESM1-M         | RCP85      | DMI-HIRHAM5           | r1i1p1  | v3      | 20060101  | 21001231 | DRIAS2020 |
+| MOHC-HadGEM2-ES       | HISTORICAL | CLMcom-CCLM4-8-17     | r1i1p1  | v1      | 19500101  | 20051231 | DRIAS2020 |
+| MOHC-HadGEM2-ES       | RCP45      | CLMcom-CCLM4-8-17     | r1i1p1  | v1      | 20060101  | 20991130 | DRIAS2020 |
+| MOHC-HadGEM2-ES       | RCP85      | CLMcom-CCLM4-8-17     | r1i1p1  | v1      | 20060101  | 20991231 | DRIAS2020 |
+| IPSL-IPSL-CM5A-MR     | HISTORICAL | IPSL-WRF381P          | r1i1p1  | v1      | 19510101  | 20051231 | DRIAS2020 |
+| IPSL-IPSL-CM5A-MR     | RCP45      | IPSL-WRF381P          | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| IPSL-IPSL-CM5A-MR     | RCP85      | IPSL-WRF381P          | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| MOHC-HadGEM2-ES       | HISTORICAL | ICTP-RegCM4-6         | r1i1p1  | v1      | 19710101  | 20051231 | DRIAS2020 |
+| MOHC-HadGEM2-ES       | RCP26      | ICTP-RegCM4-6         | r1i1p1  | v1      | 20060101  | 20991231 | DRIAS2020 |
+| MOHC-HadGEM2-ES       | RCP85      | ICTP-RegCM4-6         | r1i1p1  | v1      | 20060101  | 20991231 | DRIAS2020 |
+| MPI-M-MPI-ESM-LR      | HISTORICAL | MPI-CSC-REMO2009      | r1i1p1  | v1      | 19500101  | 20051231 | DRIAS2020 |
+| MPI-M-MPI-ESM-LR      | RCP26      | MPI-CSC-REMO2009      | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| MPI-M-MPI-ESM-LR      | RCP45      | MPI-CSC-REMO2009      | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| MPI-M-MPI-ESM-LR      | RCP85      | MPI-CSC-REMO2009      | r1i1p1  | v1      | 20060101  | 21001231 | DRIAS2020 |
+| ICHEC-EC-EARTH        | HISTORICAL | DMI-HIRHAM5           | r12i1p1 | v1      | 19510101  | 20051231 | EXPLORE2  |
+| ICHEC-EC-EARTH        | RCP85      | DMI-HIRHAM5           | r12i1p1 | v1      | 20060101  | 21001231 | EXPLORE2  |
+| MOHC-HadGEM2-ES       | HISTORICAL | CNRM-ALADIN63         | r1i1p1  | v1      | 19500101  | 20051231 | EXPLORE2  |
+| MOHC-HadGEM2-ES       | RCP85      | CNRM-ALADIN63         | r1i1p1  | v1      | 20060101  | 20991231 | EXPLORE2  |
+| NCC-NorESM1-M         | HISTORICAL | IPSL-WRF381P          | r1i1p1  | v1      | 19510101  | 20051231 | EXPLORE2  |
+| NCC-NorESM1-M         | RCP85      | IPSL-WRF381P          | r1i1p1  | v1      | 20060101  | 21001231 | EXPLORE2  |
+| MPI-M-MPI-ESM-LR      | HISTORICAL | ICTP-RegCM4-6         | r1i1p1  | v1      | 19700101  | 20051231 | EXPLORE2  |
+| MPI-M-MPI-ESM-LR      | RCP26      | ICTP-RegCM4-6         | r1i1p1  | v1      | 20060101  | 21001230 | EXPLORE2  |
+| MPI-M-MPI-ESM-LR      | RCP85      | ICTP-RegCM4-6         | r1i1p1  | v1      | 20060101  | 21001130 | EXPLORE2  |
+| CNRM-CERFACS-CNRM-CM5 | HISTORICAL | MOHC-HadREM3-GA7-05   | r1i1p1  | v2      | 19520101  | 20051231 | EXPLORE2  |
+| CNRM-CERFACS-CNRM-CM5 | RCP85      | MOHC-HadREM3-GA7-05   | r1i1p1  | v2      | 20060101  | 21001230 | EXPLORE2  |
+| ICHEC-EC-EARTH        | HISTORICAL | MOHC-HadREM3-GA7-05   | r12i1p1 | v1      | 19520101  | 20051231 | EXPLORE2  |
+| ICHEC-EC-EARTH        | RCP26      | MOHC-HadREM3-GA7-05   | r12i1p1 | v1      | 20060101  | 21001231 | EXPLORE2  |
+| ICHEC-EC-EARTH        | RCP85      | MOHC-HadREM3-GA7-05   | r12i1p1 | v1      | 20060101  | 21001231 | EXPLORE2  |
+| MOHC-HadGEM2-ES       | HISTORICAL | MOHC-HadREM3-GA7-05   | r1i1p1  | v1      | 19520101  | 20051231 | EXPLORE2  |
+| MOHC-HadGEM2-ES       | RCP26      | MOHC-HadREM3-GA7-05   | r1i1p1  | v1      | 20060101  | 20991229 | EXPLORE2  |
+| MOHC-HadGEM2-ES       | RCP85      | MOHC-HadREM3-GA7-05   | r1i1p1  | v1      | 20060101  | 20991219 | EXPLORE2  |
+| IPSL-IPSL-CM5A-MR     | HISTORICAL | DMI-HIRHAM5           | r1i1p1  | v1      | 19510101  | 20051231 | EXPLORE2  |
+| IPSL-IPSL-CM5A-MR     | RCP85      | DMI-HIRHAM5           | r1i1p1  | v1      | 20060101  | 21001231 | EXPLORE2  |
+| NCC-NorESM1-M         | RCP45      | GERICS-REMO2015       | r1i1p1  | v1      | 20060101  | 21001231 | EXPLORE2  |
+
+
 ### La cohérence croisée
 La mise en place d’un double niveau d’information (éléments du nom
 du fichier et métadonnées) nécessite de contrôler la cohérence entre
@@ -30,11 +99,11 @@ Voir aussi :
 > [Data Reference Syntax (DRS) for bias-adjusted CORDEX](http://is-enes-data.github.io/CORDEX_adjust_drs.pdf)</br>
 
 
-## Documentation
+## Documentation du code
 ### Structure
-Ce dossier comprend 6 scripts.
+Ce dossier comprend deux types de scripts.
 
-Les 5 scripts dont le nom est précédé d'un chiffre (*1_nom_du_fichier.R*, *2_attributs_globaux.R*, *3_les_dimensions.R*, *4_les_coordonnees.R*, *5_les_variables.R*) sont utilisées pour la saisie d'information nécessaire à la constitution du NetCDF. Ils seront appelés scripts d'information.
+Les scripts dont le nom est précédé d'un chiffre sont utilisées pour la saisie d'information nécessaire à la constitution du NetCDF. Ils seront appelés scripts d'information.
 
 Le dernier script nommé *DRIAS_export.R* est le script d'exécution qui gère la création en tant que tel du NetCDF.
 
@@ -62,7 +131,7 @@ Pour une meilleur compréhesion du fonctionnement du code il est important de pr
 
 
 ### Scripts d'information
-L'objectif est de vérifier, modifier, compléter selon vos besoins l'ensemble des variables R présentes dans les scripts d'information nommées *1_nom_du_fichier.R*, *2_attributs_globaux.R*, *3_les_dimensions.R*, *4_les_coordonnees.R* et *5_les_variables.R*.
+L'objectif est de vérifier, modifier, compléter selon vos besoins l'ensemble des variables R présentes dans les scripts d'information.
 
 Le découpage de ces scripts est réalisé de sorte à simplifier la compréhension des éléments à saisir et leur documentation mais leur ordre de remplissage n'a pas d'importance. 
 

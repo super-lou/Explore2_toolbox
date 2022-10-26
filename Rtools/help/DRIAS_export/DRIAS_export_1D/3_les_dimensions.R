@@ -21,10 +21,10 @@
 # ///
 
 
-#  _                ___   _                        _                
-# | |    ___  ___  |   \ (_) _ __   ___  _ _   ___(_) ___  _ _   ___
-# | |__ / -_)(_-<  | |) || || '  \ / -_)| ' \ (_-<| |/ _ \| ' \ (_-<
-# |____|\___|/__/  |___/ |_||_|_|_|\___||_||_|/__/|_|\___/|_||_|/__/ _
+#  _                _  _                        _                
+# | | ___  ___   __| |(_) _ __   ___  _ _   ___(_) ___  _ _   ___
+# | |/ -_)(_-<  / _` || || '  \ / -_)| ' \ (_-<| |/ _ \| ' \ (_-<
+# |_|\___|/__/  \__,_||_||_|_|_|\___||_||_|/__/|_|\___/|_||_|/__/ ____
 # Les séries temporelles de chaque station ayant le même nombre
 # d’instance et des valeurs temporelles identiques pour toutes les
 # instances, la représentation en tableau bidimensionnel est idéale.
@@ -103,14 +103,16 @@ pas_de_temps =
 
 from = as.POSIXct(date_de_debut, tz=fuseau_horaire)
 to = as.POSIXct(date_de_fin, tz=fuseau_horaire)
+origin = as.POSIXct("1950-01-01", tz=fuseau_horaire)
+units = paste0(pas_de_temps, " since ", origin)
 time = seq.POSIXt(from=from, to=to, by=pas_de_temps)
-time = as.numeric(time - from) / 86400
+time = as.numeric(time - origin)
 
 NCf$time.name = "time"
 NCf$time.value = time
 NCf$time.01.standard_name = "time"
 NCf$time.02.long_name = "time"
-NCf$time.03.units = paste0(pas_de_temps, " since ", from)
+NCf$time.03.units = units
 NCf$time.04.calendar = "standard"
 NCf$time.05.axis = "T"
 
@@ -140,84 +142,37 @@ NCf$time.05.axis = "T"
 # Paramètres :
 #         long_name : Un nom d’identification long de la variable
 
-### 2.1. Les dimensions associées ____________________________________
+### 2.1. La dimension station ________________________________________
 NCf$station.name = "station"
 NCf$station.value = 1:3
+NCf$station.origine_reseau =
+    "ONDE"
+    # "RCS"
+    # "HYDRO"
+    # "Explore2"
+    # "Point Nodal"
+    # "ADES"
 
+### 2.2. Station code ________________________________________________
+NCf$code.name = "code"
+NCf$code.dimension = "station, code_strlen"
+NCf$code.precision = "char"
+NCf$code.value = c("AAAAAAAA", "BBBBBBBB", "CCCCCCCC")
+NCf$code.01.long_name = "code of station"
+NCf$code.02.type =
+    "SANDRE"
+    # "BSS"
+    # "MESO"
 NCf$code_strlen.name = "code_strlen"
-NCf$code_strlen.value = 1:8
+NCf$code_strlen.value = 1:max(nchar(NCf$code.value))
 NCf$code_strlen.is_nchar_dimension = TRUE
 
+### 2.3. Station name ________________________________________________
+NCf$name.name = "name"
+NCf$name.dimension = "name_strlen, station"
+NCf$name.precision = "char"
+NCf$name.value = c("La a sur a","La b sur b", "La c sur c")
+NCf$name.01.long_name = "name of station"
 NCf$name_strlen.name = "name_strlen"
-NCf$name_strlen.value = 1:23
+NCf$name_strlen.value = 1:max(nchar(NCf$name.value))
 NCf$name_strlen.is_nchar_dimension = TRUE
-
-### 2.2. station_code ________________________________________________
-NCf$station_codeHydro.name = "station_codeHydro"
-NCf$station_codeHydro.dimension = "station, code_strlen"
-NCf$station_codeHydro.precision = "char"
-NCf$station_codeHydro.value = c("AAAAAAAA", "BBBBBBBB", "CCCCCCCC")
-NCf$station_codeHydro.01.long_name = "code HYDRO"
-
-### 2.3. station_name ________________________________________________
-NCf$station_name.name = "station_name"
-NCf$station_name.dimension = "name_strlen, station"
-NCf$station_name.precision = "char"
-NCf$station_name.value = c("La a sur a","La b sur b", "La c sur c")
-NCf$station_name.01.long_name = "station name"
-
-### 2.4. station_info ________________________________________________
-NCf$station_info.name = "station_info"
-NCf$station_info.dimension = "station"
-NCf$station_info.precision = "integer"
-NCf$station_info.value = 1:3
-NCf$station_info.01.long_name = "some kind of station info"
-
-
-## 3. LES DIMENSIONS VERTICALES ______________________________________
-# Si la station représente un site en altitude ou un site souterrain,
-# il faudra à ce moment-là définir une variable de dimension
-# verticale, à défaut la station sera considérée comme de surface ou
-# affleurante.
-#
-# La dimension verticale doit toujours inclure explicitement
-# l’attribut units, car il n’y a pas de valeur par défaut.
-# L’attribut ‘positive’, indique la direction dans laquelle les
-# valeurs des dimension augmentent, qu’elle soit ascendante ou
-# descendante (valeur up ou down). L’attribut units est une chaîne de
-# caractères et les unités attendues sont :
-# alt:units = "m" ; depth:units = "Pa".
-#
-#
-# Paramètres :
-#     standard_name : Un nom d’identification court de la dimension
-#
-#         long_name : Un nom d’identification long de la dimension
-#
-#             units : Spécifie l’unité de la variable dimension
-#
-#          positive : Indique la direction dans laquelle les valeurs
-#                     des dimension augmentent, qu’elle soit
-#                     ascendante ou descendante (valeur up ou down)
-#
-#              axis : Axe associé à la variable
-
-### 3.1. L'altitude __________________________________________________
-NCf$alt.name = "alt"
-NCf$alt.precision = "double"
-NCf$alt.value = 1:length(NCf$station.value)
-NCf$alt.01.standard_name = "height"
-NCf$alt.02.long_name = "height above mean sea level"
-NCf$alt.03.units = "meter"
-NCf$alt.04.positive = "up"
-NCf$alt.05.axis = "Z"
-
-### 3.2. La profondeur _______________________________________________
-NCf$depth.name = "depth"
-NCf$depth.precision = "double"
-NCf$depth.value = 1:length(NCf$station.value)
-NCf$depth.01.standard_name = "depth"
-NCf$depth.02.long_name = "depth_below_geoid"
-NCf$depth.03.units = "pascal"
-NCf$depth.04.positive = "down"
-NCf$depth.05.axis = "Z"

@@ -21,16 +21,21 @@
 # ///
 
 
-#  _  _                ___           ___  _      _     _           
-# | \| | ___  _ __    |   \  _  _   | __|(_) __ | |_  (_) ___  _ _ 
-# | .` |/ _ \| '  \   | |) || || |  | _| | |/ _|| ' \ | |/ -_)| '_|
-# |_|\_|\___/|_|_|_|  |___/  \_,_|  |_|  |_|\__||_||_||_|\___||_|  ___
+#  _                          
+# | | ___    _ _   ___  _ __  
+# | |/ -_)  | ' \ / _ \| '  \ 
+# |_|\___|  |_||_|\___/|_|_|_|                      
+#     _           __  _      _     _           
+#  __| | _  _    / _|(_) __ | |_  (_) ___  _ _ 
+# / _` || || |  |  _|| |/ _|| ' \ | |/ -_)| '_|
+# \__,_| \_,_|  |_|  |_|\__||_||_||_|\___||_|   ______________________
 # Les éléments composant le nom du fichier fournissent rapidement des
 # informations sur la simulation et s’écrit comme ce qui suit :
 #
 #     Variable_Domain_GCM-Inst-Model_Experiment_Member_
 #     RCM-Inst-Model_Version_Bc-Inst-Method-Obs-Period_
 #     HYDRO-Inst-Model_TimeFrequency_StartTime-EndTime_Suffix.nc
+
 
 ## 1. Variable _______________________________________________________
 # Le nom de la variable (avec Adjust si les données sont corrigées),

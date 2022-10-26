@@ -21,18 +21,20 @@
 # ///
 
 
-#    _    _    _         _  _           _       
-#   /_\  | |_ | |_  _ _ (_)| |__  _  _ | |_  ___
-#  / _ \ |  _||  _|| '_|| || '_ \| || ||  _|(_-<
-# /_/ \_\ \__| \__||_|  |_||_.__/ \_,_| \__|/__/
-#   ___  _       _                     
-#  / __|| | ___ | |__  __ _  _  _ __ __
-# | (_ || |/ _ \| '_ \/ _` || || |\ \ /
-#  \___||_|\___/|_.__/\__,_| \_,_|/_\_\ ______________________________
-# Les attributs globaux sont souvent récupérés des fichiers sources.
-# Ils renseignent sur la réalisation de la simulation, de la descente
-# d’échelle dynamique à la correction de biais, tous essentiels à la
-# traçabilité. Il est demandé de recopier sans modifier les entrées.
+#  _                   _    _         _  _           _       
+# | | ___  ___   __ _ | |_ | |_  _ _ (_)| |__  _  _ | |_  ___
+# | |/ -_)(_-<  / _` ||  _||  _|| '_|| || '_ \| || ||  _|(_-<
+# |_|\___|/__/  \__,_| \__| \__||_|  |_||_.__/ \_,_| \__|/__/
+#        _       _                     
+#  __ _ | | ___ | |__  __ _  _  _ __ __
+# / _` || |/ _ \| '_ \/ _` || || |\ \ /
+# \__, ||_|\___/|_.__/\__,_| \_,_|/_\_\ ______________________________
+# |___/  Les attributs globaux sont souvent récupérés des fichiers
+# sources. Ils renseignent sur la réalisation de la simulation, de la
+# descente d’échelle dynamique à la correction de biais, tous
+# essentiels à la traçabilité. Il est demandé de recopier sans
+# modifier les entrées.
+#
 # Les informations concernant la modélisation hydrologique : le
 # modèle, l’institut, la date de mise en œuvre, les références, ...
 # seront spécifiées par de nouveaux attributs avec le préfixe “hy_".
@@ -152,7 +154,7 @@ NCf$global.31.product = "hydro-climatique"
 
 ### 3.2. hy_projet_id ________________________________________________
 # Identification du projet
-NCf$global.32.hy_projet_id = "EXPLORE2-2021"
+NCf$global.32.hy_projet_id = "EXPLORE2"
 
 ### 3.3. hy_institute_id _____________________________________________
 # Un nom d’identification court du centre de modélisation contribuant

@@ -21,25 +21,23 @@
 # ///
 
 
-#  _                ___   _                        _                
-# | |    ___  ___  |   \ (_) _ __   ___  _ _   ___(_) ___  _ _   ___
-# | |__ / -_)(_-<  | |) || || '  \ / -_)| ' \ (_-<| |/ _ \| ' \ (_-<
-# |____|\___|/__/  |___/ |_||_|_|_|\___||_||_|/__/|_|\___/|_||_|/__/ _
+#  _                _  _                        _                
+# | | ___  ___   __| |(_) _ __   ___  _ _   ___(_) ___  _ _   ___
+# | |/ -_)(_-<  / _` || || '  \ / -_)| ' \ (_-<| |/ _ \| ' \ (_-<
+# |_|\___|/__/  \__,_||_||_|_|_|\___||_||_|/__/|_|\___/|_||_|/__/ ____
 # Au moins 3 dimensions sont attendus : celles de l’espace et du
 # temps. Dans certaines circonstances, on peut avoir besoin de plus
 # d’une quatrième dimension, pour représenter les niveaux verticaux
 # par exemple.
 #
-# On interprétera comme "date ou heure" : T, "altitude ou
-# profondeur" : Z, "latitude" : Y ou "longitude" : X. De préférence
-# ces dimensions apparaissent dans l'ordre relatif T, puis Z, puis Y,
-# puis X.
+# On interprétera comme "date ou heure" : T, " profondeur" : Z,
+# "veticale" : Y et "horizontale" : X. De préférence ces dimensions
+# apparaissent dans l'ordre relatif T, puis Z, puis Y, puis X.
 #
 # Naturellement les valeurs des dimensions sont croissantes et
 # n’ont pas de valeur manquante.
-
-
-## 1. LE TEMPS _______________________________________________________
+#
+#
 # L’axe temporel est toujours sous le format : time(time), la période
 # couverte coïncide à celle annoncée par les métadonnées. Le nombre de
 # valeur vérifie l’information sur la fréquence temporelle des
@@ -90,8 +88,14 @@
 #
 #          calendar : Indique le type de calendrier utilisé
 #
+#          positive : Indique la direction dans laquelle les valeurs
+#                     des coordonnées augmentent, qu’elle soit
+#                     ascendante ou descendante (valeur up ou down)
+#
 #              axis : Axe associé à la variable
 
+
+# 1. LE TEMPS ________________________________________________________
 date_de_debut = "2000-01-01"
 date_de_fin = "2000-01-31"
 fuseau_horaire = "UTC"
@@ -106,14 +110,16 @@ pas_de_temps =
 
 from = as.POSIXct(date_de_debut, tz=fuseau_horaire)
 to = as.POSIXct(date_de_fin, tz=fuseau_horaire)
+origin = as.POSIXct("1950-01-01", tz=fuseau_horaire)
+units = paste0(pas_de_temps, " since ", origin)
 time = seq.POSIXt(from=from, to=to, by=pas_de_temps)
-time = as.numeric(time - from) / 86400
+time = as.numeric(time - origin)
 
 NCf$time.name = "time"
 NCf$time.value = time
 NCf$time.01.standard_name = "time"
 NCf$time.02.long_name = "time"
-NCf$time.03.units = paste0(pas_de_temps, " since ", from)
+NCf$time.03.units = units
 NCf$time.04.calendar = "standard"
 NCf$time.05.axis = "T"
 
@@ -122,59 +128,35 @@ NCf$time.05.axis = "T"
 ### 2.1. L'axe x _____________________________________________________
 NCf$x.name = "x"
 NCf$x.value = seq(from=0, to=9, by=1)
-NCf$x.01.standard_name = "projection_x_coordinate"
-NCf$x.02.long_name = "x coordinate of projection"
+NCf$x.01.standard_name = "x_coordinate"
+NCf$x.02.long_name = "horizontal coordinate"
 NCf$x.03.units = "m"
 NCf$x.04.axis = "X"
 
 ### 2.2. L'axe y _____________________________________________________
 NCf$y.name = "y"
 NCf$y.value = seq(from=0, to=9, by=1)
-NCf$y.01.standard_name = "projection_y_coordinate"
-NCf$y.02.long_name = "y coordinate of projection"
+NCf$y.01.standard_name = "y_coordinate"
+NCf$y.02.long_name = "vertical coordinate"
 NCf$y.03.units = "m"
 NCf$y.04.axis = "Y"
 
 ### 2.3. L'axe z _____________________________________________________
-# S’il existe une coordonnée verticale, elle sera définie selon l’axe
-# ‘z’, elle doit toujours inclure explicitement l’attribut units,
-# car il n’y a pas de valeur par défaut.
-# L’attribut ‘positive’, indique la direction dans laquelle les
-# valeurs des coordonnées augmentent, qu’elle soit ascendante ou
-# descendante (valeur up ou down). L’attribut units est une chaîne de
-# caractères et les unités attendues sont :
-# alt:units = "m" ; depth:units = "Pa".
-#
-#
-# Paramètres :
-#     standard_name : Un nom d’identification court de la coordonnée
-#
-#         long_name : Un nom d’identification long de la coordonnée
-#
-#             units : Spécifie l’unité de la variable coordonnée
-#
-#          positive : Indique la direction dans laquelle les valeurs
-#                     des coordonnées augmentent, qu’elle soit
-#                     ascendante ou descendante (valeur up ou down)
-#
-#              axis : Axe associé à la variable
+NCf$z.name = "z"
+NCf$z.precision = "double"
+NCf$z.value = seq(from=0, to=2, by=1)
+NCf$z.01.standard_name = "z_coordinate"
+NCf$z.02.long_name = "NGF depth"
+NCf$z.03.units = "m"
+NCf$z.04.positive = "down"
+NCf$z.05.axis = "Z"
 
-#### 2.3.1. L'altitude _______________________________________________
-NCf$alt.name = "alt"
-NCf$alt.precision = "double"
-NCf$alt.value = seq(from=0, to=9, by=1)
-NCf$alt.01.standard_name = "height"
-NCf$alt.02.long_name = "height above mean sea level"
-NCf$alt.03.units = "meter"
-NCf$alt.04.positive = "up"
-NCf$alt.05.axis = "Z"
-
-#### 2.3.2. La profondeur ____________________________________________
-NCf$depth.name = "depth"
-NCf$depth.precision = "double"
-NCf$depth.value = seq(from=0, to=9, by=1)
-NCf$depth.01.standard_name = "depth"
-NCf$depth.02.long_name = "depth_below_geoid"
-NCf$depth.03.units = "pascal"
-NCf$depth.04.positive = "down"
-NCf$depth.05.axis = "Z"
+#### 2.4. Layer ______________________________________________________
+NCf$layer.name = "layer"
+NCf$layer.dimension = "z, layer_strlen"
+NCf$layer.precision = "char"
+NCf$layer.value = c("couche affleurante", "couche A", "couche B")
+NCf$layer.01.long_name = "name of hydro-geological layer"
+NCf$layer_strlen.name = "layer_strlen"
+NCf$layer_strlen.value = 1:max(nchar(NCf$layer.value))
+NCf$layer_strlen.is_nchar_dimension = TRUE

@@ -21,10 +21,10 @@
 # ///
 
 
-#  _               __   __            _        _     _          
-# | |    ___  ___  \ \ / / __ _  _ _ (_) __ _ | |__ | | ___  ___
-# | |__ / -_)(_-<   \ V / / _` || '_|| |/ _` || '_ \| |/ -_)(_-<
-# |____|\___|/__/    \_/  \__,_||_|  |_|\__,_||_.__/|_|\___|/__/ _____
+#  _                             _        _     _          
+# | | ___  ___  __ __ __ _  _ _ (_) __ _ | |__ | | ___  ___
+# | |/ -_)(_-<  \ V // _` || '_|| |/ _` || '_ \| |/ -_)(_-<
+# |_|\___|/__/   \_/ \__,_||_|  |_|\__,_||_.__/|_|\___|/__/ __________
 # Les dimensions de la variable sont au même nombre que les axes
 # spécifiés précédemment et sont définies de la même manière (nom et
 # grandeur). L’ordre des indices souhaité dépend du type des
