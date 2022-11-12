@@ -38,6 +38,20 @@ if (file.exists(dev_path)) {
     library(Ex2D)
 }
 
+# Import ashes
+dev_path = file.path(dirname(dirname(getwd())),
+                     'ashes_project', 'ashes', 'R')
+if (file.exists(dev_path)) {
+    print('Loading ashes from local directory')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+    for (path in list_path) {
+        source(path, encoding='UTF-8')    
+    }
+} else {
+    print('Loading ashes from package')
+    library(ashes)
+}
+
 ### 1.2. Files structure _____________________________________________
 data_dir = "data"
 results_dir = "results"
@@ -56,6 +70,7 @@ results_dir = "results"
 # dataSIM2_file = "Debits_modcou_19580801_20210731_day_METADATA.nc"
 # dataSIM2_path = file.path(data_dir, dataSIM2_file)
 # dataSIM2 = NetCDF_to_tibble(dataSIM2_path)
+
 
 
 

@@ -27,7 +27,7 @@
 # |___/ |_|_\|___|/_/ \_\|___/   \___|/_\_\| .__/\___/|_|   \__| ______
 # Export pour le portail DRIAS des données |_| hydro-climatiques 
 
-
+if (!require (remotes)) install.packages("remotes")
 if (!require (NCf)) remotes::github_install("super-lou/NCf")
 
 initialise_NCf()

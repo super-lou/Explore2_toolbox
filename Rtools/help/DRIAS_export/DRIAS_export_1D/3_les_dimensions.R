@@ -145,34 +145,45 @@ NCf$time.05.axis = "T"
 ### 2.1. La dimension station ________________________________________
 NCf$station.name = "station"
 NCf$station.value = 1:3
-NCf$station.origine_reseau =
-    "ONDE"
-    # "RCS"
-    # "HYDRO"
-    # "Explore2"
-    # "Point Nodal"
-    # "ADES"
 
-### 2.2. Station code ________________________________________________
-NCf$code.name = "code"
-NCf$code.dimension = "station, code_strlen"
-NCf$code.precision = "char"
-NCf$code.value = c("AAAAAAAA", "BBBBBBBB", "CCCCCCCC")
-NCf$code.01.long_name = "code of station"
-NCf$code.02.type =
-    "SANDRE"
-    # "BSS"
-    # "MESO"
-NCf$code_strlen.name = "code_strlen"
-NCf$code_strlen.value = 1:max(nchar(NCf$code.value))
-NCf$code_strlen.is_nchar_dimension = TRUE
-
-### 2.3. Station name ________________________________________________
+### 2.2. Station name ________________________________________________
 NCf$name.name = "name"
 NCf$name.dimension = "name_strlen, station"
 NCf$name.precision = "char"
 NCf$name.value = c("La a sur a","La b sur b", "La c sur c")
-NCf$name.01.long_name = "name of station"
+NCf$name.01.long_name = "name of stations"
 NCf$name_strlen.name = "name_strlen"
 NCf$name_strlen.value = 1:max(nchar(NCf$name.value))
 NCf$name_strlen.is_nchar_dimension = TRUE
+
+### 2.3. Station code ________________________________________________
+NCf$code.name = "code"
+NCf$code.dimension = "station, code_strlen"
+NCf$code.precision = "char"
+NCf$code.value = c("AAAAAAAA", "BBBBBBBB", "CCCCCCCC")
+NCf$code.01.long_name = "code of stations"
+NCf$code_strlen.name = "code_strlen"
+NCf$code_strlen.value = 1:max(nchar(NCf$code.value))
+NCf$code_strlen.is_nchar_dimension = TRUE
+
+### 2.4. Station code type ___________________________________________
+# "SANDRE" / "BSS" / "MESO"
+NCf$code_type.name = "code_type"
+NCf$code_type.dimension = "station, code_type_strlen"
+NCf$code_type.precision = "char"
+NCf$code_type.value = c("SANDRE", "BSS", "BSS")
+NCf$code_type.01.long_name = "type of code for stations"
+NCf$code_type_strlen.name = "code_type_strlen"
+NCf$code_type_strlen.value = 1:max(nchar(NCf$code_type.value))
+NCf$code_type_strlen.is_nchar_dimension = TRUE
+
+### 2.5. Station network origin ________________________________________
+# "ONDE" / "RCS" / "HYDRO" / "Explore2" / "Point Nodal" / "ADES"
+NCf$network_origin.name = "network_origin"
+NCf$network_origin.dimension = "station, network_origin_strlen"
+NCf$network_origin.precision = "char"
+NCf$network_origin.value = c("ONDE", "ONDE", "RCS")
+NCf$network_origin.01.long_name = "origin of network for stations"
+NCf$network_origin_strlen.name = "network_origin_strlen"
+NCf$network_origin_strlen.value = 1:max(nchar(NCf$network_origin.value))
+NCf$network_origin_strlen.is_nchar_dimension = TRUE

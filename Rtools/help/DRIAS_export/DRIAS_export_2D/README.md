@@ -104,6 +104,17 @@ Voir aussi :
 
 
 ## Documentation du code
+
+### Téléchargement
+Le plus simple est de télécharger l'intégralité du repository github associé et de retrouver ces fichiers en suivant le chemin *Rtools/help/DRIAS_export/DRIAS_export_2D* afin de pouvoir les modifiers et les exécuter. Pour cela, il est possible de le faire en ligne de commande : 
+
+``` 
+git clone https://github.com/super-lou/Ex2D_toolbox
+```
+
+Ou alors en le téléchargeant en *zip* avec le lien suivant [Ex2D_toolbox-main.zip](https://github.com/super-lou/Ex2D_toolbox/archive/refs/heads/main.zip).
+
+
 ### Structure
 Ce dossier comprend deux types de scripts.
 
