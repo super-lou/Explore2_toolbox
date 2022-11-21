@@ -28,7 +28,7 @@
 # Export pour le portail DRIAS des données |_| hydro-climatiques 
 
 if (!require (remotes)) install.packages("remotes")
-if (!require (NCf)) remotes::github_install("super-lou/NCf")
+if (!require (NCf)) remotes::install_github("super-lou/NCf")
 
 initialise_NCf()
 

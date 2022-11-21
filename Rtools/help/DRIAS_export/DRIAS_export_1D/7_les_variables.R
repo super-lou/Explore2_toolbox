@@ -58,14 +58,12 @@ NCf$debit.dimension = "station, time"
 NCf$debit.precision = "float"
 NCf$debit.value =
     matrix(
-        data=round(
-            x=runif(length(NCf$time.value)*length(NCf$station.value)),
-            digits=2),
+        data=round(x=runif(length(NCf$time.value)*length(NCf$station.value)),
+                   digits=2),
         ncol=length(NCf$time.value)
     )
 NCf$debit.01.standard_name = "debit"
 NCf$debit.02.long_name = "debit modcou"
 NCf$debit.03.units = "m3.s-1"
-NCf$debit.04.FillValue = "NA"
-NCf$debit.05.missing_value = "NA"
-NCf$debit.06.cell_methods = "time:sum"
+NCf$debit.04.missing_value = -99
+NCf$debit.05.cell_methods = "time:sum"

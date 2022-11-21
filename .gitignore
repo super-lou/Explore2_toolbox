@@ -3,5 +3,4 @@
 .Rhistory
 *.emacs*
 .directory
-COURS D EAU FXX-shp
-pointSimulationHYDRO_20220928
+*.nc
