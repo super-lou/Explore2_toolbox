@@ -19,15 +19,15 @@ remotes::install_github('super-lou/Ex2D_toolbox')
 ```
 
 ## Tools organisation
-You can find all the tools part of the code in the [Rtools](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools) directory.
+You can find all the tools part of the code in this repository.
 
 ### DRIAS NetCDF exportation
-In the [help](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help) directory, you will have the [DRIAS_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export) directory which includes 2 subdirectories, one for [1D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export/DRIAS_export_1D) and the other for [2D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export/DRIAS_export_2D).
+In the [help](https://github.com/super-lou/Ex2D_toolbox/tree/main/help) directory, you will have the [DRIAS_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export) directory which includes 2 subdirectories, one for [1D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export/DRIAS_export_1D) and the other for [2D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export/DRIAS_export_2D).
 
-You can make your choice between [1D](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export/DRIAS_export_1D) and [2D](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/DRIAS_export/DRIAS_export_2D) DRIAS NetCDF exportation and find a README in each subdirectory.
+You can make your choice between [1D](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export/DRIAS_export_1D) and [2D](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export/DRIAS_export_2D) DRIAS NetCDF exportation and find a README in each subdirectory.
 
 ### Formatted Rdata exportation
-In [Rdata_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/Rtools/help/Rdata_export), there is an example of what formatted data for Explore2 looks like.
+In [Rdata_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/Rdata_export), there is an example of what formatted data for Explore2 looks like.
 
 
 ## Main execution
