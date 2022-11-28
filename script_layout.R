@@ -35,7 +35,7 @@
 ## 0. SHAPEFILE LOADING ______________________________________________
 # Shapefile importation in order to do it only once time
 if (!exists("shapefile_list")) {
-    shapefile_list = load_shapefile(resources_path, df_data,
+    shapefile_list = load_shapefile(resources_path, data,
                                     fr_shpdir, fr_shpname,
                                     bs_shpdir, bs_shpname,
                                     sbs_shpdir, sbs_shpname,
@@ -54,18 +54,17 @@ logo_path = load_logo(resources_path, logo_dir, PRlogo_file,
 ### 1.1. Flow time series for stations _______________________________
 if ('station_serie_plot' %in% to_do) {
     # Square root computation
-    df_sqrt = compute_sqrt(df_data)
+    df_sqrt = compute_sqrt(data)
     # Layout
     layout_panel(to_plot=c('datasheet'),
                  df_meta=df_meta,
-                 df_data=list(df_data,
+                 data=list(data,
                               df_sqrt),
                  var=list('Q', 'sqrt(Q)'),
-                 type=list('data', 'data'),
                  event=list('chronique', 'chronique'),
                  unit=list('m^{3}.s^{-1}', 'm^{3/2}.s^{-1/2}'),
                  axis_xlim=axis_xlim,
-                 info_header=df_data,
+                 info_header=data,
                  shapefile_list=shapefile_list,
                  figdir=figdir,
                  logo_path=logo_path,
@@ -76,10 +75,9 @@ if ('station_serie_plot' %in% to_do) {
 if ('station_trend_plot' %in% to_do) {    
     layout_panel(to_plot=to_plot_station,
                  df_meta=df_meta,
-                 df_data=df_data_analyse,
+                 data=data_analyse,
                  df_trend=df_trend_analyse,
                  var=var_analyse,
-                 type=type_analyse,
                  event=event_analyse,
                  unit=unit_analyse,
                  samplePeriod=samplePeriod_analyse,
@@ -88,9 +86,9 @@ if ('station_trend_plot' %in% to_do) {
                  trend_period=trend_period,
                  mean_period=mean_period,
                  colorForce=TRUE,
-                 exQprob=exQprob,
-                 info_header=df_data,
-                 time_header=df_data,
+                 exXprob=exXprob,
+                 info_header=data,
+                 time_header=data,
                  foot_note=TRUE,
                  info_height=2.8,
                  time_height=3,
@@ -125,7 +123,7 @@ if ('climate_trend_plot' %in% to_do) {
     layout_panel(
         to_plot=c('datasheet'),
         df_meta=df_climate_meta,
-        df_data=list(
+        data=list(
             res_PAtrend$data,
             res_TAtrend$data,
             res_ETPAtrend$data
@@ -136,14 +134,13 @@ if ('climate_trend_plot' %in% to_do) {
             res_ETPAtrend$a
         ),
         var=var_climate,
-        type=type_climate,
         event=event_climate,
         unit=unit_climate,
         glose=glose_climate,
         trend_period=trend_period,
         mean_period=mean_period,
         colorForce=TRUE,
-        exQprob=exQprob,
+        exXprob=exXprob,
         linetype_per=c('longdash', 'solid'),
         info_header='code',
         info_height=0.5,

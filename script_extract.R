@@ -35,9 +35,9 @@
 ## 1. EXTRACTION OF HYDROMETRIC STATIONS _____________________________
 if ('station_extraction' %in% to_do) {
     # Initialization of null dataframes if there is no data selected
-    df_data_DOCX = NULL
-    df_data_TXT = NULL
-    df_data_MAN = NULL
+    data_DOCX = NULL
+    data_TXT = NULL
+    data_MAN = NULL
     df_meta_DOCX = NULL
     df_meta_TXT = NULL
     df_meta_MAN = NULL
@@ -58,7 +58,7 @@ if ('station_extraction' %in% to_do) {
         df_meta_DOCX = extract_meta(computer_data_path, filedir,
                                     filename_DOCX)
         # Extract data about selected stations
-        df_data_DOCX = extract_data(computer_data_path, filedir,
+        data_DOCX = extract_data(computer_data_path, filedir,
                                     filename_DOCX)
     }
 
@@ -73,7 +73,7 @@ if ('station_extraction' %in% to_do) {
         df_meta_TXT = extract_meta(computer_data_path, filedir,
                                    filename_TXT)
         # Extract data about selected stations
-        df_data_TXT = extract_data(computer_data_path, filedir,
+        data_TXT = extract_data(computer_data_path, filedir,
                                    filename_TXT)
     } 
 
@@ -83,39 +83,39 @@ if ('station_extraction' %in% to_do) {
         # Extract metadata about selected stations
         df_meta_MAN = extract_meta(computer_data_path, filedir, filename)
         # Extract data about selected stations
-        df_data_MAN = extract_data(computer_data_path, filedir, filename)
+        data_MAN = extract_data(computer_data_path, filedir, filename)
     }
 
 ### 1.4. Joining of data _____________________________________________
-    df_join = join_selection(list_data=list(df_data_DOCX,
-                                            df_data_TXT,
-                                            df_data_MAN),
+    df_join = join_selection(list_data=list(data_DOCX,
+                                            data_TXT,
+                                            data_MAN),
                              list_meta=list(df_meta_DOCX,
                                             df_meta_TXT,
                                             df_meta_MAN),
                              list_from=list('docx', 'txt', 'manual'))
-    df_data = df_join$data
+    data = df_join$data
     df_meta = df_join$meta
     
-    df_data = df_data[order(df_data$Code),]
+    data = data[order(data$Code),]
     df_meta = df_meta[order(df_meta$Code),]
 
     # Get all different stations code
-    Code = rle(df_data$Code)$value
+    Code = rle(data$Code)$value
     
 ### 1.5. Add other info about stations _______________________________
     # Time gap
-    df_meta = get_lacune(df_data, df_meta)
+    df_meta = get_lacune(data, df_meta)
     # Hydrograph
-
     if (!is.null(mean_period[[1]])) {
         period = mean_period[[1]]
     } else {
        period = trend_period[[1]] 
     }
-    df_meta = get_hydrograph(df_data, df_meta,
+    df_meta = get_hydrograph(data, df_meta,
                              period=period)$meta
 }
+
 
 
 ## 2. EXTRACTION OF CLIMATE DATA______________________________________
