@@ -147,10 +147,11 @@ if ('station_trend_analyse' %in% to_do) {
                          Process=Process,
                          period=period)
 
-        # Xdata = res$data
-        # Xmod = res$mod
-        # Xex = Xanalyse$extract
-            
+        Xex$Model = gsub("[_].*$", "", Xex$ID)
+        Xex$Code = gsub("^.*[_]", "", Xex$ID)
+        Xex = dplyr::select(Xex, -ID)
+        Xex = dplyr::select(Xex, Model, Code, dplyr::everything())
+
 
         if ('modified_data' %in% to_assign_out) {
             assign(paste0(var, 'data'), Xdata)

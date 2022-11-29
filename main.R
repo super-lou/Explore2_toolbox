@@ -80,11 +80,17 @@ models_to_diag =
 
 code_filenames_to_use =
     # ''
-    'all'
-    # c(
+    # 'all'
+    c(
         # 'X0500010_HYDRO_QJM.txt'
-        # '^[A]'
-    # )
+        '^K'
+        # '^L',
+        # '^M',
+        # '^U',
+        # '^V',
+        # '^W',
+        # '^X'
+    )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 # This vector regroups all the different step you want to do. For
@@ -109,7 +115,7 @@ code_filenames_to_use =
 # - 'station_trend_plot' : Plotting of trend analyses of stations
 to_do =
     c(
-        'station_extraction',
+        # 'station_extraction',
         'station_trend_analyse'
         # 'station_trend_plot'
     )
@@ -284,7 +290,7 @@ read_results = FALSE
 # for each variable.
 to_assign_out = c(
     # 'modified_data',
-    # 'analyse'
+    'analyse'
 )
 
 ### 6.3. Writing data on disc ________________________________________
