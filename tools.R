@@ -36,16 +36,18 @@ convert_diag_data = function (model, data) {
 
     if (model == "J2000") {
         data$Date = as.Date(data$Date)
-        names(data) = c("Date", "Code", "Q_sim",
+        names(data) = c("Date", "Code", "Qsim",
                         "ET0", "T", "Pl", "Ps", "P")
         
     } else if (model == "MODCOU") {
-        names(data) = c("Code", "Date", "Q_sim")
+        names(data) = c("Code", "Date", "Qsim")
         
     } else if (model == "SMASH") {
-        names(data) = c("Code", "Date", "Q_sim",
+        names(data) = c("Code", "Date", "Qsim",
                         "T", "Pl", "ET0", "Ps")
     }
+
+    data = dplyr::bind_cols(Model=model, data)
     
     return (data)
 }

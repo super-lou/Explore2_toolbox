@@ -80,11 +80,11 @@ models_to_diag =
 
 code_filenames_to_use =
     # ''
-    # 'all'
-    c(
-        'X0500010_HYDRO_QJM.txt'
+    'all'
+    # c(
+        # 'X0500010_HYDRO_QJM.txt'
         # '^[A]'
-    )
+    # )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 # This vector regroups all the different step you want to do. For
@@ -110,8 +110,8 @@ code_filenames_to_use =
 to_do =
     c(
         'station_extraction',
-        'station_trend_analyse',
-        'station_trend_plot'
+        'station_trend_analyse'
+        # 'station_trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
@@ -195,9 +195,11 @@ df_flag = NULL
 ## 4. ANALYSED VARIABLES _____________________________________________
 ### 4.1. Hydrological variables ______________________________________
 # Name of the directory that regroups all variables information
-CARD_dir = file.path(gsub("[/]project[_].*$", "", getwd()),
-                    "CARD_project",
-                    "CARD")
+CARD_dir = file.path(gsub("[/]project[/].*$", "",
+                          computer_work_path),
+                     "project",
+                     "CARD_project",
+                     "CARD")
 # Name of the tool directory that includes all the functions needed to
 # calculate a variable
 init_tools_dir = '__tools__'
@@ -382,6 +384,8 @@ exXprob = 0.01
 # Sets working directory
 setwd(computer_work_path)
 
+source('tools.R', encoding='UTF-8')
+
 # Import MKstat
 dev_path = file.path(dirname(dirname(computer_work_path)),
                      'MKstat_project', 'MKstat', 'R')
@@ -454,11 +458,6 @@ library(stringr)
 # library(sp)
 # potentialy useless
 # library(trend)
-
-
-
-source('tools.R', encoding='UTF-8')
-
 
 
 ## 1. EXTRACTION _____________________________________________________

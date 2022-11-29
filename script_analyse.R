@@ -60,278 +60,142 @@ if ('station_trend_analyse' %in% to_do) {
     samplePeriod_analyse = list()
     glose_analyse = c()
     data_analyse = list()
-    df_trend_analyse = list()
+    trend_analyse = list()
     
 ### 1.3. Trend analyses ______________________________________________
     for (script in script_to_analyse) {
+        
+        list_path = list.files(file.path(CARD_dir,
+                                         init_tools_dir),
+                               pattern='*.R$',
+                               full.names=TRUE)
+        for (path in list_path) {
+            source(path, encoding='UTF-8')    
+        }
 
-        if (samplePeriod_mode == 'every') {
-            nSamplePeriod = 12
+        Process_default = sourceProcess(
+            file.path(CARD_dir,init_var_file))
+        
+        Process = sourceProcess(
+            file.path(script_to_analyse_dirpath, script),
+            default=Process_default)
+
+        principal = Process$P
+        principal_names = names(principal)
+        for (i in 1:length(principal)) {
+            assign(principal_names[i], principal[[i]])
+        }
+
+        split_script = split_path(script)
+        
+        if (length(split_script) == 1) {
+            if (!('None' %in% names(structure))) {
+                structure = append(list(None=c()), structure)
+            }
+            structure[['None']] = c(structure[['None']], var)
+        } else if (length(split_script) == 2) {
+            dir = split_script[2]
+            dir = gsub('.*_', '', dir)
+            structure[[dir]] = c(structure[[dir]], var)
+        }
+        
+        if (samplePeriod_mode == 'optimale') {
+            if (identical(samplePeriod_opti[[event]], "min")) {
+                minQM = paste0(formatC(meta$minQM,
+                                       width=2,
+                                       flag="0"),
+                               '-01')
+                samplePeriodMOD = tibble(Code=meta$Code,
+                                         sp=minQM)
+            } else if (identical(samplePeriod_opti[[event]], "max")) {
+                maxQM = paste0(formatC(meta$maxQM,
+                                       width=2,
+                                       flag="0"),
+                               '-01')
+                samplePeriodMOD = tibble(Code=meta$Code,
+                                         sp=maxQM)
+            } else {
+                samplePeriodMOD = samplePeriod_opti[[event]]
+            }
+            
         } else {
-            nSamplePeriod = 1
+            samplePeriodMOD = NULL
         }
-            
-        for (iHY in 1:nSamplePeriod) {
 
-            list_path = list.files(file.path(CARD_dir,
-                                             init_tools_dir),
-                                   pattern='*.R$',
-                                   full.names=TRUE)
-            for (path in list_path) {
-                source(path, encoding='UTF-8')    
-            }
-
-            Process_default = sourceProcess(
-                file.path(CARD_dir,init_var_file))
-            
-            Process = sourceProcess(
-                file.path(script_to_analyse_dirpath, script),
-                default=Process_default)
-
-            principal = Process$P
-            principal_names = names(principal)
-            for (i in 1:length(principal)) {
-                assign(principal_names[i], principal[[i]])
-            }
-
-            split_script = split_path(script)
-            
-            if (length(split_script) == 1) {
-                if (!('None' %in% names(structure))) {
-                    structure = append(list(None=c()), structure)
-                }
-                structure[['None']] = c(structure[['None']], var)
-            } else if (length(split_script) == 2) {
-                dir = split_script[2]
-                dir = gsub('.*_', '', dir)
-                structure[[dir]] = c(structure[[dir]], var)
-            }
-            
-            if (samplePeriod_mode == 'every') {
-                samplePeriodMOD = paste0(formatC(iHY, width=2, flag="0"),
-                                         '-01')
-                
-            } else if (samplePeriod_mode == 'optimale') {
-                if (identical(samplePeriod_opti[[event]], "min")) {
-                    minQM = paste0(formatC(meta$minQM,
-                                           width=2,
-                                           flag="0"),
-                                   '-01')
-                    samplePeriodMOD = tibble(Code=meta$Code,
-                                             sp=minQM)
-                } else if (identical(samplePeriod_opti[[event]], "max")) {
-                    maxQM = paste0(formatC(meta$maxQM,
-                                           width=2,
-                                           flag="0"),
-                                   '-01')
-                    samplePeriodMOD = tibble(Code=meta$Code,
-                                             sp=maxQM)
-                } else {
-                    samplePeriodMOD = samplePeriod_opti[[event]]
-                }
-                
-            } else {
-                samplePeriodMOD = NULL
-            }
-
-            if (!is.null(samplePeriodMOD)) {
-                nProcess = length(Process)
-                for (i in 1:nProcess) {
-                    if (!is.null(Process[[i]]$samplePeriod)) {
-                        Process[[i]]$samplePeriod = samplePeriodMOD
-                        samplePeriod = Process[[i]]$samplePeriod
-                    }
+        if (!is.null(samplePeriodMOD)) {
+            nProcess = length(Process)
+            for (i in 1:nProcess) {
+                if (!is.null(Process[[i]]$samplePeriod)) {
+                    Process[[i]]$samplePeriod = samplePeriodMOD
+                    samplePeriod = Process[[i]]$samplePeriod
                 }
             }
-
-            # monthSamplePeriod = substr(samplePeriod[1], 1, 2)
-
-            if (var %in% var_analyse) {
-                next
-            }
-            
-            var_analyse = c(var_analyse, var)
-            event_analyse = c(event_analyse, event)
-            unit_analyse = c(unit_analyse, unit)
-            samplePeriod_analyse = append(samplePeriod_analyse,
-                                          list(samplePeriod))
-            glose_analyse = c(glose_analyse, glose)
-
-            missingCode = c()
-            if (read_results) {
-                # trend_path = file.path(trend_dir, var, monthSamplePeriod)
-                isExtract = file.exists(file.path(resdir, trend_path,
-                                                  'extract.txt'))
-                isEstimate = file.exists(file.path(resdir, trend_path,
-                                                   'estimate.txt'))
-
-                if (isExtract & isEstimate) {
-                    res_Xanalyse_save = read_analyse(resdir, trend_path)
-                    df_XEx_save = res_Xanalyse_save$extract
-                    df_Xtrend_save = res_Xanalyse_save$estimate
-
-                    df_XEx_read = df_XEx_save[df_XEx_save$Code %in% Code,]
-                    df_Xtrend_read = df_Xtrend_save[df_Xtrend_save$Code %in% Code,]
-                    df_Xtrend_read = df_Xtrend_read[df_Xtrend_read$input_period %in% input_trend_period,]
-                    res_Xanalyse_read = list(extract=df_XEx_read, estimate=df_Xtrend_read)
-                    
-                    # modified_data_path = file.path(modified_data_dir, var,
-                                                   # monthSamplePeriod)
-                    
-                    # df_Xdata_read = tibble()
-                    # df_Xmod_read = tibble()
-                    for (code in Code) {
-                        # nameDataMod = paste0(code, '.txt')
-                        # isCodeDataMod = file.exists(
-                        #     file.path(resdir,
-                        #               modified_data_path,
-                        #               nameDataMod))
-                        
-                        # nameMod = paste0(code, '_modification.txt')
-                        # isCodeMod = file.exists(
-                        #     file.path(resdir,
-                        #               modified_data_path,
-                        #               nameMod))
-
-                        # if (isCodeDataMod & isCodeMod) {
-                        #     df_Xdata_code = read_data(resdir,
-                        #                               modified_data_path,
-                        #                               nameDataMod)
-                        #     df_Xmod_code = read_data(resdir,
-                        #                              modified_data_path,
-                        #                              nameMod)
-                        #     df_Xdata_read = rbind(df_Xdata_read, df_Xdata_code)
-                        #     df_Xmod_read = rbind(df_Xmod_read, df_Xmod_code)
-                        # }
-
-                        isCodeExtract = any(code %in% df_XEx_read$Code)
-                        isCodeEstimate = any(code %in% df_Xtrend_read$Code)
-
-                        for (per in input_trend_period) {
-                            df_Xtrend_code =
-                                df_Xtrend_read[df_Xtrend_read$Code == code,]
-                            isPerEstimate = any(per %in% df_Xtrend_code$input_period)
-
-                            # if (!isCodeDataMod | !isCodeMod | !isCodeExtract | !isCodeEstimate | !isPerEstimate) {
-                            if (!isCodeExtract | !isCodeEstimate | !isPerEstimate) {
-                                missingCode = c(missingCode, code)
-                            }
-                        }
-                    }
-                    
-                } else {
-                    missingCode = Code
-                }                
-            } else {
-                missingCode = Code
-            }
-
-
-            if (!is.null(missingCode)) {
-                data_missing = data[data$Code %in% missingCode,]
-                meta_missing = meta[meta$Code %in% missingCode,]
-
-                res = get_Xtrend(data=data_missing,
-                                 period=trend_period,
-                                 level=level,
-                                 df_flag=df_flag,
-                                 Process)
-                
-                # source("variables/__default_save__.R", encoding='UTF-8')
-                # source("variables/tDEB_etiage_save.R", encoding='UTF-8')
-                # df_XEx_save = get_dataEx_save(var,
-                #                       data_missing,
-                #                       period=trend_period,
-                #                       df_flag=df_flag,
-                #                       NApct_lim=NApct_lim,
-                #                       NAyear_lim=NAyear_lim,
-                #                       day_to_roll=day_to_roll,
-                #                       functY=functY,
-                #                       functY_args=functY_args,
-                #                       isDateY=isDateY,
-                #                       samplePeriodY=samplePeriod,
-                #                       functYT_ext=functYT_ext,
-                #                       functYT_ext_args=functYT_ext_args,
-                #                       isDateYT_ext=isDateYT_ext,
-                #                       functYT_sum=functYT_sum,
-                #                       functYT_sum_args=functYT_sum_args)
-
-                df_Xdata = res$data
-                df_Xmod = res$mod
-                res_Xanalyse = res$analyse
-                # Gets the extracted data for the variable
-                df_XEx = res_Xanalyse$extract
-                # Gets the trend results for the variable
-                df_Xtrend = res_Xanalyse$estimate
-                
-                if (!all(Code %in% missingCode)) {
-                    # df_Xdata = rbind(df_Xdata_read, df_Xdata)
-                    # df_Xmod = rbind(df_Xmod_read, df_Xmod)
-                    df_Xdata = 'analyse read'
-                    df_Xmod = 'analyse read'
-                    df_XEx = rbind(df_XEx_read, df_XEx)
-                    df_Xtrend = rbind(df_Xtrend_read, df_Xtrend)
-                    res_Xanalyse = list(extract=df_XEx, estimate=df_Xtrend)
-                }
-                
-            } else {
-                # df_Xdata = df_Xdata_read
-                # df_Xmod = df_Xmod_read
-                df_Xdata = 'analyse read'
-                df_Xmod = 'analyse read'
-                res_Xanalyse = res_Xanalyse_read
-                df_XEx = df_XEx_read
-                df_Xtrend = df_Xtrend_read
-            }
-
-            if ('modified_data' %in% to_assign_out) {
-                assign(paste0('df_', var, 'data'), df_Xdata)
-                assign(paste0('df_', var, 'mod'), df_Xmod)
-            }
-            
-            if ('analyse' %in% to_assign_out) {
-                assign(paste0('res_', var, 'analyse'), res_Xanalyse)
-                assign(paste0('df_', var, 'Ex'), df_XEx)
-                assign(paste0('df_', var, 'trend'), df_Xtrend)
-            }
-
-            if ('station_trend_plot' %in% to_do | is.null(saving)) {
-                data_analyse = append(data_analyse, list(df_XEx))
-                df_trend_analyse = append(df_trend_analyse, list(df_Xtrend))
-            }
-
-### 1.3. Saving ______________________________________________________
-            # if ('modified_data' %in% saving & !read_results) {
-            #     # Writes modified data
-            #     write_data(df_Xdata, df_Xmod, resdir,
-            #                filedir=file.path(modified_data_dir,
-            #                                  var, monthSamplePeriod))
-                
-            #     if (fast_format) {
-            #         write_dataFST(df_Xdata, resdir,
-            #                       filedir='fst',
-            #                       filename=paste0('data_', var,
-            #                                       '_', monthSamplePeriod,
-            #                                       '.fst'))
-            #     }
-            # }
-
-            # if ('analyse' %in% saving) {                
-            #     # Writes trend analysis results
-            #     write_analyse(res_Xanalyse, resdir,
-            #                   filedir=file.path(trend_dir,
-            #                                     var, monthSamplePeriod))
-                
-            #     if (fast_format) {
-            #         write_dataFST(df_XEx,
-            #                       resdir,
-            #                       filedir='fst',
-            #                       filename=paste0(var, 'Ex_',
-            #                                       monthSamplePeriod,
-            #                                       '.fst'))
-            #     }
-            # }
         }
+
+        if (var %in% var_analyse) {
+            next
+        }
+        
+        var_analyse = c(var_analyse, var)
+        event_analyse = c(event_analyse, event)
+        unit_analyse = c(unit_analyse, unit)
+        samplePeriod_analyse = append(samplePeriod_analyse,
+                                      list(samplePeriod))
+        glose_analyse = c(glose_analyse, glose)
+
+        Xex = get_dataEx(data=data,
+                         Process=Process,
+                         period=period)
+
+        # Xdata = res$data
+        # Xmod = res$mod
+        # Xex = Xanalyse$extract
+            
+
+        if ('modified_data' %in% to_assign_out) {
+            assign(paste0(var, 'data'), Xdata)
+            assign(paste0(var, 'mod'), Xmod)
+        }
+        
+        if ('analyse' %in% to_assign_out) {
+            assign(paste0(var, 'ex'), Xex)
+        }
+
+        if ('station_trend_plot' %in% to_do | is.null(saving)) {
+            data_analyse = append(data_analyse, list(Xex))
+        }
+
+        ### 1.3. Saving ______________________________________________________
+        # if ('modified_data' %in% saving & !read_results) {
+        #     # Writes modified data
+        #     write_data(Xdata, Xmod, resdir,
+        #                filedir=file.path(modified_data_dir,
+        #                                  var, monthSamplePeriod))
+        
+        #     if (fast_format) {
+        #         write_dataFST(Xdata, resdir,
+        #                       filedir='fst',
+        #                       filename=paste0('data_', var,
+        #                                       '_', monthSamplePeriod,
+        #                                       '.fst'))
+        #     }
+        # }
+
+        # if ('analyse' %in% saving) {                
+        #     # Writes trend analysis results
+        #     write_analyse(res_Xanalyse, resdir,
+        #                   filedir=file.path(trend_dir,
+        #                                     var, monthSamplePeriod))
+        
+        #     if (fast_format) {
+        #         write_dataFST(Xex,
+        #                       resdir,
+        #                       filedir='fst',
+        #                       filename=paste0(var, 'Ex_',
+        #                                       monthSamplePeriod,
+        #                                       '.fst'))
+        #     }
+        # }
     }
 }
 
@@ -340,98 +204,4 @@ if ('meta' %in% saving) {
         write_metaFST(meta, resdir,
                       filedir=file.path('fst'))
     }
-}
-
-
-## 2. STATION BREAK ANALYSIS _________________________________________
-if ('station_break_analyse' %in% to_do) {
-    DF_BREAK = list()
-    # For all the variable
-    for (v in var) {
-        # Gets the trend results for the variable
-        res_trend = get(paste('res_', v, 'trend', sep=''))
-        # Performs the break analyses for some hydrological variables
-        df_break = get_break(res_trend$data, meta, level=0.1)
-        DF_BREAK = append(DF_BREAK, list(df_break))
-    }
-    names(DF_BREAK) = var
-}
-
-
-## 3. CLIMATE TREND ANALYSIS _________________________________________
-if ('climate_trend_analyse' %in% to_do) {
-### 3.1. Info about analysis _________________________________________
-    var_all_climate = list(
-        'PA',
-        'TA',
-        'ETPA'
-    )
-    glose_all_climate = list(
-        '',
-        '',
-        ''
-    )
-
-### 3.2. Selection of variables ______________________________________
-    var_climate = c()
-    glose_climate = c()
-    for (OkVar in to_analyse_climate) {
-        Ok = var_all_climate == OkVar
-        var_climate = c(var_climate, var_all_climate[Ok])
-        glose_climate = c(glose_climate, glose_all_climate[Ok])
-    } 
-    
-### 3.3. Formatting of climate dataframe _____________________________
-    # For precipitation
-    data_P = bind_cols(Date=df_climate_data$Date,
-                          Q=df_climate_data$PRCP_mm,
-                          code=df_climate_data$Code)
-    # For temperature
-    data_T = bind_cols(Date=df_climate_data$Date,
-                          Q=df_climate_data$T_degC,
-                          code=df_climate_data$Code)
-    # For evapotranspiration
-    data_ETP = bind_cols(Date=df_climate_data$Date,
-                            Q=df_climate_data$PET_mm,
-                            code=df_climate_data$Code)
-### 3.4. Trend analyses ______________________________________________
-    # TA trend
-    res = get_Xtrend(data_P, df_climate_meta,
-                      period=trend_period,
-                      hydroYear='09-01',
-                      level=level,
-                      dayLac_lim=dayLac_lim,
-                      yearNA_lim=yearNA_lim,
-                      df_flag=df_flag,
-                      funct=sum)
-    df_PAdata = res$data
-    df_PAmod = res$mod
-    res_PAtrend = res$analyse
-    
-    # PA trend
-    res = get_Xtrend(data_T, df_climate_meta,
-                      period=trend_period,
-                      hydroYear='09-01',
-                      level=level,
-                      dayLac_lim=dayLac_lim,
-                      yearNA_lim=yearNA_lim,
-                      df_flag=df_flag,
-                      funct=mean,
-                      na.rm=TRUE)
-    df_TAdata = res$data
-    df_TAmod = res$mod
-    res_TAtrend = res$analyse
-
-    # ETPA trend
-    res = get_Xtrend(data_ETP, df_climate_meta,
-                      period=trend_period,
-                      hydroYear='09-01',
-                      level=level,
-                      dayLac_lim=dayLac_lim,
-                      yearNA_lim=yearNA_lim,
-                      df_flag=df_flag,
-                      funct=sum)
-    df_ETPAdata = res$data
-    df_ETPAmod = res$mod
-    res_ETPAtrend = res$analyse
 }

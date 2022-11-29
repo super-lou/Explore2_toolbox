@@ -52,19 +52,25 @@ if ('station_extraction' %in% to_do) {
     
     
     # Extract metadata about selected stations
-    meta_obs = extract_meta(computer_data_path,
-                            obs_dir, code_filenames_to_use)
+    meta = extract_meta(computer_data_path,
+                        obs_dir, code_filenames_to_use)
     # Extract data about selected stations
     data_obs = extract_data(computer_data_path,
                             obs_dir, code_filenames_to_use)
 
-    meta_obs = meta_obs[order(meta_obs$Code),]      
+    meta = meta[order(meta$Code),]      
     data_obs = data_obs[order(data_obs$Code),]
 
+    # Time gap
+    meta = get_lacune(data_obs, meta)
+    # Hydrograph
+    meta = get_hydrograph(data_obs, meta,
+                          period=period)$meta
+    
+    names(data_obs)[names(data_obs) == "Q"] = "Qobs"
+    
     Model = c()
     data_sim = tibble()
-
-    
 
     for (i in 1:length(models_to_diag)) {
 
@@ -77,6 +83,8 @@ if ('station_extraction' %in% to_do) {
         if (file.exists(model_path)) {
             Model = c(Model, model)
 
+            print(model)
+            
             if (grepl(".*[.]Rdata", model_path)) {
                 data_tmp = loadRData(model_path)
                     
@@ -92,24 +100,13 @@ if ('station_extraction' %in% to_do) {
         }
     }
     
-    
+    data = dplyr::inner_join(data_sim,
+                             data_obs,
+                             by=c("Date", "Code"))
+    data = dplyr::relocate(data, Qobs, .before=Qsim)
+    data = dplyr::relocate(data, T, .before=ET0)
 
-
-
-    
-
-
-    # Get all different stations code
-    Code = rle(data$Code)$value
-    
-    # Time gap
-    meta = get_lacune(data, meta)
-    # Hydrograph
-    if (!is.null(mean_period[[1]])) {
-        period = mean_period[[1]]
-    } else {
-        period = trend_period[[1]] 
-    }
-    meta = get_hydrograph(data, meta,
-                          period=period)$meta
+    data$ID = paste0(data$Model, "_", data$Code)
+    data = dplyr::select(data, -c(Model, Code))
+    data = dplyr::select(data, ID, everything())
 }
