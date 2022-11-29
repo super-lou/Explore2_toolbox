@@ -113,18 +113,18 @@ if ('station_trend_analyse' %in% to_do) {
                 
             } else if (samplePeriod_mode == 'optimale') {
                 if (identical(samplePeriod_opti[[event]], "min")) {
-                    minQM = paste0(formatC(df_meta$minQM,
+                    minQM = paste0(formatC(meta$minQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    samplePeriodMOD = tibble(Code=df_meta$Code,
+                    samplePeriodMOD = tibble(Code=meta$Code,
                                              sp=minQM)
                 } else if (identical(samplePeriod_opti[[event]], "max")) {
-                    maxQM = paste0(formatC(df_meta$maxQM,
+                    maxQM = paste0(formatC(meta$maxQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    samplePeriodMOD = tibble(Code=df_meta$Code,
+                    samplePeriodMOD = tibble(Code=meta$Code,
                                              sp=maxQM)
                 } else {
                     samplePeriodMOD = samplePeriod_opti[[event]]
@@ -229,7 +229,7 @@ if ('station_trend_analyse' %in% to_do) {
 
             if (!is.null(missingCode)) {
                 data_missing = data[data$Code %in% missingCode,]
-                df_meta_missing = df_meta[df_meta$Code %in% missingCode,]
+                meta_missing = meta[meta$Code %in% missingCode,]
 
                 res = get_Xtrend(data=data_missing,
                                  period=trend_period,
@@ -337,7 +337,7 @@ if ('station_trend_analyse' %in% to_do) {
 
 if ('meta' %in% saving) {
     if (fast_format) {
-        write_metaFST(df_meta, resdir,
+        write_metaFST(meta, resdir,
                       filedir=file.path('fst'))
     }
 }
@@ -351,7 +351,7 @@ if ('station_break_analyse' %in% to_do) {
         # Gets the trend results for the variable
         res_trend = get(paste('res_', v, 'trend', sep=''))
         # Performs the break analyses for some hydrological variables
-        df_break = get_break(res_trend$data, df_meta, level=0.1)
+        df_break = get_break(res_trend$data, meta, level=0.1)
         DF_BREAK = append(DF_BREAK, list(df_break))
     }
     names(DF_BREAK) = var

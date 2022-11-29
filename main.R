@@ -55,41 +55,36 @@
 ## You can modify this part without risk ##      |___/ 
 
 ## 1. WORKING DIRECTORY ______________________________________________
-# Work path (it normally needs to end with '\\ashes' directory)
-computer_work_path = 
-    '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/Ex2D_toolbox'
+# Work path
+computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/Ex2D_toolbox'
 
 ## 2. DATA DIRECTORY _________________________________________________
-# Data path (it normally needs to end with '\\ashes' directory)
-data_path = 
-    '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/Ex2D_toolbox'
+# Data path
+computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
+obs_dir = "debit/BanqueHydro_Export2021"
+diag_dir = "Ex2D/diagnostic"
 
-# Directory of Banque HYDRO data you want to use in ash\\data\\ to
-# extract stations flow data. If '' is use, data will be search in
-# ash\\data\\.
-filedir =
-    # ''
-    # 'AEAG_selection'
-    'RRSE'
+codes_to_diag_SHPdir = "Ex2D/reseauReferenceHYDRO"
 
-# Name of the files that will be analysed from the data directory
-# (if 'all', all the file of the directory will be chosen)
-filename =
+models_to_diag =
+    c(
+        # "EROS",
+        # "GRSD",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "MODCOU"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "MORDOR",
+        # "ORCHIDEE",
+        "SMASH"="SMASH_20220921.Rdata"
+        # "STRIP"
+    )
+
+code_filenames_to_use =
     # ''
-    'all'
-    # c(
-        # 'X0500010_HYDRO_QJM.txt'
-        # 'Q0214010_HYDRO_QJM.txt',
-        # 'H7833520_HYDRO_QJM.txt',
-        # 'O0384010_HYDRO_QJM.txt',
-        # 'O3314010_HYDRO_QJM.txt',
-        # 'S2235610_HYDRO_QJM.txt',
-        # 'O1484320_HYDRO_QJM.txt',
-        # 'O0362510_HYDRO_QJM.txt'
-        # 'A3301010_HYDRO_QJM.txt',
-        # 'A4050620_HYDRO_QJM.txt'
+    # 'all'
+    c(
+        'X0500010_HYDRO_QJM.txt'
         # '^[A]'
-    # )
+    )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 # This vector regroups all the different step you want to do. For
@@ -135,8 +130,6 @@ period =
 
 ## 1. FILES STRUCTURE _________________________________________________
 ### 1.1. Input directories ___________________________________________
-# Path to the data
-computer_data_path = file.path(computer_work_path, 'data')
 
 # Resources directory
 resources_path = file.path(computer_work_path, 'resources')
@@ -451,6 +444,7 @@ library(officer)
 library(sf)
 library(stringr)
 # already ::
+# library(ncdf4)
 # library(rgeos)
 # library(lubridate)
 # library(Hmisc)
@@ -461,24 +455,10 @@ library(stringr)
 # potentialy useless
 # library(trend)
 
-# Creates list of period for trend analysis
-trend_period = NULL
-if (!is.null(periodAll)) {
-    trend_period = append(trend_period, list(periodAll))
-}
-if (!is.null(periodSub)) {
-    trend_period = append(trend_period, list(periodSub))
-}
-# Creates list of period for average analysis
-mean_period = NULL
-if (!is.null(periodRef)) {
-    mean_period = append(mean_period, list(periodRef))
-}
-if (!is.null(periodCur)) {
-    mean_period = append(mean_period, list(periodCur))
-}
 
-input_trend_period = sapply(trend_period, paste, collapse='/')
+
+source('tools.R', encoding='UTF-8')
+
 
 
 ## 1. EXTRACTION _____________________________________________________
@@ -503,21 +483,6 @@ if ('station_serie_plot' %in% to_do | 'station_trend_plot' %in% to_do | 'station
 
 
 
-
-
-## 2. DATA IMPORTATION _______________________________________________
-# dataJ2K_file = "DATA_DIAGNOSTIC_EXPLORE2_J2000_v0.Rdata"
-# dataJ2K_path = file.path(data_dir, dataJ2K_file)
-# dataJ2K = loadRData(dataJ2K_path)
-# dataJ2K = convert_J2K(dataJ2K)
-
-# dataSMASH_file = "SMASH_20220921.Rdata"
-# dataSMASH_path file.path(data_dir, dataSMASH_file)
-# dataSMASH = loadRData(dataSMASH_path)
-
-# dataSIM2_file = "Debits_modcou_19580801_20210731_day_METADATA.nc"
-# dataSIM2_path = file.path(data_dir, dataSIM2_file)
-# dataSIM2 = NetCDF_to_tibble(dataSIM2_path)
 
 
 

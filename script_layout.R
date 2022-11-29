@@ -57,7 +57,7 @@ if ('station_serie_plot' %in% to_do) {
     df_sqrt = compute_sqrt(data)
     # Layout
     layout_panel(to_plot=c('datasheet'),
-                 df_meta=df_meta,
+                 meta=meta,
                  data=list(data,
                               df_sqrt),
                  var=list('Q', 'sqrt(Q)'),
@@ -74,7 +74,7 @@ if ('station_serie_plot' %in% to_do) {
 ### 1.2. Analyses layout _____________________________________________
 if ('station_trend_plot' %in% to_do) {    
     layout_panel(to_plot=to_plot_station,
-                 df_meta=df_meta,
+                 meta=meta,
                  data=data_analyse,
                  df_trend=df_trend_analyse,
                  var=var_analyse,
@@ -112,8 +112,8 @@ if ('station_break_plot' %in% to_do) {
         # Gets the break results for the variable
         df_break = DF_BREAK[[v]]
         
-        histogram(df_break, df_meta, title=v, figdir=figdir)    
-        cumulative(df_break, df_meta, title=v, dyear=8, figdir=figdir)
+        histogram(df_break, meta, title=v, figdir=figdir)    
+        cumulative(df_break, meta, title=v, dyear=8, figdir=figdir)
     }
 }
 
@@ -122,7 +122,7 @@ if ('station_break_plot' %in% to_do) {
 if ('climate_trend_plot' %in% to_do) {
     layout_panel(
         to_plot=c('datasheet'),
-        df_meta=df_climate_meta,
+        meta=df_climate_meta,
         data=list(
             res_PAtrend$data,
             res_TAtrend$data,
