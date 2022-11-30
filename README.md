@@ -18,8 +18,8 @@ For latest development version
 remotes::install_github('super-lou/Ex2D_toolbox')
 ```
 
-## Tools organisation
-You can find all the tools part of the code in this repository.
+## Help
+You can find different help script in this the [help](https://github.com/super-lou/Ex2D_toolbox/tree/main/help) directory.
 
 ### DRIAS NetCDF exportation
 In the [help](https://github.com/super-lou/Ex2D_toolbox/tree/main/help) directory, you will have the [DRIAS_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export) directory which includes 2 subdirectories, one for [1D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export/DRIAS_export_1D) and the other for [2D data exportation](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/DRIAS_export/DRIAS_export_2D).
@@ -31,7 +31,7 @@ In [Rdata_export](https://github.com/super-lou/Ex2D_toolbox/tree/main/help/Rdata
 
 
 ## Main execution
-In the principal directory of this toolbox you will find the [main.R](https://github.com/super-lou/Ex2D_toolbox/tree/main/main.R) script which is dedicated to fast global execution of the Explore2 diagnostic by using [Ex2D](https://github.com/super-lou/Ex2D) R package.
+In the principal directory of this toolbox you will find the [main.R](https://github.com/super-lou/Ex2D_toolbox/tree/main/main.R) script which is dedicated to fast global execution of the Explore2 diagnostic by using [MKstat](https://github.com/super-lou/MKstat), [ashes](https://github.com/super-lou/ashes) and [dataSheep](https://github.com/super-lou/dataSheep) R package.
 
 *in construction*
 
