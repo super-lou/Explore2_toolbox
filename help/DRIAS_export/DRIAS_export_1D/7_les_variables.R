@@ -65,5 +65,5 @@ NCf$debit.value =
 NCf$debit.01.standard_name = "debit"
 NCf$debit.02.long_name = "debit modcou"
 NCf$debit.03.units = "m3.s-1"
-NCf$debit.04.missing_value = -99
+NCf$debit.04.missing_value = NaN
 NCf$debit.05.cell_methods = "time:sum"

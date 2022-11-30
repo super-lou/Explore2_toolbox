@@ -35,8 +35,16 @@
 # nécessaires pour calculer les coordonnées horizontale et verticale
 # à partir des abscisses et des ordonnées.
 
+## 1. WGS 84 _________________________________________________________
+NCf$WGS84.name = "WGS84"
+NCf$WGS84.dimension = ""
+NCf$WGS84.precision = "float"
+NCf$WGS84.01.standard_name = "WGS 84"
+NCf$WGS84.02.EPSG = "4326"
+NCf$WGS84.03.references =
+    "https://spatialreference.org/ref/epsg/wgs-84/html/"
 
-## 1. LAMBERT-93 _____________________________________________________
+## 2. LAMBERT-93 _____________________________________________________
 NCf$L93.name = "L93"
 NCf$L93.dimension = ""
 NCf$L93.precision = "integer"
@@ -53,7 +61,7 @@ NCf$L93.10.EPSG = "2154"
 NCf$L93.11.references =
     "https://spatialreference.org/ref/epsg/2154/html/"
 
-## 2. LAMBERT-II _____________________________________________________
+## 3. LAMBERT-II _____________________________________________________
 NCf$LII.name = "LII"
 NCf$LII.dimension = ""
 NCf$LII.precision = "integer"

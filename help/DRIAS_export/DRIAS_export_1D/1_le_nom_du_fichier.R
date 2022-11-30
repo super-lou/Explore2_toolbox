@@ -107,12 +107,12 @@ NCf$title.08.Bc_Inst_Method_Obs_Period =
 # Identifiant du HYDRO = Institut-Modèle
 NCf$title.09.HYDRO_Inst_Model =
     'MF-SIM2'
-    # 'BRGM-MONA'
     # '****-ORCHIDEE'
-    # 'BRGM-EROS'
     # 'ENS-EauDyssee'
-    # 'BRGM-AquiFR'
     # 'BRGM-Marthe'
+    # 'BRGM-MONA'
+    # 'BRGM-EROS'
+    # 'BRGM-AquiFR'
 
 ## 10. TimeFrequency _________________________________________________
 # Le pas de temps du jeu de données
