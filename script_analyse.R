@@ -61,6 +61,10 @@ if ('station_trend_analyse' %in% to_do) {
     glose_analyse = c()
     data_analyse = list()
     trend_analyse = list()
+
+    if (exists("dataEx")) {
+        rm (dataEx)
+    }
     
 ### 1.3. Trend analyses ______________________________________________
     for (script in script_to_analyse) {
@@ -152,7 +156,14 @@ if ('station_trend_analyse' %in% to_do) {
         Xex = dplyr::select(Xex, -ID)
         Xex = dplyr::select(Xex, Model, Code, dplyr::everything())
 
-
+        if (!exists("dataEx")) {
+            dataEx = Xex
+        } else {
+            dataEx = dplyr::full_join(dataEx,
+                                      Xex,
+                                      by=c("Model", "Code"))  
+        }
+            
         if ('modified_data' %in% to_assign_out) {
             assign(paste0(var, 'data'), Xdata)
             assign(paste0(var, 'mod'), Xmod)

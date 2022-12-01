@@ -67,7 +67,7 @@ if ('station_extraction' %in% to_do) {
     meta = get_hydrograph(data_obs, meta,
                           period=period)$meta
     
-    names(data_obs)[names(data_obs) == "Q"] = "Qobs"
+    names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
     
     Model = c()
     data_sim = tibble()
@@ -103,7 +103,7 @@ if ('station_extraction' %in% to_do) {
     data = dplyr::inner_join(data_sim,
                              data_obs,
                              by=c("Date", "Code"))
-    data = dplyr::relocate(data, Qobs, .before=Qsim)
+    data = dplyr::relocate(data, Q_obs, .before=Q_sim)
     data = dplyr::relocate(data, T, .before=ET0)
 
     data$ID = paste0(data$Model, "_", data$Code)

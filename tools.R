@@ -36,14 +36,14 @@ convert_diag_data = function (model, data) {
 
     if (model == "J2000") {
         data$Date = as.Date(data$Date)
-        names(data) = c("Date", "Code", "Qsim",
+        names(data) = c("Date", "Code", "Q_sim",
                         "ET0", "T", "Pl", "Ps", "P")
         
     } else if (model == "MODCOU") {
-        names(data) = c("Code", "Date", "Qsim")
+        names(data) = c("Code", "Date", "Q_sim")
         
     } else if (model == "SMASH") {
-        names(data) = c("Code", "Date", "Qsim",
+        names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "ET0", "Ps")
     }
 

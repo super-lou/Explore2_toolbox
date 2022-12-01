@@ -75,7 +75,7 @@ models_to_diag =
         # "MORDOR",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
-        # "STRIP"
+        # "CTRIP"
     )
 
 code_filenames_to_use =
@@ -83,11 +83,11 @@ code_filenames_to_use =
     # 'all'
     c(
         # 'X0500010_HYDRO_QJM.txt'
-        '^K'
+        # '^K'
         # '^L',
         # '^M',
         # '^U',
-        # '^V',
+        '^V'
         # '^W',
         # '^X'
     )
@@ -378,6 +378,8 @@ axis_xlim =
 # quantile 99 will be used as the minimum and maximum values to assign
 # to minmimal maximum colors.
 exXprob = 0.01
+
+nCode4write = 100
 
 
 #  ___              ___             _   
