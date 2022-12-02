@@ -32,8 +32,8 @@
 # realise analyses.
 
 
-## 1. STATION TREND ANALYSIS _________________________________________
-if ('station_trend_analyse' %in% to_do) {
+## 1. ANALYSING OF DATA ______________________________________________
+if ('analyse_data' %in% to_do) {
 
     script_to_analyse_dirpath = file.path(CARD_dir, var_to_analyse_dir)
     
@@ -66,7 +66,6 @@ if ('station_trend_analyse' %in% to_do) {
         rm (dataEx)
     }
     
-### 1.3. Trend analyses ______________________________________________
     for (script in script_to_analyse) {
         
         list_path = list.files(file.path(CARD_dir,
@@ -163,57 +162,19 @@ if ('station_trend_analyse' %in% to_do) {
                                       Xex,
                                       by=c("Model", "Code"))  
         }
-            
-        if ('modified_data' %in% to_assign_out) {
-            assign(paste0(var, 'data'), Xdata)
-            assign(paste0(var, 'mod'), Xmod)
-        }
-        
-        if ('analyse' %in% to_assign_out) {
-            assign(paste0(var, 'ex'), Xex)
-        }
-
-        if ('station_trend_plot' %in% to_do | is.null(saving)) {
-            data_analyse = append(data_analyse, list(Xex))
-        }
-
-        ### 1.3. Saving ______________________________________________________
-        # if ('modified_data' %in% saving & !read_results) {
-        #     # Writes modified data
-        #     write_data(Xdata, Xmod, resdir,
-        #                filedir=file.path(modified_data_dir,
-        #                                  var, monthSamplePeriod))
-        
-        #     if (fast_format) {
-        #         write_dataFST(Xdata, resdir,
-        #                       filedir='fst',
-        #                       filename=paste0('data_', var,
-        #                                       '_', monthSamplePeriod,
-        #                                       '.fst'))
-        #     }
-        # }
-
-        # if ('analyse' %in% saving) {                
-        #     # Writes trend analysis results
-        #     write_analyse(res_Xanalyse, resdir,
-        #                   filedir=file.path(trend_dir,
-        #                                     var, monthSamplePeriod))
-        
-        #     if (fast_format) {
-        #         write_dataFST(Xex,
-        #                       resdir,
-        #                       filedir='fst',
-        #                       filename=paste0(var, 'Ex_',
-        #                                       monthSamplePeriod,
-        #                                       '.fst'))
-        #     }
-        # }
     }
 }
 
-if ('meta' %in% saving) {
-    if (fast_format) {
+if ('save_analyse' %in% to_do) {
+    if (saving_format == "fst") {
         write_metaFST(meta, resdir,
                       filedir=file.path('fst'))
+        write_metaFST(dataEx, resdir,
+                      filedir=file.path('fst'))
+        
+    } else if (saving_format == "Rdata") {
+        
+    } else if (saving_format == "txt") {
+        
     }
 }

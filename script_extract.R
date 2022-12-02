@@ -32,24 +32,8 @@
 # realise extraction of data.
 
 
-## 1. EXTRACTION OF HYDROMETRIC STATIONS _____________________________
-if ('station_extraction' %in% to_do) {
-
-    codes_to_diag_SHP = read_shp(file.path(computer_data_path,
-                                           codes_to_diag_SHPdir))
-    codes_to_diag = as.character(codes_to_diag_SHP$Code)
-
-    if (all(code_filenames_to_use == "")) {
-        stop ("No station selected")
-    }
-
-    code_filenames_to_use = convert_regexp(computer_data_path,
-                                  obs_dir, code_filenames_to_use)
-    codes_to_use = gsub("[_].*$", "", code_filenames_to_use)
-    okCode = codes_to_use %in% codes_to_diag
-    Code = codes_to_use[okCode]
-    code_filenames_to_use = code_filenames_to_use[okCode]
-    
+## 1. CREATION OF DATA _______________________________________________
+if ('create_data' %in% to_do) {
     
     # Extract metadata about selected stations
     meta = extract_meta(computer_data_path,
