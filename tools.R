@@ -25,12 +25,6 @@ NetCDF_to_tibble = function (NetCDF_path) {
     return (data)
 }
 
-loadRData = function(fileName) {
-    load(fileName)
-    get(ls()[ls() != "fileName"])
-}
-
-
 convert_diag_data = function (model, data) {
 
     if (model == "J2000") {

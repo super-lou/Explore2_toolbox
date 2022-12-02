@@ -70,7 +70,7 @@ if ('create_data' %in% to_do) {
             print(model)
             
             if (grepl(".*[.]Rdata", model_path)) {
-                data_tmp = loadRData(model_path)
+                data_tmp = read_tibble(filepath=model_path)
                     
             } else if (grepl(".*[.]nc", model_path)) {
                 data_tmp = NetCDF_to_tibble(model_path)

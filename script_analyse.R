@@ -163,18 +163,10 @@ if ('analyse_data' %in% to_do) {
                                       by=c("Model", "Code"))  
         }
     }
-}
-
-if ('save_analyse' %in% to_do) {
-    if (saving_format == "fst") {
-        write_metaFST(meta, resdir,
-                      filedir=file.path('fst'))
-        write_metaFST(dataEx, resdir,
-                      filedir=file.path('fst'))
-        
-    } else if (saving_format == "Rdata") {
-        
-    } else if (saving_format == "txt") {
-        
-    }
+    write_tibble(meta,
+                 filedir=tmpdir,
+                 filename=paste0("meta_", subset, ".fst"))
+    write_tibble(dataEx,
+                 filedir=tmpdir,
+                 filename=paste0("dataEx_", subset, ".fst"))
 }

@@ -111,22 +111,27 @@ rv_shpname = 'CoursEau_FXX.shp'
 
 
 ## 3. OUTPUT DIRECTORIES _____________________________________________
+### 3.0. Info ________________________________________________________
 today = format(Sys.Date(), "%Y_%m_%d")
+now = format(Sys.time(), "%H_%M_%S")
+
 ### 3.1. Results _____________________________________________________
-resdir = file.path(computer_work_path, 'results', today)
-if (!(file.exists(resdir))) {
-  dir.create(resdir)
-}
-print(paste('resdir :', resdir))
-modified_data_dir = 'modified_data'
-trend_dir = 'trend_analyses'
+resdir = file.path(computer_work_path, 'results')
+today_resdir = file.path(computer_work_path, 'results', today)
+now_resdir = file.path(computer_work_path, 'results', today, now)
+# if (!(file.exists(now_resdir))) {
+#   dir.create(now_resdir, recursive=TRUE)
+# }
+print(paste('now_resdir :', now_resdir))
 
 ### 3.2. Figures  ____________________________________________________
-figdir = file.path(computer_work_path, 'figures', today)
-if (!(file.exists(figdir))) {
-  dir.create(figdir)
-}
-print(paste('figdir :', figdir))
+figdir = file.path(computer_work_path, 'figures')
+today_figdir = file.path(computer_work_path, 'figures', today)
+now_figdir = file.path(computer_work_path, 'figures', today, now)
+# if (!(file.exists(now_figdir))) {
+#   dir.create(now_figdir, recursive=TRUE)
+# }
+print(paste('now_figdir :', now_figdir))
 
 
 #  ___                               _                 
@@ -171,9 +176,11 @@ samplePeriod_opti = list(
 ### 1.3. Saving ______________________________________________________
 # Saving format to use to save analyse data
 saving_format =
-    'fst'
-    # 'Rdata'
-    # 'txt'
+    c(
+        'fst',
+        'Rdata',
+        'txt'
+    )
 
 
 ## 2. PLOTTING  ______________________________________________________
@@ -290,11 +297,11 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        'create_data'
-        'analyse_data'
+        'create_data',
+        'analyse_data',
         'save_analyse'
-        'read_saving'=''
-        'plot_diagnostic_datasheet'
+        # 'read_saving'='',
+        # 'plot_diagnostic_datasheet'
     )
 
 
@@ -383,6 +390,11 @@ library(stringr)
 # library(trend)
 
 
+if ("read_saving" %in% names(to_do)) {
+    read_saving_in = to_do["read_saving"]
+    to_do[names(to_do) == "read_saving"] = "read_saving"
+}
+
 codes_to_diag_SHP = read_shp(file.path(computer_data_path,
                                        codes_to_diag_SHPdir))
 codes_to_diag = as.character(codes_to_diag_SHP$Code)
@@ -395,34 +407,46 @@ code_filenames_to_use = convert_regexp(computer_data_path,
                                        obs_dir, code_filenames_to_use)
 codes_to_use = gsub("[_].*$", "", code_filenames_to_use)
 okCode = codes_to_use %in% codes_to_diag
-Code = codes_to_use[okCode]
-nCode = length(Code)
+CodeALL = codes_to_use[okCode]
+nCodeALL = length(CodeALL)
 code_filenames_to_use = code_filenames_to_use[okCode]
 
-nCode4write = 4
-nSlice = (nCode %/% nCode4write)
-dS = nCode/nSlice
+nCode4write = 5
+Subsets = ceiling(nCodeALL/nCode4write)
 
-for (s in 1:nSlice) {
-
-    CodeSlice = Code[as.integer((s-1)*dS):as.integer(s*dS)]
-    print(CodeSlice)
-
+if ('analyse_data' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
+    tmpdir = file.path(computer_work_path, "tmp")
+    if (file.exists(tmpdir)) {
+        unlink(tmpdir, recursive=TRUE)
+    }
+    if (!(file.exists(tmpdir))) {
+        dir.create(tmpdir, recursive=TRUE)
+    }
 }
 
-## 1. CREATION _____________________________________________________
-if ('create_data' %in% to_do) {
-    print('CREATE')
-    source('script_create.R', encoding='UTF-8')
+if ('create_data' %in% to_do | 'analyse_data' %in% to_do) {    
+    for (subset in 1:Subsets) {
+
+        Code = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
+        Code = Code[!is.na(Code)]
+
+        if ('create_data' %in% to_do) {
+            print('CREATE')
+            source('script_create.R', encoding='UTF-8')
+        }
+
+        if ('analyse_data' %in% to_do) {
+            print('ANALYSES')
+            source('script_analyse.R', encoding='UTF-8')
+        }
+    }
 }
 
-## 2. ANALYSES _______________________________________________________
 if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do) {
-    print('ANALYSES')
-    source('script_analyse.R', encoding='UTF-8')
+    print('MANAGEMENT')
+    source('script_management.R', encoding='UTF-8')
 }
 
-## 3. PLOTTING _______________________________________________________
 if ('plot_diagnostic_datasheet' %in% to_do) {
     print('PLOTTING')
     source('script_layout.R', encoding='UTF-8')
