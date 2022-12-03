@@ -150,6 +150,9 @@ if ('analyse_data' %in% to_do) {
                          Process=Process,
                          period=period)
 
+        print(paste0("Data extracted for ", var))
+        print(Xex)
+
         Xex$Model = gsub("[_].*$", "", Xex$ID)
         Xex$Code = gsub("^.*[_]", "", Xex$ID)
         Xex = dplyr::select(Xex, -ID)

@@ -50,7 +50,6 @@ if ('analyse_data' %in% to_do) {
                                  filename=paste0("dataEx_",
                                                  subset,
                                                  ".fst"))
-
         if (!exists("dataEx")) {
             meta = meta_tmp
         } else {
@@ -62,9 +61,37 @@ if ('analyse_data' %in% to_do) {
             dataEx = dplyr::bind_rows(dataEx, dataEx_tmp)
         }
     }
+    rm (meta_tmp)
+    rm (dataEx_tmp)
+
+    dataEx = dataEx[order(dataEx$Model),]
+    meta = meta[order(meta$Code),]
+
+    Vars = colnames(dataEx)
+    Vars = Vars[grepl("([_]obs)|([_]sim)", Vars)]
+    VarsREL = gsub("([_]obs)|([_]sim)", "", Vars)
+    VarsREL = VarsREL[!duplicated(VarsREL)]
+    nVarsREL = length(VarsREL)
+    
+    for (i in 1:nVarsREL) {
+        varREL = VarsREL[i]
+        if (grepl("^HYP.*", varREL)) {
+            dataEx[varREL] =
+                dataEx[paste0(varREL, "_sim")] &
+                dataEx[paste0(varREL, "_obs")]
+        } else {
+            dataEx[varREL] =
+                dataEx[paste0(varREL, "_sim")] /
+                dataEx[paste0(varREL, "_obs")]
+        }
+    }
 }
 
 if ('save_analyse' %in% to_do) {
+
+    print(paste0("Save extracted data and metadata in ",
+                 paste0(saving_format, collapse=", ")))
+    
     if ("fst" %in% saving_format) {
         write_tibble(meta,
                      filedir=now_resdir,
@@ -92,6 +119,10 @@ if ('save_analyse' %in% to_do) {
 }
 
 if ('read_saving' %in% to_do) {
+
+    print(paste0("Reading extracted data and metadata in ",
+                 read_saving_in))
+    
     Filepaths = list.files(read_saving_in, full.names=TRUE)
     Filenames = list.files(read_saving_in, full.names=FALSE)
     nFile = length(Filenames)

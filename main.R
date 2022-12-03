@@ -429,25 +429,39 @@ if ('create_data' %in% to_do | 'analyse_data' %in% to_do) {
 
         Code = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
         Code = Code[!is.na(Code)]
+        nCode = length(Code)
+        
+        print(paste0(nCode*(subset-1), "/", nCodeALL,
+                     " stations analysed so ",
+                     round(nCode*(subset-1)/nCodeALL*100, 1),
+                     "% done"))
+        print("")
+        print("For stations :")
+        print(paste0(Code, collapse=", "))
 
         if ('create_data' %in% to_do) {
+            print("")
             print('CREATE')
             source('script_create.R', encoding='UTF-8')
         }
 
         if ('analyse_data' %in% to_do) {
+            print("")
             print('ANALYSES')
             source('script_analyse.R', encoding='UTF-8')
         }
+        print("")
     }
 }
 
 if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do) {
+    print("")
     print('MANAGEMENT')
     source('script_management.R', encoding='UTF-8')
 }
 
 if ('plot_diagnostic_datasheet' %in% to_do) {
+    print("")
     print('PLOTTING')
     source('script_layout.R', encoding='UTF-8')
 }

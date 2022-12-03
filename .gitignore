@@ -4,3 +4,6 @@
 *.emacs*
 .directory
 *.nc
+tmp
+results
+figures

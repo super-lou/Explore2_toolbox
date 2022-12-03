@@ -67,7 +67,8 @@ if ('create_data' %in% to_do) {
         if (file.exists(model_path)) {
             Model = c(Model, model)
 
-            print(model)
+            print(paste0("Get simulated data from ", model,
+                         " in ", model_path))
             
             if (grepl(".*[.]Rdata", model_path)) {
                 data_tmp = read_tibble(filepath=model_path)
@@ -83,6 +84,7 @@ if ('create_data' %in% to_do) {
             data_sim = dplyr::bind_rows(data_sim, data_tmp)
         }
     }
+    rm (data_tmp)
     
     data = dplyr::inner_join(data_sim,
                              data_obs,
