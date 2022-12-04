@@ -60,6 +60,7 @@ computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/E
 ### 2.1. Data ________________________________________________________
 computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
 obs_dir = "debit/BanqueHydro_Export2021"
+obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Ex2D/diagnostic"
 codes_to_diag_SHPdir = "Ex2D/reseauReferenceHYDRO"
 
@@ -297,9 +298,9 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'create_data',
+        'analyse_data'
+        # 'save_analyse'
         # 'read_saving'='',
         # 'plot_diagnostic_datasheet'
     )
@@ -403,15 +404,19 @@ if (all(code_filenames_to_use == "")) {
     stop ("No station selected")
 }
 
-code_filenames_to_use = convert_regexp(computer_data_path,
-                                       obs_dir, code_filenames_to_use)
-codes_to_use = gsub("[_].*$", "", code_filenames_to_use)
-okCode = codes_to_use %in% codes_to_diag
-CodeALL = codes_to_use[okCode]
+if (code_filenames_to_use == "all") {
+    CodeALL = codes_to_diag
+        
+} else {
+    code_filenames_to_use = convert_regexp(computer_data_path,
+                                           obs_dir, code_filenames_to_use)
+    codes_to_use = gsub("[_].*$", "", code_filenames_to_use)
+    okCode = codes_to_use %in% codes_to_diag
+    CodeALL = codes_to_use[okCode]
+}
 nCodeALL = length(CodeALL)
-code_filenames_to_use = code_filenames_to_use[okCode]
 
-nCode4write = 5
+nCode4write = 50
 Subsets = ceiling(nCodeALL/nCode4write)
 
 if ('analyse_data' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
@@ -430,6 +435,7 @@ if ('create_data' %in% to_do | 'analyse_data' %in% to_do) {
         Code = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
         Code = Code[!is.na(Code)]
         nCode = length(Code)
+        code_filenames_to_use = paste0(Code, obs_format)
         
         print(paste0(nCode*(subset-1), "/", nCodeALL,
                      " stations analysed so ",

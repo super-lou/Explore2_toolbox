@@ -76,14 +76,28 @@ if ('analyse_data' %in% to_do) {
     for (i in 1:nVarsREL) {
         varREL = VarsREL[i]
         if (grepl("^HYP.*", varREL)) {
-            dataEx[varREL] =
-                dataEx[paste0(varREL, "_sim")] &
-                dataEx[paste0(varREL, "_obs")]
+            dataEx[[varREL]] =
+                dataEx[[paste0(varREL, "_sim")]] &
+                dataEx[[paste0(varREL, "_obs")]]
+
+        } else if (grepl("(^t)|([{]t)", varREL)) {
+            dataEx[[varREL]] =
+                circular_divided(
+                    circular_minus(dataEx[[paste0(varREL, "_sim")]],
+                                   dataEx[[paste0(varREL, "_obs")]],
+                                   period=365.25),
+                    dataEx[[paste0(varREL, "_obs")]],
+                    period=365.25)
+            
         } else {
-            dataEx[varREL] =
-                dataEx[paste0(varREL, "_sim")] /
-                dataEx[paste0(varREL, "_obs")]
+            dataEx[[varREL]] =
+                (dataEx[[paste0(varREL, "_sim")]] -
+                 dataEx[[paste0(varREL, "_obs")]]) /
+                dataEx[[paste0(varREL, "_obs")]]
         }
+        dataEx = dplyr::relocate(dataEx,
+                                 !!varREL,
+                                 .after=!!paste0(varREL, "_sim"))
     }
 }
 
