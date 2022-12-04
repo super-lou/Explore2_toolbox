@@ -242,17 +242,17 @@ models_to_diag =
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    # 'all'
-    c(
-        # 'X0500010_HYDRO_QJM.txt'
+    'all'
+    # c(
+        # 'K3374710_HYDRO_QJM.txt'
         # '^K'
         # '^L',
         # '^M',
         # '^U',
         # '^V'
         # '^W',
-        '^X'
-    )
+        # '^X'
+    # )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -271,8 +271,8 @@ var_to_analyse_dir =
     # ''
     # 'AEAG'
     # 'MAKAHO'
-    # 'Ex2D'
-    'WIP'
+    'Ex2D'
+    # 'WIP'
 
 ### 3.4. Steps _______________________________________________________
 # This vector regroups all the different step you want to do. For
@@ -298,9 +298,9 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data',
-        'analyse_data'
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_saving'='',
         # 'plot_diagnostic_datasheet'
     )
