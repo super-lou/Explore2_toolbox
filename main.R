@@ -298,10 +298,11 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        'create_data',
-        'analyse_data',
-        'save_analyse'
-        # 'read_saving'='',
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
+        # 'read_saving'='2022_12_04/18_44_43/dataEx_presque.fst'
+        'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
     )
 
@@ -392,7 +393,8 @@ library(stringr)
 
 
 if ("read_saving" %in% names(to_do)) {
-    read_saving_in = to_do["read_saving"]
+    read_saving = to_do["read_saving"]
+    read_saving = file.path(resdir, read_saving)
     to_do[names(to_do) == "read_saving"] = "read_saving"
 }
 
@@ -466,7 +468,7 @@ if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% t
     source('script_management.R', encoding='UTF-8')
 }
 
-if ('plot_diagnostic_datasheet' %in% to_do) {
+if ('plot_correlation_matrix' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
     print("")
     print('PLOTTING')
     source('script_layout.R', encoding='UTF-8')

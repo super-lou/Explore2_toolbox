@@ -67,14 +67,34 @@ if ('analyse_data' %in% to_do) {
     dataEx = dataEx[order(dataEx$Model),]
     meta = meta[order(meta$Code),]
 
-    Vars = colnames(dataEx)
-    Vars = Vars[grepl("([_]obs)|([_]sim)", Vars)]
-    VarsREL = gsub("([_]obs)|([_]sim)", "", Vars)
+    Vars = names(dataEx)
+
+    
+    # endBySO = grepl("([_]obs$)|([_]sim$)", Vars)
+    # Vars[containSO & !endBySO]
+
+    containSEA = grepl("SEA", Vars)
+    
+    Vars_SEA = Vars[containSEA]
+    SEAofVars = gsub("^.*[_]+", "", Vars_SEA)
+    Vars_SEA = stringr::str_extract(Vars_SEA, "^.*[_]+")
+    Vars_SEA = gsub("[_]$", "", Vars_SEA)
+    for (i in 1:length(Vars_SEA)) {
+        Vars_SEA[i] = gsub("SEA", SEAofVars[i], Vars_SEA[i])
+    }
+    
+    Vars[containSEA] = Vars_SEA
+    names(dataEx) = Vars
+    
+    containSO = "([_]obs$)|([_]sim$)"
+    Vars = Vars[grepl(containSO, Vars)]
+    VarsREL = gsub(containSO, "", Vars)
     VarsREL = VarsREL[!duplicated(VarsREL)]
     nVarsREL = length(VarsREL)
     
     for (i in 1:nVarsREL) {
         varREL = VarsREL[i]
+        print(varREL)
         if (grepl("^HYP.*", varREL)) {
             dataEx[[varREL]] =
                 dataEx[[paste0(varREL, "_sim")]] &
@@ -135,12 +155,13 @@ if ('save_analyse' %in% to_do) {
 if ('read_saving' %in% to_do) {
 
     print(paste0("Reading extracted data and metadata in ",
-                 read_saving_in))
+                 read_saving))
     
-    Filepaths = list.files(read_saving_in, full.names=TRUE)
-    Filenames = list.files(read_saving_in, full.names=FALSE)
+    Filenames = gsub("^.*[/]+", "", read_saving)
+    Filenames = gsub("[.].*$", "", Filenames)
     nFile = length(Filenames)
     for (i in 1:nFile) {
-        assign(read_tibble(filepath=Filepaths[i]), Filenames[i])
+        print(paste0(Filepaths[i], " saves in ", read_saving[i]))
+        assign(Filenames[i], read_tibble(filepath=read_saving[i]))
     }
 }
