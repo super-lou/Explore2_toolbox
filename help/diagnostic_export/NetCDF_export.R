@@ -124,16 +124,11 @@ NCf$P.03.missing_value = NaN
 
 
 ## 6. SAVING _________________________________________________________
-data_dir = "data_NetCDF"
-if (!(file.exists(data_dir))) {
-    dir.create(data_dir)
-}
-
-generate_NCf(out_dir=data_dir)
+generate_NCf(out_dir="./")
 
 
 ## 7. READING ________________________________________________________
-NetCDF_path = file.path(data_dir, "MODEL_20221205.nc")
+NetCDF_path = file.path("MODEL_20221205.nc")
 
 NCdata = ncdf4::nc_open(NetCDF_path)    
 Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
