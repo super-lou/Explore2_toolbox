@@ -44,9 +44,49 @@
 #             units : Spécifie l’unité de la variable coordonnée
 
 
-## 1. LAMBERT-93 _____________________________________________________
-### 1.1. Lambert-93 X ________________________________________________
+## 1. WGS 84 _____________________________________________________
+### 1.1. WGS 84 lon ________________________________________________
 #### 1.1.1. Real _____________________________________________________
+NCf$WGS84_lon.name = "WGS84_lon"
+NCf$WGS84_lon.dimension = "station"
+NCf$WGS84_lon.precision = "double"
+NCf$WGS84_lon.value = 1:length(NCf$station.value)
+NCf$WGS84_lon.01.standard_name = "longitude"
+NCf$WGS84_lon.02.long_name = "longitude coordinate in WGS84"
+NCf$WGS84_lon.03.units = "degrees_east"
+#### 1.1.2. Model _____________________________________________________
+NCf$WGS84_lon_model.name = "WGS84_lon_model"
+NCf$WGS84_lon_model.dimension = "station"
+NCf$WGS84_lon_model.precision = "double"
+NCf$WGS84_lon_model.value = 1:length(NCf$station.value)
+NCf$WGS84_lon_model.01.standard_name = "longitude model"
+NCf$WGS84_lon_model.02.long_name =
+    "longitude coordinate in WGS84 in the model world"
+NCf$WGS84_lon_model.03.units = "degrees_east"
+
+### 1.2. WGS 84 lat ________________________________________________
+#### 1.2.1. Real _____________________________________________________
+NCf$WGS84_lat.name = "WGS84_lat"
+NCf$WGS84_lat.dimension = "station"
+NCf$WGS84_lat.precision = "double"
+NCf$WGS84_lat.value = 1:length(NCf$station.value)
+NCf$WGS84_lat.01.standard_name = "latitude"
+NCf$WGS84_lat.02.long_name = "latitude coordinate in WGS84"
+NCf$WGS84_lat.03.units = "degrees_north"
+#### 1.2.2. Model _____________________________________________________
+NCf$WGS84_lat_model.name = "WGS84_lat_model"
+NCf$WGS84_lat_model.dimension = "station"
+NCf$WGS84_lat_model.precision = "double"
+NCf$WGS84_lat_model.value = 1:length(NCf$station.value)
+NCf$WGS84_lat_model.01.standard_name = "latitude model"
+NCf$WGS84_lat_model.02.long_name =
+    "latitude coordinate in WGS84 in the model world"
+NCf$WGS84_lat_model.03.units = "degrees_north"
+
+
+## 2. LAMBERT-93 _____________________________________________________
+### 2.1. Lambert-93 X ________________________________________________
+#### 2.1.1. Real _____________________________________________________
 NCf$L93_X.name = "L93_X"
 NCf$L93_X.dimension = "station"
 NCf$L93_X.precision = "double"
@@ -54,7 +94,7 @@ NCf$L93_X.value = 1:length(NCf$station.value)
 NCf$L93_X.01.standard_name = "X Lambert-93"
 NCf$L93_X.02.long_name = "horizontal coordinate in Lambert-93"
 NCf$L93_X.03.units = "m"
-#### 1.1.2. Model _____________________________________________________
+#### 2.1.2. Model _____________________________________________________
 NCf$L93_X_model.name = "L93_X_model"
 NCf$L93_X_model.dimension = "station"
 NCf$L93_X_model.precision = "double"
@@ -64,8 +104,8 @@ NCf$L93_X_model.02.long_name =
     "horizontal coordinate in Lambert-93 in the model world"
 NCf$L93_X_model.03.units = "m"
 
-### 1.2. Lambert-93 Y ________________________________________________
-#### 1.2.1. Real _____________________________________________________
+### 2.2. Lambert-93 Y ________________________________________________
+#### 2.2.1. Real _____________________________________________________
 NCf$L93_Y.name = "L93_Y"
 NCf$L93_Y.dimension = "station"
 NCf$L93_Y.precision = "double"
@@ -73,7 +113,7 @@ NCf$L93_Y.value = 1:length(NCf$station.value)
 NCf$L93_Y.01.standard_name = "Y Lambert-93"
 NCf$L93_Y.02.long_name = "vertical coordinate in Lambert-93"
 NCf$L93_Y.03.units = "m"
-#### 1.2.2. Model _____________________________________________________
+#### 2.2.2. Model _____________________________________________________
 NCf$L93_Y_model.name = "L93_Y_model"
 NCf$L93_Y_model.dimension = "station"
 NCf$L93_Y_model.precision = "double"
@@ -84,9 +124,9 @@ NCf$L93_Y_model.02.long_name =
 NCf$L93_Y_model.03.units = "m"
 
 
-## 2. LAMBERT-II _____________________________________________________
-### 2.1. Lambert-II X ________________________________________________
-#### 2.1.1. Real _____________________________________________________
+## 3. LAMBERT-II _____________________________________________________
+### 3.1. Lambert-II X ________________________________________________
+#### 3.1.1. Real _____________________________________________________
 NCf$LII_X.name = "LII_X"
 NCf$LII_X.dimension = "station"
 NCf$LII_X.precision = "double"
@@ -94,7 +134,7 @@ NCf$LII_X.value = 1:length(NCf$station.value)
 NCf$LII_X.01.standard_name = "X Lambert-II"
 NCf$LII_X.02.long_name = "horizontal coordinate in Lambert-II"
 NCf$LII_X.03.units = "m"
-#### 2.1.2. Model _____________________________________________________
+#### 3.1.2. Model _____________________________________________________
 NCf$LII_X_model.name = "LII_X_model"
 NCf$LII_X_model.dimension = "station"
 NCf$LII_X_model.precision = "double"
@@ -104,8 +144,8 @@ NCf$LII_X_model.02.long_name =
     "horizontal coordinate in Lambert-II in the model world"
 NCf$LII_X_model.03.units = "m"
 
-### 2.2. Lambert-II Y ________________________________________________
-#### 2.2.1. Real _____________________________________________________
+### 3.2. Lambert-II Y ________________________________________________
+#### 3.2.1. Real _____________________________________________________
 NCf$LII_Y.name = "LII_Y"
 NCf$LII_Y.dimension = "station"
 NCf$LII_Y.precision = "double"
@@ -113,7 +153,7 @@ NCf$LII_Y.value = 1:length(NCf$station.value)
 NCf$LII_Y.01.standard_name = "Y Lambert-II"
 NCf$LII_Y.02.long_name = "vertical coordinate in Lambert-II"
 NCf$LII_Y.03.units = "m"
-#### 2.2.2. Model _____________________________________________________
+#### 3.2.2. Model _____________________________________________________
 NCf$LII_Y_model.name = "LII_Y_model"
 NCf$LII_Y_model.dimension = "station"
 NCf$LII_Y_model.precision = "double"
