@@ -301,9 +301,9 @@ to_do =
         # 'create_data',
         # 'analyse_data',
         # 'save_analyse'
-        # 'read_saving'='2022_12_04/18_44_43/dataEx_presque.fst'
-        'plot_correlation_matrix'
-        # 'plot_diagnostic_datasheet'
+        # 'read_saving'='2022_12_04/dataEx.fst'
+        # 'plot_correlation_matrix'
+        'plot_diagnostic_datasheet'
     )
 
 

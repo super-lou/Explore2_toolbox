@@ -128,26 +128,26 @@ if ('save_analyse' %in% to_do) {
     
     if ("fst" %in% saving_format) {
         write_tibble(meta,
-                     filedir=now_resdir,
+                     filedir=today_resdir,
                      filename=paste0("meta.fst"))
         write_tibble(dataEx,
-                     filedir=now_resdir,
+                     filedir=today_resdir,
                      filename=paste0("dataEx.fst"))
     }
     if ("Rdata" %in% saving_format) {
         write_tibble(meta,
-                     filedir=now_resdir,
+                     filedir=today_resdir,
                      filename=paste0("meta.Rdata"))
         write_tibble(dataEx,
-                     filedir=now_resdir,
+                     filedir=today_resdir,
                      filename=paste0("dataEx.Rdata"))
     }    
     if ("txt" %in% saving_format) {
         write_tibble(meta,
-                     filedir=now_resdir,
+                     filedir=today_resdir,
                      filename=paste0("meta.txt"))
         write_tibble(dataEx,
-                     filedir=now_resdir,
+                     filedir=today_resdir,
                      filename=paste0("dataEx.txt"))
     }  
 }
@@ -161,7 +161,7 @@ if ('read_saving' %in% to_do) {
     Filenames = gsub("[.].*$", "", Filenames)
     nFile = length(Filenames)
     for (i in 1:nFile) {
-        print(paste0(Filepaths[i], " saves in ", read_saving[i]))
+        print(paste0(Filenames[i], " saves in ", read_saving[i]))
         assign(Filenames[i], read_tibble(filepath=read_saving[i]))
     }
 }

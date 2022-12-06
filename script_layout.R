@@ -57,6 +57,29 @@ if ('plot_correlation_matrix' %in% to_do) {
 }
 
 
+if ('plot_diagnostic_datasheet' %in% to_do) {
+    plot_diagnostic_datasheet(dataEx,
+                              meta=meta,
+                              period=period,
+                              var=var_analyse,
+                              event=event_analyse,
+                              unit=unit_analyse,
+                              samplePeriod=samplePeriod_analyse,
+                              glose=glose_analyse,
+                              structure=structure,
+                              colorForce=TRUE,
+                              exXprob=exXprob,
+                              foot_note=TRUE,
+                              info_height=2.8,
+                              time_height=3,
+                              var_ratio=3,
+                              foot_height=1.25,
+                              shapefile_list=shapefile_list,
+                              figdir=today_figdir,
+                              logo_path=logo_path,
+                              zone_to_show=zone_to_show,
+                              pdf_chunk=pdf_chunk)
+}
 
 
 
