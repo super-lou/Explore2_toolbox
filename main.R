@@ -223,6 +223,8 @@ axis_xlim =
 # quantile 99 will be used as the minimum and maximum values to assign
 # to minmimal maximum colors.
 exXprob = 0.01
+
+propagate_NA = TRUE
     
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
@@ -231,8 +233,8 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "MODCOU"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "MODCOU"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         # "MORDOR",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
@@ -242,17 +244,17 @@ models_to_diag =
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    'all'
-    # c(
-        # 'K3374710_HYDRO_QJM.txt'
+    # 'all'
+    c(
+        'K3374710_HYDRO_QJM.txt'
         # '^K'
         # '^L',
         # '^M',
         # '^U',
         # '^V'
-        # '^W',
+        # '^W'
         # '^X'
-    # )
+    )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -271,8 +273,8 @@ var_to_analyse_dir =
     # ''
     # 'AEAG'
     # 'MAKAHO'
-    'Ex2D'
-    # 'WIP'
+    # 'Ex2D'
+    'WIP'
 
 ### 3.4. Steps _______________________________________________________
 # This vector regroups all the different step you want to do. For
@@ -298,12 +300,12 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data',
-        # 'analyse_data',
+        'create_data'
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_saving'='2022_12_04/dataEx.fst'
         # 'plot_correlation_matrix'
-        'plot_diagnostic_datasheet'
+        # 'plot_diagnostic_datasheet'
     )
 
 

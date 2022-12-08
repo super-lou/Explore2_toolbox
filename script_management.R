@@ -69,21 +69,18 @@ if ('analyse_data' %in% to_do) {
 
     Vars = names(dataEx)
 
-    
-    # endBySO = grepl("([_]obs$)|([_]sim$)", Vars)
-    # Vars[containSO & !endBySO]
-
     containSEA = grepl("SEA", Vars)
-    
-    Vars_SEA = Vars[containSEA]
-    SEAofVars = gsub("^.*[_]+", "", Vars_SEA)
-    Vars_SEA = stringr::str_extract(Vars_SEA, "^.*[_]+")
-    Vars_SEA = gsub("[_]$", "", Vars_SEA)
-    for (i in 1:length(Vars_SEA)) {
-        Vars_SEA[i] = gsub("SEA", SEAofVars[i], Vars_SEA[i])
+    if (any(containSEA)) {
+        Vars_SEA = Vars[containSEA]
+        SEAofVars = gsub("^.*[_]+", "", Vars_SEA)
+        Vars_SEA = stringr::str_extract(Vars_SEA, "^.*[_]+")
+        Vars_SEA = gsub("[_]$", "", Vars_SEA)
+        for (i in 1:length(Vars_SEA)) {
+            Vars_SEA[i] = gsub("SEA", SEAofVars[i], Vars_SEA[i])
+        }
+        Vars[containSEA] = Vars_SEA
     }
     
-    Vars[containSEA] = Vars_SEA
     names(dataEx) = Vars
     
     containSO = "([_]obs$)|([_]sim$)"

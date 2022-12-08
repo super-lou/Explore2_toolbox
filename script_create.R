@@ -89,6 +89,11 @@ if ('create_data' %in% to_do) {
     data = dplyr::inner_join(data_sim,
                              data_obs,
                              by=c("Date", "Code"))
+
+    if (propagate_NA) {
+        data$Q_sim[is.na(data$Q_obs)] = NA
+    }
+    
     data = dplyr::relocate(data, Q_obs, .before=Q_sim)
     data = dplyr::relocate(data, T, .before=ET0)
 
