@@ -6,6 +6,15 @@ inflect <- function(x, threshold=1){
     list(minima = which(apply(a, 1, min) == a[, 1]), maxima = which(apply(a, 1, max) == a[, 1]))
 }
 
+HTML2rgba = function (HTML, alpha) {
+    HTML = gsub("^[#]", "", HTML)
+    r = base::strtoi(paste0("0x", substr(HTML, 1, 2)))
+    g = base::strtoi(paste0("0x", substr(HTML, 3, 4)))
+    b = base::strtoi(paste0("0x", substr(HTML, 5, 6)))
+    a = round(alpha*255)
+    return (paste0("rgba(", r, ",", g, ",", b, ",", a, ")"))
+}
+
 data = data[!is.na(data$Q_sim),]
 
 
@@ -55,8 +64,6 @@ if (valley[length(valley)] < peak[length(peak)]) {
     peak = peak[-length(peak)]
 }
 
-
-
 # 'V2114010_HYDRO_QJM.txt'
 # cut gap for data = data[10000:11000,]
 
@@ -96,24 +103,13 @@ Beta = sapply(Coef, '[[', "beta")
 Tau = -1/Alpha
 
 OK = Tau > 0 & Tau < quantile(Tau, 0.9)
+peak = peak[OK]
+valley = valley[OK]
 ABS = ABS[OK]
 ORD = ORD[OK]
 Alpha = Alpha[OK]
 Beta = Beta[OK]
 Tau = Tau[OK]
-
-
-# x11(width=18, height=10)
-# plot(data$Date, logb(data$Q_sim), type="l")
-# lines(ssX, logb(ssY), col='blue')
-# points(ssX[peak], logb(ssY[peak]), col='red')
-# points(ssX[valley], logb(ssY[valley]), col='yellow')
-
-# nLine = length(Tau)
-# for (i in 1:nLine) {
-#     lines(ABS[[i]], ABS[[i]]*Alpha[i] + Beta[i], col='green')
-# }
-
 
 medianTau = median(Tau)
 
@@ -137,7 +133,7 @@ fig1 = plotly::add_trace(fig1,
                          mode="lines",
                          x=data$Date,
                          y=logb(data$Q_sim),
-                         line=list(color="Turquoise",
+                         line=list(color="PaleTurquoise",
                                    width=1.5),
                          xhoverformat="%d/%m/%Y",
                          hovertemplate = paste0(
@@ -145,7 +141,7 @@ fig1 = plotly::add_trace(fig1,
                              " ", "%{x}<br>",
                              "<b>Q </b> %{y}",
                              "<extra></extra>"),
-                         hoverlabel=list(bgcolor="Turquoise",
+                         hoverlabel=list(bgcolor="PaleTurquoise",
                                          font=list(size=12),
                                          bordercolor="white"),
                          legendgroup='Q',
@@ -169,7 +165,7 @@ fig1 = plotly::add_trace(fig1,
                          x=ssX,
                          y=logb(ssY),
                          line=list(color="Teal",
-                                   width=1.5),
+                                   width=2),
                          xhoverformat="%d/%m/%Y",
                          hovertemplate = paste0(
                              "jour",
@@ -197,8 +193,9 @@ for (i in 1:nLine) {
                              mode="lines",
                              x=ABS[[i]],
                              y=as.numeric(ABS[[i]])*Alpha[i] + Beta[i],
+                             opacity=0.8,
                              line=list(color="white",
-                                       width=2),
+                                       width=3),
                              hoverinfo="none",
                              legendgroup='fit',
                              showlegend=FALSE)
@@ -208,15 +205,15 @@ for (i in 1:nLine) {
                              mode="lines",
                              x=ABS[[i]],
                              y=as.numeric(ABS[[i]])*Alpha[i] + Beta[i],
-                             line=list(color="CornflowerBlue ",
-                                       width=1),
+                             opacity=0.8,
+                             line=list(color="MediumTurquoise",
+                                       width=1.5),
                              xhoverformat="%d/%m/%Y",
+                             text=round(Tau[i], 1),
                              hovertemplate = paste0(
-                                 "jour",
-                                 " ", "%{x}<br>",
-                                 "<b>fit </b> %{y}",
+                                 "<b>%{text}</b> jour",
                                  "<extra></extra>"),
-                             hoverlabel=list(bgcolor="CornflowerBlue ",
+                             hoverlabel=list(bgcolor="MediumTurquoise",
                                              font=list(size=12),
                                              bordercolor="white"),
                              legendgroup='fit',
@@ -230,12 +227,13 @@ fig1 = plotly::add_trace(fig1,
                          mode="markers",
                          x=ssX[peak],
                          y=logb(ssY[peak]),
+                         opacity=0.8,
                          marker=list(
                              color='transparent',
-                             size=6,
+                             size=7,
                              line=list(
                                  color='DarkOrange',
-                                 width=1)),
+                                 width=1.5)),
                          xhoverformat="%d/%m/%Y",
                          hovertemplate = paste0(
                              "jour",
@@ -253,12 +251,13 @@ fig1 = plotly::add_trace(fig1,
                          mode="markers",
                          x=ssX[valley],
                          y=logb(ssY[valley]),
+                         opacity=0.8,
                          marker=list(
                              color='transparent',
-                             size=6,
+                             size=7,
                              line=list(
-                                 color='DarkSlateBlue',
-                                 width=1)),
+                                 color="DarkSlateBlue",
+                                 width=1.5)),
                          xhoverformat="%d/%m/%Y",
                          hovertemplate = paste0(
                              "jour",
@@ -274,7 +273,7 @@ fig1 = plotly::add_trace(fig1,
 ## Annotation ________________________________________________________
 fig1 = plotly::add_annotations(fig1,
                                x=0.01,
-                               y=1.05,
+                               y=1,
                                xref="paper",
                                yref="paper",
                                text=paste0("<b>",
@@ -284,22 +283,8 @@ fig1 = plotly::add_annotations(fig1,
                                showarrow=FALSE,
                                xanchor='left',
                                yanchor='bottom',
-                               font=list(color="LightSeaGreen ",
+                               font=list(color="LightSeaGreen",
                                          size=25))
-
-fig1 = plotly::add_annotations(fig1,
-                               x=0.01,
-                               y=1,
-                               xref="paper",
-                               yref="paper",
-                               text=paste0("<b>Tau </b>:<b> ",
-                                           round(medianTau, 2),
-                                           "</b> jours"),
-                               showarrow=FALSE,
-                               xanchor='left',
-                               yanchor='bottom',
-                               font=list(color="LightSeaGreen ",
-                                         size=20))
 
 fig1 = plotly::layout(fig1,
                       separators='. ',
@@ -334,16 +319,90 @@ fig1 = plotly::layout(fig1,
 
 ## FIG2 ______________________________________________________________
 fig2 = plotly::plot_ly()
-fig2 = plotly::add_histogram(fig2,
-                             x=Tau,
-                             nbinsx=20,
-                             bargap=0.05,
-                             color_discrete_sequence=list("MediumTurquoise"),
-                             name="<b>Histogram de Tau</b>")
+for (i in 1:nLine) {
+    fig2 = plotly::add_trace(fig2,
+                             type="scatter",
+                             mode="lines",
+                             x=seq(0.4, 1, length.out=10),
+                             y=rep(Tau[i], 10),
+                             opacity=0.4,
+                             line=list(color="MediumTurquoise",
+                                       width=2),
+                             hovertemplate = paste0(
+                                 "<b>tau </b> %{y} jours",
+                                 "<extra></extra>"),
+                             hoverlabel=list(bgcolor="MediumTurquoise",
+                                             font=list(size=12),
+                                             bordercolor="white"),
+                             showlegend=FALSE)
+}
+
+fig2 = plotly::add_trace(fig2,
+                         type="scatter",
+                         mode="lines",
+                         x=seq(0.2, 1.2, length.out=10),
+                         y=rep(medianTau, 10),
+                         opacity=0.8,
+                         line=list(color="MediumTurquoise",
+                                   width=2),
+                         hovertemplate = paste0(
+                             "<b>tau </b> %{y} jours",
+                             "<extra></extra>"),
+                         hoverlabel=list(bgcolor="MediumTurquoise",
+                                         font=list(size=12),
+                                         bordercolor="white"),
+                         showlegend=FALSE)
+
+fig2 = plotly::add_annotations(fig2,
+                               x=1.3,
+                               y=medianTau,
+                               text=paste0("<b>",
+                                           round(medianTau, 1),
+                                           "<br>jours</b>"),
+                               showarrow=FALSE,
+                               xanchor='left',
+                               yanchor='center',
+                               font=list(color="MediumTurquoise",
+                                         size=10))
+
+
+fig2 = plotly::layout(fig2,
+                      separators='. ',
+
+                      xaxis=list(range=list(0, 2),
+                                 showgrid=FALSE,
+                                 ticks="transparent",
+                                 tickcolor="transparent",
+                                 tickfont=
+                                     list(color="transparent"),
+                                 showline=FALSE,
+                                 zerolinecolor="LightGrey",
+                                 zerolinewidth=2,
+                                 linecolor="transparent",
+                                 showticklabels=FALSE,
+                                 fixedrange=TRUE),
+                      
+                      yaxis=list(
+                          title=list(
+                              font=list(color="DarkGrey")),
+                          gridcolor="WhiteSmoke",
+                          gridwidth=1,
+                          ticks="outside",
+                          tickcolor="DarkGrey",
+                          tickfont=list(color="Grey"),
+                          showline=FALSE,
+                          zerolinecolor="WhiteSmoke",
+                          zerolinewidth=2,
+                          fixedrange=TRUE),
+
+                      autosize=TRUE,
+                      plot_bgcolor="transparent",
+                      paper_bgcolor='transparent',
+                      showlegend=TRUE)
 
 ## FIG _______________________________________________________________
 fig = plotly::subplot(fig1, fig2,
-                      widths=c(4/5, 1/5),
+                      widths=c(9/10, 1/10),
                       margin=0.02)
 
 fig = plotly::layout(fig,
@@ -351,7 +410,7 @@ fig = plotly::layout(fig,
                      margin=list(l=25,
                                  r=25,
                                  b=25,
-                                 t=75,
+                                 t=50,
                                  pad=0),
 
                      autosize=TRUE,
