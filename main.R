@@ -83,13 +83,8 @@ if (!(file.exists(resources_path))) {
   dir.create(resources_path)
 }
 print(paste('resources_path :', resources_path))
-
 #### 2.3.1. Logo _____________________________________________________
 logo_dir = 'logo'
-PRlogo_file = 'logo_Prefet_bassin.png'
-AEAGlogo_file = 'agence-de-leau-adour-garonne_logo.png'
-INRAElogo_file = 'Logo-INRAE_Transparent.png'
-FRlogo_file = 'Republique_Francaise_RVB.png'
 
 #### 2.3.2. Shapefile ________________________________________________
 shp_dir = 'map'
@@ -206,10 +201,7 @@ toleranceRel =
 # Which logo do you want to show in the footnote
 logo_to_show =
     c(
-        # 'PR',
-        'FR',
-        'INRAE'
-        # 'AEAG'
+        Explore2='LogoExplore2.png'
     )
 
 ### 2.3. Other _______________________________________________________ 
@@ -233,8 +225,8 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "MODCOU"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "MODCOU"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         # "MORDOR",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
@@ -248,14 +240,14 @@ code_filenames_to_use =
     c(
         # 'K3374710_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
-        'W2335210_HYDRO_QJM.txt'
+        # 'W2335210_HYDRO_QJM.txt'
         # 'X2114010_HYDRO_QJM.txt'
         # '^K'
         # '^L',
         # '^M',
         # '^U',
         # '^V'
-        # '^W'
+        '^W'
         # '^X'
     )
 
@@ -303,11 +295,11 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        'create_data'
+        # 'create_data'
         # 'analyse_data'
         # 'save_analyse'
         # 'read_saving'='2022_12_04/dataEx.fst'
-        # 'plot_correlation_matrix'
+        'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
     )
 

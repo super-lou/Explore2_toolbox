@@ -22,11 +22,8 @@ ss = smooth.spline(data$Date,
                    data$Q_sim,
                    df=10,
                    spar=0.5,
-                   # nknots=length(data$Date)*2/3,
                    nknots=length(data$Date)/1.5,
-                   # w=data$Q_sim/max(data$Q_sim)
-                   w=1/sqrt(data$Q_sim/max(data$Q_sim))
-                   )
+                   w=1/sqrt(data$Q_sim/max(data$Q_sim)))
 ssX = as.Date(ss$x, origin=as.Date("1970-01-01"))
 ssY = ss$y
 
@@ -43,11 +40,6 @@ nMax = max(nPeak, nValley)
 peak = c(peak, rep(NA, times=nMax-nPeak))
 valley = c(valley, rep(NA, times=nMax-nValley))
 
-# p = 0.05
-# OK = ssY[peak] >= quantile(ssY[peak], p, na.rm=TRUE) | ssY[valley] >= quantile(ssY[valley], p, na.rm=TRUE)
-# peak = peak[OK]
-# valley = valley[OK]
-
 names(valley)=rep("v", length(valley))
 names(peak)=rep("p", length(peak))
 all = sort(c(peak, valley))
@@ -63,7 +55,6 @@ if (valley[1] < peak[1]) {
 if (valley[length(valley)] < peak[length(peak)]) {
     peak = peak[-length(peak)]
 }
-
 # 'V2114010_HYDRO_QJM.txt'
 # cut gap for data = data[10000:11000,]
 
@@ -79,17 +70,7 @@ add = function (X, n) {
 }
 
 ABS = mapply(cut, peak, valley, list(X=ssX))
-# nMaxABS = max(sapply(ABS, length))
-# ABS = lapply(ABS, add, n=nMaxABS)
-# ABS = matrix(unlist(ABS), ncol=length(ABS))
-
 ORD = mapply(cut, peak, valley, list(X=logb(ssY)))
-# nMaxORD = max(sapply(ORD, length))
-# ORD = lapply(ORD, add, n=nMaxORD)
-# ORD = matrix(unlist(ORD), ncol=length(ORD))
-
-# lm.fit(ABS, ORD)
-
 
 fit = function (X, Y) {
     res = lm(Y~X)$coefficients

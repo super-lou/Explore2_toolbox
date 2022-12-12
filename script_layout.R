@@ -45,16 +45,17 @@
 #                                     toleranceRel=toleranceRel)
 # }
 
-logo_path = load_logo(resources_path, logo_dir, PRlogo_file,
-                      AEAGlogo_file, INRAElogo_file, FRlogo_file,
-                      logo_to_show)
+logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 
 
 
 
 if ('plot_correlation_matrix' %in% to_do) {
-    plot_correlation_matrix(dataEx, today_figdir)
+    page_correlation_matrix(dataEx,
+                            logo_path=logo_path,
+                            figdir=today_figdir)
 }
+
 
 
 if ('plot_diagnostic_datasheet' %in% to_do) {
