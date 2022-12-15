@@ -80,16 +80,53 @@ if ('create_data' %in% to_do) {
             data_tmp = data_tmp[data_tmp$Code %in% Code,]
             data_tmp = data_tmp[order(data_tmp$Code),]
             data_tmp = convert_diag_data(model, data_tmp)
-            
+
             data_sim = dplyr::bind_rows(data_sim, data_tmp)
         }
     }
     rm (data_tmp)
-    
+
     data = dplyr::inner_join(data_sim,
                              data_obs,
                              by=c("Date", "Code"))
 
+    if (!is.null(complete_by) & complete_by != "") {
+        model4complete = complete_by[complete_by %in% Model][1]
+        col2check = c("T", "Pl", "ET0", "Ps")
+        nCol2check = length(col2check)
+        
+        if (!is.na(model4complete)) {
+            data_model4complete = data[data$Model == model4complete,]
+            data_model4complete = dplyr::select(data_model4complete,
+                                                -Model)
+            
+            for (model in Model) {
+                data_model = data[data$Model == model,]
+                data_model = dplyr::select(data_model,
+                                           -Model)
+
+                for (i in 1:nCol2check) {
+                    col = col2check[i]
+                    
+                    if (all(is.na(data_model[[col]]))) {
+                        data_model =
+                            dplyr::left_join(
+                                       dplyr::select(data_model, -col),
+                                       dplyr::select(data_model4complete,
+                                                     c("Date",
+                                                       "Code",
+                                                       col)),
+                                       by=c("Code", "Date"))
+                    }
+                }
+                data_model = dplyr::bind_cols(Model=model,
+                                              data_model)
+                data_model = data_model[names(data)]
+                data[data$Model == model,] = data_model
+            }
+        }
+    }
+    
     if (propagate_NA) {
         data$Q_sim[is.na(data$Q_obs)] = NA
     }

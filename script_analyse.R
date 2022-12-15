@@ -46,22 +46,22 @@ if ('analyse_data' %in% to_do) {
     script_to_analyse = script_to_analyse[!grepl("default.R",
                                                  script_to_analyse)]
 
-    event_to_analyse = list.dirs(script_to_analyse_dirpath,
+    topic_to_analyse = list.dirs(script_to_analyse_dirpath,
                                  recursive=TRUE, full.names=FALSE)
-    event_to_analyse = event_to_analyse[event_to_analyse != ""]
-    event_to_analyse = gsub('.*_', '', event_to_analyse)
+    topic_to_analyse = topic_to_analyse[topic_to_analyse != ""]
+    topic_to_analyse = gsub('.*_', '', topic_to_analyse)
 
-    structure = replicate(length(event_to_analyse), c())
-    names(structure) = event_to_analyse
+    structure = replicate(length(topic_to_analyse), c())
+    names(structure) = topic_to_analyse
     
     var_analyse = c()
-    event_analyse = c()
+    topic_analyse = c()
     unit_analyse = c()
     samplePeriod_analyse = list()
     glose_analyse = c()
-    data_analyse = list()
-    trend_analyse = list()
 
+    metaVAR = dplyr::tibble()
+    
     if (exists("dataEx")) {
         rm (dataEx)
     }
@@ -88,7 +88,7 @@ if ('analyse_data' %in% to_do) {
         for (i in 1:length(principal)) {
             assign(principal_names[i], principal[[i]])
         }
-
+        
         split_script = split_path(script)
         
         if (length(split_script) == 1) {
@@ -103,14 +103,14 @@ if ('analyse_data' %in% to_do) {
         }
         
         if (samplePeriod_mode == 'optimale') {
-            if (identical(samplePeriod_opti[[event]], "min")) {
+            if (identical(samplePeriod_opti[[topic]], "min")) {
                 minQM = paste0(formatC(meta$minQM,
                                        width=2,
                                        flag="0"),
                                '-01')
                 samplePeriodMOD = tibble(Code=meta$Code,
                                          sp=minQM)
-            } else if (identical(samplePeriod_opti[[event]], "max")) {
+            } else if (identical(samplePeriod_opti[[topic]], "max")) {
                 maxQM = paste0(formatC(meta$maxQM,
                                        width=2,
                                        flag="0"),
@@ -118,7 +118,7 @@ if ('analyse_data' %in% to_do) {
                 samplePeriodMOD = tibble(Code=meta$Code,
                                          sp=maxQM)
             } else {
-                samplePeriodMOD = samplePeriod_opti[[event]]
+                samplePeriodMOD = samplePeriod_opti[[topic]]
             }
             
         } else {
@@ -140,7 +140,7 @@ if ('analyse_data' %in% to_do) {
         }
         
         var_analyse = c(var_analyse, var)
-        event_analyse = c(event_analyse, event)
+        topic_analyse = c(topic_analyse, topic)
         unit_analyse = c(unit_analyse, unit)
         samplePeriod_analyse = append(samplePeriod_analyse,
                                       list(samplePeriod))
@@ -152,6 +152,22 @@ if ('analyse_data' %in% to_do) {
 
         print(paste0("Data extracted for ", var))
         print(Xex)
+
+        vars = names(Xex)[!(names(Xex) %in% c("ID", "Date"))]
+        vars = gsub("([_]obs)|([_]sim)", "", vars)
+        vars = vars[!duplicated(vars)]
+
+        metaVAR = dplyr::bind_rows(
+                             metaVAR,
+                             dplyr::tibble(var=vars,
+                                           unit=unit,
+                                           glose=glose,
+                                           topic=
+                                               paste0(topic,
+                                                      collapse="/"),
+                                           samplePeriod=
+                                               paste0(samplePeriod,
+                                                      collapse="/")))
 
         Xex$Model = gsub("[_].*$", "", Xex$ID)
         Xex$Code = gsub("^.*[_]", "", Xex$ID)

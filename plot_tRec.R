@@ -15,15 +15,15 @@ HTML2rgba = function (HTML, alpha) {
     return (paste0("rgba(", r, ",", g, ",", b, ",", a, ")"))
 }
 
-data = data[!is.na(data$Q_sim),]
+data = data[!is.na(data$Q_obs),]
 
 
 ss = smooth.spline(data$Date,
-                   data$Q_sim,
+                   data$Q_obs,
                    df=10,
                    spar=0.5,
                    nknots=length(data$Date)/1.5,
-                   w=1/sqrt(data$Q_sim/max(data$Q_sim)))
+                   w=1/sqrt(data$Q_obs/max(data$Q_obs)))
 ssX = as.Date(ss$x, origin=as.Date("1970-01-01"))
 ssY = ss$y
 
@@ -61,6 +61,12 @@ if (valley[length(valley)] < peak[length(peak)]) {
 names(peak) = NULL
 names(valley) = NULL
 
+pSsY = 0.75
+ssYlim = quantile(ssY, pSsY)
+OK = !(ssY[peak] < ssYlim & ssY[valley] < ssYlim)
+peak = peak[OK]
+valley = valley[OK]
+
 cut = function (peak, valley, X) {
     return (X[peak:valley])
 }
@@ -83,7 +89,8 @@ Alpha = sapply(Coef, '[[', "alpha")
 Beta = sapply(Coef, '[[', "beta")
 Tau = -1/Alpha
 
-OK = Tau > 0 & Tau < quantile(Tau, 0.9)
+pTau = 0.9
+OK = Tau > 0 & Tau < quantile(Tau, pTau)
 peak = peak[OK]
 valley = valley[OK]
 ABS = ABS[OK]
@@ -102,7 +109,7 @@ fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="lines",
                          x=data$Date,
-                         y=logb(data$Q_sim),
+                         y=(data$Q_obs),
                          line=list(color="white",
                                    width=6),
                          hoverinfo="none",
@@ -113,7 +120,7 @@ fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="lines",
                          x=data$Date,
-                         y=logb(data$Q_sim),
+                         y=(data$Q_obs),
                          line=list(color="PaleTurquoise",
                                    width=1.5),
                          xhoverformat="%d/%m/%Y",
@@ -133,7 +140,7 @@ fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="lines",
                          x=ssX,
-                         y=logb(ssY),
+                         y=(ssY),
                          line=list(color="white",
                                    width=4),
                          hoverinfo="none",
@@ -144,7 +151,7 @@ fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="lines",
                          x=ssX,
-                         y=logb(ssY),
+                         y=(ssY),
                          line=list(color="Teal",
                                    width=2),
                          xhoverformat="%d/%m/%Y",
@@ -173,7 +180,8 @@ for (i in 1:nLine) {
                              type="scatter",
                              mode="lines",
                              x=ABS[[i]],
-                             y=as.numeric(ABS[[i]])*Alpha[i] + Beta[i],
+                             y=exp(as.numeric(ABS[[i]])*Alpha[i] +
+                                   Beta[i]),
                              opacity=0.8,
                              line=list(color="white",
                                        width=3),
@@ -185,7 +193,8 @@ for (i in 1:nLine) {
                              type="scatter",
                              mode="lines",
                              x=ABS[[i]],
-                             y=as.numeric(ABS[[i]])*Alpha[i] + Beta[i],
+                             y=exp(as.numeric(ABS[[i]])*Alpha[i] +
+                                   Beta[i]),
                              opacity=0.8,
                              line=list(color="MediumTurquoise",
                                        width=1.5),
@@ -207,7 +216,7 @@ fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="markers",
                          x=ssX[peak],
-                         y=logb(ssY[peak]),
+                         y=(ssY[peak]),
                          opacity=0.8,
                          marker=list(
                              color='transparent',
@@ -231,7 +240,7 @@ fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="markers",
                          x=ssX[valley],
-                         y=logb(ssY[valley]),
+                         y=(ssY[valley]),
                          opacity=0.8,
                          marker=list(
                              color='transparent',
@@ -259,8 +268,7 @@ fig1 = plotly::add_annotations(fig1,
                                yref="paper",
                                text=paste0("<b>",
                                            Code,
-                                           "</b> - ",
-                                           Model),
+                                           "</b>"),
                                showarrow=FALSE,
                                xanchor='left',
                                yanchor='bottom',
@@ -296,6 +304,29 @@ fig1 = plotly::layout(fig1,
                       plot_bgcolor="transparent",
                       paper_bgcolor='transparent',
                       showlegend=TRUE)
+
+
+
+fig1 = plotly::layout(fig1,
+                      updatemenus=list(
+                          list(
+                              type="buttons",
+                              direction="right",
+                              xanchor="center",
+                              yanchor="bottom",
+                              x = 0.8,
+                              y = 1,
+                              buttons=list(
+                                  list(label="Linear",  
+                                       method="relayout", 
+                                       args=list("yaxis.type",
+                                                 "linear")),
+                                  list(label="Log", 
+                                       method="relayout", 
+                                       args=list("yaxis.type",
+                                                 "log"))
+                               ))))
+
 
 
 ## FIG2 ______________________________________________________________
@@ -404,19 +435,19 @@ fig = plotly::config(fig,
                      locale="fr",
                      displaylogo=FALSE,
                      toImageButtonOptions =
-                         list(format="svg")
-                     # modeBarButtonsToRemove =
-                     #     list("lasso2d",
-                     #          "select2d",
-                     #          "drawline",
-                     #          "zoom2d",
-                     #          "drawrect",
-                     #          "autoScale2d",
-                     #          "hoverCompareCartesian",
-                     #          "hoverClosestCartesian")
+                         list(format="svg"),
+                     modeBarButtonsToRemove =
+                         list("lasso2d",
+                              "select2d",
+                              "drawline",
+                              "drawrect",
+                              "autoScale2d",
+                              "hoverCompareCartesian",
+                              "hoverClosestCartesian")
                      ) 
 
-fig
-
-
-# hist(Tau, breaks=20)
+filename = paste0("tRec", ".html")
+if (!(file.exists(today_figdir))) {
+    dir.create(today_figdir, recursive=TRUE)
+}
+plotly_save(fig, file.path(today_figdir, filename))

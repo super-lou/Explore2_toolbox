@@ -153,7 +153,7 @@ samplePeriod_mode =
 #### 1.2.2. Optimisation options _____________________________________
 # Parameters for the optimal selection of the hydrological year. As
 # you can see, the optimisation is separated between each hydrological
-# event. You must therefore select an optimisation for each event. The
+# topic. You must therefore select an optimisation for each topic. The
 # possibilities are:
 # - 'min' or 'max' to choose the month associated with the minimum or
 #   maximum of the mean monthly flow as the beginning of the
@@ -225,13 +225,15 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "MODCOU"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         # "MORDOR",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
     )
+
+complete_by = "SMASH"
 
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
@@ -239,15 +241,15 @@ code_filenames_to_use =
     # 'all'
     c(
         # 'K3374710_HYDRO_QJM.txt'
-        # 'V2114010_HYDRO_QJM.txt'
-        # 'W2335210_HYDRO_QJM.txt'
+        'V2114010_HYDRO_QJM.txt'
+        # 'W0300010_HYDRO_QJM.txt'
         # 'X2114010_HYDRO_QJM.txt'
         # '^K'
         # '^L',
         # '^M',
         # '^U',
         # '^V'
-        '^W'
+        # '^W'
         # '^X'
     )
 
@@ -260,16 +262,16 @@ code_filenames_to_use =
 #   underscore '_' to create an order in variables. For example,
 #   '2_QA.R' will be analysed and plotted after '1_QMNA.R'.
 # - Directory of variable files can also be created in order to make a
-#   group of variable of similar event. Names should be chosen between
+#   group of variable of similar topic. Names should be chosen between
 #   'Crue'/'Crue Nivale'/'Moyennes Eaux' and 'Étiage'. A directory can
 #   also be named 'Resume' in order to not include variables in an
-#   event group.
+#   topic group.
 var_to_analyse_dir =
     # ''
     # 'AEAG'
     # 'MAKAHO'
-    # 'Ex2D'
-    'WIP'
+    'Ex2D'
+    # 'WIP'
 
 ### 3.4. Steps _______________________________________________________
 # This vector regroups all the different step you want to do. For
@@ -295,10 +297,12 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data'
+        # 'create_data',
         # 'analyse_data'
         # 'save_analyse'
-        # 'read_saving'='2022_12_04/dataEx.fst'
+        # 'read_saving'=c('2022_12_14/dataEx.fst',
+        #                 '2022_12_14/meta.fst',
+        #                 '2022_12_14/metaVAR.fst')
         'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
     )
@@ -389,8 +393,12 @@ library(stringr)
 # library(trend)
 
 
+names(to_do) = gsub("read_saving[[:digit:]]+",
+                    "read_saving",
+                    names(to_do))
+
 if ("read_saving" %in% names(to_do)) {
-    read_saving = to_do["read_saving"]
+    read_saving = to_do[names(to_do) == "read_saving"]
     read_saving = file.path(resdir, read_saving)
     to_do[names(to_do) == "read_saving"] = "read_saving"
 }

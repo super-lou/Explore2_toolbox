@@ -13,14 +13,14 @@ NetCDF_to_tibble = function (NetCDF_path) {
     
     CodeOrder = order(CodeRaw)
     Code = CodeRaw[CodeOrder]
-    Q = QRaw[CodeOrder,]
+    Q_sim = QRaw[CodeOrder,]
     nCode = length(Code)
     nDate = length(Date)
     
     data = tibble(
         Code=rep(Code, each=nDate),
         Date=rep(Date, times=nCode),
-        Q=c(t(Q))
+        Q_sim=c(t(Q_sim))
     )
     return (data)
 }
@@ -31,6 +31,7 @@ convert_diag_data = function (model, data) {
         data$Date = as.Date(data$Date)
         names(data) = c("Date", "Code", "Q_sim",
                         "ET0", "T", "Pl", "Ps", "P")
+        data = dplyr::select(data, -"P")
         
     } else if (model == "MODCOU") {
         names(data) = c("Code", "Date", "Q_sim")

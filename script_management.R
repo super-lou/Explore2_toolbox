@@ -68,7 +68,6 @@ if ('analyse_data' %in% to_do) {
     meta = meta[order(meta$Code),]
 
     Vars = names(dataEx)
-
     containSEA = grepl("SEA", Vars)
     if (any(containSEA)) {
         Vars_SEA = Vars[containSEA]
@@ -80,8 +79,19 @@ if ('analyse_data' %in% to_do) {
         }
         Vars[containSEA] = Vars_SEA
     }
-    
     names(dataEx) = Vars
+
+    containSEA = grepl("SEA", metaVAR$var)
+    if (any(containSEA)) {
+        Vars_SEA = metaVAR$var[containSEA]
+        SEAofVars = gsub("^.*[_]+", "", Vars_SEA)
+        Vars_SEA = stringr::str_extract(Vars_SEA, "^.*[_]+")
+        Vars_SEA = gsub("[_]$", "", Vars_SEA)
+        for (i in 1:length(Vars_SEA)) {
+            Vars_SEA[i] = gsub("SEA", SEAofVars[i], Vars_SEA[i])
+        }
+        metaVAR$var[containSEA] = Vars_SEA
+    }
     
     containSO = "([_]obs$)|([_]sim$)"
     Vars = Vars[grepl(containSO, Vars)]
@@ -127,6 +137,9 @@ if ('save_analyse' %in% to_do) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.fst"))
+        write_tibble(metaVAR,
+                     filedir=today_resdir,
+                     filename=paste0("metaVAR.fst"))
         write_tibble(dataEx,
                      filedir=today_resdir,
                      filename=paste0("dataEx.fst"))
@@ -135,6 +148,9 @@ if ('save_analyse' %in% to_do) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.Rdata"))
+        write_tibble(metaVAR,
+                     filedir=today_resdir,
+                     filename=paste0("metaVAR.Rdata"))
         write_tibble(dataEx,
                      filedir=today_resdir,
                      filename=paste0("dataEx.Rdata"))
@@ -143,6 +159,9 @@ if ('save_analyse' %in% to_do) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.txt"))
+        write_tibble(metaVAR,
+                     filedir=today_resdir,
+                     filename=paste0("metaVAR.txt"))
         write_tibble(dataEx,
                      filedir=today_resdir,
                      filename=paste0("dataEx.txt"))

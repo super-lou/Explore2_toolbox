@@ -52,6 +52,7 @@ logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 
 if ('plot_correlation_matrix' %in% to_do) {
     page_correlation_matrix(dataEx,
+                            metaVAR,
                             logo_path=logo_path,
                             figdir=today_figdir)
 }
@@ -63,7 +64,7 @@ if ('plot_diagnostic_datasheet' %in% to_do) {
                               meta=meta,
                               period=period,
                               var=var_analyse,
-                              event=event_analyse,
+                              topic=topic_analyse,
                               unit=unit_analyse,
                               samplePeriod=samplePeriod_analyse,
                               glose=glose_analyse,
@@ -91,7 +92,7 @@ if ('station_trend_plot' %in% to_do) {
                  data=data_analyse,
                  df_trend=df_trend_analyse,
                  var=var_analyse,
-                 event=event_analyse,
+                 topic=topic_analyse,
                  unit=unit_analyse,
                  samplePeriod=samplePeriod_analyse,
                  glose=glose_analyse,
@@ -114,5 +115,5 @@ if ('station_trend_plot' %in% to_do) {
                  logo_path=logo_path,
                  zone_to_show=zone_to_show,
                  pdf_chunk=pdf_chunk,
-                 show_colorEvent=show_colorEvent)
+                 show_colorTopic=show_colorTopic)
 }
