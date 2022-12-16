@@ -32,7 +32,7 @@
 # realise extraction of data.
 
 
-## 1. CREATION OF DATA _______________________________________________
+## 1. CREATION OF DATA 4 DIAG ________________________________________
 if ('create_data' %in% to_do) {
     
     # Extract metadata about selected stations
@@ -74,7 +74,8 @@ if ('create_data' %in% to_do) {
                 data_tmp = read_tibble(filepath=model_path)
                     
             } else if (grepl(".*[.]nc", model_path)) {
-                data_tmp = NetCDF_to_tibble(model_path)
+                data_tmp = NetCDF_to_tibble(model_path,
+                                       type="diag")
             }
 
             data_tmp = data_tmp[data_tmp$Code %in% Code,]
@@ -137,4 +138,43 @@ if ('create_data' %in% to_do) {
     data$ID = paste0(data$Model, "_", data$Code)
     data = dplyr::select(data, -c(Model, Code))
     data = dplyr::select(data, ID, everything())
+}
+
+
+## 2. CREATION OF DATA 4 PROJ ________________________________________
+if ('create_data_proj' %in% to_do) {
+
+    Model = c()
+    data_sim = tibble()
+
+    for (i in 1:length(models_to_proj)) {
+
+        model = names(models_to_proj)[i]
+        model_file = models_to_proj[i]
+        
+        model_path = file.path(computer_data_path,
+                               proj_dir, model_file)
+        
+        if (file.exists(model_path)) {
+            Model = c(Model, model)
+
+            print(paste0("Get simulated data from ", model,
+                         " in ", model_path))
+            
+            if (grepl(".*[.]Rdata", model_path)) {
+                data_tmp = read_tibble(filepath=model_path)
+                
+            } else if (grepl(".*[.]nc", model_path)) {
+                data_tmp = NetCDF_to_tibble(model_path,
+                                            type="proj")
+            }
+
+            data_tmp = data_tmp[data_tmp$Code %in% Code,]
+            data_tmp = data_tmp[order(data_tmp$Code),]
+            data_tmp = convert_diag_data(model, data_tmp)
+
+            data_sim = dplyr::bind_rows(data_sim, data_tmp)
+        }
+    }
+    # rm (data_tmp)
 }

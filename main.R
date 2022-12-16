@@ -62,6 +62,7 @@ computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
 obs_dir = "debit/BanqueHydro_Export2021"
 obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Ex2D/diagnostic"
+proj_dir = "Ex2D/projection"
 codes_to_diag_SHPdir = "Ex2D/reseauReferenceHYDRO"
 
 ### 2.2. Variables ___________________________________________________
@@ -228,33 +229,44 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        # "MORDOR",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "MORDOR"="MordorTS_20221213.Rdata"
         # "ORCHIDEE",
-        "SMASH"="SMASH_20220921.Rdata"
+        # "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
     )
-
 complete_by = "SMASH"
+
+models_to_proj =
+    c(
+        # "EROS",
+        # "GRSD",
+        # "J2000"=
+        # "SIM2"=
+        # "MORDOR"="debit_Loire_CNRM-CERFACS-CNRM-CM5_historical_r1i1p1_CNRM-ALADIN63_v2_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_19510101-20051231.nc"
+        # "ORCHIDEE",
+        # "SMASH"=
+        # "CTRIP"
+    )
 
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    'all'
-    # c(
+    # 'all'
+    c(
         # 'K3374710_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'W0300010_HYDRO_QJM.txt'
         # 'X2114010_HYDRO_QJM.txt'
         # '^K'
-        # '^L',
+        '^L'
         # '^M',
-        # '^U',
+        # '^U'
         # '^V'
         # '^W'
         # '^X'
-    # )
+    )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -300,14 +312,16 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data',
-        # 'analyse_data',
+        # 'create_data'
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_saving'=c('2022_12_15/dataEx.fst',
-        #                 '2022_12_15/meta.fst',
-        #                 '2022_12_15/metaVAR.fst')
+                        # '2022_12_15/meta.fst',
+                        # '2022_12_15/metaVAR.fst')
         'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
+        
+        # 'create_data_proj'
     )
 
 
@@ -439,7 +453,7 @@ if ('analyse_data' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
     }
 }
 
-if ('create_data' %in% to_do | 'analyse_data' %in% to_do) {    
+if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %in% to_do) {    
     for (subset in 1:Subsets) {
 
         Code = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
@@ -455,7 +469,7 @@ if ('create_data' %in% to_do | 'analyse_data' %in% to_do) {
         print("For stations :")
         print(paste0(Code, collapse=", "))
 
-        if ('create_data' %in% to_do) {
+        if ('create_data' %in% to_do | 'create_data_proj' %in% to_do) {
             print("")
             print('CREATE')
             source('script_create.R', encoding='UTF-8')

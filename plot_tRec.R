@@ -18,14 +18,66 @@ HTML2rgba = function (HTML, alpha) {
 data = data[!is.na(data$Q_obs),]
 
 
-ss = smooth.spline(data$Date,
-                   data$Q_obs,
-                   df=10,
-                   spar=0.5,
-                   nknots=length(data$Date)/1.5,
-                   w=1/sqrt(data$Q_obs/max(data$Q_obs)))
-ssX = as.Date(ss$x, origin=as.Date("1970-01-01"))
-ssY = ss$y
+# ss = smooth.spline(data$Date,
+#                    data$Q_obs,
+#                    df=10,
+#                    spar=0.5,
+#                    nknots=length(data$Date)/1.5,
+#                    w=1/sqrt(data$Q_obs/max(data$Q_obs)))
+
+
+BFS = function (Q, d=5, w=0.9) {
+
+    N = length(Q)
+    if (all(is.na(Q))) {
+        return (NA)
+    }
+    Slices = split(Q, ceiling(seq_along(Q)/d))    
+    idMinSlices = unlist(lapply(Slices, which.minNA),
+                         use.names=FALSE)
+    
+    idShift = c(0, cumsum(unlist(lapply(Slices, length),
+                                 use.names=FALSE)))
+    idShift = idShift[-length(idShift)]
+    idMin = idMinSlices + idShift
+    Qmin_k = Q[idMin]
+
+    if (length(Qmin_k) == 1) {
+        BF = rep(NA, N)
+        return (BF)
+    }
+
+    n = length(Qmin_k)
+    Qmin_kp1 = c(Qmin_k[2:n], NA)
+    Qmin_km1 = c(NA, Qmin_k[1:(n-1)])
+    test = w * Qmin_k < pmin(Qmin_km1, Qmin_kp1)
+    test[is.na(test)] = FALSE
+    idPivots = idMin[which(test)]
+    Pivots = Qmin_k[test]
+
+    nbNAid = length(idPivots[!is.na(idPivots)])
+    nbNA = length(Pivots[!is.na(Pivots)])
+    if (nbNAid >= 2 & nbNA >= 2) {
+        BF = Hmisc::approxExtrap(idPivots, Pivots, xout=1:N,
+                          method="linear", na.rm=TRUE)$y  
+        BF[is.na(Q)] = NA
+        BF[BF < 0] = 0
+        test = BF > Q
+        test[is.na(test)] = FALSE
+        BF[test] = Q[test]
+        
+    } else {
+        BF = rep(NA, N)
+    }    
+    return (BF)
+}
+
+
+ssX = data$Date
+ssY = BFS(data$Q_obs)
+
+# ssX = as.Date(ss$x, origin=as.Date("1970-01-01"))
+# ssY = ss$y
 
 OK = ssY > 0
 ssX = ssX[OK]
@@ -61,7 +113,7 @@ if (valley[length(valley)] < peak[length(peak)]) {
 names(peak) = NULL
 names(valley) = NULL
 
-pSsY = 0.75
+pSsY = 0.25
 ssYlim = quantile(ssY, pSsY)
 OK = !(ssY[peak] < ssYlim & ssY[valley] < ssYlim)
 peak = peak[OK]

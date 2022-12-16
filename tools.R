@@ -1,4 +1,4 @@
-NetCDF_to_tibble = function (NetCDF_path) {
+NetCDF_to_tibble = function (NetCDF_path, type="diag") {
         
     NCdata = ncdf4::nc_open(NetCDF_path)    
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
@@ -7,7 +7,18 @@ NetCDF_to_tibble = function (NetCDF_path) {
                            ncdf4::ncatt_get(NCdata,
                                             "time")$units,
                            "[0-9]+-[0-9]+-[0-9]+")))
-    CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
+
+    if (type == "diag") { 
+        if ("code" %in% names(NCdata$var)) {
+            CodeRaw = ncdf4::ncvar_get(NCdata, "code")
+        } else if ("code_hydro" %in% names(NCdata$var)) {
+            CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
+        }
+        
+    } else if (type == "proj") {
+        CodeRaw = ncdf4::ncvar_get(NCdata, "code")
+    }
+ 
     QRaw = ncdf4::ncvar_get(NCdata, "debit")
     ncdf4::nc_close(NCdata)
     
@@ -35,6 +46,11 @@ convert_diag_data = function (model, data) {
         
     } else if (model == "MODCOU") {
         names(data) = c("Code", "Date", "Q_sim")
+
+    } else if (model == "MORDOR") {
+        data$Date = as.Date(data$Date)
+        names(data) = c("Code", "Date", "Q_sim",
+                        "T", "Pl", "Ps", "ET0")
         
     } else if (model == "SMASH") {
         names(data) = c("Code", "Date", "Q_sim",
