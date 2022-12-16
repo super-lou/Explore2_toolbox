@@ -86,7 +86,10 @@ print(paste('resources_path :', resources_path))
 #### 2.3.1. Logo _____________________________________________________
 logo_dir = 'logo'
 
-#### 2.3.2. Shapefile ________________________________________________
+#### 2.3.2. Icon _____________________________________________________
+icon_dir = 'icon'
+
+#### 2.3.3. Shapefile ________________________________________________
 shp_dir = 'map'
 # Path to the shapefile for france contour from 'computer_data_path' 
 fr_shpdir = file.path(shp_dir, 'france')
@@ -225,8 +228,8 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         # "MORDOR",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
@@ -238,10 +241,10 @@ complete_by = "SMASH"
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    # 'all'
-    c(
+    'all'
+    # c(
         # 'K3374710_HYDRO_QJM.txt'
-        'V2114010_HYDRO_QJM.txt'
+        # 'V2114010_HYDRO_QJM.txt'
         # 'W0300010_HYDRO_QJM.txt'
         # 'X2114010_HYDRO_QJM.txt'
         # '^K'
@@ -251,7 +254,7 @@ code_filenames_to_use =
         # '^V'
         # '^W'
         # '^X'
-    )
+    # )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -298,11 +301,11 @@ var_to_analyse_dir =
 to_do =
     c(
         # 'create_data',
-        # 'analyse_data'
+        # 'analyse_data',
         # 'save_analyse'
-        # 'read_saving'=c('2022_12_14/dataEx.fst',
-        #                 '2022_12_14/meta.fst',
-        #                 '2022_12_14/metaVAR.fst')
+        # 'read_saving'=c('2022_12_15/dataEx.fst',
+        #                 '2022_12_15/meta.fst',
+        #                 '2022_12_15/metaVAR.fst')
         'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
     )

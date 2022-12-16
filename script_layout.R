@@ -46,13 +46,14 @@
 # }
 
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
-
+icon_path = file.path(resources_path, icon_dir)
 
 
 
 if ('plot_correlation_matrix' %in% to_do) {
     page_correlation_matrix(dataEx,
                             metaVAR,
+                            icon_path=icon_path,
                             logo_path=logo_path,
                             figdir=today_figdir)
 }
