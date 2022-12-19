@@ -47,7 +47,7 @@ convert_diag_data = function (model, data) {
     } else if (model == "MODCOU") {
         names(data) = c("Code", "Date", "Q_sim")
 
-    } else if (model == "MORDOR") {
+    } else if (model == "MORDOR-TS") {
         data$Date = as.Date(data$Date)
         names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "Ps", "ET0")

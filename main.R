@@ -229,11 +229,12 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR"="MordorTS_20221213.Rdata"
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "MORDOR-TS"="MordorTS_20221213.Rdata",
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata"
         # "ORCHIDEE",
-        # "SMASH"="SMASH_20220921.Rdata"
+        "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
     )
 complete_by = "SMASH"
@@ -244,7 +245,7 @@ models_to_proj =
         # "GRSD",
         # "J2000"=
         # "SIM2"=
-        # "MORDOR"="debit_Loire_CNRM-CERFACS-CNRM-CM5_historical_r1i1p1_CNRM-ALADIN63_v2_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_19510101-20051231.nc"
+        # "MORDOR-TS"="debit_Loire_CNRM-CERFACS-CNRM-CM5_historical_r1i1p1_CNRM-ALADIN63_v2_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_19510101-20051231.nc"
         # "ORCHIDEE",
         # "SMASH"=
         # "CTRIP"
@@ -253,20 +254,20 @@ models_to_proj =
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    # 'all'
-    c(
-        # 'K3374710_HYDRO_QJM.txt'
+    'all'
+    # c(
+        # 'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'W0300010_HYDRO_QJM.txt'
         # 'X2114010_HYDRO_QJM.txt'
         # '^K'
-        '^L'
+        # '^L'
         # '^M',
         # '^U'
         # '^V'
         # '^W'
         # '^X'
-    )
+    # )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -312,17 +313,86 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data'
-        # 'analyse_data'
+        # 'create_data',
+        # 'analyse_data',
         # 'save_analyse'
-        # 'read_saving'=c('2022_12_15/dataEx.fst',
-                        # '2022_12_15/meta.fst',
-                        # '2022_12_15/metaVAR.fst')
+        # 'read_saving'=c('2022_12_19/dataEx.fst',
+                        # '2022_12_19/meta.fst',
+                        # '2022_12_19/metaVAR.fst')
         'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
+
+
+
+
+# [1] "Computes median{tQJXA}"
+# [1] "Process 1/2"
+# [1] "EXTRACTION PROCESS                                "
+# [1] "├── Missing year                                  "
+# [1] "│   └── Checking missing continuous periods       "
+# [1] "│       longer than 10 years                      "
+# [1] "├── Period                                        "
+# [1] "│   └── Selecting data between 01 janv. 1900 and  "
+# [1] "│       31 déc. 2020                              "
+# [1] "├── Sample period                                 "
+# [1] "│   └── Fixing sample period                      "
+# [1] "│       ├── Only start of the sample period was   "
+# [1] "│       │   given                                 "
+# [1] "│       ├── Every time series have the same       "
+# [1] "│       │   sample period                         "
+# [1] "│       └── All : 09-01 / 08-31                   "
+# [1] "├── Yearly extraction                             "
+# [1] "│   ├── Sampling of the data                      "
+# [1] "│   └── Preparing date data for the extraction    "
+# [1] "│       ├── Computing of time indicators for      "
+# [1] "│       │   each time serie                       "
+# [1] "│       ├── Shifting the start of each year in    "
+# [1] "│       │   order to speed extraction process     "
+# [1] "│       └── Removing useless data                 "
+# [1] "├── Grouping data                                 "
+# [1] "├── Application of the function                   "
+# [1] "├── Cleaning extracted tibble                     "
+# [1] "├── Converting index to date                      "
+# [1] "├── Removing data if NA percentage is strictly    "
+# [1] "│   above 20 %                                    "
+# [1] "└── Last cleaning                                 "
+# [1] "Process 2/2"
+# [1] "EXTRACTION PROCESS                                "
+# [1] "├── Period                                        "
+# [1] "│   └── Selecting data between 01 janv. 1900 and  "
+# [1] "│       31 déc. 2020                              "
+# [1] "├── Sample period                                 "
+# [1] "│   ├── Default sample period used                "
+# [1] "│   └── Fixing sample period                      "
+# [1] "│       ├── Only start of the sample period was   "
+# [1] "│       │   given                                 "
+# [1] "│       ├── Every time series have the same       "
+# [1] "│       │   sample period                         "
+# [1] "│       └── All : 01-01 / 12-31                   "
+# [1] "├── None extraction                               "
+# [1] "│   ├── Sampling of the data                      "
+# [1] "├── Grouping data                                 "
+# [1] "├── Application of the function                   "
+# Error in `dplyr::summarise()` at MKstat/R/process.R:1244:16:
+# ! Problem while computing `ValueEx1 = f(.data$Value1, period =
+#   365.25, na.rm = TRUE)`.
+# ℹ The error occurred in group 79: Code = "MORDOR-TS_K2981910".
+# Caused by error in `if (median >= 0) ...`:
+# ! valeur manquante là où TRUE / FALSE est requis
+# Run `rlang::last_error()` to see where the error occurred.
+# There were 50 or more warnings (use warnings() to see the first 50)
+
+
+# Error in `dplyr::summarise()` at MKstat/R/process.R:1244:16:
+# ! Problem while computing `ValueEx1 = f(Q = .data$Value1)`.
+# ℹ The error occurred in group 79: Code = "MORDOR-TS_K2981910".
+# Caused by error in `smooth.spline()`:
+# ! some weights should be positive
+# Run `rlang::last_error()` to see where the error occurred.
+
 
 
 #  ___        _  _    _        _  _            _    _            
