@@ -229,12 +229,12 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
-        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata"
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "MORDOR-SD"="MORDOR-SD_20221912.Rdata"
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
-        "SMASH"="SMASH_20220921.Rdata"
+        # "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
     )
 complete_by = "SMASH"
@@ -254,20 +254,20 @@ models_to_proj =
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    'all'
-    # c(
+    # 'all'
+    c(
         # 'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'W0300010_HYDRO_QJM.txt'
         # 'X2114010_HYDRO_QJM.txt'
         # '^K'
-        # '^L'
+        '^L'
         # '^M',
         # '^U'
         # '^V'
         # '^W'
         # '^X'
-    # )
+    )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -314,7 +314,7 @@ var_to_analyse_dir =
 to_do =
     c(
         # 'create_data',
-        # 'analyse_data',
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_saving'=c('2022_12_19/dataEx.fst',
                         # '2022_12_19/meta.fst',

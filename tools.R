@@ -47,6 +47,12 @@ convert_diag_data = function (model, data) {
     } else if (model == "MODCOU") {
         names(data) = c("Code", "Date", "Q_sim")
 
+    } else if (model == "MORDOR-SD") {
+        data$Date = as.Date(data$Date)
+        names(data) = c("Code", "Date", "Q_sim",
+                        "Pl", "Ps", "ETR", "ET0")
+        data = dplyr::select(data, -ETR)
+        
     } else if (model == "MORDOR-TS") {
         data$Date = as.Date(data$Date)
         names(data) = c("Code", "Date", "Q_sim",
