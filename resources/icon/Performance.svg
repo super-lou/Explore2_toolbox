@@ -5,17 +5,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   enable-background="new 0 0 24 24"
-   height="24px"
-   viewBox="0 0 24 24"
-   width="24px"
-   fill="#302f2f"
-   version="1.1"
    id="svg14"
-   sodipodi:docname="build.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+   version="1.1"
+   fill="#302f2f"
+   width="24px"
+   viewBox="0 0 24 24"
+   height="24px"
+   enable-background="new 0 0 24 24">
   <metadata
      id="metadata20">
     <rdf:RDF>
@@ -30,51 +26,22 @@
   </metadata>
   <defs
      id="defs18" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1015"
-     id="namedview16"
-     showgrid="false"
-     inkscape:zoom="13.906433"
-     inkscape:cx="20.934883"
-     inkscape:cy="7.1636163"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg14" />
+  <circle
+     r="9.0965099"
+     cy="12.099033"
+     cx="12.044785"
+     id="path830"
+     style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#302f2f;stroke-width:1.1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   <g
-     id="g12"
-     transform="translate(0.10786375)">
-    <g
-       id="g10"
-       inkscape:label="g10">
-      <path
-         d="M 12,2 C 6.48,2 2,6.48 2,12 2,17.52 6.48,22 12,22 17.52,22 22,17.52 22,12 22,6.48 17.52,2 12,2 Z m 0,18 C 7.59,20 4,16.41 4,12 4,7.59 7.59,4 12,4 c 4.41,0 8,3.59 8,8 0,4.41 -3.59,8 -8,8 z"
-         id="path6"
-         inkscape:connector-curvature="0"
-         style="display:inline" />
-    </g>
-  </g>
-  <g
-     style="fill:#302f2f"
-     id="g1091"
-     transform="matrix(0.48819245,0,0,0.48819245,6.2246115,6.0631317)">
+     transform="matrix(0.33898303,0,0,0.33898303,8.054961,8.1337869)"
+     id="g1083"
+     style="fill:#302f2f">
     <path
-       id="path1077"
+       style="fill:none"
        d="M 0,0 H 24 V 24 H 0 Z"
-       inkscape:connector-curvature="0"
-       style="fill:none" />
+       id="path1069" />
     <path
-       id="path1079"
        d="M 12.09,2.91 C 10.08,0.9 7.07,0.49 4.65,1.67 L 8.28,5.3 c 0.39,0.39 0.39,1.02 0,1.41 L 6.69,8.3 C 6.3,8.7 5.67,8.7 5.28,8.3 L 1.65,4.67 C 0.48,7.1 0.89,10.09 2.9,12.1 c 1.86,1.86 4.58,2.35 6.89,1.48 l 7.96,7.96 c 1.03,1.03 2.69,1.03 3.71,0 1.03,-1.03 1.03,-2.69 0,-3.71 L 13.54,9.9 C 14.46,7.56 13.98,4.8 12.09,2.91 Z"
-       inkscape:connector-curvature="0" />
+       id="path1071" />
   </g>
 </svg>

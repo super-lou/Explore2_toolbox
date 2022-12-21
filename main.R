@@ -327,7 +327,6 @@ to_do =
 
 
 
-
 # [1] "Computes median{tQJXA}"
 # [1] "Process 1/2"
 # [1] "EXTRACTION PROCESS                                "
