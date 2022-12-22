@@ -35,6 +35,8 @@
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
 
+    # print(dataEx[dataEx$Code == "W2832020",])
+    
     if (exists("meta")) {
         rm (meta)
     }
@@ -50,6 +52,9 @@ if ('analyse_data' %in% to_do) {
                                  filename=paste0("dataEx_",
                                                  subset,
                                                  ".fst"))
+
+        # print(dataEx_tmp[dataEx_tmp$Code == "W2832020",])
+        
         if (!exists("dataEx")) {
             meta = meta_tmp
         } else {
@@ -60,6 +65,7 @@ if ('analyse_data' %in% to_do) {
         } else {
             dataEx = dplyr::bind_rows(dataEx, dataEx_tmp)
         }
+        # print(dataEx[dataEx$Code == "W2832020",])
     }
     rm (meta_tmp)
     rm (dataEx_tmp)
@@ -101,7 +107,7 @@ if ('analyse_data' %in% to_do) {
     
     for (i in 1:nVarsREL) {
         varREL = VarsREL[i]
-        print(varREL)
+        # print(varREL)
         if (grepl("^HYP.*", varREL)) {
             dataEx[[varREL]] =
                 dataEx[[paste0(varREL, "_sim")]] &
@@ -126,6 +132,9 @@ if ('analyse_data' %in% to_do) {
                                  !!varREL,
                                  .after=!!paste0(varREL, "_sim"))
     }
+
+    # print(dataEx[dataEx$Code == "W2832020",])
+    
 }
 
 if ('save_analyse' %in% to_do) {

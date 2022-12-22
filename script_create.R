@@ -44,7 +44,7 @@ if ('create_data' %in% to_do) {
 
     meta = meta[order(meta$Code),]      
     data_obs = data_obs[order(data_obs$Code),]
-
+    
     # Time gap
     meta = get_lacune(data_obs, meta)
     # Hydrograph
@@ -52,6 +52,8 @@ if ('create_data' %in% to_do) {
                           period=period)$meta
     
     names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
+
+    # print(data_obs[data_obs$Code == "W2832020" & data_obs$Date >= as.Date("1984-01-01"),])
     
     Model = c()
     data_sim = tibble()
@@ -82,6 +84,8 @@ if ('create_data' %in% to_do) {
             data_tmp = data_tmp[order(data_tmp$Code),]
             data_tmp = convert_diag_data(model, data_tmp)
 
+            # print(data_tmp[data_tmp$Code == "W2832020" & data_tmp$Date >= as.Date("1984-01-01"),])
+
             data_sim = dplyr::bind_rows(data_sim, data_tmp)
         }
     }
@@ -90,6 +94,8 @@ if ('create_data' %in% to_do) {
     data = dplyr::inner_join(data_sim,
                              data_obs,
                              by=c("Date", "Code"))
+
+    # print(data[data$Code == "W2832020" & data$Date >= as.Date("1984-01-01"),])
 
     if (!is.null(complete_by) & complete_by != "") {
         model4complete = complete_by[complete_by %in% Model][1]
@@ -127,6 +133,8 @@ if ('create_data' %in% to_do) {
             }
         }
     }
+
+    # print(data[data$Code == "W2832020" & data$Date >= as.Date("1984-01-01"),])
     
     if (propagate_NA) {
         data$Q_sim[is.na(data$Q_obs)] = NA
@@ -138,6 +146,8 @@ if ('create_data' %in% to_do) {
     data$ID = paste0(data$Model, "_", data$Code)
     data = dplyr::select(data, -c(Model, Code))
     data = dplyr::select(data, ID, everything())
+
+    # print(data[data$ID == "SIM2_W2832020" & data$Date >= as.Date("1984-01-01"),])
 }
 
 

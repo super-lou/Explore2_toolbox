@@ -35,6 +35,8 @@
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
 
+    # print(data[data$ID == "SIM2_W2832020" & data$Date >= as.Date("1984-01-01"),])
+    
     script_to_analyse_dirpath = file.path(CARD_dir, var_to_analyse_dir)
     
     script_to_analyse = list.files(script_to_analyse_dirpath,
@@ -153,6 +155,9 @@ if ('analyse_data' %in% to_do) {
         print(paste0("Data extracted for ", var))
         print(Xex)
 
+
+        # print(Xex[Xex$ID == "SIM2_W2832020",])
+
         vars = names(Xex)[!(names(Xex) %in% c("ID", "Date"))]
         vars = gsub("([_]obs)|([_]sim)", "", vars)
         vars = vars[!duplicated(vars)]
@@ -174,6 +179,8 @@ if ('analyse_data' %in% to_do) {
         Xex = dplyr::select(Xex, -ID)
         Xex = dplyr::select(Xex, Model, Code, dplyr::everything())
 
+        # print(Xex[Xex$Code == "W2832020",])
+
         if (!exists("dataEx")) {
             dataEx = Xex
         } else {
@@ -181,6 +188,9 @@ if ('analyse_data' %in% to_do) {
                                       Xex,
                                       by=c("Model", "Code"))  
         }
+
+        # print(dataEx[dataEx$Code == "W2832020",])
+        
     }
     write_tibble(meta,
                  filedir=tmpdir,

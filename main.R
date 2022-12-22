@@ -229,12 +229,12 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata"
-        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
-        # "SMASH"="SMASH_20220921.Rdata"
+        "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
     )
 complete_by = "SMASH"
@@ -254,20 +254,26 @@ models_to_proj =
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    # 'all'
-    c(
+    'all'
+    # c(
         # 'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
-        # 'W0300010_HYDRO_QJM.txt'
-        # 'X2114010_HYDRO_QJM.txt'
+        # 'W2832020_HYDRO_QJM.txt'
+        # "W3315010_HYDRO_QJM.txt",
+        # "W2755010_HYDRO_QJM.txt"
+        # 'H2083110_HYDRO_QJM.txt'
+        # '^E',
+        # '^F',
+        # '^G',
+        # '^H'
+        # '^J'
         # '^K'
-        '^L'
         # '^M',
         # '^U'
         # '^V'
         # '^W'
         # '^X'
-    )
+    # )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -314,16 +320,45 @@ var_to_analyse_dir =
 to_do =
     c(
         # 'create_data',
-        # 'analyse_data'
+        # 'analyse_data',
         # 'save_analyse'
-        # 'read_saving'=c('2022_12_19/dataEx.fst',
-                        # '2022_12_19/meta.fst',
-                        # '2022_12_19/metaVAR.fst')
+        # 'read_saving'=c('2022_12_22/dataEx.fst',
+                        # '2022_12_22/meta.fst',
+                        # '2022_12_22/metaVAR.fst')
         'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
+
+
+
+# [1] "Computes median{dtRec}"
+# [1] "Process 1/1"
+# [1] "EXTRACTION PROCESS                                "
+# [1] "├── Missing year                                  "
+# [1] "│   └── Checking missing continuous periods       "
+# [1] "│       longer than 10 years                      "
+# [1] "├── Period                                        "
+# [1] "│   └── Selecting data between 01 janv. 1900 and  "
+# [1] "│       31 déc. 2020                              "
+# [1] "├── Sample period                                 "
+# [1] "│   ├── Default sample period used                "
+# [1] "│   └── Fixing sample period                      "
+# [1] "│       ├── Only start of the sample period was   "
+# [1] "│       │   given                                 "
+# [1] "│       ├── Every time series have the same       "
+# [1] "│       │   sample period                         "
+# [1] "│       └── All : 01-01 / 12-31                   "
+# [1] "├── None extraction                               "
+# [1] "│   ├── Sampling of the data                      "
+# [1] "├── Grouping data                                 "
+# [1] "├── Application of the function                   "
+# Error in `dplyr::summarise()` at MKstat/R/process.R:1255:16:
+# ! Problem while computing `ValueEx2 = f(Q = .data$Value2)`.
+# ℹ The error occurred in group 32: Code = "MORDOR-SD_H2083110".
+# Caused by error in `mapply()`:
+# ! des entrées de longueur nulle ne peuvent être mélangés avec celles de longueur non nulle
 
 
 
