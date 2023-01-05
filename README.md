@@ -6,17 +6,17 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) 
 <!-- badges: end -->
 
-**Ex2D toolbox** is a **R toolbox** based on [Ex2D](https://github.com/super-lou/Ex2D) and [MKstat](https://github.com/super-lou/MKstat) packages. Its main objective is to provide a simple way of interacting with all these codes to carry out diagnostic of the hydrological models used in [Explore2](https://professionnels.ofb.fr/fr/node/1244).
+**Ex2D toolbox** is a R toolbox based on [EXstat](https://github.com/super-lou/EXstat) and [CARD](https://github.com/super-lou/CARD) packages which provide a simple way of interacting with all these codes to carry out diagnostic of hydrological models used in [Explore2](https://professionnels.ofb.fr/fr/node/1244).
 
 This project was carried out for National Research Institute for Agriculture, Food and the Environment (Institut National de Recherche pour l’Agriculture, l’Alimentation et l’Environnement, [INRAE](https://agriculture.gouv.fr/inrae-linstitut-national-de-recherche-pour-lagriculture-lalimentation-et-lenvironnement) in french).
 
 
 ## Installation
 For latest development version
-
-``` r
-remotes::install_github('super-lou/Ex2D_toolbox')
+``` 
+git clone https://github.com/super-lou/Ex2D_toolbox.git
 ```
+
 
 ## Help
 You can find different help script in this the [help](https://github.com/super-lou/Ex2D_toolbox/tree/main/help) directory.
