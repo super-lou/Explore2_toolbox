@@ -150,9 +150,9 @@ period = c('1900-01-01', '2020-12-31')
 #             noted in the variable file in 'CARD_dir'
 # - 'optimale' : Hydrological period is determined for each station by
 #                following rules listed in the next variable.
-samplePeriod_mode =
-    'fixed'
-    # 'optimale'
+# samplePeriod_mode =
+#     'fixed'
+#     # 'optimale'
 
 #### 1.2.2. Optimisation options _____________________________________
 # Parameters for the optimal selection of the hydrological year. As
@@ -166,12 +166,14 @@ samplePeriod_mode =
 #   the beginning of the hydrological year.
 # - A vector of two months and day to select a beginning and an end of
 #   the hydrological year.
-samplePeriod_opti = list(
-    'Crue' = 'min',
-    'Crue Nivale' = '09-01',
-    'Moyennes Eaux' = 'min',
-    'Étiage' = c('05-01', '11-30')
-)
+samplePeriod_opti =
+    # NULL
+    list(
+        'Crue' = 'min',
+        'Crue Nivale' = '09-01',
+        'Moyennes Eaux' = 'min',
+        'Étiage' = c('05-01', '11-30')
+    )
 
 ### 1.3. Saving ______________________________________________________
 # Saving format to use to save analyse data
@@ -229,12 +231,12 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata"
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
-        "SMASH"="SMASH_20220921.Rdata"
+        # "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
     )
 complete_by = "SMASH"
@@ -254,9 +256,9 @@ models_to_proj =
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    'all'
-    # c(
-        # 'K2981910_HYDRO_QJM.txt'
+    # 'all'
+    c(
+        'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'W2832020_HYDRO_QJM.txt'
         # "W3315010_HYDRO_QJM.txt",
@@ -273,7 +275,7 @@ code_filenames_to_use =
         # '^V'
         # '^W'
         # '^X'
-    # )
+    )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -292,8 +294,8 @@ var_to_analyse_dir =
     # ''
     # 'AEAG'
     # 'MAKAHO'
-    'Ex2D'
-    # 'WIP'
+    # 'Ex2D'
+    'WIP'
 
 ### 3.4. Steps _______________________________________________________
 # This vector regroups all the different step you want to do. For
@@ -320,113 +322,16 @@ var_to_analyse_dir =
 to_do =
     c(
         # 'create_data',
-        # 'analyse_data',
+        'analyse_data'
         # 'save_analyse'
         # 'read_saving'=c('2022_12_22/dataEx.fst',
                         # '2022_12_22/meta.fst',
                         # '2022_12_22/metaVAR.fst')
-        'plot_correlation_matrix'
+        # 'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
-
-
-
-# [1] "Computes median{dtRec}"
-# [1] "Process 1/1"
-# [1] "EXTRACTION PROCESS                                "
-# [1] "├── Missing year                                  "
-# [1] "│   └── Checking missing continuous periods       "
-# [1] "│       longer than 10 years                      "
-# [1] "├── Period                                        "
-# [1] "│   └── Selecting data between 01 janv. 1900 and  "
-# [1] "│       31 déc. 2020                              "
-# [1] "├── Sample period                                 "
-# [1] "│   ├── Default sample period used                "
-# [1] "│   └── Fixing sample period                      "
-# [1] "│       ├── Only start of the sample period was   "
-# [1] "│       │   given                                 "
-# [1] "│       ├── Every time series have the same       "
-# [1] "│       │   sample period                         "
-# [1] "│       └── All : 01-01 / 12-31                   "
-# [1] "├── None extraction                               "
-# [1] "│   ├── Sampling of the data                      "
-# [1] "├── Grouping data                                 "
-# [1] "├── Application of the function                   "
-# Error in `dplyr::summarise()` at MKstat/R/process.R:1255:16:
-# ! Problem while computing `ValueEx2 = f(Q = .data$Value2)`.
-# ℹ The error occurred in group 32: Code = "MORDOR-SD_H2083110".
-# Caused by error in `mapply()`:
-# ! des entrées de longueur nulle ne peuvent être mélangés avec celles de longueur non nulle
-
-
-
-# [1] "Computes median{tQJXA}"
-# [1] "Process 1/2"
-# [1] "EXTRACTION PROCESS                                "
-# [1] "├── Missing year                                  "
-# [1] "│   └── Checking missing continuous periods       "
-# [1] "│       longer than 10 years                      "
-# [1] "├── Period                                        "
-# [1] "│   └── Selecting data between 01 janv. 1900 and  "
-# [1] "│       31 déc. 2020                              "
-# [1] "├── Sample period                                 "
-# [1] "│   └── Fixing sample period                      "
-# [1] "│       ├── Only start of the sample period was   "
-# [1] "│       │   given                                 "
-# [1] "│       ├── Every time series have the same       "
-# [1] "│       │   sample period                         "
-# [1] "│       └── All : 09-01 / 08-31                   "
-# [1] "├── Yearly extraction                             "
-# [1] "│   ├── Sampling of the data                      "
-# [1] "│   └── Preparing date data for the extraction    "
-# [1] "│       ├── Computing of time indicators for      "
-# [1] "│       │   each time serie                       "
-# [1] "│       ├── Shifting the start of each year in    "
-# [1] "│       │   order to speed extraction process     "
-# [1] "│       └── Removing useless data                 "
-# [1] "├── Grouping data                                 "
-# [1] "├── Application of the function                   "
-# [1] "├── Cleaning extracted tibble                     "
-# [1] "├── Converting index to date                      "
-# [1] "├── Removing data if NA percentage is strictly    "
-# [1] "│   above 20 %                                    "
-# [1] "└── Last cleaning                                 "
-# [1] "Process 2/2"
-# [1] "EXTRACTION PROCESS                                "
-# [1] "├── Period                                        "
-# [1] "│   └── Selecting data between 01 janv. 1900 and  "
-# [1] "│       31 déc. 2020                              "
-# [1] "├── Sample period                                 "
-# [1] "│   ├── Default sample period used                "
-# [1] "│   └── Fixing sample period                      "
-# [1] "│       ├── Only start of the sample period was   "
-# [1] "│       │   given                                 "
-# [1] "│       ├── Every time series have the same       "
-# [1] "│       │   sample period                         "
-# [1] "│       └── All : 01-01 / 12-31                   "
-# [1] "├── None extraction                               "
-# [1] "│   ├── Sampling of the data                      "
-# [1] "├── Grouping data                                 "
-# [1] "├── Application of the function                   "
-# Error in `dplyr::summarise()` at MKstat/R/process.R:1244:16:
-# ! Problem while computing `ValueEx1 = f(.data$Value1, period =
-#   365.25, na.rm = TRUE)`.
-# ℹ The error occurred in group 79: Code = "MORDOR-TS_K2981910".
-# Caused by error in `if (median >= 0) ...`:
-# ! valeur manquante là où TRUE / FALSE est requis
-# Run `rlang::last_error()` to see where the error occurred.
-# There were 50 or more warnings (use warnings() to see the first 50)
-
-
-# Error in `dplyr::summarise()` at MKstat/R/process.R:1244:16:
-# ! Problem while computing `ValueEx1 = f(Q = .data$Value1)`.
-# ℹ The error occurred in group 79: Code = "MORDOR-TS_K2981910".
-# Caused by error in `smooth.spline()`:
-# ! some weights should be positive
-# Run `rlang::last_error()` to see where the error occurred.
-
 
 
 #  ___        _  _    _        _  _            _    _            

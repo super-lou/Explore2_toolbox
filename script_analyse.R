@@ -35,163 +35,160 @@
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
 
-    # print(data[data$ID == "SIM2_W2832020" & data$Date >= as.Date("1984-01-01"),])
+    # script_to_analyse_dirpath = file.path(CARD_dir, var_to_analyse_dir)
     
-    script_to_analyse_dirpath = file.path(CARD_dir, var_to_analyse_dir)
+    card_dir = file.path(CARD_dir, var_to_analyse_dir)
     
-    script_to_analyse = list.files(script_to_analyse_dirpath,
-                                   pattern=".R$",
-                                   recursive=TRUE,
-                                   include.dirs=FALSE,
-                                   full.names=FALSE)
-
-    script_to_analyse = script_to_analyse[!grepl("default.R",
-                                                 script_to_analyse)]
-
-    topic_to_analyse = list.dirs(script_to_analyse_dirpath,
-                                 recursive=TRUE, full.names=FALSE)
-    topic_to_analyse = topic_to_analyse[topic_to_analyse != ""]
-    topic_to_analyse = gsub('.*_', '', topic_to_analyse)
-
-    structure = replicate(length(topic_to_analyse), c())
-    names(structure) = topic_to_analyse
+    res = card_extraction(data, card_dir, period=period,
+                          samplePeriod_opti=samplePeriod_opti,
+                          verbose=TRUE)
     
-    var_analyse = c()
-    topic_analyse = c()
-    unit_analyse = c()
-    samplePeriod_analyse = list()
-    glose_analyse = c()
+    # script_to_analyse = list.files(script_to_analyse_dirpath,
+    #                                pattern=".R$",
+    #                                recursive=TRUE,
+    #                                include.dirs=FALSE,
+    #                                full.names=FALSE)
 
-    metaVAR = dplyr::tibble()
+    # script_to_analyse = script_to_analyse[!grepl("default.R",
+    #                                              script_to_analyse)]
+
+    # topic_to_analyse = list.dirs(script_to_analyse_dirpath,
+    #                              recursive=TRUE, full.names=FALSE)
+    # topic_to_analyse = topic_to_analyse[topic_to_analyse != ""]
+    # topic_to_analyse = gsub('.*_', '', topic_to_analyse)
+
+    # structure = replicate(length(topic_to_analyse), c())
+    # names(structure) = topic_to_analyse
     
-    if (exists("dataEx")) {
-        rm (dataEx)
-    }
+    # var_analyse = c()
+    # topic_analyse = c()
+    # unit_analyse = c()
+    # samplePeriod_analyse = list()
+    # glose_analyse = c()
+
+    # metaVAR = dplyr::tibble()
     
-    for (script in script_to_analyse) {
+    # if (exists("dataEx")) {
+    #     rm (dataEx)
+    # }
+    
+    # for (script in script_to_analyse) {
         
-        list_path = list.files(file.path(CARD_dir,
-                                         init_tools_dir),
-                               pattern='*.R$',
-                               full.names=TRUE)
-        for (path in list_path) {
-            source(path, encoding='UTF-8')    
-        }
+    #     list_path = list.files(file.path(CARD_dir,
+    #                                      init_tools_dir),
+    #                            pattern='*.R$',
+    #                            full.names=TRUE)
+    #     for (path in list_path) {
+    #         source(path, encoding='UTF-8')    
+    #     }
 
-        Process_default = sourceProcess(
-            file.path(CARD_dir,init_var_file))
+    #     Process_default = sourceProcess(
+    #         file.path(CARD_dir,init_var_file))
         
-        Process = sourceProcess(
-            file.path(script_to_analyse_dirpath, script),
-            default=Process_default)
+    #     Process = sourceProcess(
+    #         file.path(script_to_analyse_dirpath, script),
+    #         default=Process_default)
 
-        principal = Process$P
-        principal_names = names(principal)
-        for (i in 1:length(principal)) {
-            assign(principal_names[i], principal[[i]])
-        }
+    #     principal = Process$P
+    #     principal_names = names(principal)
+    #     for (i in 1:length(principal)) {
+    #         assign(principal_names[i], principal[[i]])
+    #     }
         
-        split_script = split_path(script)
+    #     split_script = split_path(script)
         
-        if (length(split_script) == 1) {
-            if (!('None' %in% names(structure))) {
-                structure = append(list(None=c()), structure)
-            }
-            structure[['None']] = c(structure[['None']], var)
-        } else if (length(split_script) == 2) {
-            dir = split_script[2]
-            dir = gsub('.*_', '', dir)
-            structure[[dir]] = c(structure[[dir]], var)
-        }
+    #     if (length(split_script) == 1) {
+    #         if (!('None' %in% names(structure))) {
+    #             structure = append(list(None=c()), structure)
+    #         }
+    #         structure[['None']] = c(structure[['None']], var)
+    #     } else if (length(split_script) == 2) {
+    #         dir = split_script[2]
+    #         dir = gsub('.*_', '', dir)
+    #         structure[[dir]] = c(structure[[dir]], var)
+    #     }
         
-        if (samplePeriod_mode == 'optimale') {
-            if (identical(samplePeriod_opti[[topic]], "min")) {
-                minQM = paste0(formatC(meta$minQM,
-                                       width=2,
-                                       flag="0"),
-                               '-01')
-                samplePeriodMOD = tibble(Code=meta$Code,
-                                         sp=minQM)
-            } else if (identical(samplePeriod_opti[[topic]], "max")) {
-                maxQM = paste0(formatC(meta$maxQM,
-                                       width=2,
-                                       flag="0"),
-                               '-01')
-                samplePeriodMOD = tibble(Code=meta$Code,
-                                         sp=maxQM)
-            } else {
-                samplePeriodMOD = samplePeriod_opti[[topic]]
-            }
+    #     if (samplePeriod_mode == 'optimale') {
+    #         if (identical(samplePeriod_opti[[topic]], "min")) {
+    #             minQM = paste0(formatC(meta$minQM,
+    #                                    width=2,
+    #                                    flag="0"),
+    #                            '-01')
+    #             samplePeriodMOD = tibble(Code=meta$Code,
+    #                                      sp=minQM)
+    #         } else if (identical(samplePeriod_opti[[topic]], "max")) {
+    #             maxQM = paste0(formatC(meta$maxQM,
+    #                                    width=2,
+    #                                    flag="0"),
+    #                            '-01')
+    #             samplePeriodMOD = tibble(Code=meta$Code,
+    #                                      sp=maxQM)
+    #         } else {
+    #             samplePeriodMOD = samplePeriod_opti[[topic]]
+    #         }
             
-        } else {
-            samplePeriodMOD = NULL
-        }
+    #     } else {
+    #         samplePeriodMOD = NULL
+    #     }
 
-        if (!is.null(samplePeriodMOD)) {
-            nProcess = length(Process)
-            for (i in 1:nProcess) {
-                if (!is.null(Process[[i]]$samplePeriod)) {
-                    Process[[i]]$samplePeriod = samplePeriodMOD
-                    samplePeriod = Process[[i]]$samplePeriod
-                }
-            }
-        }
+    #     if (!is.null(samplePeriodMOD)) {
+    #         nProcess = length(Process)
+    #         for (i in 1:nProcess) {
+    #             if (!is.null(Process[[i]]$samplePeriod)) {
+    #                 Process[[i]]$samplePeriod = samplePeriodMOD
+    #                 samplePeriod = Process[[i]]$samplePeriod
+    #             }
+    #         }
+    #     }
 
-        if (var %in% var_analyse) {
-            next
-        }
+    #     if (var %in% var_analyse) {
+    #         next
+    #     }
         
-        var_analyse = c(var_analyse, var)
-        topic_analyse = c(topic_analyse, topic)
-        unit_analyse = c(unit_analyse, unit)
-        samplePeriod_analyse = append(samplePeriod_analyse,
-                                      list(samplePeriod))
-        glose_analyse = c(glose_analyse, glose)
+    #     var_analyse = c(var_analyse, var)
+    #     topic_analyse = c(topic_analyse, topic)
+    #     unit_analyse = c(unit_analyse, unit)
+    #     samplePeriod_analyse = append(samplePeriod_analyse,
+    #                                   list(samplePeriod))
+    #     glose_analyse = c(glose_analyse, glose)
 
-        Xex = get_dataEx(data=data,
-                         Process=Process,
-                         period=period)
+    #     Xex = get_dataEx(data=data,
+    #                      Process=Process,
+    #                      period=period)
 
-        print(paste0("Data extracted for ", var))
-        print(Xex)
+    #     print(paste0("Data extracted for ", var))
+    #     print(Xex)
 
+    #     vars = names(Xex)[!(names(Xex) %in% c("ID", "Date"))]
+    #     vars = gsub("([_]obs)|([_]sim)", "", vars)
+    #     vars = vars[!duplicated(vars)]
 
-        # print(Xex[Xex$ID == "SIM2_W2832020",])
+    #     metaVAR = dplyr::bind_rows(
+    #                          metaVAR,
+    #                          dplyr::tibble(var=vars,
+    #                                        unit=unit,
+    #                                        glose=glose,
+    #                                        topic=
+    #                                            paste0(topic,
+    #                                                   collapse="/"),
+    #                                        samplePeriod=
+    #                                            paste0(samplePeriod,
+    #                                                   collapse="/")))
 
-        vars = names(Xex)[!(names(Xex) %in% c("ID", "Date"))]
-        vars = gsub("([_]obs)|([_]sim)", "", vars)
-        vars = vars[!duplicated(vars)]
+    #     Xex$Model = gsub("[_].*$", "", Xex$ID)
+    #     Xex$Code = gsub("^.*[_]", "", Xex$ID)
+    #     Xex = dplyr::select(Xex, -ID)
+    #     Xex = dplyr::select(Xex, Model, Code, dplyr::everything())
 
-        metaVAR = dplyr::bind_rows(
-                             metaVAR,
-                             dplyr::tibble(var=vars,
-                                           unit=unit,
-                                           glose=glose,
-                                           topic=
-                                               paste0(topic,
-                                                      collapse="/"),
-                                           samplePeriod=
-                                               paste0(samplePeriod,
-                                                      collapse="/")))
-
-        Xex$Model = gsub("[_].*$", "", Xex$ID)
-        Xex$Code = gsub("^.*[_]", "", Xex$ID)
-        Xex = dplyr::select(Xex, -ID)
-        Xex = dplyr::select(Xex, Model, Code, dplyr::everything())
-
-        # print(Xex[Xex$Code == "W2832020",])
-
-        if (!exists("dataEx")) {
-            dataEx = Xex
-        } else {
-            dataEx = dplyr::full_join(dataEx,
-                                      Xex,
-                                      by=c("Model", "Code"))  
-        }
-
-        # print(dataEx[dataEx$Code == "W2832020",])
-        
-    }
+    #     if (!exists("dataEx")) {
+    #         dataEx = Xex
+    #     } else {
+    #         dataEx = dplyr::full_join(dataEx,
+    #                                   Xex,
+    #                                   by=c("Model", "Code"))  
+    #     }    
+    # }
+    
     write_tibble(meta,
                  filedir=tmpdir,
                  filename=paste0("meta_", subset, ".fst"))

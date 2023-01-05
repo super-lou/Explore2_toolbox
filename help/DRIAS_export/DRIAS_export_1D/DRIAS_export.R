@@ -43,4 +43,4 @@ if (!(file.exists(data_dir))) {
     dir.create(data_dir)
 }
 
-generate_NCf(out_dir=data_dir)
+generate_NCf(out_dir=data_dir, verbose=TRUE)
