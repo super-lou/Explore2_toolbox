@@ -39,8 +39,8 @@ icon_path = file.path(resources_path, icon_dir)
 
 
 if ('plot_correlation_matrix' %in% to_do) {
-    page_correlation_matrix(dataEx,
-                            metaVAR,
+    page_correlation_matrix(dataEX,
+                            metaEX,
                             icon_path=icon_path,
                             logo_path=logo_path,
                             figdir=today_figdir)
@@ -49,7 +49,7 @@ if ('plot_correlation_matrix' %in% to_do) {
 
 
 if ('plot_diagnostic_datasheet' %in% to_do) {
-    plot_diagnostic_datasheet(dataEx,
+    plot_diagnostic_datasheet(dataEX,
                               meta=meta,
                               period=period,
                               var=var_analyse,

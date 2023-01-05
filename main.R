@@ -60,11 +60,11 @@ codes_to_diag_SHPdir = "Ex2D/reseauReferenceHYDRO"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
-CARD_dir = file.path(gsub("[/]project[/].*$", "",
-                          computer_work_path),
-                     "project",
-                     "CARD_project",
-                     "CARD")
+CARD_path = file.path(gsub("[/]project[/].*$", "",
+                           computer_work_path),
+                      "project",
+                      "CARD_project",
+                      "CARD")
 # Name of the tool directory that includes all the functions needed to
 # calculate a variable
 init_tools_dir = '__tools__'
@@ -314,12 +314,12 @@ var_to_analyse_dir =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data',
+        # 'create_data'
         'analyse_data'
         # 'save_analyse'
-        # 'read_saving'=c('2022_12_22/dataEx.fst',
+        # 'read_saving'=c('2022_12_22/dataEX.fst',
                         # '2022_12_22/meta.fst',
-                        # '2022_12_22/metaVAR.fst')
+                        # '2022_12_22/metaEX.fst')
         # 'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
@@ -338,32 +338,32 @@ setwd(computer_work_path)
 
 source('tools.R', encoding='UTF-8')
 
-# Import MKstat
+# Import EXstat
 dev_path = file.path(dirname(dirname(computer_work_path)),
-                     'MKstat_project', 'MKstat', 'R')
+                     'EXstat_project', 'EXstat', 'R')
 if (file.exists(dev_path)) {
-    print('Loading MKstat from local directory')
+    print('Loading EXstat from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
 } else {
-    print('Loading MKstat from package')
-    library(MKstat)
+    print('Loading EXstat from package')
+    library(EXstat)
 }
 
-# Import ashes
+# Import ASHE
 dev_path = file.path(dirname(dirname(computer_work_path)),
-                     'ashes_project', 'ashes', 'R')
+                     'ASHE_project', 'ASHE', 'R')
 if (file.exists(dev_path)) {
-    print('Loading ashes from local directory')
+    print('Loading ASHE from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
 } else {
-    print('Loading ashes from package')
-    library(ashes)
+    print('Loading ASHE from package')
+    library(ASHE)
 }
 
 # Import dataSheep

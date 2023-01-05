@@ -23,45 +23,45 @@
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
 
-    # print(dataEx[dataEx$Code == "W2832020",])
+    # print(dataEX[dataEX$Code == "W2832020",])
     
     if (exists("meta")) {
         rm (meta)
     }
-    if (exists("dataEx")) {
-        rm (dataEx)
+    if (exists("dataEX")) {
+        rm (dataEX)
     }
     for (subset in 1:Subsets) {
         meta_tmp = read_tibble(filedir=tmpdir,
                                filename=paste0("meta_",
                                                subset,
                                                ".fst"))
-        dataEx_tmp = read_tibble(filedir=tmpdir,
-                                 filename=paste0("dataEx_",
+        dataEX_tmp = read_tibble(filedir=tmpdir,
+                                 filename=paste0("dataEX_",
                                                  subset,
                                                  ".fst"))
 
-        # print(dataEx_tmp[dataEx_tmp$Code == "W2832020",])
+        # print(dataEX_tmp[dataEX_tmp$Code == "W2832020",])
         
-        if (!exists("dataEx")) {
+        if (!exists("dataEX")) {
             meta = meta_tmp
         } else {
             meta = dplyr::bind_rows(meta, meta_tmp)
         }        
-        if (!exists("dataEx")) {
-            dataEx = dataEx_tmp
+        if (!exists("dataEX")) {
+            dataEX = dataEX_tmp
         } else {
-            dataEx = dplyr::bind_rows(dataEx, dataEx_tmp)
+            dataEX = dplyr::bind_rows(dataEX, dataEX_tmp)
         }
-        # print(dataEx[dataEx$Code == "W2832020",])
+        # print(dataEX[dataEX$Code == "W2832020",])
     }
     rm (meta_tmp)
-    rm (dataEx_tmp)
+    rm (dataEX_tmp)
 
-    dataEx = dataEx[order(dataEx$Model),]
+    dataEX = dataEX[order(dataEX$Model),]
     meta = meta[order(meta$Code),]
 
-    Vars = names(dataEx)
+    Vars = names(dataEX)
     containSEA = grepl("SEA", Vars)
     if (any(containSEA)) {
         Vars_SEA = Vars[containSEA]
@@ -73,18 +73,18 @@ if ('analyse_data' %in% to_do) {
         }
         Vars[containSEA] = Vars_SEA
     }
-    names(dataEx) = Vars
+    names(dataEX) = Vars
 
-    containSEA = grepl("SEA", metaVAR$var)
+    containSEA = grepl("SEA", metaEX$var)
     if (any(containSEA)) {
-        Vars_SEA = metaVAR$var[containSEA]
+        Vars_SEA = metaEX$var[containSEA]
         SEAofVars = gsub("^.*[_]+", "", Vars_SEA)
         Vars_SEA = stringr::str_extract(Vars_SEA, "^.*[_]+")
         Vars_SEA = gsub("[_]$", "", Vars_SEA)
         for (i in 1:length(Vars_SEA)) {
             Vars_SEA[i] = gsub("SEA", SEAofVars[i], Vars_SEA[i])
         }
-        metaVAR$var[containSEA] = Vars_SEA
+        metaEX$var[containSEA] = Vars_SEA
     }
     
     containSO = "([_]obs$)|([_]sim$)"
@@ -97,31 +97,31 @@ if ('analyse_data' %in% to_do) {
         varREL = VarsREL[i]
         # print(varREL)
         if (grepl("^HYP.*", varREL)) {
-            dataEx[[varREL]] =
-                dataEx[[paste0(varREL, "_sim")]] &
-                dataEx[[paste0(varREL, "_obs")]]
+            dataEX[[varREL]] =
+                dataEX[[paste0(varREL, "_sim")]] &
+                dataEX[[paste0(varREL, "_obs")]]
 
         } else if (grepl("(^t)|([{]t)", varREL)) {
-            dataEx[[varREL]] =
+            dataEX[[varREL]] =
                 circular_divided(
-                    circular_minus(dataEx[[paste0(varREL, "_sim")]],
-                                   dataEx[[paste0(varREL, "_obs")]],
+                    circular_minus(dataEX[[paste0(varREL, "_sim")]],
+                                   dataEX[[paste0(varREL, "_obs")]],
                                    period=365.25),
-                    dataEx[[paste0(varREL, "_obs")]],
+                    dataEX[[paste0(varREL, "_obs")]],
                     period=365.25)
             
         } else {
-            dataEx[[varREL]] =
-                (dataEx[[paste0(varREL, "_sim")]] -
-                 dataEx[[paste0(varREL, "_obs")]]) /
-                dataEx[[paste0(varREL, "_obs")]]
+            dataEX[[varREL]] =
+                (dataEX[[paste0(varREL, "_sim")]] -
+                 dataEX[[paste0(varREL, "_obs")]]) /
+                dataEX[[paste0(varREL, "_obs")]]
         }
-        dataEx = dplyr::relocate(dataEx,
+        dataEX = dplyr::relocate(dataEX,
                                  !!varREL,
                                  .after=!!paste0(varREL, "_sim"))
     }
 
-    # print(dataEx[dataEx$Code == "W2832020",])
+    # print(dataEX[dataEX$Code == "W2832020",])
     
 }
 
@@ -134,34 +134,34 @@ if ('save_analyse' %in% to_do) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.fst"))
-        write_tibble(metaVAR,
+        write_tibble(metaEX,
                      filedir=today_resdir,
-                     filename=paste0("metaVAR.fst"))
-        write_tibble(dataEx,
+                     filename=paste0("metaEX.fst"))
+        write_tibble(dataEX,
                      filedir=today_resdir,
-                     filename=paste0("dataEx.fst"))
+                     filename=paste0("dataEX.fst"))
     }
     if ("Rdata" %in% saving_format) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.Rdata"))
-        write_tibble(metaVAR,
+        write_tibble(metaEX,
                      filedir=today_resdir,
-                     filename=paste0("metaVAR.Rdata"))
-        write_tibble(dataEx,
+                     filename=paste0("metaEX.Rdata"))
+        write_tibble(dataEX,
                      filedir=today_resdir,
-                     filename=paste0("dataEx.Rdata"))
+                     filename=paste0("dataEX.Rdata"))
     }    
     if ("txt" %in% saving_format) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.txt"))
-        write_tibble(metaVAR,
+        write_tibble(metaEX,
                      filedir=today_resdir,
-                     filename=paste0("metaVAR.txt"))
-        write_tibble(dataEx,
+                     filename=paste0("metaEX.txt"))
+        write_tibble(dataEX,
                      filedir=today_resdir,
-                     filename=paste0("dataEx.txt"))
+                     filename=paste0("dataEX.txt"))
     }  
 }
 

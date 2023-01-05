@@ -1,4 +1,4 @@
-VarRAW = metaVAR$var
+VarRAW = metaEX$var
 VarRAW = gsub("median", "med", VarRAW)
 VarRAW = gsub("HYP", "H", VarRAW)
 VarRAW = gsub("alpha", "a", VarRAW)
