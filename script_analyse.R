@@ -33,7 +33,7 @@ if ('analyse_data' %in% to_do) {
     dataEX_all = res$dataEX
 
     
-    meaEX = res$metaEX
+    metaEX = res$metaEX
     
     write_tibble(meta,
                  filedir=tmpdir,

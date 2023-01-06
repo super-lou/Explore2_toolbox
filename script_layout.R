@@ -41,6 +41,7 @@ icon_path = file.path(resources_path, icon_dir)
 if ('plot_correlation_matrix' %in% to_do) {
     page_correlation_matrix(dataEX,
                             metaEX,
+                            ModelGroup=group_of_models_to_use,
                             icon_path=icon_path,
                             logo_path=logo_path,
                             figdir=today_figdir)

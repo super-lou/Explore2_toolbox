@@ -216,7 +216,7 @@ axis_xlim =
 exXprob = 0.01
 
 propagate_NA = TRUE
-    
+
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 ### 3.1. Models ______________________________________________________
@@ -224,12 +224,12 @@ models_to_diag =
     c(
         # "EROS",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata"
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata"
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc"
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata"
+        # "MORDOR-TS"="MordorTS_20221213.Rdata"
         # "ORCHIDEE",
-        # "SMASH"="SMASH_20220921.Rdata"
+        "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
     )
 complete_by = "SMASH"
@@ -246,12 +246,28 @@ models_to_proj =
         # "CTRIP"
     )
 
+group_of_models_to_use =
+    # NULL
+    list(
+        # "EROS",
+        # "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        # "ORCHIDEE",
+        "SMASH",
+        # "CTRIP",
+        "Multi-Model"=
+            c("J2000", "SIM2", "MORDOR-SD", "MORDOR-TS", "SMASH")
+    )
+
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    # 'all'
-    c(
-        'K2981910_HYDRO_QJM.txt'
+    'all'
+    # c(
+        # 'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'W2832020_HYDRO_QJM.txt'
         # "W3315010_HYDRO_QJM.txt",
@@ -268,7 +284,7 @@ code_filenames_to_use =
         # '^V'
         # '^W'
         # '^X'
-    )
+    # )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -315,17 +331,19 @@ var_to_analyse_dir =
 to_do =
     c(
         # 'create_data'
-        'analyse_data'
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_saving'=c('2022_12_22/dataEX.fst',
                         # '2022_12_22/meta.fst',
                         # '2022_12_22/metaEX.fst')
-        # 'plot_correlation_matrix'
+        'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
 
+
+# CodeDisp = gsub("[_].*$", "", list.files(file.path(computer_data_path, obs_dir)))
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
