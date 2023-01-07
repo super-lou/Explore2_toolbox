@@ -23,17 +23,50 @@
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
 
+
+    samplePeriodMOD = samplePeriod_opti
+    
+    if (!is.null(samplePeriod_opti)) {
+        nTopic = length(samplePeriod_opti)
+
+        for (i in 1:nTopic) {
+            sp = samplePeriodMOD[[i]]
+            
+            if (identical(sp, "min") | identical(sp, "max")) {
+                sp = tibble(Code=meta$Code,
+                            sp=paste0(formatC(meta[[paste0(sp,
+                                                           "QM")]],
+                                              width=2,
+                                              flag="0"),
+                                      '-01'))
+            } else {
+                if (length(sp) == 2) {
+                    sp = list(sp)
+                }
+                sp = tibble(Code=meta$Code, sp=sp)
+            }
+            samplePeriodMOD[[i]] = sp
+        }
+    }
+    
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
                           WIP_dir=var_to_analyse_dir,
-                          samplePeriod_opti=samplePeriod_opti,
+                          samplePeriod_by_topic=samplePeriodMOD,
+                          simplify=TRUE,
                           verbose=TRUE)
 
-
-    dataEX_all = res$dataEX
-
-    
+    dataEX = res$dataEX
     metaEX = res$metaEX
+
+    # vars = names(Xex)[!(names(Xex) %in% c("ID", "Date"))]
+    # vars = gsub("([_]obs)|([_]sim)", "", vars)
+    # vars = vars[!duplicated(vars)]
+    
+    dataEX$Model = gsub("[_].*$", "", dataEX$ID)
+    dataEX$Code = gsub("^.*[_]", "", dataEX$ID)
+    dataEX = dplyr::select(dataEX, -ID)
+    dataEX = dplyr::select(dataEX, Model, Code, dplyr::everything())
     
     write_tibble(meta,
                  filedir=tmpdir,

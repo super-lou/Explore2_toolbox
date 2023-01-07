@@ -89,36 +89,38 @@ if ('analyse_data' %in% to_do) {
     
     containSO = "([_]obs$)|([_]sim$)"
     Vars = Vars[grepl(containSO, Vars)]
-    VarsREL = gsub(containSO, "", Vars)
-    VarsREL = VarsREL[!duplicated(VarsREL)]
-    nVarsREL = length(VarsREL)
-    
-    for (i in 1:nVarsREL) {
-        varREL = VarsREL[i]
-        # print(varREL)
-        if (grepl("^HYP.*", varREL)) {
-            dataEX[[varREL]] =
-                dataEX[[paste0(varREL, "_sim")]] &
-                dataEX[[paste0(varREL, "_obs")]]
+    if (length(Vars) > 0) {
+        VarsREL = gsub(containSO, "", Vars)
+        VarsREL = VarsREL[!duplicated(VarsREL)]
+        nVarsREL = length(VarsREL)
+        
+        for (i in 1:nVarsREL) {
+            varREL = VarsREL[i]
+            # print(varREL)
+            if (grepl("^HYP.*", varREL)) {
+                dataEX[[varREL]] =
+                    dataEX[[paste0(varREL, "_sim")]] &
+                    dataEX[[paste0(varREL, "_obs")]]
 
-        } else if (grepl("(^t)|([{]t)", varREL)) {
-            dataEX[[varREL]] =
-                circular_divided(
-                    circular_minus(dataEX[[paste0(varREL, "_sim")]],
-                                   dataEX[[paste0(varREL, "_obs")]],
-                                   period=365.25),
-                    dataEX[[paste0(varREL, "_obs")]],
-                    period=365.25)
-            
-        } else {
-            dataEX[[varREL]] =
-                (dataEX[[paste0(varREL, "_sim")]] -
-                 dataEX[[paste0(varREL, "_obs")]]) /
-                dataEX[[paste0(varREL, "_obs")]]
+            } else if (grepl("(^t)|([{]t)", varREL)) {
+                dataEX[[varREL]] =
+                    circular_divided(
+                        circular_minus(dataEX[[paste0(varREL, "_sim")]],
+                                       dataEX[[paste0(varREL, "_obs")]],
+                                       period=365.25),
+                        dataEX[[paste0(varREL, "_obs")]],
+                        period=365.25)
+                
+            } else {
+                dataEX[[varREL]] =
+                    (dataEX[[paste0(varREL, "_sim")]] -
+                     dataEX[[paste0(varREL, "_obs")]]) /
+                    dataEX[[paste0(varREL, "_obs")]]
+            }
+            dataEX = dplyr::relocate(dataEX,
+                                     !!varREL,
+                                     .after=!!paste0(varREL, "_sim"))
         }
-        dataEX = dplyr::relocate(dataEX,
-                                 !!varREL,
-                                 .after=!!paste0(varREL, "_sim"))
     }
 
     # print(dataEX[dataEX$Code == "W2832020",])

@@ -265,9 +265,9 @@ group_of_models_to_use =
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    'all'
-    # c(
-        # 'K2981910_HYDRO_QJM.txt'
+    # 'all'
+    c(
+        'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'W2832020_HYDRO_QJM.txt'
         # "W3315010_HYDRO_QJM.txt",
@@ -284,7 +284,7 @@ code_filenames_to_use =
         # '^V'
         # '^W'
         # '^X'
-    # )
+    )
 
 ### 3.3. Variables ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
@@ -331,12 +331,12 @@ var_to_analyse_dir =
 to_do =
     c(
         # 'create_data'
-        # 'analyse_data'
+        'analyse_data'
         # 'save_analyse'
         # 'read_saving'=c('2022_12_22/dataEX.fst',
                         # '2022_12_22/meta.fst',
                         # '2022_12_22/metaEX.fst')
-        'plot_correlation_matrix'
+        # 'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
