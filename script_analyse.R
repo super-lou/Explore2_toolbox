@@ -71,7 +71,7 @@ if ('analyse_data' %in% to_do) {
     
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
-                          WIP_dir=var_to_analyse_dir,
+                          CARD_dir=var_to_analyse_dir,
                           samplePeriod_by_topic=samplePeriodMOD,
                           simplify=TRUE,
                           verbose=TRUE)
