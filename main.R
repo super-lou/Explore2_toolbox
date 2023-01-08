@@ -226,7 +226,7 @@ models_to_diag =
         # "GRSD",
         # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata"
         # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc"
-        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata"
+        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         # "MORDOR-TS"="MordorTS_20221213.Rdata"
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
@@ -267,9 +267,9 @@ code_filenames_to_use =
     # ''
     # 'all'
     c(
-        'K2981910_HYDRO_QJM.txt'
-        # 'V2114010_HYDRO_QJM.txt'
-        # 'W2832020_HYDRO_QJM.txt'
+        'K2981910_HYDRO_QJM.txt',
+        'V2114010_HYDRO_QJM.txt',
+        'W2832020_HYDRO_QJM.txt'
         # "W3315010_HYDRO_QJM.txt",
         # "W2755010_HYDRO_QJM.txt"
         # 'H2083110_HYDRO_QJM.txt'
@@ -448,7 +448,7 @@ if (all(code_filenames_to_use == "")) {
     stop ("No station selected")
 }
 
-if (code_filenames_to_use == "all") {
+if (all(code_filenames_to_use == "all")) {
     CodeALL = codes_to_diag
         
 } else {

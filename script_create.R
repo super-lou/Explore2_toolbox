@@ -85,6 +85,8 @@ if ('create_data' %in% to_do) {
 
     # print(data[data$Code == "W2832020" & data$Date >= as.Date("1984-01-01"),])
 
+    nModel = length(Model)
+
     if (!is.null(complete_by) & complete_by != "") {
         model4complete = complete_by[complete_by %in% Model][1]
         col2check = c("T", "Pl", "ET0", "Ps")
