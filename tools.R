@@ -96,3 +96,20 @@ read_shp = function (path) {
     return (shp)
 }
 
+
+get_select = function (dataEX, metaEX, select="") {
+    if (!any(select == "all")) {
+        select = paste0("(",
+                        paste0(c("Model", "Code", select),
+                               collapse=")|("), ")")
+        select = gsub("[{]", "[{]", select)
+        select = gsub("[}]", "[}]", select)
+        select = gsub("[_]", "[_]", select)
+        select = gsub("[,]", "[,]", select)
+        select = names(dataEX)[grepl(select, names(dataEX))]        
+        dataEX = dplyr::select(dataEX, select)
+        metaEX = metaEX[metaEX$var %in% select,]
+    }
+    res = list(metaEX=metaEX, dataEX=dataEX)
+    return (res)
+}

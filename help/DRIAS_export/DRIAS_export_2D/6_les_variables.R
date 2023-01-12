@@ -76,4 +76,5 @@ NCf$SWI.04.units = " "
 NCf$SWI.05.coordinates = "lat lon"
 NCf$SWI.06.missing_value = NaN
 NCf$SWI.07.cell_methods = "time:mean"
+# Publication or an official doc concerning the hydro model
 NCf$SWI.08.comment = "Potential evapotranspiration calculated using the Hargreaves method with unique coefficient 0.175 from DRIAS-2020 corrected data set (the variable rsdsAdjust is not used). Source : ........."

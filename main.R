@@ -217,6 +217,10 @@ exXprob = 0.01
 
 propagate_NA = TRUE
 
+verbose =
+    FALSE
+    # TRUE
+
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 ### 3.1. Models ______________________________________________________
@@ -226,7 +230,7 @@ models_to_diag =
         # "GRSD",
         # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata"
         # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc"
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         # "MORDOR-TS"="MordorTS_20221213.Rdata"
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
@@ -267,9 +271,9 @@ code_filenames_to_use =
     # ''
     # 'all'
     c(
-        'K2981910_HYDRO_QJM.txt',
-        'V2114010_HYDRO_QJM.txt',
-        'W2832020_HYDRO_QJM.txt'
+        'K2981910_HYDRO_QJM.txt'
+        # 'V2114010_HYDRO_QJM.txt'
+        # 'W2832020_HYDRO_QJM.txt'
         # "W3315010_HYDRO_QJM.txt",
         # "W2755010_HYDRO_QJM.txt"
         # 'H2083110_HYDRO_QJM.txt'
@@ -303,8 +307,14 @@ var_to_analyse_dir =
     # ''
     # 'AEAG'
     # 'MAKAHO'
-    # 'Ex2D'
-    'WIP'
+    'Ex2D/1_all'
+    # 'Ex2D/2_diagnostic'
+    # 'WIP'
+
+var_selection =
+    # "all"
+    c("KGEsqrt", "Bias$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "mean{QA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
+
 
 ### 3.4. Steps _______________________________________________________
 # This vector regroups all the different step you want to do. For
@@ -331,12 +341,13 @@ var_to_analyse_dir =
 to_do =
     c(
         # 'create_data'
-        'analyse_data'
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_saving'=c('2022_12_22/dataEX.fst',
-                        # '2022_12_22/meta.fst',
-                        # '2022_12_22/metaEX.fst')
-        # 'plot_correlation_matrix'
+        #                 '2022_12_22/meta.fst',
+        #                 '2022_12_22/metaEX.fst')
+        # 'select_var'
+        'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
@@ -504,7 +515,7 @@ if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %i
     }
 }
 
-if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do) {
+if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do) {
     print("")
     print('MANAGEMENT')
     source('script_management.R', encoding='UTF-8')

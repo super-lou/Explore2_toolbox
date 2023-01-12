@@ -73,8 +73,8 @@ if ('analyse_data' %in% to_do) {
                           CARD_path=CARD_path,
                           CARD_dir=var_to_analyse_dir,
                           samplePeriod_by_topic=samplePeriodMOD,
-                          simplify=TRUE,
-                          verbose=TRUE)
+                          simplify_by="ID",
+                          verbose=verbose)
 
     dataEX = res$dataEX
     metaEX = res$metaEX

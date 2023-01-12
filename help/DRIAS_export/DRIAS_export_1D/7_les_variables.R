@@ -67,3 +67,6 @@ NCf$debit.02.long_name = "debit modcou"
 NCf$debit.03.units = "m3.s-1"
 NCf$debit.04.missing_value = NaN
 NCf$debit.05.cell_methods = "time:sum"
+# Publication or an official doc concerning the hydro model
+NCf$debit.06.comment = "source : ..."
+

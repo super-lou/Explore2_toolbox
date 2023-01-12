@@ -40,9 +40,6 @@ if ('analyse_data' %in% to_do) {
                                  filename=paste0("dataEX_",
                                                  subset,
                                                  ".fst"))
-
-        # print(dataEX_tmp[dataEX_tmp$Code == "W2832020",])
-        
         if (!exists("dataEX")) {
             meta = meta_tmp
         } else {
@@ -53,39 +50,12 @@ if ('analyse_data' %in% to_do) {
         } else {
             dataEX = dplyr::bind_rows(dataEX, dataEX_tmp)
         }
-        # print(dataEX[dataEX$Code == "W2832020",])
     }
     rm (meta_tmp)
     rm (dataEX_tmp)
 
     dataEX = dataEX[order(dataEX$Model),]
     meta = meta[order(meta$Code),]
-
-    Vars = names(dataEX)
-    containSEA = grepl("SEA", Vars)
-    if (any(containSEA)) {
-        Vars_SEA = Vars[containSEA]
-        SEAofVars = gsub("^.*[_]+", "", Vars_SEA)
-        Vars_SEA = stringr::str_extract(Vars_SEA, "^.*[_]+")
-        Vars_SEA = gsub("[_]$", "", Vars_SEA)
-        for (i in 1:length(Vars_SEA)) {
-            Vars_SEA[i] = gsub("SEA", SEAofVars[i], Vars_SEA[i])
-        }
-        Vars[containSEA] = Vars_SEA
-    }
-    names(dataEX) = Vars
-
-    containSEA = grepl("SEA", metaEX$var)
-    if (any(containSEA)) {
-        Vars_SEA = metaEX$var[containSEA]
-        SEAofVars = gsub("^.*[_]+", "", Vars_SEA)
-        Vars_SEA = stringr::str_extract(Vars_SEA, "^.*[_]+")
-        Vars_SEA = gsub("[_]$", "", Vars_SEA)
-        for (i in 1:length(Vars_SEA)) {
-            Vars_SEA[i] = gsub("SEA", SEAofVars[i], Vars_SEA[i])
-        }
-        metaEX$var[containSEA] = Vars_SEA
-    }
     
     containSO = "([_]obs$)|([_]sim$)"
     Vars = Vars[grepl(containSO, Vars)]
@@ -96,7 +66,6 @@ if ('analyse_data' %in% to_do) {
         
         for (i in 1:nVarsREL) {
             varREL = VarsREL[i]
-            # print(varREL)
             if (grepl("^HYP.*", varREL)) {
                 dataEX[[varREL]] =
                     dataEX[[paste0(varREL, "_sim")]] &
@@ -111,6 +80,11 @@ if ('analyse_data' %in% to_do) {
                         dataEX[[paste0(varREL, "_obs")]],
                         period=365.25)
                 
+            } else if (grepl("(Rc)|(epsilon)", varREL)) {
+                dataEX[[varREL]] =
+                    dataEX[[paste0(varREL, "_sim")]] /
+                    dataEX[[paste0(varREL, "_obs")]]
+            
             } else {
                 dataEX[[varREL]] =
                     (dataEX[[paste0(varREL, "_sim")]] -
@@ -178,5 +152,11 @@ if ('read_saving' %in% to_do) {
     for (i in 1:nFile) {
         print(paste0(Filenames[i], " saves in ", read_saving[i]))
         assign(Filenames[i], read_tibble(filepath=read_saving[i]))
-    }
+    } 
+}
+
+if ('select_var' %in% to_do) {
+    res = get_select(dataEX, metaEX, select=var_selection)
+    dataEX = res$dataEX
+    metaEX = res$metaEX
 }
