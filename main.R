@@ -162,10 +162,10 @@ period = c('1900-01-01', '2020-12-31')
 samplePeriod_opti =
     # NULL
     list(
-        'Crue' = 'min',
-        'Crue Nivale' = '09-01',
+        'Hautes Eaux' = 'min',
+        'Écoulement Lents' = '09-01',
         'Moyennes Eaux' = 'min',
-        'Étiage' = c('05-01', '11-30')
+        'Basses Eaux' = c('05-01', '11-30')
     )
 
 ### 1.3. Saving ______________________________________________________
@@ -218,20 +218,21 @@ exXprob = 0.01
 propagate_NA = TRUE
 
 verbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     c(
-        # "EROS",
+        # "EROS-Bretagne"="EROS-Bretagne_20230111.Rdata",
+        # "EROS-Loire"="EROS-Loire_20230111.Rdata",
         # "GRSD",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata"
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc"
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        # "MORDOR-TS"="MordorTS_20221213.Rdata"
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
@@ -255,15 +256,15 @@ group_of_models_to_use =
     list(
         # "EROS",
         # "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
+        "J2000"
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
         # "ORCHIDEE",
-        "SMASH",
+        # "SMASH",
         # "CTRIP",
-        "Multi-Model"=
-            c("J2000", "SIM2", "MORDOR-SD", "MORDOR-TS", "SMASH")
+        # "Multi-Model"=
+        #     c("EROS", "J2000", "SIM2", "MORDOR-SD", "MORDOR-TS", "SMASH")
     )
 
 ### 3.2. Code ________________________________________________________
@@ -271,23 +272,16 @@ code_filenames_to_use =
     # ''
     # 'all'
     c(
-        'K2981910_HYDRO_QJM.txt'
+        # 'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'W2832020_HYDRO_QJM.txt'
-        # "W3315010_HYDRO_QJM.txt",
-        # "W2755010_HYDRO_QJM.txt"
-        # 'H2083110_HYDRO_QJM.txt'
-        # '^E',
-        # '^F',
-        # '^G',
         # '^H'
+        # '^I',
         # '^J'
         # '^K'
         # '^M',
         # '^U'
         # '^V'
-        # '^W'
-        # '^X'
     )
 
 ### 3.3. Variables ___________________________________________________
@@ -307,9 +301,9 @@ var_to_analyse_dir =
     # ''
     # 'AEAG'
     # 'MAKAHO'
-    'Ex2D/1_all'
+    # 'Ex2D/1_all'
     # 'Ex2D/2_diagnostic'
-    # 'WIP'
+    'WIP'
 
 var_selection =
     # "all"
@@ -340,14 +334,14 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data'
-        # 'analyse_data'
+        'create_data',
+        'analyse_data'
         # 'save_analyse'
         # 'read_saving'=c('2022_12_22/dataEX.fst',
-        #                 '2022_12_22/meta.fst',
-        #                 '2022_12_22/metaEX.fst')
+                        # '2022_12_22/meta.fst',
+                        # '2022_12_22/metaEX.fst')
         # 'select_var'
-        'plot_correlation_matrix'
+        # 'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
@@ -355,6 +349,8 @@ to_do =
 
 
 # CodeDisp = gsub("[_].*$", "", list.files(file.path(computer_data_path, obs_dir)))
+
+# extract_meta(computer_data_path, obs_dir, paste0(codes_to_diag, obs_format)[300:length(codes_to_diag)])
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
@@ -464,7 +460,8 @@ if (all(code_filenames_to_use == "all")) {
         
 } else {
     code_filenames_to_use = convert_regexp(computer_data_path,
-                                           obs_dir, code_filenames_to_use)
+                                           obs_dir,
+                                           code_filenames_to_use)
     codes_to_use = gsub("[_].*$", "", code_filenames_to_use)
     okCode = codes_to_use %in% codes_to_diag
     CodeALL = codes_to_use[okCode]
@@ -486,24 +483,23 @@ if ('analyse_data' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
 
 if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %in% to_do) {    
     for (subset in 1:Subsets) {
-
-        Code = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
-        Code = Code[!is.na(Code)]
-        nCode = length(Code)
-        code_filenames_to_use = paste0(Code, obs_format)
         
-        print(paste0(nCode*(subset-1), "/", nCodeALL,
-                     " stations analysed so ",
-                     round(nCode*(subset-1)/nCodeALL*100, 1),
-                     "% done"))
-        print("")
-        print("For stations :")
-        print(paste0(Code, collapse=", "))
+        print(paste0(subset, "/", Subsets,
+                     " chunks of stations in analyse so ",
+                     round(subset/Subsets*100, 1), "%"))
+        
+        CodeSUB = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
+        CodeSUB = CodeSUB[!is.na(CodeSUB)]
+        nCodeSUB = length(CodeSUB)
 
         if ('create_data' %in% to_do | 'create_data_proj' %in% to_do) {
             print("")
             print('CREATE')
             source('script_create.R', encoding='UTF-8')
+        }
+
+        if (is.null(data)) {
+            next
         }
 
         if ('analyse_data' %in% to_do) {

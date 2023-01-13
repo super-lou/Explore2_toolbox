@@ -23,6 +23,12 @@
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
 
+    Model = levels(factor(data$Model))
+    nModel = length(Model)
+    
+    Code_available = levels(factor(data$Code))
+    Code = Code_available[Code_available %in% CodeSUB]
+    nCode = length(Code)
 
     samplePeriodMOD = samplePeriod_opti
     
@@ -68,6 +74,10 @@ if ('analyse_data' %in% to_do) {
             samplePeriodMOD[[i]] = sp
         }
     }
+
+    data$ID = paste0(data$Model, "_", data$Code)
+    data = dplyr::select(data, -c(Model, Code))
+    data = dplyr::select(data, ID, everything())
     
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
@@ -78,10 +88,6 @@ if ('analyse_data' %in% to_do) {
 
     dataEX = res$dataEX
     metaEX = res$metaEX
-
-    # vars = names(Xex)[!(names(Xex) %in% c("ID", "Date"))]
-    # vars = gsub("([_]obs)|([_]sim)", "", vars)
-    # vars = vars[!duplicated(vars)]
     
     dataEX$Model = gsub("[_].*$", "", dataEX$ID)
     dataEX$Code = gsub("^.*[_]", "", dataEX$ID)

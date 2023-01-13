@@ -56,6 +56,8 @@ if ('analyse_data' %in% to_do) {
 
     dataEX = dataEX[order(dataEX$Model),]
     meta = meta[order(meta$Code),]
+
+    Vars = colnames(dataEX)
     
     containSO = "([_]obs$)|([_]sim$)"
     Vars = Vars[grepl(containSO, Vars)]
@@ -96,9 +98,6 @@ if ('analyse_data' %in% to_do) {
                                      .after=!!paste0(varREL, "_sim"))
         }
     }
-
-    # print(dataEX[dataEX$Code == "W2832020",])
-    
 }
 
 if ('save_analyse' %in% to_do) {

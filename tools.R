@@ -60,7 +60,12 @@ NetCDF_to_tibble = function (NetCDF_path, type="diag") {
 
 convert_diag_data = function (model, data) {
 
-    if (model == "J2000") {
+    if (grepl("EROS", model)) {
+        names(data) = c("Code", "Date", "Q_sim",
+                        "Pl", "ET0", "Ps", "T")
+        data$Code = substr(data$Code, 1, 8)
+        
+    } else if (model == "J2000") {
         data$Date = as.Date(data$Date)
         names(data) = c("Date", "Code", "Q_sim",
                         "ET0", "T", "Pl", "Ps", "P")
