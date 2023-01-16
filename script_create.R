@@ -45,7 +45,7 @@ if ('create_data' %in% to_do) {
                     
             } else if (grepl(".*[.]nc", model_path)) {
                 data_tmp = NetCDF_to_tibble(model_path,
-                                       type="diag")
+                                            type="diag")
             }
             
             data_tmp = convert_diag_data(model, data_tmp)
@@ -55,8 +55,7 @@ if ('create_data' %in% to_do) {
             data_sim = dplyr::bind_rows(data_sim, data_tmp)
         }
     }
-    rm (data_tmp)
-
+    
     if (nrow(data_sim) > 0) {
 
         Code_available = levels(factor(data_sim$Code))
@@ -125,6 +124,7 @@ if ('create_data' %in% to_do) {
                     data_model = dplyr::bind_cols(Model=model,
                                                   data_model)
                     data_model = data_model[names(data)]
+                    
                     data[data$Model == model,] = data_model
                 }
             }

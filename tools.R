@@ -55,6 +55,7 @@ NetCDF_to_tibble = function (NetCDF_path, type="diag") {
         Date=rep(Date, times=nCode),
         Q_sim=c(t(Q_sim))
     )
+    
     return (data)
 }
 

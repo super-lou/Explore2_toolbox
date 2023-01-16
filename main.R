@@ -239,8 +239,7 @@ models_to_diag =
     )
 complete_by = "SMASH"
 
-models_to_proj =
-    c(
+models_to_proj = c(
         # "EROS",
         # "GRSD",
         # "J2000"=
@@ -254,34 +253,46 @@ models_to_proj =
 group_of_models_to_use =
     # NULL
     list(
-        # "EROS",
+        "EROS",
         # "GRSD",
-        "J2000"
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
         # "ORCHIDEE",
-        # "SMASH",
+        "SMASH",
         # "CTRIP",
-        # "Multi-Model"=
-        #     c("EROS", "J2000", "SIM2", "MORDOR-SD", "MORDOR-TS", "SMASH")
+        "Multi-Model"=
+            c("EROS", "J2000", "SIM2",
+              "MORDOR-SD", "MORDOR-TS", "SMASH")
     )
 
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
-    # 'all'
     c(
-        # 'K2981910_HYDRO_QJM.txt'
+        # 'all'
+
+        'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
-        # 'W2832020_HYDRO_QJM.txt'
+        # 'WDORON01_HYDRO_QJM.txt',
+        # 'WDORON02_HYDRO_QJM.txt',
+        # 'WSOULOIS_HYDRO_QJM.txt',
+        # 'XVENEON1_HYDRO_QJM.txt',
+        # 'XVENEON2_HYDRO_QJM.txt'
+        
+        # "X0454010_HYDRO_QJM.txt"
+        
         # '^H'
         # '^I',
         # '^J'
         # '^K'
         # '^M',
         # '^U'
-        # '^V'
+        # '^V',
+        # '^W'
+        # '^X'
+        # '^Y'
     )
 
 ### 3.3. Variables ___________________________________________________
@@ -337,9 +348,9 @@ to_do =
         'create_data',
         'analyse_data'
         # 'save_analyse'
-        # 'read_saving'=c('2022_12_22/dataEX.fst',
-                        # '2022_12_22/meta.fst',
-                        # '2022_12_22/metaEX.fst')
+        # 'read_saving'=c('ALL_VAR/dataEX.fst',
+                        # 'ALL_VAR/meta.fst',
+                        # 'ALL_VAR/metaEX.fst')
         # 'select_var'
         # 'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'
@@ -347,6 +358,8 @@ to_do =
         # 'create_data_proj'
     )
 
+
+# dataEX$Model[grepl("EROS", dataEX$Model)] = "EROS"
 
 # CodeDisp = gsub("[_].*$", "", list.files(file.path(computer_data_path, obs_dir)))
 
