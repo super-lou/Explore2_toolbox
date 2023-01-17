@@ -229,9 +229,9 @@ models_to_diag =
         # "EROS-Bretagne"="EROS-Bretagne_20230111.Rdata",
         # "EROS-Loire"="EROS-Loire_20230111.Rdata",
         # "GRSD",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
         # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         # "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
@@ -273,8 +273,8 @@ code_filenames_to_use =
     c(
         # 'all'
 
-        'K2981910_HYDRO_QJM.txt'
-        # 'V2114010_HYDRO_QJM.txt'
+        'K2981910_HYDRO_QJM.txt',
+        'V2114010_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
         # 'WSOULOIS_HYDRO_QJM.txt',
@@ -308,13 +308,12 @@ code_filenames_to_use =
 #   'Crue'/'Crue Nivale'/'Moyennes Eaux' and 'Étiage'. A directory can
 #   also be named 'Resume' in order to not include variables in an
 #   topic group.
-var_to_analyse_dir =
-    # ''
-    # 'AEAG'
-    # 'MAKAHO'
-    # 'Ex2D/1_all'
-    # 'Ex2D/2_diagnostic'
-    'WIP'
+# var_to_analyse_dir =
+#     # ''
+#     # 'AEAG'
+#     # 'MAKAHO'
+#     'Ex2D'
+#     # 'WIP'
 
 var_selection =
     # "all"
@@ -345,15 +344,20 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        'create_data',
-        'analyse_data'
+        # 'create_data',
+        # 'analyse_data'=c(
+            # 'WIP'
+            # 'Ex2D/indicator/all',
+            # 'Ex2D/1_indicator/2_selection',
+            # 'Ex2D/2_serie')
         # 'save_analyse'
-        # 'read_saving'=c('ALL_VAR/dataEX.fst',
-                        # 'ALL_VAR/meta.fst',
-                        # 'ALL_VAR/metaEX.fst')
-        # 'select_var'
+        # 'read_saving'=c(
+            # 'ALL_VAR/dataEX.fst',
+            # 'ALL_VAR/meta.fst',
+            # 'ALL_VAR/metaEX.fst')
+        # 'select_var',
         # 'plot_correlation_matrix'
-        # 'plot_diagnostic_datasheet'
+        'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
@@ -449,6 +453,15 @@ library(stringr)
 # potentialy useless
 # library(trend)
 
+
+names(to_do) = gsub("analyse_data[[:digit:]]+",
+                    "analyse_data",
+                    names(to_do))
+
+if ("analyse_data" %in% names(to_do)) {
+    analyse_data = to_do[names(to_do) == "analyse_data"]
+    to_do[names(to_do) == "analyse_data"] = "analyse_data"
+}
 
 names(to_do) = gsub("read_saving[[:digit:]]+",
                     "read_saving",

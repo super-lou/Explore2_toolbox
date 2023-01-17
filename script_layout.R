@@ -36,74 +36,23 @@
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
-
-
 if ('plot_correlation_matrix' %in% to_do) {
-    page_correlation_matrix(dataEX,
-                            metaEX,
+    page_correlation_matrix(dataEXind,
+                            metaEXind,
                             ModelGroup=group_of_models_to_use,
                             icon_path=icon_path,
                             logo_path=logo_path,
                             figdir=today_figdir)
 }
 
-
-
 if ('plot_diagnostic_datasheet' %in% to_do) {
-    plot_diagnostic_datasheet(dataEX,
-                              meta=meta,
-                              period=period,
-                              var=var_analyse,
-                              topic=topic_analyse,
-                              unit=unit_analyse,
-                              samplePeriod=samplePeriod_analyse,
-                              glose=glose_analyse,
-                              structure=structure,
-                              colorForce=TRUE,
-                              exXprob=exXprob,
-                              foot_note=TRUE,
-                              info_height=2.8,
-                              time_height=3,
-                              var_ratio=3,
-                              foot_height=1.25,
-                              shapefile_list=shapefile_list,
-                              figdir=today_figdir,
+    plot_diagnostic_datasheet(data,
+                              meta,
+                              dataEXind,
+                              metaEXind,
+                              dataEXserie,
+                              ModelGroup=group_of_models_to_use,
+                              icon_path=icon_path,
                               logo_path=logo_path,
-                              zone_to_show=zone_to_show,
-                              pdf_chunk=pdf_chunk)
-}
-
-
-
-### 1.2. Analyses layout _____________________________________________
-if ('station_trend_plot' %in% to_do) {    
-    layout_panel(to_plot=to_plot_station,
-                 meta=meta,
-                 data=data_analyse,
-                 df_trend=df_trend_analyse,
-                 var=var_analyse,
-                 topic=topic_analyse,
-                 unit=unit_analyse,
-                 samplePeriod=samplePeriod_analyse,
-                 glose=glose_analyse,
-                 structure=structure,
-                 trend_period=trend_period,
-                 mean_period=mean_period,
-                 colorForce=TRUE,
-                 exXprob=exXprob,
-                 info_header=data,
-                 time_header=data,
-                 foot_note=TRUE,
-                 info_height=2.8,
-                 time_height=3,
-                 var_ratio=3,
-                 foot_height=1.25,
-                 shapefile_list=shapefile_list,
-                 figdir=figdir,
-                 filename_opt='',
-                 resdir=resdir,
-                 logo_path=logo_path,
-                 zone_to_show=zone_to_show,
-                 pdf_chunk=pdf_chunk,
-                 show_colorTopic=show_colorTopic)
+                              figdir=today_figdir)
 }

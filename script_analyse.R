@@ -29,75 +29,113 @@ if ('analyse_data' %in% to_do) {
     Code_available = levels(factor(data$Code))
     Code = Code_available[Code_available %in% CodeSUB]
     nCode = length(Code)
-
-    samplePeriodMOD = samplePeriod_opti
     
-    if (!is.null(samplePeriodMOD)) {
-        nTopic = length(samplePeriodMOD)        
-        
-        for (i in 1:nTopic) {
-            
-            spMOD = samplePeriodMOD[[i]]
-            
-            if (identical(spMOD, "min") | identical(spMOD, "max")) {
-
-                Code_opti = c()
-                sp_opti = c()
-                for (j in 1:nCode) {
-                    Code_opti = c(Code_opti,
-                                  paste0(Model, "_", Code[j]))
-                    sp_opti =
-                        c(sp_opti,
-                          rep(paste0(formatC(meta[[paste0(spMOD,
-                                                          "QM")]][j],
-                                             width=2, flag="0"), '-01'),
-                              nModel))
-                }
-                sp = tibble(Code=Code_opti,
-                            sp=sp_opti)
-                
-            } else {
-                if (length(spMOD) == 2) {
-                    spMOD = list(spMOD)
-                }
-                Code_opti = c()
-                sp_opti = c()
-                for (j in 1:nCode) {
-                    Code_opti = c(Code_opti,
-                                  paste0(Model, "_", Code[j]))
-                    sp_opti =
-                        c(sp_opti, rep(spMOD, nModel))
-                }
-                sp = tibble(Code=Code_opti,
-                            sp=sp_opti)
-            }
-            samplePeriodMOD[[i]] = sp
-        }
-    }
-
     data$ID = paste0(data$Model, "_", data$Code)
     data = dplyr::select(data, -c(Model, Code))
     data = dplyr::select(data, ID, everything())
-    
-    res = CARD_extraction(data,
-                          CARD_path=CARD_path,
-                          CARD_dir=var_to_analyse_dir,
-                          samplePeriod_by_topic=samplePeriodMOD,
-                          simplify_by="ID",
-                          verbose=verbose)
 
-    dataEX = res$dataEX
-    metaEX = res$metaEX
     
-    dataEX$Model = gsub("[_].*$", "", dataEX$ID)
-    dataEX$Code = gsub("^.*[_]", "", dataEX$ID)
-    dataEX = dplyr::select(dataEX, -ID)
-    dataEX = dplyr::select(dataEX, Model, Code, dplyr::everything())
+    indOK = grepl("indicator", analyse_data)
+    if (any(indOK)) {
+
+        samplePeriodMOD = samplePeriod_opti
+        
+        if (!is.null(samplePeriodMOD)) {
+            nTopic = length(samplePeriodMOD)        
+            
+            for (i in 1:nTopic) {
+                
+                spMOD = samplePeriodMOD[[i]]
+                
+                if (identical(spMOD, "min") | identical(spMOD, "max")) {
+
+                    Code_opti = c()
+                    sp_opti = c()
+                    for (j in 1:nCode) {
+                        Code_opti = c(Code_opti,
+                                      paste0(Model, "_", Code[j]))
+                        sp_opti =
+                            c(sp_opti,
+                              rep(paste0(formatC(meta[[paste0(spMOD,
+                                                              "QM")]][j],
+                                                 width=2, flag="0"), '-01'),
+                                  nModel))
+                    }
+                    sp = tibble(Code=Code_opti,
+                                sp=sp_opti)
+                    
+                } else {
+                    if (length(spMOD) == 2) {
+                        spMOD = list(spMOD)
+                    }
+                    Code_opti = c()
+                    sp_opti = c()
+                    for (j in 1:nCode) {
+                        Code_opti = c(Code_opti,
+                                      paste0(Model, "_", Code[j]))
+                        sp_opti =
+                            c(sp_opti, rep(spMOD, nModel))
+                    }
+                    sp = tibble(Code=Code_opti,
+                                sp=sp_opti)
+                }
+                samplePeriodMOD[[i]] = sp
+            }
+        }
+        
+        res = CARD_extraction(data,
+                              CARD_path=CARD_path,
+                              CARD_dir=analyse_data[indOK][1],
+                              samplePeriod_by_topic=samplePeriodMOD,
+                              simplify_by="ID",
+                              verbose=verbose)
+
+        dataEXind = res$dataEX
+        metaEXind = res$metaEX
+        
+        dataEXind$Model = gsub("[_].*$", "", dataEXind$ID)
+        dataEXind$Code = gsub("^.*[_]", "", dataEXind$ID)
+        dataEXind = dplyr::select(dataEXind, -ID)
+        dataEXind = dplyr::select(dataEXind, Model, Code, dplyr::everything())
+        
+        write_tibble(meta,
+                     filedir=tmpdir,
+                     filename=paste0("meta_", subset, ".fst"))
+        write_tibble(dataEXind,
+                     filedir=tmpdir,
+                     filename=paste0("dataEXind_", subset, ".fst"))
+
+    }
+
     
-    write_tibble(meta,
-                 filedir=tmpdir,
-                 filename=paste0("meta_", subset, ".fst"))
-    write_tibble(dataEX,
-                 filedir=tmpdir,
-                 filename=paste0("dataEX_", subset, ".fst"))
+    serieOK = grepl("serie", analyse_data)
+    if (any(serieOK)) {
+        
+        res = CARD_extraction(data,
+                              CARD_path=CARD_path,
+                              CARD_dir=analyse_data[serieOK][1],
+                              samplePeriod_by_topic=samplePeriodMOD,
+                              simplify_by=NULL,
+                              verbose=verbose)
+
+        dataEXserie = res$dataEX
+        metaEXserie = res$metaEX
+
+        for (i in 1:length(dataEXserie)) {
+            dataEXserie[[i]]$Model = gsub("[_].*$", "",
+                                          dataEXserie[[i]]$ID)
+            dataEXserie[[i]]$Code = gsub("^.*[_]", "",
+                                         dataEXserie[[i]]$ID)
+            dataEXserie[[i]] = dplyr::select(dataEXserie[[i]], -ID)
+            dataEXserie[[i]] = dplyr::select(dataEXserie[[i]],
+                                             Model, Code,
+                                             dplyr::everything())
+        }
+    }
+
+    
+    data$Model = gsub("[_].*$", "", data$ID)
+    data$Code = gsub("^.*[_]", "", data$ID)
+    data = dplyr::select(data, -ID)
+    data = dplyr::select(data, Model, Code, dplyr::everything())
 }

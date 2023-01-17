@@ -21,43 +21,43 @@
 
 
 ## 1. MANAGEMENT OF DATA ______________________________________________
-if ('analyse_data' %in% to_do) {
+if ('analyse_indicator_data' %in% to_do) {
 
-    # print(dataEX[dataEX$Code == "W2832020",])
+    # print(dataEXind[dataEXind$Code == "W2832020",])
     
     if (exists("meta")) {
         rm (meta)
     }
-    if (exists("dataEX")) {
-        rm (dataEX)
+    if (exists("dataEXind")) {
+        rm (dataEXind)
     }
     for (subset in 1:Subsets) {
         meta_tmp = read_tibble(filedir=tmpdir,
                                filename=paste0("meta_",
                                                subset,
                                                ".fst"))
-        dataEX_tmp = read_tibble(filedir=tmpdir,
-                                 filename=paste0("dataEX_",
+        dataEXind_tmp = read_tibble(filedir=tmpdir,
+                                 filename=paste0("dataEXind_",
                                                  subset,
                                                  ".fst"))
-        if (!exists("dataEX")) {
+        if (!exists("dataEXind")) {
             meta = meta_tmp
         } else {
             meta = dplyr::bind_rows(meta, meta_tmp)
         }        
-        if (!exists("dataEX")) {
-            dataEX = dataEX_tmp
+        if (!exists("dataEXind")) {
+            dataEXind = dataEXind_tmp
         } else {
-            dataEX = dplyr::bind_rows(dataEX, dataEX_tmp)
+            dataEXind = dplyr::bind_rows(dataEXind, dataEXind_tmp)
         }
     }
     rm (meta_tmp)
-    rm (dataEX_tmp)
+    rm (dataEXind_tmp)
 
-    dataEX = dataEX[order(dataEX$Model),]
+    dataEXind = dataEXind[order(dataEXind$Model),]
     meta = meta[order(meta$Code),]
 
-    Vars = colnames(dataEX)
+    Vars = colnames(dataEXind)
     
     containSO = "([_]obs$)|([_]sim$)"
     Vars = Vars[grepl(containSO, Vars)]
@@ -69,31 +69,31 @@ if ('analyse_data' %in% to_do) {
         for (i in 1:nVarsREL) {
             varREL = VarsREL[i]
             if (grepl("^HYP.*", varREL)) {
-                dataEX[[varREL]] =
-                    dataEX[[paste0(varREL, "_sim")]] &
-                    dataEX[[paste0(varREL, "_obs")]]
+                dataEXind[[varREL]] =
+                    dataEXind[[paste0(varREL, "_sim")]] &
+                    dataEXind[[paste0(varREL, "_obs")]]
 
             } else if (grepl("(^t)|([{]t)", varREL)) {
-                dataEX[[varREL]] =
+                dataEXind[[varREL]] =
                     circular_divided(
-                        circular_minus(dataEX[[paste0(varREL, "_sim")]],
-                                       dataEX[[paste0(varREL, "_obs")]],
+                        circular_minus(dataEXind[[paste0(varREL, "_sim")]],
+                                       dataEXind[[paste0(varREL, "_obs")]],
                                        period=365.25),
-                        dataEX[[paste0(varREL, "_obs")]],
+                        dataEXind[[paste0(varREL, "_obs")]],
                         period=365.25)
                 
             } else if (grepl("(Rc)|(epsilon)", varREL)) {
-                dataEX[[varREL]] =
-                    dataEX[[paste0(varREL, "_sim")]] /
-                    dataEX[[paste0(varREL, "_obs")]]
+                dataEXind[[varREL]] =
+                    dataEXind[[paste0(varREL, "_sim")]] /
+                    dataEXind[[paste0(varREL, "_obs")]]
             
             } else {
-                dataEX[[varREL]] =
-                    (dataEX[[paste0(varREL, "_sim")]] -
-                     dataEX[[paste0(varREL, "_obs")]]) /
-                    dataEX[[paste0(varREL, "_obs")]]
+                dataEXind[[varREL]] =
+                    (dataEXind[[paste0(varREL, "_sim")]] -
+                     dataEXind[[paste0(varREL, "_obs")]]) /
+                    dataEXind[[paste0(varREL, "_obs")]]
             }
-            dataEX = dplyr::relocate(dataEX,
+            dataEXind = dplyr::relocate(dataEXind,
                                      !!varREL,
                                      .after=!!paste0(varREL, "_sim"))
         }
@@ -109,34 +109,34 @@ if ('save_analyse' %in% to_do) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.fst"))
-        write_tibble(metaEX,
+        write_tibble(metaEXind,
                      filedir=today_resdir,
-                     filename=paste0("metaEX.fst"))
-        write_tibble(dataEX,
+                     filename=paste0("metaEXind.fst"))
+        write_tibble(dataEXind,
                      filedir=today_resdir,
-                     filename=paste0("dataEX.fst"))
+                     filename=paste0("dataEXind.fst"))
     }
     if ("Rdata" %in% saving_format) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.Rdata"))
-        write_tibble(metaEX,
+        write_tibble(metaEXind,
                      filedir=today_resdir,
-                     filename=paste0("metaEX.Rdata"))
-        write_tibble(dataEX,
+                     filename=paste0("metaEXind.Rdata"))
+        write_tibble(dataEXind,
                      filedir=today_resdir,
-                     filename=paste0("dataEX.Rdata"))
+                     filename=paste0("dataEXind.Rdata"))
     }    
     if ("txt" %in% saving_format) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.txt"))
-        write_tibble(metaEX,
+        write_tibble(metaEXind,
                      filedir=today_resdir,
-                     filename=paste0("metaEX.txt"))
-        write_tibble(dataEX,
+                     filename=paste0("metaEXind.txt"))
+        write_tibble(dataEXind,
                      filedir=today_resdir,
-                     filename=paste0("dataEX.txt"))
+                     filename=paste0("dataEXind.txt"))
     }  
 }
 
@@ -155,7 +155,7 @@ if ('read_saving' %in% to_do) {
 }
 
 if ('select_var' %in% to_do) {
-    res = get_select(dataEX, metaEX, select=var_selection)
-    dataEX = res$dataEX
-    metaEX = res$metaEX
+    res = get_select(dataEXind, metaEXind, select=var_selection)
+    dataEXind = res$dataEXind
+    metaEXind = res$metaEXind
 }
