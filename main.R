@@ -267,14 +267,44 @@ group_of_models_to_use =
               "MORDOR-SD", "MORDOR-TS", "SMASH")
     )
 
+Colors_of_models =c(
+    "EROS"="#788764",
+    "GRSD"="#a7c681",
+    "J2000"="#97cfe4",
+    "SIM2"="#8ca6d0",
+    "MORDOR-SD"="#bd7162",
+    "MORDOR-TS"="#f18873",
+    "ORCHIDEE"=NA,
+    "SMASH"="#fac182",
+    "CTRIP"="#707999"
+        )
+
+"#2a4a62" #bleu
+"#5eb8e1" #cyan
+"#d8904c" #orange
+"#cf2f34" #rouge
+"#822836" #marron
+"#745188" #violet
+
+"#bd7162" #rouge
+"#f18873" #orange
+"#fac182" #jaune
+"#8ca6d0" #bleu
+"#a7c681" #vert clair
+"#707999" #violet
+"#788764" #vert
+"#97cfe4" #bleu clair
+
+
+
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
     c(
         # 'all'
 
-        'K2981910_HYDRO_QJM.txt',
-        'V2114010_HYDRO_QJM.txt'
+        'K2981910_HYDRO_QJM.txt'
+        # 'V2114010_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
         # 'WSOULOIS_HYDRO_QJM.txt',
@@ -349,7 +379,7 @@ to_do =
             # 'WIP'
             # 'Ex2D/indicator/all',
             # 'Ex2D/1_indicator/2_selection',
-            # 'Ex2D/2_serie')
+            # 'Ex2D/2_serie'),
         # 'save_analyse'
         # 'read_saving'=c(
             # 'ALL_VAR/dataEX.fst',
@@ -425,6 +455,7 @@ if (file.exists(dev_path)) {
 # Import other library
 library(dplyr)
 library(ggplot2)
+library(ggforce)
 library(scales)
 library(qpdf)
 library(gridExtra)

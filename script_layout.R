@@ -22,16 +22,16 @@
 
 ## 0. SHAPEFILE LOADING ______________________________________________
 # Shapefile importation in order to do it only once time
-# if (!exists("shapefile_list")) {
-#     shapefile_list = load_shapefile(resources_path, data,
-#                                     fr_shpdir, fr_shpname,
-#                                     bs_shpdir, bs_shpname,
-#                                     sbs_shpdir, sbs_shpname,
-#                                     cbs_shpdir, cbs_shpname, cbs_coord,
-#                                     rv_shpdir, rv_shpname,
-#                                     river_selection=river_selection,
-#                                     toleranceRel=toleranceRel)
-# }
+if (!exists("Shapefiles")) {
+    Shapefiles = load_shapefile(computer_data_path, data,
+                                fr_shpdir, fr_shpname,
+                                bs_shpdir, bs_shpname,
+                                sbs_shpdir, sbs_shpname,
+                                cbs_shpdir, cbs_shpname, cbs_coord,
+                                rv_shpdir, rv_shpname,
+                                river_selection=river_selection,
+                                toleranceRel=toleranceRel)
+}
 
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
@@ -46,13 +46,15 @@ if ('plot_correlation_matrix' %in% to_do) {
 }
 
 if ('plot_diagnostic_datasheet' %in% to_do) {
-    plot_diagnostic_datasheet(data,
+    page_diagnostic_datasheet(data,
                               meta,
                               dataEXind,
                               metaEXind,
                               dataEXserie,
+                              Colors=Colors_of_models,
                               ModelGroup=group_of_models_to_use,
                               icon_path=icon_path,
                               logo_path=logo_path,
+                              Shapefiles=Shapefiles,
                               figdir=today_figdir)
 }

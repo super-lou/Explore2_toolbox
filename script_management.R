@@ -21,81 +21,85 @@
 
 
 ## 1. MANAGEMENT OF DATA ______________________________________________
-if ('analyse_indicator_data' %in% to_do) {
+if ('analyse_data' %in% to_do) {
 
     # print(dataEXind[dataEXind$Code == "W2832020",])
-    
-    if (exists("meta")) {
-        rm (meta)
-    }
-    if (exists("dataEXind")) {
-        rm (dataEXind)
-    }
-    for (subset in 1:Subsets) {
-        meta_tmp = read_tibble(filedir=tmpdir,
-                               filename=paste0("meta_",
-                                               subset,
-                                               ".fst"))
-        dataEXind_tmp = read_tibble(filedir=tmpdir,
-                                 filename=paste0("dataEXind_",
-                                                 subset,
-                                                 ".fst"))
-        if (!exists("dataEXind")) {
-            meta = meta_tmp
-        } else {
-            meta = dplyr::bind_rows(meta, meta_tmp)
-        }        
-        if (!exists("dataEXind")) {
-            dataEXind = dataEXind_tmp
-        } else {
-            dataEXind = dplyr::bind_rows(dataEXind, dataEXind_tmp)
-        }
-    }
-    rm (meta_tmp)
-    rm (dataEXind_tmp)
 
-    dataEXind = dataEXind[order(dataEXind$Model),]
-    meta = meta[order(meta$Code),]
-
-    Vars = colnames(dataEXind)
-    
-    containSO = "([_]obs$)|([_]sim$)"
-    Vars = Vars[grepl(containSO, Vars)]
-    if (length(Vars) > 0) {
-        VarsREL = gsub(containSO, "", Vars)
-        VarsREL = VarsREL[!duplicated(VarsREL)]
-        nVarsREL = length(VarsREL)
+    indOK = grepl("indicator", analyse_data)
+    if (any(indOK)) {
         
-        for (i in 1:nVarsREL) {
-            varREL = VarsREL[i]
-            if (grepl("^HYP.*", varREL)) {
-                dataEXind[[varREL]] =
-                    dataEXind[[paste0(varREL, "_sim")]] &
-                    dataEXind[[paste0(varREL, "_obs")]]
-
-            } else if (grepl("(^t)|([{]t)", varREL)) {
-                dataEXind[[varREL]] =
-                    circular_divided(
-                        circular_minus(dataEXind[[paste0(varREL, "_sim")]],
-                                       dataEXind[[paste0(varREL, "_obs")]],
-                                       period=365.25),
-                        dataEXind[[paste0(varREL, "_obs")]],
-                        period=365.25)
-                
-            } else if (grepl("(Rc)|(epsilon)", varREL)) {
-                dataEXind[[varREL]] =
-                    dataEXind[[paste0(varREL, "_sim")]] /
-                    dataEXind[[paste0(varREL, "_obs")]]
-            
+        if (exists("meta")) {
+            rm (meta)
+        }
+        if (exists("dataEXind")) {
+            rm (dataEXind)
+        }
+        for (subset in 1:Subsets) {
+            meta_tmp = read_tibble(filedir=tmpdir,
+                                   filename=paste0("meta_",
+                                                   subset,
+                                                   ".fst"))
+            dataEXind_tmp = read_tibble(filedir=tmpdir,
+                                        filename=paste0("dataEXind_",
+                                                        subset,
+                                                        ".fst"))
+            if (!exists("dataEXind")) {
+                meta = meta_tmp
             } else {
-                dataEXind[[varREL]] =
-                    (dataEXind[[paste0(varREL, "_sim")]] -
-                     dataEXind[[paste0(varREL, "_obs")]]) /
-                    dataEXind[[paste0(varREL, "_obs")]]
+                meta = dplyr::bind_rows(meta, meta_tmp)
+            }        
+            if (!exists("dataEXind")) {
+                dataEXind = dataEXind_tmp
+            } else {
+                dataEXind = dplyr::bind_rows(dataEXind, dataEXind_tmp)
             }
-            dataEXind = dplyr::relocate(dataEXind,
-                                     !!varREL,
-                                     .after=!!paste0(varREL, "_sim"))
+        }
+        rm (meta_tmp)
+        rm (dataEXind_tmp)
+
+        dataEXind = dataEXind[order(dataEXind$Model),]
+        meta = meta[order(meta$Code),]
+
+        Vars = colnames(dataEXind)
+        
+        containSO = "([_]obs$)|([_]sim$)"
+        Vars = Vars[grepl(containSO, Vars)]
+        if (length(Vars) > 0) {
+            VarsREL = gsub(containSO, "", Vars)
+            VarsREL = VarsREL[!duplicated(VarsREL)]
+            nVarsREL = length(VarsREL)
+            
+            for (i in 1:nVarsREL) {
+                varREL = VarsREL[i]
+                if (grepl("^HYP.*", varREL)) {
+                    dataEXind[[varREL]] =
+                        dataEXind[[paste0(varREL, "_sim")]] &
+                        dataEXind[[paste0(varREL, "_obs")]]
+
+                } else if (grepl("(^t)|([{]t)", varREL)) {
+                    dataEXind[[varREL]] =
+                        circular_divided(
+                            circular_minus(dataEXind[[paste0(varREL, "_sim")]],
+                                           dataEXind[[paste0(varREL, "_obs")]],
+                                           period=365.25),
+                            dataEXind[[paste0(varREL, "_obs")]],
+                            period=365.25)
+                    
+                } else if (grepl("(Rc)|(epsilon)", varREL)) {
+                    dataEXind[[varREL]] =
+                        dataEXind[[paste0(varREL, "_sim")]] /
+                        dataEXind[[paste0(varREL, "_obs")]]
+                    
+                } else {
+                    dataEXind[[varREL]] =
+                        (dataEXind[[paste0(varREL, "_sim")]] -
+                         dataEXind[[paste0(varREL, "_obs")]]) /
+                        dataEXind[[paste0(varREL, "_obs")]]
+                }
+                dataEXind = dplyr::relocate(dataEXind,
+                                            !!varREL,
+                                            .after=!!paste0(varREL, "_sim"))
+            }
         }
     }
 }
