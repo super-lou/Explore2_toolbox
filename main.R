@@ -379,13 +379,14 @@ to_do =
             # 'WIP'
             # 'Ex2D/indicator/all',
             # 'Ex2D/1_indicator/2_selection',
-            # 'Ex2D/2_serie'),
+            # 'Ex2D/2_serie')
         # 'save_analyse'
         # 'read_saving'=c(
-            # 'ALL_VAR/dataEX.fst',
+            # 'ALL_VAR/dataEXind.fst'
             # 'ALL_VAR/meta.fst',
-            # 'ALL_VAR/metaEX.fst')
-        # 'select_var',
+            # 'ALL_VAR/metaEXind.fst'
+            # )
+        # 'select_var'
         # 'plot_correlation_matrix'
         'plot_diagnostic_datasheet'
         
@@ -393,7 +394,7 @@ to_do =
     )
 
 
-# dataEX$Model[grepl("EROS", dataEX$Model)] = "EROS"
+# dataEXind$Model[grepl("EROS", dataEXind$Model)] = "EROS"
 
 # CodeDisp = gsub("[_].*$", "", list.files(file.path(computer_data_path, obs_dir)))
 
@@ -455,7 +456,6 @@ if (file.exists(dev_path)) {
 # Import other library
 library(dplyr)
 library(ggplot2)
-library(ggforce)
 library(scales)
 library(qpdf)
 library(gridExtra)
