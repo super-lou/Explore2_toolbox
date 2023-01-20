@@ -66,7 +66,7 @@ convert_diag_data = function (model, data) {
                         "Pl", "ET0", "Ps", "T")
         data$Code = substr(data$Code, 1, 8)
         
-    } else if (model == "J2000") {
+    } else if (grepl("J2000", model)) {
         data$Date = as.Date(data$Date)
         names(data) = c("Date", "Code", "Q_sim",
                         "ET0", "T", "Pl", "Ps", "P")

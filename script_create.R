@@ -20,9 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-## 1. CREATION OF DATA 4 DIAG ________________________________________
-if ('create_data' %in% to_do) {
-
+create_data = function () {
     Model = c()
     data_sim = tibble()
 
@@ -136,10 +134,24 @@ if ('create_data' %in% to_do) {
         
         data = dplyr::relocate(data, Q_obs, .before=Q_sim)
         data = dplyr::relocate(data, T, .before=ET0)
+
+        write_tibble(data,
+                     filedir=tmpdir,
+                     filename=paste0("data_", subset, ".fst"))
+        write_tibble(meta,
+                     filedir=tmpdir,
+                     filename=paste0("meta_", subset, ".fst"))
     } else {
         data = NULL
     }
 }
+
+
+## 1. CREATION OF DATA 4 DIAG ________________________________________
+if ('create_data' %in% to_do) {
+    create_data()
+}
+
 
 
 ## 2. CREATION OF DATA 4 PROJ ________________________________________

@@ -217,6 +217,8 @@ exXprob = 0.01
 
 propagate_NA = TRUE
 
+nCode4write = 50
+
 verbose =
     # FALSE
     TRUE
@@ -226,13 +228,15 @@ verbose =
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     c(
-        # "EROS-Bretagne"="EROS-Bretagne_20230111.Rdata",
-        # "EROS-Loire"="EROS-Loire_20230111.Rdata",
+        "EROS-Bretagne"="EROS-Bretagne_20230111.Rdata",
+        "EROS-Loire"="EROS-Loire_20230111.Rdata",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        ## "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "J2000-Loire"="DATA_DIAGNOSTIC_EXPLORE2_J2000_Loire.Rdata",
+        "J2000-Rhone"="DATA_DIAGNOSTIC_EXPLORE2_J2000_Rhone.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
         # "CTRIP"
@@ -240,7 +244,8 @@ models_to_diag =
 complete_by = "SMASH"
 
 models_to_proj = c(
-        # "EROS",
+        # "EROS-Bretagne",
+        # "EROS-Loire",
         # "GRSD",
         # "J2000"=
         # "SIM2"=
@@ -253,7 +258,8 @@ models_to_proj = c(
 group_of_models_to_use =
     # NULL
     list(
-        "EROS",
+        "EROS-Bretagne",
+        "EROS-Loire",
         # "GRSD",
         "J2000",
         "SIM2",
@@ -263,17 +269,20 @@ group_of_models_to_use =
         "SMASH",
         # "CTRIP",
         "Multi-Model"=
-            c("EROS", "J2000", "SIM2",
+            c("EROS-Bretagne", "EROS-Loire", "J2000", "SIM2",
               "MORDOR-SD", "MORDOR-TS", "SMASH")
     )
 
-Colors_of_models =c(
-    "EROS"="#788764",
+Colors_of_models = c(
+    "EROS-Bretagne"="#788764",
+    "EROS-Loire"="#788764",
     "GRSD"="#a7c681",
     "J2000"="#97cfe4",
+    "J2000-Loire"="#97cfe4",
+    "J2000-Rhone"="#97cfe4",
     "SIM2"="#8ca6d0",
     "MORDOR-SD"="#bd7162",
-    "MORDOR-TS"="#f18873",
+    "MORDOR-TS"="#bd7162",
     "ORCHIDEE"=NA,
     "SMASH"="#fac182",
     "CTRIP"="#707999"
@@ -287,7 +296,7 @@ Colors_of_models =c(
 "#745188" #violet
 
 "#bd7162" #rouge
-"#f18873" #orange
+"#f18873" #orange | vide
 "#fac182" #jaune
 "#8ca6d0" #bleu
 "#a7c681" #vert clair
@@ -301,9 +310,9 @@ Colors_of_models =c(
 code_filenames_to_use =
     # ''
     c(
-        # 'all'
+        'all'
 
-        'K2981910_HYDRO_QJM.txt'
+        # 'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -312,7 +321,8 @@ code_filenames_to_use =
         # 'XVENEON2_HYDRO_QJM.txt'
         
         # "X0454010_HYDRO_QJM.txt"
-        
+
+        # '^A'
         # '^H'
         # '^I',
         # '^J'
@@ -374,27 +384,54 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data',
-        # 'analyse_data'=c(
+        'create_data',
+        'analyse_data'=c(
             # 'WIP'
-            # 'Ex2D/indicator/all',
-            # 'Ex2D/1_indicator/2_selection',
-            # 'Ex2D/2_serie')
-        # 'save_analyse'
+            'Ex2D/1_indicator/1_all',
+            # 'Ex2D/1_indicator/2_selection'
+            'Ex2D/2_serie'
+        ),
+        'save_analyse'
         # 'read_saving'=c(
-            # 'ALL_VAR/dataEXind.fst'
-            # 'ALL_VAR/meta.fst',
+            # 'ALL_VAR/meta.fst'
+            # 'ALL_VAR/dataEXind.fst',
             # 'ALL_VAR/metaEXind.fst'
             # )
         # 'select_var'
         # 'plot_correlation_matrix'
-        'plot_diagnostic_datasheet'
+        # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
 
 
+
+# CodeJ2000 = levels(factor(data_tmp$Code))
+# CodeJ2000_RH = meta$region_hydro[meta$Code %in% CodeJ2000]
+# CodeJ2000_Loire = CodeJ2000[CodeJ2000_RH == "Loire"]
+# CodeJ2000_Rhone = CodeJ2000[CodeJ2000_RH != "Loire"]
+
+# write_tibble(data_tmp[data_tmp$Code %in% CodeJ2000_Loire,], "./", filename="DATA_DIAGNOSTIC_EXPLORE2_J2000_Loire.Rdata")
+# write_tibble(data_tmp[data_tmp$Code %in% CodeJ2000_Rhone,], "./", filename="DATA_DIAGNOSTIC_EXPLORE2_J2000_Rhone.Rdata")
+
+
+# CodeJ2000 = levels(factor(dataEXind$Code[dataEXind$Model == "J2000"]))
+# CodeJ2000_RH = meta$region_hydro[meta$Code %in% CodeJ2000]
+# CodeJ2000_Loire = CodeJ2000[CodeJ2000_RH == "Loire"]
+# CodeJ2000_Rhone = CodeJ2000[CodeJ2000_RH != "Loire"]
+
+# dataEXind$Model[dataEXind$Model == "J2000" & dataEXind$Code %in% CodeJ2000_Loire] = "J2000-Loire"
+# dataEXind$Model[dataEXind$Model == "J2000" & dataEXind$Code %in% CodeJ2000_Rhone] = "J2000-Rhone"
+
+# dataEXserie$`median{QJ}`$Model[dataEXserie$`median{QJ}`$Model == "J2000" & dataEXserie$`median{QJ}`$Code %in% CodeJ2000_Loire] = "J2000-Loire"
+# dataEXserie$`median{QJ}`$Model[dataEXserie$`median{QJ}`$Model == "J2000" & dataEXserie$`median{QJ}`$Code %in% CodeJ2000_Rhone] = "J2000-Rhone"
+# dataEXserie$`FDC`$Model[dataEXserie$`FDC`$Model == "J2000" & dataEXserie$`FDC`$Code %in% CodeJ2000_Loire] = "J2000-Loire"
+# dataEXserie$`FDC`$Model[dataEXserie$`FDC`$Model == "J2000" & dataEXserie$`FDC`$Code %in% CodeJ2000_Rhone] = "J2000-Rhone"
+
+
 # dataEXind$Model[grepl("EROS", dataEXind$Model)] = "EROS"
+# dataEXserie$`median{QJ}`$Model[grepl("EROS", dataEXserie$`median{QJ}`$Model)] = "EROS"
+# dataEXserie$`FDC`$Model[grepl("EROS", dataEXserie$FDC$Model)] = "EROS"
 
 # CodeDisp = gsub("[_].*$", "", list.files(file.path(computer_data_path, obs_dir)))
 
@@ -525,7 +562,6 @@ if (all(code_filenames_to_use == "all")) {
 }
 nCodeALL = length(CodeALL)
 
-nCode4write = 50
 Subsets = ceiling(nCodeALL/nCode4write)
 
 if ('analyse_data' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
