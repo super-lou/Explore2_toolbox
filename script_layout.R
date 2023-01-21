@@ -46,6 +46,16 @@ if ('plot_correlation_matrix' %in% to_do) {
 }
 
 if ('plot_diagnostic_datasheet' %in% to_do) {
+
+    data = read_tibble(filedir=tmpdir,
+                       filename=paste0("data_",
+                                       subset,
+                                       ".fst"))
+    meta = read_tibble(filedir=tmpdir,
+                       filename=paste0("meta_",
+                                       subset,
+                                       ".fst"))
+    
     page_diagnostic_datasheet(data,
                               meta,
                               dataEXind,

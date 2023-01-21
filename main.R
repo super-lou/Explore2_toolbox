@@ -218,6 +218,7 @@ exXprob = 0.01
 propagate_NA = TRUE
 
 nCode4write = 50
+delete_tmp = FALSE
 
 verbose =
     # FALSE
@@ -310,9 +311,9 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        'all'
+        # 'all'
 
-        # 'K2981910_HYDRO_QJM.txt'
+        'K2981910_HYDRO_QJM.txt'
         # 'V2114010_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -384,22 +385,24 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        'create_data',
-        'analyse_data'=c(
+        # 'create_data',
+        # 'analyse_data'=c(
             # 'WIP'
-            'Ex2D/1_indicator/1_all',
+            # 'Ex2D/1_indicator/1_all',
             # 'Ex2D/1_indicator/2_selection'
-            'Ex2D/2_serie'
-        ),
-        'save_analyse'
+            # 'Ex2D/2_serie'
+        # ),
+        # 'save_analyse'
         # 'read_saving'=c(
-            # 'ALL_VAR/meta.fst'
-            # 'ALL_VAR/dataEXind.fst',
-            # 'ALL_VAR/metaEXind.fst'
-            # )
+        #     'ALL/meta.fst',
+        #     'ALL/dataEXind.fst',
+        #     'ALL/metaEXind.fst',
+        #     'ALL/dataEXserie.fst',
+        #     'ALL/metaEXserie.fst'
+        #     )
         # 'select_var'
         # 'plot_correlation_matrix'
-        # 'plot_diagnostic_datasheet'
+        'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
@@ -566,7 +569,7 @@ Subsets = ceiling(nCodeALL/nCode4write)
 
 if ('analyse_data' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
     tmpdir = file.path(computer_work_path, "tmp")
-    if (file.exists(tmpdir)) {
+    if (file.exists(tmpdir) & delete_tmp) {
         unlink(tmpdir, recursive=TRUE)
     }
     if (!(file.exists(tmpdir))) {

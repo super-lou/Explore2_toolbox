@@ -217,7 +217,7 @@ if ('read_saving' %in% to_do) {
     Filenames = gsub("[.].*$", "", Filenames)
     nFile = length(Filenames)
     for (i in 1:nFile) {
-        print(paste0(Filenames[i], " saves in ", read_saving[i]))
+        print(paste0(Filenames[i], " reads in ", read_saving[i]))
         assign(Filenames[i], read_tibble(filepath=read_saving[i]))
     } 
 }
