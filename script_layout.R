@@ -20,6 +20,15 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
+data = read_tibble(filedir=tmpdir,
+                   filename=paste0("data_",
+                                   subset,
+                                   ".fst"))
+meta = read_tibble(filedir=tmpdir,
+                   filename=paste0("meta_",
+                                   subset,
+                                   ".fst"))
+
 ## 0. SHAPEFILE LOADING ______________________________________________
 # Shapefile importation in order to do it only once time
 if (!exists("Shapefiles")) {
@@ -46,15 +55,6 @@ if ('plot_correlation_matrix' %in% to_do) {
 }
 
 if ('plot_diagnostic_datasheet' %in% to_do) {
-
-    data = read_tibble(filedir=tmpdir,
-                       filename=paste0("data_",
-                                       subset,
-                                       ".fst"))
-    meta = read_tibble(filedir=tmpdir,
-                       filename=paste0("meta_",
-                                       subset,
-                                       ".fst"))
     
     page_diagnostic_datasheet(data,
                               meta,

@@ -218,7 +218,9 @@ exXprob = 0.01
 propagate_NA = TRUE
 
 nCode4write = 50
-delete_tmp = FALSE
+delete_tmp =
+    # TRUE
+    FALSE
 
 verbose =
     # FALSE
@@ -394,12 +396,12 @@ to_do =
         # ),
         # 'save_analyse'
         # 'read_saving'=c(
-        #     'ALL/meta.fst',
-        #     'ALL/dataEXind.fst',
-        #     'ALL/metaEXind.fst',
-        #     'ALL/dataEXserie.fst',
-        #     'ALL/metaEXserie.fst'
-        #     )
+            # 'ALL/meta.fst',
+            # 'ALL/dataEXind.fst',
+            # 'ALL/metaEXind.fst',
+            # 'ALL/dataEXserie.fst',
+            # 'ALL/metaEXserie.fst'
+            # )
         # 'select_var'
         # 'plot_correlation_matrix'
         'plot_diagnostic_datasheet'
