@@ -264,7 +264,9 @@ group_of_models_to_use =
         "EROS-Bretagne",
         "EROS-Loire",
         # "GRSD",
-        "J2000",
+        # "J2000",
+        "J2000-Loire",
+        "J2000-Rhone",
         "SIM2",
         "MORDOR-SD",
         "MORDOR-TS",
@@ -276,27 +278,21 @@ group_of_models_to_use =
               "MORDOR-SD", "MORDOR-TS", "SMASH")
     )
 
-Colors_of_models = c(
-    "EROS-Bretagne"="#788764",
-    "EROS-Loire"="#788764",
-    "GRSD"="#a7c681",
-    "J2000"="#97cfe4",
-    "J2000-Loire"="#97cfe4",
-    "J2000-Rhone"="#97cfe4",
-    "SIM2"="#8ca6d0",
-    "MORDOR-SD"="#bd7162",
-    "MORDOR-TS"="#bd7162",
-    "ORCHIDEE"=NA,
-    "SMASH"="#fac182",
-    "CTRIP"="#707999"
-        )
-
-"#2a4a62" #bleu
-"#5eb8e1" #cyan
-"#d8904c" #orange
-"#cf2f34" #rouge
-"#822836" #marron
-"#745188" #violet
+# IPCC
+# Colors_of_models = c(
+#     "EROS-Bretagne"="#788764",
+#     "EROS-Loire"="#788764",
+#     "GRSD"="#a7c681",
+#     "J2000"="#97cfe4",
+#     "J2000-Loire"="#97cfe4",
+#     "J2000-Rhone"="#97cfe4",
+#     "SIM2"="#8ca6d0",
+#     "MORDOR-SD"="#bd7162",
+#     "MORDOR-TS"="#bd7162",
+#     "ORCHIDEE"=NA,
+#     "SMASH"="#fac182",
+#     "CTRIP"="#707999"
+#         )
 
 "#bd7162" #rouge
 "#f18873" #orange | vide
@@ -308,6 +304,20 @@ Colors_of_models = c(
 "#97cfe4" #bleu clair
 
 
+Colors_of_models = c(
+    "EROS-Bretagne"="#cecd8d", #vert clair
+    "EROS-Loire"="#cecd8d", #vert clair
+    "GRSD"="#619c6c", #vert foncé
+    "J2000"="#74aeb9", #bleur clair
+    "J2000-Loire"="#74aeb9", #bleur clair
+    "J2000-Rhone"="#74aeb9", #bleur clair
+    "SIM2"="#384a54", #bleu foncé
+    "MORDOR-SD"="#d8714e", #orange
+    "MORDOR-TS"="#d8714e", #orange
+    "ORCHIDEE"="#a88d72", #marron
+    "SMASH"="#f6ba62", #mimosa
+    "CTRIP"="#f5c8c3" #rose
+        )
 
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
@@ -315,8 +325,9 @@ code_filenames_to_use =
     c(
         # 'all'
 
-        'K2981910_HYDRO_QJM.txt'
-        # 'V2114010_HYDRO_QJM.txt'
+        # 'K2981910_HYDRO_QJM.txt'
+        # 'H4252010_HYDRO_QJM.txt',
+        # 'H7833520_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
         # 'WSOULOIS_HYDRO_QJM.txt',
@@ -326,7 +337,7 @@ code_filenames_to_use =
         # "X0454010_HYDRO_QJM.txt"
 
         # '^A'
-        # '^H'
+        '^H'
         # '^I',
         # '^J'
         # '^K'
@@ -401,8 +412,8 @@ to_do =
             # 'ALL/metaEXind.fst',
             # 'ALL/dataEXserie.fst',
             # 'ALL/metaEXserie.fst'
-            # )
-        # 'select_var'
+            # ),
+        # 'select_var',
         # 'plot_correlation_matrix'
         'plot_diagnostic_datasheet'
         

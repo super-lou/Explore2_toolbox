@@ -62,7 +62,17 @@ NCf$Q.01.standard_name = "debit"
 NCf$Q.02.units = "m3.s-1"
 NCf$Q.03.missing_value = NaN
 
-### 5.2. Temperature _________________________________________________
+### 5.2. Surface _____________________________________________________
+NCf$surface_model.name = "surface_model"
+NCf$surface_model.dimension = "station"
+NCf$surface_model.precision = "float"
+NCf$surface_model.value = round(x=runif(length(NCf$station.value)),
+                                digits=2)
+NCf$surface_model.01.standard_name = "surface dans le monde du modèle"
+NCf$surface_model.02.units = "km2"
+NCf$surface_model.03.missing_value = NaN
+
+### 5.3. Temperature _________________________________________________
 NCf$T.name = "T"
 NCf$T.dimension = "station, time"
 NCf$T.precision = "float"
@@ -74,7 +84,7 @@ NCf$T.01.standard_name = "temperature"
 NCf$T.02.units = "°C"
 NCf$T.03.missing_value = NaN
 
-### 5.3. Évapotranspiration de référence _____________________________
+### 5.4. Évapotranspiration de référence _____________________________
 NCf$ET0.name = "ET0"
 NCf$ET0.dimension = "station, time"
 NCf$ET0.precision = "float"
@@ -86,7 +96,7 @@ NCf$ET0.01.standard_name = "Évapotranspiration de référence"
 NCf$ET0.02.units = "mm"
 NCf$ET0.03.missing_value = NaN
 
-### 5.4. Précipitations liquides _____________________________________
+### 5.5. Précipitations liquides _____________________________________
 NCf$Pl.name = "Pl"
 NCf$Pl.dimension = "station, time"
 NCf$Pl.precision = "float"
@@ -98,7 +108,7 @@ NCf$Pl.01.standard_name = "Précipitations liquides"
 NCf$Pl.02.units = "mm"
 NCf$Pl.03.missing_value = NaN
 
-### 5.5. Précipitations solides ______________________________________
+### 5.6. Précipitations solides ______________________________________
 NCf$Ps.name = "Ps"
 NCf$Ps.dimension = "station, time"
 NCf$Ps.precision = "float"
@@ -110,7 +120,7 @@ NCf$Pl.01.standard_name = "Précipitations solides"
 NCf$Pl.02.units = "mm"
 NCf$Pl.03.missing_value = NaN
 
-### 5.6. Précipitations totales ______________________________________
+### 5.7. Précipitations totales ______________________________________
 NCf$P.name = "P"
 NCf$P.dimension = "station, time"
 NCf$P.precision = "float"

@@ -20,28 +20,6 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-data = read_tibble(filedir=tmpdir,
-                   filename=paste0("data_",
-                                   subset,
-                                   ".fst"))
-meta = read_tibble(filedir=tmpdir,
-                   filename=paste0("meta_",
-                                   subset,
-                                   ".fst"))
-
-## 0. SHAPEFILE LOADING ______________________________________________
-# Shapefile importation in order to do it only once time
-if (!exists("Shapefiles")) {
-    Shapefiles = load_shapefile(computer_data_path, data,
-                                fr_shpdir, fr_shpname,
-                                bs_shpdir, bs_shpname,
-                                sbs_shpdir, sbs_shpname,
-                                cbs_shpdir, cbs_shpname, cbs_coord,
-                                rv_shpdir, rv_shpname,
-                                river_selection=river_selection,
-                                toleranceRel=toleranceRel)
-}
-
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
@@ -55,16 +33,39 @@ if ('plot_correlation_matrix' %in% to_do) {
 }
 
 if ('plot_diagnostic_datasheet' %in% to_do) {
-    
-    page_diagnostic_datasheet(data,
-                              meta,
-                              dataEXind,
-                              metaEXind,
-                              dataEXserie,
-                              Colors=Colors_of_models,
-                              ModelGroup=group_of_models_to_use,
-                              icon_path=icon_path,
-                              logo_path=logo_path,
-                              Shapefiles=Shapefiles,
-                              figdir=today_figdir)
+
+    for (subset in 1:Subsets) {
+        data = read_tibble(filedir=tmpdir,
+                           filename=paste0("data_",
+                                           subset,
+                                           ".fst"))
+        meta = read_tibble(filedir=tmpdir,
+                           filename=paste0("meta_",
+                                           subset,
+                                           ".fst"))
+        
+        # Shapefile importation in order to do it only once time
+        if (!exists("Shapefiles")) {
+            Shapefiles = load_shapefile(computer_data_path, data,
+                                        fr_shpdir, fr_shpname,
+                                        bs_shpdir, bs_shpname,
+                                        sbs_shpdir, sbs_shpname,
+                                        cbs_shpdir, cbs_shpname, cbs_coord,
+                                        rv_shpdir, rv_shpname,
+                                        river_selection=river_selection,
+                                        toleranceRel=toleranceRel)
+        }
+        
+        page_diagnostic_datasheet(data,
+                                  meta,
+                                  dataEXind,
+                                  metaEXind,
+                                  dataEXserie,
+                                  Colors=Colors_of_models,
+                                  ModelGroup=group_of_models_to_use,
+                                  icon_path=icon_path,
+                                  logo_path=logo_path,
+                                  Shapefiles=Shapefiles,
+                                  figdir=today_figdir)
+    }
 }
