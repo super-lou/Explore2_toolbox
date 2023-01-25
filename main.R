@@ -126,6 +126,12 @@ now_figdir = file.path(computer_work_path, 'figures', today, now)
 # }
 print(paste('now_figdir :', now_figdir))
 
+### 3.3. Tmp  ________________________________________________________
+tmpdir = file.path(computer_work_path, "tmp")
+if (!(file.exists(tmpdir))) {
+    dir.create(tmpdir, recursive=TRUE)
+}
+
 
 #  ___                               _                 
 # | _ \ __ _  _ _  __ _  _ __   ___ | |_  ___  _ _  ___
@@ -133,8 +139,8 @@ print(paste('now_figdir :', now_figdir))
 # |_|  \__,_||_|  \__,_||_|_|_|\___| \__|\___||_|  /__/ ______________
 ## 1. ANALYSIS _______________________________________________________
 ### 1.1. Period ______________________________________________________
-# Periods of time to perform the trend analyses
-period = c('1900-01-01', '2020-12-31')
+# Periods of time to perform analyses
+period_diagnostic = c('1976-01-01', '2019-12-31')
 
 ### 1.2. Sampling period _____________________________________________
 #### 1.2.1 Mode of sampling __________________________________________
@@ -218,9 +224,6 @@ exXprob = 0.01
 propagate_NA = TRUE
 
 nCode4write = 50
-delete_tmp =
-    # TRUE
-    FALSE
 
 verbose =
     # FALSE
@@ -231,93 +234,57 @@ verbose =
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     c(
-        "EROS-Bretagne"="EROS-Bretagne_20230111.Rdata",
-        "EROS-Loire"="EROS-Loire_20230111.Rdata",
+        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        "EROS"="EROS_20230111.Rdata",
         # "GRSD",
-        ## "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "J2000-Loire"="DATA_DIAGNOSTIC_EXPLORE2_J2000_Loire.Rdata",
-        "J2000-Rhone"="DATA_DIAGNOSTIC_EXPLORE2_J2000_Rhone.Rdata",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
         "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
-        # "CTRIP"
     )
 complete_by = "SMASH"
 
 models_to_proj = c(
-        # "EROS-Bretagne",
-        # "EROS-Loire",
+        # "CTRIP",
+        # "EROS",
         # "GRSD",
         # "J2000"=
         # "SIM2"=
         # "MORDOR-TS"="debit_Loire_CNRM-CERFACS-CNRM-CM5_historical_r1i1p1_CNRM-ALADIN63_v2_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_19510101-20051231.nc"
         # "ORCHIDEE",
         # "SMASH"=
-        # "CTRIP"
     )
 
 group_of_models_to_use =
     # NULL
     list(
-        "EROS-Bretagne",
-        "EROS-Loire",
+        # "CTRIP",
+        "EROS",
         # "GRSD",
-        # "J2000",
-        "J2000-Loire",
-        "J2000-Rhone",
+        "J2000",
         "SIM2",
         "MORDOR-SD",
         "MORDOR-TS",
         # "ORCHIDEE",
-        "SMASH",
-        # "CTRIP",
+        "SMASH",        
         "Multi-Model"=
-            c("EROS-Bretagne", "EROS-Loire", "J2000", "SIM2",
+            c("EROS", "J2000", "SIM2",
               "MORDOR-SD", "MORDOR-TS", "SMASH")
     )
 
-# IPCC
-# Colors_of_models = c(
-#     "EROS-Bretagne"="#788764",
-#     "EROS-Loire"="#788764",
-#     "GRSD"="#a7c681",
-#     "J2000"="#97cfe4",
-#     "J2000-Loire"="#97cfe4",
-#     "J2000-Rhone"="#97cfe4",
-#     "SIM2"="#8ca6d0",
-#     "MORDOR-SD"="#bd7162",
-#     "MORDOR-TS"="#bd7162",
-#     "ORCHIDEE"=NA,
-#     "SMASH"="#fac182",
-#     "CTRIP"="#707999"
-#         )
-
-"#bd7162" #rouge
-"#f18873" #orange | vide
-"#fac182" #jaune
-"#8ca6d0" #bleu
-"#a7c681" #vert clair
-"#707999" #violet
-"#788764" #vert
-"#97cfe4" #bleu clair
-
-
 Colors_of_models = c(
-    "EROS-Bretagne"="#cecd8d", #vert clair
-    "EROS-Loire"="#cecd8d", #vert clair
+    "CTRIP"="#a88d72", #marron
+    "EROS"="#cecd8d", #vert clair
     "GRSD"="#619c6c", #vert foncé
     "J2000"="#74aeb9", #bleur clair
-    "J2000-Loire"="#74aeb9", #bleur clair
-    "J2000-Rhone"="#74aeb9", #bleur clair
     "SIM2"="#384a54", #bleu foncé
     "MORDOR-SD"="#d8714e", #orange
-    "MORDOR-TS"="#d8714e", #orange
-    "ORCHIDEE"="#a88d72", #marron
-    "SMASH"="#f6ba62", #mimosa
-    "CTRIP"="#f5c8c3" #rose
-        )
+    "MORDOR-TS"="#ae473e", #rouge
+    "ORCHIDEE"="#f5c8c3", #rose
+    "SMASH"="#f6ba62" #mimosa    
+)
 
 ### 3.2. Code ________________________________________________________
 code_filenames_to_use =
@@ -325,7 +292,7 @@ code_filenames_to_use =
     c(
         # 'all'
 
-        # 'K2981910_HYDRO_QJM.txt'
+        'K2981910_HYDRO_QJM.txt' #ref
         # 'H4252010_HYDRO_QJM.txt',
         # 'H7833520_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
@@ -337,7 +304,7 @@ code_filenames_to_use =
         # "X0454010_HYDRO_QJM.txt"
 
         # '^A'
-        '^H'
+        # '^H'
         # '^I',
         # '^J'
         # '^K'
@@ -371,7 +338,7 @@ code_filenames_to_use =
 
 var_selection =
     # "all"
-    c("KGEsqrt", "Bias$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "mean{QA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
+    c("KGEsqrt", "Bias$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
 
 
 ### 3.4. Steps _______________________________________________________
@@ -399,6 +366,7 @@ var_selection =
 to_do =
     c(
         # 'create_data',
+        # 'delete_tmp'
         # 'analyse_data'=c(
             # 'WIP'
             # 'Ex2D/1_indicator/1_all',
@@ -420,38 +388,6 @@ to_do =
         # 'create_data_proj'
     )
 
-
-
-# CodeJ2000 = levels(factor(data_tmp$Code))
-# CodeJ2000_RH = meta$region_hydro[meta$Code %in% CodeJ2000]
-# CodeJ2000_Loire = CodeJ2000[CodeJ2000_RH == "Loire"]
-# CodeJ2000_Rhone = CodeJ2000[CodeJ2000_RH != "Loire"]
-
-# write_tibble(data_tmp[data_tmp$Code %in% CodeJ2000_Loire,], "./", filename="DATA_DIAGNOSTIC_EXPLORE2_J2000_Loire.Rdata")
-# write_tibble(data_tmp[data_tmp$Code %in% CodeJ2000_Rhone,], "./", filename="DATA_DIAGNOSTIC_EXPLORE2_J2000_Rhone.Rdata")
-
-
-# CodeJ2000 = levels(factor(dataEXind$Code[dataEXind$Model == "J2000"]))
-# CodeJ2000_RH = meta$region_hydro[meta$Code %in% CodeJ2000]
-# CodeJ2000_Loire = CodeJ2000[CodeJ2000_RH == "Loire"]
-# CodeJ2000_Rhone = CodeJ2000[CodeJ2000_RH != "Loire"]
-
-# dataEXind$Model[dataEXind$Model == "J2000" & dataEXind$Code %in% CodeJ2000_Loire] = "J2000-Loire"
-# dataEXind$Model[dataEXind$Model == "J2000" & dataEXind$Code %in% CodeJ2000_Rhone] = "J2000-Rhone"
-
-# dataEXserie$`median{QJ}`$Model[dataEXserie$`median{QJ}`$Model == "J2000" & dataEXserie$`median{QJ}`$Code %in% CodeJ2000_Loire] = "J2000-Loire"
-# dataEXserie$`median{QJ}`$Model[dataEXserie$`median{QJ}`$Model == "J2000" & dataEXserie$`median{QJ}`$Code %in% CodeJ2000_Rhone] = "J2000-Rhone"
-# dataEXserie$`FDC`$Model[dataEXserie$`FDC`$Model == "J2000" & dataEXserie$`FDC`$Code %in% CodeJ2000_Loire] = "J2000-Loire"
-# dataEXserie$`FDC`$Model[dataEXserie$`FDC`$Model == "J2000" & dataEXserie$`FDC`$Code %in% CodeJ2000_Rhone] = "J2000-Rhone"
-
-
-# dataEXind$Model[grepl("EROS", dataEXind$Model)] = "EROS"
-# dataEXserie$`median{QJ}`$Model[grepl("EROS", dataEXserie$`median{QJ}`$Model)] = "EROS"
-# dataEXserie$`FDC`$Model[grepl("EROS", dataEXserie$FDC$Model)] = "EROS"
-
-# CodeDisp = gsub("[_].*$", "", list.files(file.path(computer_data_path, obs_dir)))
-
-# extract_meta(computer_data_path, obs_dir, paste0(codes_to_diag, obs_format)[300:length(codes_to_diag)])
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
@@ -580,16 +516,6 @@ nCodeALL = length(CodeALL)
 
 Subsets = ceiling(nCodeALL/nCode4write)
 
-if ('analyse_data' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
-    tmpdir = file.path(computer_work_path, "tmp")
-    if (file.exists(tmpdir) & delete_tmp) {
-        unlink(tmpdir, recursive=TRUE)
-    }
-    if (!(file.exists(tmpdir))) {
-        dir.create(tmpdir, recursive=TRUE)
-    }
-}
-
 if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %in% to_do) {    
     for (subset in 1:Subsets) {
         
@@ -620,7 +546,7 @@ if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %i
     }
 }
 
-if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do) {
+if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do | 'delete_tmp' %in% to_do) {
     print("")
     print('MANAGEMENT')
     source('script_management.R', encoding='UTF-8')

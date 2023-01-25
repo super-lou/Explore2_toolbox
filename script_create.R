@@ -77,7 +77,7 @@ create_data = function () {
         meta = get_lacune(data_obs, meta)
         # Hydrograph
         meta = get_hydrograph(data_obs, meta,
-                              period=period)$meta
+                              period=period_diagnostic)$meta
         
         names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
         

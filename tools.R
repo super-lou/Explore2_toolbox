@@ -61,7 +61,10 @@ NetCDF_to_tibble = function (NetCDF_path, type="diag") {
 
 convert_diag_data = function (model, data) {
 
-    if (grepl("EROS", model)) {
+    if (model == "CTRIP") {
+        # names(data) = c()
+        
+    } else if (grepl("EROS", model)) {
         names(data) = c("Code", "Date", "Q_sim",
                         "Pl", "ET0", "Ps", "T")
         data$Code = substr(data$Code, 1, 8)

@@ -227,3 +227,10 @@ if ('select_var' %in% to_do) {
     dataEXind = res$dataEXind
     metaEXind = res$metaEXind
 }
+
+
+if ('delete_tmp' %in% to_do) {
+    if (file.exists(tmpdir)) {
+        unlink(tmpdir, recursive=TRUE)
+    }
+}

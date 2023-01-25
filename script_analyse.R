@@ -91,6 +91,7 @@ analyse_data_indicator = function () {
                           CARD_dir=
                               analyse_data[grepl("indicator",
                                                  analyse_data)][1],
+                          period=period_diagnostic,
                           samplePeriod_by_topic=samplePeriodMOD,
                           simplify_by="ID",
                           verbose=verbose)
@@ -183,6 +184,7 @@ analyse_data_serie = function () {
                           CARD_dir=
                               analyse_data[grepl("serie",
                                                  analyse_data)][1],
+                          period=period_diagnostic,
                           samplePeriod_by_topic=samplePeriodMOD,
                           simplify_by=NULL,
                           verbose=verbose)
