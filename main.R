@@ -52,11 +52,11 @@ computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/E
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
 computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
-obs_dir = "debit/BanqueHydro_Export2021"
+obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
 obs_format = "_HYDRO_QJM.txt"
-diag_dir = "Ex2D/diagnostic"
-proj_dir = "Ex2D/projection"
-codes_to_diag_SHPdir = "Ex2D/reseauReferenceHYDRO"
+diag_dir = "Explore2/diagnostic"
+proj_dir = "Explore2/projection"
+codes_to_diag_SHPdir = "Explore2/reseauReferenceHYDRO"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
@@ -234,15 +234,15 @@ verbose =
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     c(
-        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        "EROS"="EROS_20230111.Rdata",
+        "CTRIP"="CTRIP_diagnostic_20230124.nc"
+        # "EROS"="EROS_20230111.Rdata",
         # "GRSD",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
-        "SMASH"="SMASH_20220921.Rdata"
+        # "SMASH"="SMASH_20220921.Rdata"
     )
 complete_by = "SMASH"
 
@@ -293,8 +293,7 @@ code_filenames_to_use =
         # 'all'
 
         'K2981910_HYDRO_QJM.txt' #ref
-        # 'H4252010_HYDRO_QJM.txt',
-        # 'H7833520_HYDRO_QJM.txt'
+        # 'H5172010_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
         # 'WSOULOIS_HYDRO_QJM.txt',
@@ -338,7 +337,7 @@ code_filenames_to_use =
 
 var_selection =
     # "all"
-    c("KGEsqrt", "Bias$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
+    c("KGEracine", "Bias$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
 
 
 ### 3.4. Steps _______________________________________________________
@@ -365,12 +364,12 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'create_data',
-        # 'delete_tmp'
+        # 'delete_tmp',
+        'create_data'
         # 'analyse_data'=c(
             # 'WIP'
             # 'Ex2D/1_indicator/1_all',
-            # 'Ex2D/1_indicator/2_selection'
+            # 'Ex2D/1_indicator/2_selection',
             # 'Ex2D/2_serie'
         # ),
         # 'save_analyse'
@@ -380,13 +379,19 @@ to_do =
             # 'ALL/metaEXind.fst',
             # 'ALL/dataEXserie.fst',
             # 'ALL/metaEXserie.fst'
-            # ),
+            # )
         # 'select_var',
         # 'plot_correlation_matrix'
-        'plot_diagnostic_datasheet'
+        # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
+
+
+
+
+# meta = extract_meta(computer_data_path, obs_dir, list.files(file.path(computer_data_path, obs_dir)))
+
 
 
 #  ___        _  _    _        _  _            _    _            
@@ -474,6 +479,10 @@ library(stringr)
 # library(trend)
 
 
+if ('delete_tmp' %in% to_do) {
+    source('script_management.R', encoding='UTF-8')
+}
+
 names(to_do) = gsub("analyse_data[[:digit:]]+",
                     "analyse_data",
                     names(to_do))
@@ -546,7 +555,7 @@ if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %i
     }
 }
 
-if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do | 'delete_tmp' %in% to_do) {
+if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do) {
     print("")
     print('MANAGEMENT')
     source('script_management.R', encoding='UTF-8')

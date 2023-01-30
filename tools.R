@@ -22,13 +22,18 @@
 
 NetCDF_to_tibble = function (NetCDF_path, type="diag") {
         
-    NCdata = ncdf4::nc_open(NetCDF_path)    
+    NCdata = ncdf4::nc_open(NetCDF_path)
+
+    print(NCdata)
+    
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
                    origin=
                        as.Date(str_extract(
                            ncdf4::ncatt_get(NCdata,
                                             "time")$units,
                            "[0-9]+-[0-9]+-[0-9]+")))
+
+    Date = as.Date(as.character(Date), origin=as.Date("1970-01-01"))
 
     if (type == "diag") { 
         if ("code" %in% names(NCdata$var)) {
@@ -40,31 +45,36 @@ NetCDF_to_tibble = function (NetCDF_path, type="diag") {
     } else if (type == "proj") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
     }
- 
-    QRaw = ncdf4::ncvar_get(NCdata, "debit")
-    ncdf4::nc_close(NCdata)
+
+    if ("debit" %in% names(NCdata$var)) {
+        QRaw = ncdf4::ncvar_get(NCdata, "debit")
+    } else if ("Q" %in% names(NCdata$var)) {
+        QRaw = ncdf4::ncvar_get(NCdata, "Q")
+    }
     
+    ncdf4::nc_close(NCdata)
+
     CodeOrder = order(CodeRaw)
     Code = CodeRaw[CodeOrder]
-    Q_sim = QRaw[CodeOrder,]
     nCode = length(Code)
     nDate = length(Date)
-    
+    dimCode = dim(QRaw) == nCode
+    if (dimCode[1]) {
+        Q_sim = QRaw[CodeOrder,]
+    } else if (dimCode[2]) {
+        Q_sim = QRaw[, CodeOrder]
+    }
     data = tibble(
         Code=rep(Code, each=nDate),
         Date=rep(Date, times=nCode),
         Q_sim=c(t(Q_sim))
-    )
-    
+    )    
     return (data)
 }
 
 convert_diag_data = function (model, data) {
 
-    if (model == "CTRIP") {
-        # names(data) = c()
-        
-    } else if (grepl("EROS", model)) {
+    if (grepl("EROS", model)) {
         names(data) = c("Code", "Date", "Q_sim",
                         "Pl", "ET0", "Ps", "T")
         data$Code = substr(data$Code, 1, 8)

@@ -61,6 +61,7 @@ create_data = function () {
         Code_filename = paste0(Code, obs_format)
         nCode = length(Code)
         
+
         # Extract metadata about selected stations
         meta = extract_meta(computer_data_path,
                             obs_dir,
@@ -68,9 +69,16 @@ create_data = function () {
         # Extract data about selected stations
         data_obs = extract_data(computer_data_path,
                                 obs_dir,
-                                Code_filename)
+                                Code_filename,
+                                val2keep=c(val_E2=0))
 
-        meta = meta[order(meta$Code),]      
+        data_obs =
+            dplyr::filter(data_obs,
+                          dplyr::between(Date,
+                                         as.Date(period_diagnostic[1]),
+                                         as.Date(period_diagnostic[2])))
+        
+        meta = meta[order(meta$Code),] 
         data_obs = data_obs[order(data_obs$Code),]
         
         # Time gap
@@ -80,18 +88,17 @@ create_data = function () {
                               period=period_diagnostic)$meta
         
         names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
-        
-        
+
         data = dplyr::inner_join(data_sim,
                                  data_obs,
-                                 by=c("Date", "Code"))
-
+                                 by=c("Code", "Date"))
+        
         nModel = length(Model)
 
         if (!is.null(complete_by) & complete_by != "") {
             model4complete = complete_by[complete_by %in% Model][1]
-            col2check = c("T", "Pl", "ET0", "Ps")
-            nCol2check = length(col2check)
+            val2check = c("T", "Pl", "ET0", "Ps")
+            nVal2check = length(val2check)
             
             if (!is.na(model4complete)) {
                 data_model4complete =
@@ -105,8 +112,8 @@ create_data = function () {
                     data_model = dplyr::select(data_model,
                                                -Model)
 
-                    for (i in 1:nCol2check) {
-                        col = col2check[i]
+                    for (i in 1:nVal2check) {
+                        col = val2check[i]
                         
                         if (all(is.na(data_model[[col]]))) {
                             data_model =
@@ -151,7 +158,6 @@ create_data = function () {
 if ('create_data' %in% to_do) {
     create_data()
 }
-
 
 
 ## 2. CREATION OF DATA 4 PROJ ________________________________________

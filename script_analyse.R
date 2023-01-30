@@ -89,7 +89,7 @@ analyse_data_indicator = function () {
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
                           CARD_dir=
-                              analyse_data[grepl("indicator",
+                              analyse_data[grepl("(indicator)|(WIP)",
                                                  analyse_data)][1],
                           period=period_diagnostic,
                           samplePeriod_by_topic=samplePeriodMOD,
@@ -215,7 +215,7 @@ analyse_data_serie = function () {
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
     
-    if (any(grepl("indicator", analyse_data))) {
+    if (any(grepl("(indicator)|(WIP)", analyse_data))) {
         analyse_data_indicator()
     }
 
