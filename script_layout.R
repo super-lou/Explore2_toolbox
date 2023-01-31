@@ -50,7 +50,8 @@ if ('plot_diagnostic_datasheet' %in% to_do) {
                                         fr_shpdir, fr_shpname,
                                         bs_shpdir, bs_shpname,
                                         sbs_shpdir, sbs_shpname,
-                                        cbs_shpdir, cbs_shpname, cbs_coord,
+                                        cbs_shpdir, cbs_shpname,
+                                        cbs_coord,
                                         rv_shpdir, rv_shpname,
                                         river_selection=river_selection,
                                         toleranceRel=toleranceRel)

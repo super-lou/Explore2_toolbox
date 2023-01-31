@@ -223,26 +223,26 @@ exXprob = 0.01
 
 propagate_NA = TRUE
 
-nCode4write = 50
+nCode4write = 25
 
 verbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 ### 3.1. Models ______________________________________________________
 models_to_diag =
-    c(
-        "CTRIP"="CTRIP_diagnostic_20230124.nc"
-        # "EROS"="EROS_20230111.Rdata",
+    list(
+        "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
         # "GRSD",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
-        # "SMASH"="SMASH_20220921.Rdata"
+        "SMASH"="SMASH_20220921.Rdata"
     )
 complete_by = "SMASH"
 
@@ -291,7 +291,6 @@ code_filenames_to_use =
     # ''
     c(
         # 'all'
-
         'K2981910_HYDRO_QJM.txt' #ref
         # 'H5172010_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
@@ -299,9 +298,7 @@ code_filenames_to_use =
         # 'WSOULOIS_HYDRO_QJM.txt',
         # 'XVENEON1_HYDRO_QJM.txt',
         # 'XVENEON2_HYDRO_QJM.txt'
-        
         # "X0454010_HYDRO_QJM.txt"
-
         # '^A'
         # '^H'
         # '^I',
@@ -337,7 +334,7 @@ code_filenames_to_use =
 
 var_selection =
     # "all"
-    c("KGEracine", "Bias$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
+    c("KGEracine", "Biais$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
 
 
 ### 3.4. Steps _______________________________________________________
@@ -365,7 +362,7 @@ var_selection =
 to_do =
     c(
         # 'delete_tmp',
-        'create_data'
+        # 'create_data',
         # 'analyse_data'=c(
             # 'WIP'
             # 'Ex2D/1_indicator/1_all',
@@ -379,10 +376,10 @@ to_do =
             # 'ALL/metaEXind.fst',
             # 'ALL/dataEXserie.fst',
             # 'ALL/metaEXserie.fst'
-            # )
+            # ),
         # 'select_var',
         # 'plot_correlation_matrix'
-        # 'plot_diagnostic_datasheet'
+        'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )

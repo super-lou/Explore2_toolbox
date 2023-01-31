@@ -26,31 +26,34 @@ create_data = function () {
 
     for (i in 1:length(models_to_diag)) {
 
-        model = names(models_to_diag)[i]
-        model_file = models_to_diag[i]
+        model = names(models_to_diag)[[i]]
+        model_file = models_to_diag[[i]]
         
         model_path = file.path(computer_data_path,
                                diag_dir, model_file)
+
+        for (path in model_path) {
         
-        if (file.exists(model_path)) {
-            Model = c(Model, model)
+            if (file.exists(path)) {
+                Model = c(Model, model)
 
-            print(paste0("Get simulated data from ", model,
-                         " in ", model_path))
-            
-            if (grepl(".*[.]Rdata", model_path)) {
-                data_tmp = read_tibble(filepath=model_path)
+                print(paste0("Get simulated data from ", model,
+                             " in ", path))
+                
+                if (grepl(".*[.]Rdata", path)) {
+                    data_tmp = read_tibble(filepath=path)
                     
-            } else if (grepl(".*[.]nc", model_path)) {
-                data_tmp = NetCDF_to_tibble(model_path,
-                                            type="diag")
-            }
-            
-            data_tmp = convert_diag_data(model, data_tmp)
-            data_tmp = data_tmp[data_tmp$Code %in% CodeSUB,]
-            data_tmp = data_tmp[order(data_tmp$Code),]
+                } else if (grepl(".*[.]nc", path)) {
+                    data_tmp = NetCDF_to_tibble(path,
+                                                type="diag")
+                }
+                
+                data_tmp = convert_diag_data(model, data_tmp)
+                data_tmp = data_tmp[data_tmp$Code %in% CodeSUB,]
+                data_tmp = data_tmp[order(data_tmp$Code),]
 
-            data_sim = dplyr::bind_rows(data_sim, data_tmp)
+                data_sim = dplyr::bind_rows(data_sim, data_tmp)
+            }
         }
     }
     
