@@ -463,6 +463,7 @@ library(StatsAnalysisTrend)
 library(officer)
 library(sf)
 library(stringr)
+library(ggtext)
 # already ::
 # library(ncdf4)
 # library(rgeos)
