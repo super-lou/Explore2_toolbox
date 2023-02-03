@@ -370,16 +370,16 @@ to_do =
             # 'Ex2D/2_serie'
         # ),
         # 'save_analyse'
-        # 'read_saving'=c(
+        'read_saving'=c(
             # 'ALL/meta.fst',
-            # 'ALL/dataEXind.fst',
-            # 'ALL/metaEXind.fst',
-            # 'ALL/dataEXserie.fst',
-            # 'ALL/metaEXserie.fst'
-            # ),
-        # 'select_var',
+            'ALL/dataEXind.fst',
+            'ALL/metaEXind.fst',
+            'ALL/dataEXserie.fst',
+            'ALL/metaEXserie.fst'
+            ),
+        'select_var'
         # 'plot_correlation_matrix'
-        'plot_diagnostic_datasheet'
+        # 'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
