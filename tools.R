@@ -136,37 +136,9 @@ get_select = function (dataEXind, metaEXind, select="") {
 }
 
 
+# get_warning_Lines(dataEXind, metaEXind, "K2981910")
+write_Warnings = function (dataEXind, metaEXind, lim=5, resdir="") {
 
-get_warning_Lines = function (dataEXind, metaEXind, codeLight) {
-
-    logicalCol = names(dataEXind)[sapply(dataEXind, class) == "logical"]
-    dataEXind = dataEXind[!(names(dataEXind) %in% logicalCol)]
-    metaEXind = metaEXind[!(metaEXind$var %in% logicalCol),]
-    
-    vars2keep = names(dataEXind)
-    vars2keep = vars2keep[!grepl("([_]obs)|([_]sim)", vars2keep)]
-
-    dataEXind = dplyr::mutate(dataEXind,
-                              dplyr::across(where(is.logical),
-                                            as.numeric),
-                              .keep="all")
-
-    dataEXind = dplyr::select(dataEXind, vars2keep)
-
-    Model = levels(factor(dataEXind$Model))
-    nModel = length(Model)
-
-    dataEXind_tmp = dataEXind
-    dataEXind_tmp = dplyr::select(dataEXind_tmp, -c(Code, Model))
-
-    matchVar = match(names(dataEXind_tmp), metaEXind$var)
-    matchVar = matchVar[!is.na(matchVar)]
-    dataEXind_tmp = dataEXind_tmp[matchVar]
-
-    nameCol = names(dataEXind_tmp)
-    Var = nameCol
-    nVar = length(Var)
-    
     tick_perfect = c(
         "(KGE)|(^epsilon)|(^alpha)"=1,
         "(^Biais$)|(^Q[[:digit:]]+$)|([{]t.*[}])"=0)
@@ -181,162 +153,335 @@ get_warning_Lines = function (dataEXind, metaEXind, codeLight) {
     # abs(res - perfect) si que +
     # res - perfect si + et -
     tick_diff = list(
-        "(^KGE)|(^epsilon.*)|(^alphaQA$)|([{]t.*[}])"=c(0.2, 0.4),
-        "(^Biais$)|(^Q[[:digit:]]+$)|(^alphaCDC$)"=c(0.1, 0.2))
+        "(^KGE)|(^epsilon.*)|(^alpha)|([{]t.*[}])"=c(0.2, 0.4),
+        "(^Biais$)|(^Q[[:digit:]]+$)"=c(0.1, 0.2))
 
 
+    all_model = "L'ensemble des modèles"
+    
     # if rel [1]+ [2]-
     tick_text = list(
         
         "^KGE"=c(
-            "reproduit/reproduisent correctement les observations.",
-            "reproduit/reproduisent partielement les observations.",
-            "reproduit/reproduisent mal les observations."),
+            ":reproduit/reproduisent: correctement les observations.",
+            ":reproduit/reproduisent: partielement les observations.",
+            ":reproduit/reproduisent: mal les observations."),
         
         "^Biais$"=c(
-            "a/ont un biais faible.",
-            "a/ont un biais.",
-            "a/ont un biais important."),
+            ":a/ont: un biais faible.",
+            ":a/ont: un biais.",
+            ":a/ont: un biais important."),
         
         "^epsilon.*P.*DJF"=list(
-            c("a/ont une bonne sensibilité aux variations de précipitations hivernales.",
-              "est/sont un peu trop sensible aux variations de précipitations hivernales.",
-              "est/sont trop sensible aux variations de précipitations hivernales."),
-            c("a/ont une bonne sensibilité aux variations de précipitations hivernales.",
-              "est/sont peu sensible aux variations de précipitations hivernales.",
-              "n'/ne est/sont pas assez sensible aux variations de précipitations hivernales.")),
+            c(":a/ont: une bonne sensibilité aux variations de précipitations hivernales.",
+              ":est/sont: un peu trop sensible aux variations de précipitations hivernales.",
+              ":est/sont: trop sensible aux variations de précipitations hivernales."),
+            c(":a/ont: une bonne sensibilité aux variations de précipitations hivernales.",
+              ":est/sont: peu sensible aux variations de précipitations hivernales.",
+              ":n'est/ne sont: pas assez sensible aux variations de précipitations hivernales.")),
 
         "^epsilon.*P.*JJA"=list(
-            c("a/ont une bonne sensibilité aux variations de précipitations estivales.",
-              "est/sont un peu trop sensible aux variations de précipitations estivales.",
-              "est/sont trop sensible aux variations de précipitations estivales."),            
-            c("a/ont une bonne sensibilité aux variations de précipitations estivales.",
-              "est/sont peu sensible aux variations de précipitations estivales.",
-              "n'/ne est/sont pas assez sensible aux variations de précipitations estivales.")),
+            c(":a/ont: une bonne sensibilité aux variations de précipitations estivales.",
+              ":est/sont: un peu trop sensible aux variations de précipitations estivales.",
+              ":est/sont: trop sensible aux variations de précipitations estivales."),            
+            c(":a/ont: une bonne sensibilité aux variations de précipitations estivales.",
+              ":est/sont: peu sensible aux variations de précipitations estivales.",
+              ":n'est/ne sont: pas assez sensible aux variations de précipitations estivales.")),
 
         "^epsilon.*T.*DJF"=list(
-            c("a/ont une bonne sensibilité aux variations de température en hiver.",
-              "est/sont un peu trop sensible aux variations de température en hiver.",
-              "est/sont trop sensible aux variations de température en hiver."),
+            c(":a/ont: une bonne sensibilité aux variations de température en hiver.",
+              ":est/sont: un peu trop sensible aux variations de température en hiver.",
+              ":est/sont: trop sensible aux variations de température en hiver."),
 
-            c("a/ont une bonne sensibilité aux variations de température en hiver.",
-              "est/sont peu sensible aux variations de température en hiver.",
-              "n'/ne est/sont pas assez sensible aux variations de température en hiver.")),
+            c(":a/ont: une bonne sensibilité aux variations de température en hiver.",
+              ":est/sont: peu sensible aux variations de température en hiver.",
+              ":n'est/ne sont: pas assez sensible aux variations de température en hiver.")),
 
         "^epsilon.*T.*JJA"=list(
-            c("a/ont une bonne sensibilité aux variations de température en été.",
-              "est/sont un peu trop sensible aux variations de température en été.",
-              "est/sont trop sensible aux variations de température en été."),
-            c("a/ont une bonne sensibilité aux variations de température en été.",
-              "est/sont peu sensible aux variations de température en été.",
-              "n'/ne est/sont pas assez sensible aux variations de température en été.")),
+            c(":a/ont: une bonne sensibilité aux variations de température en été.",
+              ":est/sont: un peu trop sensible aux variations de température en été.",
+              ":est/sont: trop sensible aux variations de température en été."),
+            c(":a/ont: une bonne sensibilité aux variations de température en été.",
+              ":est/sont: peu sensible aux variations de température en été.",
+              ":n'est/ne sont: pas assez sensible aux variations de température en été.")),
 
         "^Q10$"=list(
-            c("restitue/restituent bien l'intensité des hautes eaux.",
-              "accentue/accentuent l'intensité des hautes eaux.",
-              "accentue/accentuent trop l'intensité des hautes eaux."),
-            c("restitue/restituent bien l'intensité des hautes eaux.",
-              "atténue/atténuent l'intensité des hautes eaux.",
-              "atténue/atténuent trop l'intensité des hautes eaux.")),
+            c(":restitue/restituent: bien l'intensité des hautes eaux.",
+              ":accentue/accentuent: l'intensité des hautes eaux.",
+              ":accentue/accentuent: trop l'intensité des hautes eaux."),
+            c(":restitue/restituent: bien l'intensité des hautes eaux.",
+              ":atténue/atténuent: l'intensité des hautes eaux.",
+              ":atténue/atténuent: trop l'intensité des hautes eaux.")),
 
         "tQJXA"=list(
-            c("restitue/restituent bien la temporalité annuelle des crues.",
-              "produit/produisent des crues plus tard dans l'année.",
-              "produit/produisent des crues trop tard dans l'année."),
-            c("restitue/restituent bien la temporalité annuelle des crues.",
-              "produit/produisent des crues plus tôt dans l'année.",
-              "produit/produisent des crues trop tôt dans l'année.")),
+            c(":restitue/restituent: bien la temporalité annuelle des crues.",
+              ":produit/produisent: des crues tard dans l'année.",
+              ":produit/produisent: des crues trop tard dans l'année."),
+            c(":restitue/restituent: bien la temporalité annuelle des crues.",
+              ":produit/produisent: des crues tôt dans l'année.",
+              ":produit/produisent: des crues trop tôt dans l'année.")),
 
         "^alphaCDC$"=list(
-            c("restitue/restituent bien le régime des moyennes eaux.",
-              "accentue/accentuent le régime des moyennes eaux.",
-              "accentue/accentuent trop le régime des moyennes eaux."),
-            c("restitue/restituent bien le régime des moyennes eaux.",
-              "atténue/atténuent le régime des moyennes eaux.",
-              "atténue/atténuent trop le régime des moyennes eaux.")),
+            c(":restitue/restituent: bien le régime des moyennes eaux.",
+              ":accentue/accentuent: le régime des moyennes eaux.",
+              ":accentue/accentuent: trop le régime des moyennes eaux."),
+            c(":restitue/restituent: bien le régime des moyennes eaux.",
+              ":atténue/atténuent: le régime des moyennes eaux.",
+              ":atténue/atténuent: trop le régime des moyennes eaux.")),
 
         "^alphaQA$"=list(
-            c("restitue/restituent bien l'évolution au cours du temps du débit moyen annuel.",
-              "accentue/accentuent la hausse au cours du temps du débit moyen annuel.",
-              "accentue/accentuent trop la hausse au cours du temps du débit moyen annuel."),
-            c("restitue/restituent bien l'évolution au cours du temps du débit moyen annuel.",
-              "accentue/accentuent la baisse au cours du temps du débit moyen annuel.",
-              "accentue/accentuent trop la baisse au cours du temps du débit moyen annuel.")),
+            c(":restitue/restituent: bien l'évolution au cours du temps du débit moyen annuel.",
+              ":accentue/accentuent: la hausse au cours du temps du débit moyen annuel.",
+              ":accentue/accentuent: trop la hausse au cours du temps du débit moyen annuel."),
+            c(":restitue/restituent: bien l'évolution au cours du temps du débit moyen annuel.",
+              ":accentue/accentuent: la baisse au cours du temps du débit moyen annuel.",
+              ":accentue/accentuent: trop la baisse au cours du temps du débit moyen annuel.")),
 
         "^Q90$"=list(
-            c("restitue/restituent bien l'intensité des basses eaux.",
-              "atténue/atténuent l'intensité des basses eaux.",
-              "atténue/atténuent trop l'intensité des basses eaux."),
-            c("restitue/restituent bien l'intensité des basses eaux.",
-              "accentue/accentuent l'intensité des basses eaux.",
-              "accentue/accentuent trop l'intensité des basses eaux.")),
+            c(":restitue/restituent: bien l'intensité des basses eaux.",
+              ":atténue/atténuent: l'intensité des basses eaux.",
+              ":atténue/atténuent: trop l'intensité des basses eaux."),
+            c(":restitue/restituent: bien l'intensité des basses eaux.",
+              ":accentue/accentuent: l'intensité des basses eaux.",
+              ":accentue/accentuent: trop l'intensité des basses eaux.")),
 
         "tVCN10"=list(
-            c("restitue/restituent bien la temporalité annuelle des étiages.",
-              "produit/produisent des étiages plus tard dans l'année.",
-              "produit/produisent des étiages trop tard dans l'année."),
-            c("restitue/restituent bien la temporalité annuelle des étiages.",
-              "produit/produisent des étiages plus tôt dans l'année.",
-              "produit/produisent des étiages trop tôt dans l'année.")))
-
+            c(":restitue/restituent: bien la temporalité annuelle des étiages.",
+              ":produit/produisent: des étiages tard dans l'année.",
+              ":produit/produisent: des étiages trop tard dans l'année."),
+            c(":restitue/restituent: bien la temporalité annuelle des étiages.",
+              ":produit/produisent: des étiages tôt dans l'année.",
+              ":produit/produisent: des étiages trop tôt dans l'année.")))
     
-    Lines = dplyr::tibble()
-    for (i in 1:nVar) {
-        var = Var[i]
-        x = dataEXind[dataEXind$Code == codeLight,][[var]]
+    Code = levels(factor(dataEXind$Code))
+    nCode = length(Code)
+    Warnings = dplyr::tibble()
+    
+    for (k in 1:nCode) {
 
-        per = tick_perfect[sapply(names(tick_perfect), grepl, var)]
-        names(per) = NULL
-        dif = unlist(tick_diff[sapply(names(tick_diff), grepl, var)], use.names=FALSE)
-        rel = unlist(tick_rel[sapply(names(tick_rel), grepl, var)], use.names=FALSE)
-        text = tick_text[sapply(names(tick_text), grepl, var)][[1]]
+        if ((k-1) %% 10 == 0) {
+            print(paste0(round(k/nCode*100), " %"))
+        }
+        
+        code = Code[k]
 
-        for (j in 1:nModel) {
-            model = Model[j]
-            x = dataEXind[dataEXind$Model == model &
-                          dataEXind$Code == codeLight,][[var]]
+        dataEXind_code = dataEXind[dataEXind$Code == code,]
+    
+        logicalCol = names(dataEXind_code)[sapply(dataEXind_code, class) == "logical"]
+        dataEXind_code = dataEXind_code[!(names(dataEXind_code) %in% logicalCol)]
+        metaEXind = metaEXind[!(metaEXind$var %in% logicalCol),]
+        
+        vars2keep = names(dataEXind_code)
+        vars2keep = vars2keep[!grepl("([_]obs)|([_]sim)", vars2keep)]
 
-            if (rel) {
-                ec = x - per
-            } else {
-                ec = abs(x - per)
-            }
+        dataEXind_code = dplyr::mutate(dataEXind_code,
+                                  dplyr::across(where(is.logical),
+                                                as.numeric),
+                                  .keep="all")
 
-            if (rel) {
-                if (ec > 0) {
-                    text_model = unlist(text[[1]])
-                    id = min(which(ec <= c(dif, 10**99)))
-                } else {
-                    text_model = unlist(text[[2]])
-                    id = min(which(ec >= c(-dif, -10**99)))
+        dataEXind_code = dplyr::select(dataEXind_code, vars2keep)
+
+        Model = levels(factor(dataEXind_code$Model))
+        nModel = length(Model)
+
+        dataEXind_code_tmp = dataEXind_code
+        dataEXind_code_tmp = dplyr::select(dataEXind_code_tmp, -c(Code, Model))
+
+        matchVar = match(names(dataEXind_code_tmp), metaEXind$var)
+        matchVar = matchVar[!is.na(matchVar)]
+        dataEXind_code_tmp = dataEXind_code_tmp[matchVar]
+
+        nameCol = names(dataEXind_code_tmp)
+        Var = nameCol
+        nVar = length(Var)
+        
+        Lines = dplyr::tibble()
+        modelWarnings_code = dplyr::tibble(Model=Model,
+                                           priority=0)
+        for (i in 1:nVar) {
+            var = Var[i]
+            x = dataEXind_code[[var]]
+
+            per = tick_perfect[sapply(names(tick_perfect), grepl, var)]
+            names(per) = NULL
+            dif = unlist(tick_diff[sapply(names(tick_diff), grepl, var)], use.names=FALSE)
+            rel = unlist(tick_rel[sapply(names(tick_rel), grepl, var)], use.names=FALSE)
+            text = tick_text[sapply(names(tick_text), grepl, var)][[1]]
+
+            for (j in 1:nModel) {
+                model = Model[j]
+                x = dataEXind_code[dataEXind_code$Model == model,][[var]]
+
+                if (is.na(x)) {
+                    next 
                 }
-            } else {
-                text_model = text
-                id = min(which(ec <= c(dif, 10**99)))
-            }
+                
+                if (rel) {
+                    ec = x - per
+                } else {
+                    ec = abs(x - per)
+                }
 
-            if (nrow(Lines) == 0) {
-                Lines = dplyr::tibble(var=var,
-                                      model=model,
-                                      niveau=id,
-                                      line=text_model[id])
-            } else {
-                Lines =
-                    dplyr::bind_rows(Lines,
-                                     dplyr::tibble(var=var,
-                                                   model=model,
-                                                   niveau=id,
-                                                   line=text_model[id]))
+                if (rel) {
+                    if (ec > 0) {
+                        text_model = unlist(text[[1]])
+                        id = min(which(ec <= c(dif, 10**99)))
+                        niveau = (id-1)
+                    } else {
+                        text_model = unlist(text[[2]])
+                        id = min(which(ec >= c(-dif, -10**99)))
+                        niveau = -(id-1)
+                    }
+                } else {
+                    text_model = text
+                    id = min(which(ec <= c(dif, 10**99)))
+                    niveau = (id-1)
+                }
+
+                if (nrow(Lines) == 0) {
+                    Lines = dplyr::tibble(var=var,
+                                          model=model,
+                                          niveau=niveau,
+                                          ecart=abs(ec),
+                                          line=text_model[id])
+                } else {
+                    Lines =
+                        dplyr::bind_rows(Lines,
+                                         dplyr::tibble(var=var,
+                                                       model=model,
+                                                       niveau=niveau,
+                                                       ecart=abs(ec),
+                                                       line=text_model[id]))
+                }
+                
+                modelWarnings_code$priority[modelWarnings_code$Model == model] =
+                    modelWarnings_code$priority[modelWarnings_code$Model == model] +
+                    abs(ec)
             }
         }
-    }
+        
+        stat_Lines =
+            dplyr::summarise(
+                       dplyr::group_by(Lines, var, niveau),
+                       n=dplyr::n(),
+                       model=list(model[niveau==dplyr::cur_group()$niveau]),
+                       line=line[1],
+                       priority=mean(ecart),
+                       .groups="drop")
 
-    stat_Lines =
-        dplyr::summarise(
-                   dplyr::group_by(Lines, var, niveau),
-                   n=dplyr::n(),
-                   model=list(model[niveau==dplyr::cur_group()$niveau]),
-                   .groups="drop")
-    
-    return (Lines)
+        Warnings_code = dplyr::tibble()
+        for (var in Var) {
+
+            line = c()
+            priority = c()
+            
+            stat_Lines_var = stat_Lines[stat_Lines$var == var,]
+
+            if (nrow(stat_Lines_var) == 0) {
+                next
+            }
+
+            if (all(stat_Lines_var$niveau != 0)) {
+                if (nrow(stat_Lines_var) == 1) {
+                    line = c(line,
+                             paste0(all_model, " ",
+                                    gsub("([:].*[/])|([:])",
+                                         "",
+                                         stat_Lines_var$line)))
+                    priority = c(priority,
+                                 stat_Lines_var$priority) 
+                } else {
+                    for (i in 1:nrow(stat_Lines_var)) {
+                        model = unlist(stat_Lines_var[i,]$model)
+
+                        # print(stat_Lines_var[i,])
+                        
+                        if (stat_Lines_var[i,]$n == 1) {
+                            line =
+                                c(line,
+                                  paste0(model, " ",
+                                         gsub("([/].*[:])|([:])",
+                                              "",
+                                              stat_Lines_var[i,]$line)))
+                        } else {
+                            line =
+                                c(line,
+                                  paste0(paste0(model, collapse=", "),
+                                         " ",
+                                         gsub("([:].*[/])|([:])",
+                                              "",
+                                              stat_Lines_var[i,]$line)))
+                        }
+                        priority = c(priority,
+                                     stat_Lines_var[i,]$priority)
+                    }
+                }
+                
+            } else if (max(abs(stat_Lines_var$niveau)) > 0) {
+
+                stat_Lines_var_max =
+                    stat_Lines_var[abs(stat_Lines_var$niveau) > 0,]
+
+                for (i in 1:nrow(stat_Lines_var_max)) {
+                    model = unlist(stat_Lines_var_max[i,]$model)
+                    if (stat_Lines_var_max[i,]$n == 1) {
+                        line =
+                            c(line,
+                              paste0(model, " ",
+                                     gsub("([/].*[:])|([:])",
+                                          "",
+                                          stat_Lines_var_max[i,]$line)))
+                    } else {
+                        line =
+                            c(line,
+                              paste0(paste0(model, collapse=", "),
+                                     " ",
+                                     gsub("([:].*[/])|([:])",
+                                          "",
+                                          stat_Lines_var_max[i,]$line)))
+                    }
+                    priority = c(priority,
+                                 stat_Lines_var_max[i,]$priority)
+                }
+            }
+
+            if (nrow(Warnings_code) == 0) {
+                Warnings_code = dplyr::tibble(priority=priority,
+                                         line=line)
+            } else {
+                Warnings_code =
+                    dplyr::bind_rows(Warnings_code,
+                                     dplyr::tibble(priority=priority,
+                                                   line=line))
+            }
+        }
+
+        minPriority = min(modelWarnings_code$priority)
+        
+        if (minPriority > lim) {
+            line = "Dans l'ensemble, aucun modèle hydrologique ne parvient à reproduire de manière satisfaisante l'hydrologie de cette station de mesure."
+        } else {
+            model =
+                modelWarnings_code$Model[modelWarnings_code$priority == minPriority]
+            line = paste0("Dans l'ensemble, ", model, " ",
+                          "est le modèle hydrologique qui parvient à reproduire le mieux l'hydrologie de cette station de mesure.")
+        }
+
+        Warnings_code = dplyr::arrange(Warnings_code, dplyr::desc(priority))
+        Warnings_code = dplyr::bind_rows(dplyr::tibble(priority=Inf,
+                                                  line=line),
+                                    Warnings_code)
+
+        if (nrow(Warnings) == 0) {
+            Warnings = dplyr::tibble(Code=code, Warnings_code)
+        } else {
+            Warnings =
+                dplyr::bind_rows(Warnings,
+                                 dplyr::tibble(Code=code,
+                                               Warnings_code))
+        }
+    }
+    write_tibble(Warnings,
+                 filedir=resdir,
+                 filename="Warnings.fst")
 }

@@ -238,6 +238,11 @@ if (!('delete_tmp' %in% to_do)) {
         dataEXind = res$dataEXind
         metaEXind = res$metaEXind
     }
+
+    if ('write_warnings' %in% to_do) {
+        write_Warnings(dataEXind, metaEXind, lim=5,
+                       resdir=today_resdir)
+    }
 }
 
 if ('delete_tmp' %in% to_do) {

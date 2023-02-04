@@ -65,6 +65,7 @@ if ('plot_diagnostic_datasheet' %in% to_do) {
                                   Colors=Colors_of_models,
                                   ModelGroup=group_of_models_to_use,
                                   icon_path=icon_path,
+                                  Warnings=Warnings,
                                   logo_path=logo_path,
                                   Shapefiles=Shapefiles,
                                   figdir=today_figdir)

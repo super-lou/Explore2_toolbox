@@ -370,16 +370,17 @@ to_do =
             # 'Ex2D/2_serie'
         # ),
         # 'save_analyse'
-        'read_saving'=c(
-            # 'ALL/meta.fst',
-            'ALL/dataEXind.fst',
-            'ALL/metaEXind.fst',
-            'ALL/dataEXserie.fst',
-            'ALL/metaEXserie.fst'
-            ),
-        'select_var'
+        # 'read_saving'=c(
+            # 'ALL/dataEXind.fst',
+            # 'ALL/metaEXind.fst',
+            # 'ALL/dataEXserie.fst',
+            # 'ALL/metaEXserie.fst',
+            # 'ALL/Warnings.fst'
+            # )
+        # 'select_var'
+        # 'write_warnings'
         # 'plot_correlation_matrix'
-        # 'plot_diagnostic_datasheet'
+        'plot_diagnostic_datasheet'
         
         # 'create_data_proj'
     )
@@ -553,7 +554,7 @@ if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %i
     }
 }
 
-if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do) {
+if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do | 'write_warnings' %in% to_do) {
     print("")
     print('MANAGEMENT')
     source('script_management.R', encoding='UTF-8')
