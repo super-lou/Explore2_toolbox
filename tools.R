@@ -157,7 +157,7 @@ write_Warnings = function (dataEXind, metaEXind, lim=5, resdir="") {
         "(^Biais$)|(^Q[[:digit:]]+$)"=c(0.1, 0.2))
 
 
-    all_model = "L'ensemble des modèles"
+    all_model = "<b>L'ensemble des modèles</b>"
     
     # if rel [1]+ [2]-
     tick_text = list(
@@ -392,9 +392,9 @@ write_Warnings = function (dataEXind, metaEXind, lim=5, resdir="") {
                                  stat_Lines_var$priority) 
                 } else {
                     for (i in 1:nrow(stat_Lines_var)) {
-                        model = unlist(stat_Lines_var[i,]$model)
-
-                        # print(stat_Lines_var[i,])
+                        model = paste0("<b>",
+                                       unlist(stat_Lines_var[i,]$model),
+                                       "</b>")
                         
                         if (stat_Lines_var[i,]$n == 1) {
                             line =
@@ -423,7 +423,9 @@ write_Warnings = function (dataEXind, metaEXind, lim=5, resdir="") {
                     stat_Lines_var[abs(stat_Lines_var$niveau) > 0,]
 
                 for (i in 1:nrow(stat_Lines_var_max)) {
-                    model = unlist(stat_Lines_var_max[i,]$model)
+                    model = paste0("<b>",
+                                   unlist(stat_Lines_var_max[i,]$model),
+                                   "</b>")
                     if (stat_Lines_var_max[i,]$n == 1) {
                         line =
                             c(line,
@@ -459,12 +461,12 @@ write_Warnings = function (dataEXind, metaEXind, lim=5, resdir="") {
         minPriority = min(modelWarnings_code$priority)
         
         if (minPriority > lim) {
-            line = "Dans l'ensemble, aucun modèle hydrologique ne parvient à reproduire de manière satisfaisante l'hydrologie de cette station de mesure."
+            line = "<b>Aucun modèle hydrologique</b> ne reproduit de manière satisfaisante l'hydrologie de cette station."
         } else {
             model =
                 modelWarnings_code$Model[modelWarnings_code$priority == minPriority]
-            line = paste0("Dans l'ensemble, ", model, " ",
-                          "est le modèle hydrologique qui parvient à reproduire le mieux l'hydrologie de cette station de mesure.")
+            line = paste0("<b>", model, "</b> ",
+                          "est le modèle hydrologique qui reproduit le mieux l'hydrologie de cette station.")
         }
 
         Warnings_code = dplyr::arrange(Warnings_code, dplyr::desc(priority))

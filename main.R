@@ -236,7 +236,7 @@ models_to_diag =
     list(
         "CTRIP"="CTRIP_diagnostic_20230124.nc",
         "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
-        # "GRSD",
+        # "GRSD"="GRSD_20230202.Rdata",
         "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
         "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
@@ -370,6 +370,7 @@ to_do =
             # 'Ex2D/2_serie'
         # ),
         # 'save_analyse'
+        # 'write_warnings'
         # 'read_saving'=c(
             # 'ALL/dataEXind.fst',
             # 'ALL/metaEXind.fst',
@@ -378,10 +379,8 @@ to_do =
             # 'ALL/Warnings.fst'
             # )
         # 'select_var'
-        # 'write_warnings'
         # 'plot_correlation_matrix'
-        'plot_diagnostic_datasheet'
-        
+        'plot_diagnostic_datasheet'        
         # 'create_data_proj'
     )
 
