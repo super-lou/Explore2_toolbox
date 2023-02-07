@@ -361,14 +361,14 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp',
+        # 'delete_tmp', 
         # 'create_data',
         # 'analyse_data'=c(
             # 'WIP'
             # 'Ex2D/1_indicator/1_all',
             # 'Ex2D/1_indicator/2_selection',
             # 'Ex2D/2_serie'
-        # ),
+        # )
         # 'save_analyse'
         # 'write_warnings'
         # 'read_saving'=c(
@@ -377,8 +377,8 @@ to_do =
             # 'ALL/dataEXserie.fst',
             # 'ALL/metaEXserie.fst',
             # 'ALL/Warnings.fst'
-            # )
-        # 'select_var'
+            # ),
+        # 'select_var',
         # 'plot_correlation_matrix'
         'plot_diagnostic_datasheet'        
         # 'create_data_proj'
