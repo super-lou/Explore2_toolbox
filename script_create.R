@@ -158,13 +158,13 @@ create_data = function () {
 
 
 ## 1. CREATION OF DATA 4 DIAG ________________________________________
-if ('create_data' %in% to_do) {
+if (do == 'create_data') {
     create_data()
 }
 
 
 ## 2. CREATION OF DATA 4 PROJ ________________________________________
-if ('create_data_proj' %in% to_do) {
+if (do == 'create_data_proj') {
 
     Model = c()
     data_sim = tibble()

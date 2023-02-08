@@ -235,12 +235,12 @@ verbose =
 models_to_diag =
     list(
         "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
         # "GRSD"="GRSD_20230202.Rdata",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
     )
@@ -262,7 +262,7 @@ group_of_models_to_use =
     list(
         # "CTRIP",
         "EROS",
-        # "GRSD",
+        "GRSD",
         "J2000",
         "SIM2",
         "MORDOR-SD",
@@ -291,8 +291,8 @@ code_filenames_to_use =
     # ''
     c(
         # 'all'
-        'K2981910_HYDRO_QJM.txt' #ref
-        # 'H5172010_HYDRO_QJM.txt'
+        # 'K2981910_HYDRO_QJM.txt' #ref
+        'A9402110_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
         # 'WSOULOIS_HYDRO_QJM.txt',
@@ -361,14 +361,15 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp', 
+        # 'delete_tmp',
         # 'create_data',
         # 'analyse_data'=c(
             # 'WIP'
             # 'Ex2D/1_indicator/1_all',
             # 'Ex2D/1_indicator/2_selection',
             # 'Ex2D/2_serie'
-        # )
+        # ),
+        # 'read_tmp'
         # 'save_analyse'
         # 'write_warnings'
         # 'read_saving'=c(
@@ -378,9 +379,9 @@ to_do =
             # 'ALL/metaEXserie.fst',
             # 'ALL/Warnings.fst'
             # ),
-        # 'select_var',
+        # 'select_var'
         # 'plot_correlation_matrix'
-        'plot_diagnostic_datasheet'        
+        # 'plot_diagnostic_datasheet'        
         # 'create_data_proj'
     )
 
@@ -476,15 +477,9 @@ library(ggtext)
 # potentialy useless
 # library(trend)
 
-
-if ('delete_tmp' %in% to_do) {
-    source('script_management.R', encoding='UTF-8')
-}
-
 names(to_do) = gsub("analyse_data[[:digit:]]+",
                     "analyse_data",
                     names(to_do))
-
 if ("analyse_data" %in% names(to_do)) {
     analyse_data = to_do[names(to_do) == "analyse_data"]
     to_do[names(to_do) == "analyse_data"] = "analyse_data"
@@ -493,7 +488,6 @@ if ("analyse_data" %in% names(to_do)) {
 names(to_do) = gsub("read_saving[[:digit:]]+",
                     "read_saving",
                     names(to_do))
-
 if ("read_saving" %in% names(to_do)) {
     read_saving = to_do[names(to_do) == "read_saving"]
     read_saving = file.path(resdir, read_saving)
@@ -503,14 +497,12 @@ if ("read_saving" %in% names(to_do)) {
 codes_to_diag_SHP = read_shp(file.path(computer_data_path,
                                        codes_to_diag_SHPdir))
 codes_to_diag = as.character(codes_to_diag_SHP$Code)
-
 if (all(code_filenames_to_use == "")) {
     stop ("No station selected")
 }
 
 if (all(code_filenames_to_use == "all")) {
     CodeALL = codes_to_diag
-        
 } else {
     code_filenames_to_use = convert_regexp(computer_data_path,
                                            obs_dir,
@@ -520,47 +512,40 @@ if (all(code_filenames_to_use == "all")) {
     CodeALL = codes_to_use[okCode]
 }
 nCodeALL = length(CodeALL)
-
 Subsets = ceiling(nCodeALL/nCode4write)
 
-if ('create_data' %in% to_do | 'create_data_proj' %in% to_do | 'analyse_data' %in% to_do) {    
-    for (subset in 1:Subsets) {
-        
-        print(paste0(subset, "/", Subsets,
-                     " chunks of stations in analyse so ",
-                     round(subset/Subsets*100, 1), "%"))
-        
-        CodeSUB = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
-        CodeSUB = CodeSUB[!is.na(CodeSUB)]
-        nCodeSUB = length(CodeSUB)
+for (do in to_do) {
 
-        if ('create_data' %in% to_do | 'create_data_proj' %in% to_do) {
-            print("")
-            print('CREATE')
-            source('script_create.R', encoding='UTF-8')
-        }
-
-        if (is.null(data)) {
-            next
-        }
-
-        if ('analyse_data' %in% to_do) {
-            print("")
-            print('ANALYSES')
-            source('script_analyse.R', encoding='UTF-8')
-        }
-        print("")
+    if (do %in% c('read_tmp', 'delete_tmp')) {
+        source('script_management.R', encoding='UTF-8')
     }
-}
+    
+    if (any(do %in% c('create_data', 'analyse_data', 'create_data_proj'))) {    
+        for (subset in 1:Subsets) {
+            print(paste0(subset, "/", Subsets,
+                         " chunks of stations in analyse so ",
+                         round(subset/Subsets*100, 1), "%"))
+            CodeSUB = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
+            CodeSUB = CodeSUB[!is.na(CodeSUB)]
+            nCodeSUB = length(CodeSUB)
 
-if ('analyse_data' %in% to_do | 'save_analyse' %in% to_do | 'read_saving' %in% to_do | 'select_var' %in% to_do | 'write_warnings' %in% to_do) {
-    print("")
-    print('MANAGEMENT')
-    source('script_management.R', encoding='UTF-8')
-}
+            if (any(do %in% c('create_data', 'create_data_proj'))) {
+                source('script_create.R', encoding='UTF-8')
+            }
+            if (is.null(data)) {
+                next
+            }
+            if (do == 'analyse_data') {
+                source('script_analyse.R', encoding='UTF-8')
+            }
+        }
+    }
 
-if ('plot_correlation_matrix' %in% to_do | 'plot_diagnostic_datasheet' %in% to_do) {
-    print("")
-    print('PLOTTING')
-    source('script_layout.R', encoding='UTF-8')
+    if (any(do %in% c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_saving'))) {
+        source('script_management.R', encoding='UTF-8')
+    }
+
+    if (any(do %in% c('plot_correlation_matrix', 'plot_diagnostic_datasheet'))) {
+        source('script_layout.R', encoding='UTF-8')
+    }
 }

@@ -213,7 +213,7 @@ analyse_data_serie = function () {
 
 
 ## 1. ANALYSING OF DATA ______________________________________________
-if ('analyse_data' %in% to_do) {
+if (do == 'analyse_data') {
     
     if (any(grepl("(indicator)|(WIP)", analyse_data))) {
         analyse_data_indicator()

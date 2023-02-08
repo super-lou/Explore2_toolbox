@@ -21,233 +21,241 @@
 
 
 ## 1. MANAGEMENT OF DATA ______________________________________________
-if (!('delete_tmp' %in% to_do)) {
-    if ('analyse_data' %in% to_do) {
+if (do == 'analyse_data') {
 
-        if (exists("meta")) {
-            rm (meta)
+    if (exists("meta")) {
+        rm (meta)
+    }
+    for (subset in 1:Subsets) {
+        meta_tmp = read_tibble(filedir=tmpdir,
+                               filename=paste0("meta_",
+                                               subset,
+                                               ".fst"))
+        if (!exists("meta")) {
+            meta = meta_tmp
+        } else {
+            meta = dplyr::bind_rows(meta, meta_tmp)
+        }
+    }
+    rm (meta_tmp)
+    meta = meta[order(meta$Code),]
+    
+
+    if (any(grepl("indicator", analyse_data))) {
+
+        metaEXind = read_tibble(filedir=tmpdir,
+                                filename="metaEXind.fst")
+        
+        if (exists("dataEXind")) {
+            rm (dataEXind)
         }
         for (subset in 1:Subsets) {
-            meta_tmp = read_tibble(filedir=tmpdir,
-                                   filename=paste0("meta_",
-                                                   subset,
-                                                   ".fst"))
-            if (!exists("meta")) {
-                meta = meta_tmp
+            dataEXind_tmp = read_tibble(filedir=tmpdir,
+                                        filename=paste0("dataEXind_",
+                                                        subset,
+                                                        ".fst"))
+            if (!exists("dataEXind")) {
+                dataEXind = dataEXind_tmp
             } else {
-                meta = dplyr::bind_rows(meta, meta_tmp)
+                dataEXind = dplyr::bind_rows(dataEXind, dataEXind_tmp)
             }
         }
-        rm (meta_tmp)
-        meta = meta[order(meta$Code),]
+        rm (dataEXind_tmp)
+
+        dataEXind = dataEXind[order(dataEXind$Model),]
         
-
-        if (any(grepl("indicator", analyse_data))) {
-
-            metaEXind = read_tibble(filedir=tmpdir,
-                                    filename="metaEXind.fst")
+        Vars = colnames(dataEXind)
+        
+        containSO = "([_]obs$)|([_]sim$)"
+        Vars = Vars[grepl(containSO, Vars)]
+        if (length(Vars) > 0) {
+            VarsREL = gsub(containSO, "", Vars)
+            VarsREL = VarsREL[!duplicated(VarsREL)]
+            nVarsREL = length(VarsREL)
             
-            if (exists("dataEXind")) {
-                rm (dataEXind)
-            }
-            for (subset in 1:Subsets) {
-                dataEXind_tmp = read_tibble(filedir=tmpdir,
-                                            filename=paste0("dataEXind_",
-                                                            subset,
-                                                            ".fst"))
-                if (!exists("dataEXind")) {
-                    dataEXind = dataEXind_tmp
-                } else {
-                    dataEXind = dplyr::bind_rows(dataEXind, dataEXind_tmp)
-                }
-            }
-            rm (dataEXind_tmp)
+            for (i in 1:nVarsREL) {
+                varREL = VarsREL[i]
 
-            dataEXind = dataEXind[order(dataEXind$Model),]
-            
-            Vars = colnames(dataEXind)
-            
-            containSO = "([_]obs$)|([_]sim$)"
-            Vars = Vars[grepl(containSO, Vars)]
-            if (length(Vars) > 0) {
-                VarsREL = gsub(containSO, "", Vars)
-                VarsREL = VarsREL[!duplicated(VarsREL)]
-                nVarsREL = length(VarsREL)
+                print(varREL)
                 
-                for (i in 1:nVarsREL) {
-                    varREL = VarsREL[i]
+                if (grepl("^HYP.*", varREL)) {
+                    print("a")
+                    dataEXind[[varREL]] =
+                        dataEXind[[paste0(varREL, "_sim")]] &
+                        dataEXind[[paste0(varREL, "_obs")]]
 
-                    print(varREL)
+                } else if (grepl("(^t)|([{]t)", varREL)) {
+                    print("b")
+                    dataEXind[[varREL]] =
+                        circular_minus(
+                            dataEXind[[paste0(varREL, "_sim")]],
+                            dataEXind[[paste0(varREL, "_obs")]],
+                            period=365.25)/30.4375
+
+                } else if (grepl("(Rc)|(^epsilon)|(^alpha)", varREL)) {
+                    print("c")
+                    dataEXind[[varREL]] =
+                        dataEXind[[paste0(varREL, "_sim")]] /
+                        dataEXind[[paste0(varREL, "_obs")]]
                     
-                    if (grepl("^HYP.*", varREL)) {
-                        print("a")
-                        dataEXind[[varREL]] =
-                            dataEXind[[paste0(varREL, "_sim")]] &
-                            dataEXind[[paste0(varREL, "_obs")]]
-
-                    } else if (grepl("(^t)|([{]t)", varREL)) {
-                        print("b")
-                        dataEXind[[varREL]] =
-                            circular_minus(
-                                dataEXind[[paste0(varREL, "_sim")]],
-                                dataEXind[[paste0(varREL, "_obs")]],
-                                period=365.25)/30.4375
-
-                    } else if (grepl("(Rc)|(^epsilon)|(^alpha)", varREL)) {
-                        print("c")
-                        dataEXind[[varREL]] =
-                            dataEXind[[paste0(varREL, "_sim")]] /
-                            dataEXind[[paste0(varREL, "_obs")]]
-                        
-                    } else {
-                        print("d")
-                        dataEXind[[varREL]] =
-                            (dataEXind[[paste0(varREL, "_sim")]] -
-                             dataEXind[[paste0(varREL, "_obs")]]) /
-                            dataEXind[[paste0(varREL, "_obs")]]
-                    }
-                    print("")
-                    
-                    dataEXind = dplyr::relocate(dataEXind,
-                                                !!varREL,
-                                                .after=!!paste0(varREL, "_sim"))
-                }
-            }
-        }
-
-
-        if (any(grepl("serie", analyse_data))) {
-
-            metaEXserie = read_tibble(filedir=tmpdir,
-                                      filename="metaEXserie.fst")
-            
-            if (exists("dataEXserie")) {
-                rm (dataEXserie)
-            }
-            for (subset in 1:Subsets) {
-                dataEXserie_tmp = read_tibble(
-                    filedir=tmpdir,
-                    filename=paste0("dataEXserie_",
-                                    subset,
-                                    ".fst"))
-                if (!exists("dataEXserie")) {
-                    dataEXserie = dataEXserie_tmp
                 } else {
-                    for (i in 1:length(dataEXserie)) {
-                        dataEXserie[[i]] =
-                            dplyr::bind_rows(dataEXserie[[i]],
-                                             dataEXserie_tmp[[i]])
-                    }
+                    print("d")
+                    dataEXind[[varREL]] =
+                        (dataEXind[[paste0(varREL, "_sim")]] -
+                         dataEXind[[paste0(varREL, "_obs")]]) /
+                        dataEXind[[paste0(varREL, "_obs")]]
+                }
+                print("")
+                
+                dataEXind = dplyr::relocate(dataEXind,
+                                            !!varREL,
+                                            .after=!!paste0(varREL, "_sim"))
+            }
+        }
+    }
+
+
+    if (any(grepl("serie", analyse_data))) {
+
+        metaEXserie = read_tibble(filedir=tmpdir,
+                                  filename="metaEXserie.fst")
+        
+        if (exists("dataEXserie")) {
+            rm (dataEXserie)
+        }
+        for (subset in 1:Subsets) {
+            dataEXserie_tmp = read_tibble(
+                filedir=tmpdir,
+                filename=paste0("dataEXserie_",
+                                subset,
+                                ".fst"))
+            if (!exists("dataEXserie")) {
+                dataEXserie = dataEXserie_tmp
+            } else {
+                for (i in 1:length(dataEXserie)) {
+                    dataEXserie[[i]] =
+                        dplyr::bind_rows(dataEXserie[[i]],
+                                         dataEXserie_tmp[[i]])
                 }
             }
-            rm (dataEXserie_tmp)
-            
-            for (i in 1:length(dataEXserie)) {
-                dataEXserie[[i]] = dataEXserie[[i]][order(dataEXserie[[i]]$Model),]
-            }
         }
+        rm (dataEXserie_tmp)
         
-    }
-
-    if ('save_analyse' %in% to_do) {
-
-        print(paste0("Save extracted data and metadata in ",
-                     paste0(saving_format, collapse=", ")))
-        
-        if ("fst" %in% saving_format) {
-            write_tibble(meta,
-                         filedir=today_resdir,
-                         filename=paste0("meta.fst"))
-            if (any(grepl("indicator", analyse_data))) {
-                write_tibble(metaEXind,
-                             filedir=today_resdir,
-                             filename=paste0("metaEXind.fst"))
-                write_tibble(dataEXind,
-                             filedir=today_resdir,
-                             filename=paste0("dataEXind.fst"))
-            }
-            if (any(grepl("serie", analyse_data))) {
-                write_tibble(metaEXserie,
-                             filedir=today_resdir,
-                             filename=paste0("metaEXserie.fst"))
-                write_tibble(dataEXserie,
-                             filedir=today_resdir,
-                             filename=paste0("dataEXserie.fst"))
-            }
+        for (i in 1:length(dataEXserie)) {
+            dataEXserie[[i]] = dataEXserie[[i]][order(dataEXserie[[i]]$Model),]
         }
-        if ("Rdata" %in% saving_format) {
-            write_tibble(meta,
+    }
+    
+}
+
+if (do == 'save_analyse') {
+
+    print(paste0("Save extracted data and metadata in ",
+                 paste0(saving_format, collapse=", ")))
+    
+    if ("fst" %in% saving_format) {
+        write_tibble(meta,
+                     filedir=today_resdir,
+                     filename=paste0("meta.fst"))
+        if (any(grepl("indicator", analyse_data))) {
+            write_tibble(metaEXind,
                          filedir=today_resdir,
-                         filename=paste0("meta.Rdata"))
-            if (any(grepl("indicator", analyse_data))) {
-                write_tibble(metaEXind,
-                             filedir=today_resdir,
-                             filename=paste0("metaEXind.Rdata"))
-                write_tibble(dataEXind,
-                             filedir=today_resdir,
-                             filename=paste0("dataEXind.Rdata"))
-            }
-            if (any(grepl("serie", analyse_data))) {
-                write_tibble(metaEXserie,
-                             filedir=today_resdir,
-                             filename=paste0("metaEXserie.Rdata"))
-                write_tibble(dataEXserie,
-                             filedir=today_resdir,
-                             filename=paste0("dataEXserie.Rdata"))
-            }
-        }    
-        if ("txt" %in% saving_format) {
-            write_tibble(meta,
+                         filename=paste0("metaEXind.fst"))
+            write_tibble(dataEXind,
                          filedir=today_resdir,
-                         filename=paste0("meta.txt"))
-            if (any(grepl("indicator", analyse_data))) {
-                write_tibble(metaEXind,
-                             filedir=today_resdir,
-                             filename=paste0("metaEXind.txt"))
-                write_tibble(dataEXind,
-                             filedir=today_resdir,
-                             filename=paste0("dataEXind.txt"))
-            }
-            if (any(grepl("serie", analyse_data))) {
-                write_tibble(metaEXserie,
-                             filedir=today_resdir,
-                             filename=paste0("metaEXserie.txt"))
-                write_tibble(dataEXserie,
-                             filedir=today_resdir,
-                             filename=paste0("dataEXserie.txt"))
-            }
-        }  
+                         filename=paste0("dataEXind.fst"))
+        }
+        if (any(grepl("serie", analyse_data))) {
+            write_tibble(metaEXserie,
+                         filedir=today_resdir,
+                         filename=paste0("metaEXserie.fst"))
+            write_tibble(dataEXserie,
+                         filedir=today_resdir,
+                         filename=paste0("dataEXserie.fst"))
+        }
     }
+    if ("Rdata" %in% saving_format) {
+        write_tibble(meta,
+                     filedir=today_resdir,
+                     filename=paste0("meta.Rdata"))
+        if (any(grepl("indicator", analyse_data))) {
+            write_tibble(metaEXind,
+                         filedir=today_resdir,
+                         filename=paste0("metaEXind.Rdata"))
+            write_tibble(dataEXind,
+                         filedir=today_resdir,
+                         filename=paste0("dataEXind.Rdata"))
+        }
+        if (any(grepl("serie", analyse_data))) {
+            write_tibble(metaEXserie,
+                         filedir=today_resdir,
+                         filename=paste0("metaEXserie.Rdata"))
+            write_tibble(dataEXserie,
+                         filedir=today_resdir,
+                         filename=paste0("dataEXserie.Rdata"))
+        }
+    }    
+    if ("txt" %in% saving_format) {
+        write_tibble(meta,
+                     filedir=today_resdir,
+                     filename=paste0("meta.txt"))
+        if (any(grepl("indicator", analyse_data))) {
+            write_tibble(metaEXind,
+                         filedir=today_resdir,
+                         filename=paste0("metaEXind.txt"))
+            write_tibble(dataEXind,
+                         filedir=today_resdir,
+                         filename=paste0("dataEXind.txt"))
+        }
+        if (any(grepl("serie", analyse_data))) {
+            write_tibble(metaEXserie,
+                         filedir=today_resdir,
+                         filename=paste0("metaEXserie.txt"))
+            write_tibble(dataEXserie,
+                         filedir=today_resdir,
+                         filename=paste0("dataEXserie.txt"))
+        }
+    }  
+}
 
-    if ('read_saving' %in% to_do) {
+if (do == 'read_saving') {
+    print(paste0("Reading extracted data and metadata in ",
+                 read_saving))
+    
+    Filenames = gsub("^.*[/]+", "", read_saving)
+    Filenames = gsub("[.].*$", "", Filenames)
+    nFile = length(Filenames)
+    for (i in 1:nFile) {
+        print(paste0(Filenames[i], " reads in ", read_saving[i]))
+        assign(Filenames[i], read_tibble(filepath=read_saving[i]))
+    } 
+}
 
-        print(paste0("Reading extracted data and metadata in ",
-                     read_saving))
-        
-        Filenames = gsub("^.*[/]+", "", read_saving)
-        Filenames = gsub("[.].*$", "", Filenames)
-        nFile = length(Filenames)
-        for (i in 1:nFile) {
-            print(paste0(Filenames[i], " reads in ", read_saving[i]))
-            assign(Filenames[i], read_tibble(filepath=read_saving[i]))
-        } 
-    }
+if (do == 'select_var') {
+    res = get_select(dataEXind, metaEXind, select=var_selection)
+    dataEXind = res$dataEXind
+    metaEXind = res$metaEXind
+}
 
-    if ('select_var' %in% to_do) {
-        res = get_select(dataEXind, metaEXind, select=var_selection)
-        dataEXind = res$dataEXind
-        metaEXind = res$metaEXind
-    }
+if (do == 'write_warnings') {
+    write_Warnings(dataEXind, metaEXind, lim=5,
+                   resdir=today_resdir)
+}
 
-    if ('write_warnings' %in% to_do) {
-        write_Warnings(dataEXind, metaEXind, lim=5,
-                       resdir=today_resdir)
+if (do == 'read_tmp') {
+    print(paste0("Reading tmp data in ", tmpdir))
+    Path = list.files(tmpdir, full.names=TRUE)
+    Filenames = gsub("^.*[/]+", "", Path)
+    Filenames = gsub("[.].*$", "", Filenames)
+    nFile = length(Filenames)
+    for (i in 1:nFile) {
+        print(paste0(Filenames[i], " reads in ", Path[i]))
+        assign(Filenames[i], read_tibble(filepath=Path[i]))
     }
 }
 
-if ('delete_tmp' %in% to_do) {
+if (do == 'delete_tmp') {
     if (file.exists(tmpdir)) {
         unlink(tmpdir, recursive=TRUE)
     }
-    to_do = to_do[to_do !='delete_tmp']
 }

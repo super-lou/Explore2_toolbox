@@ -23,7 +23,7 @@
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
-if ('plot_correlation_matrix' %in% to_do) {
+if (do == 'plot_correlation_matrix') {
     page_correlation_matrix(dataEXind,
                             metaEXind,
                             ModelGroup=group_of_models_to_use,
@@ -32,7 +32,7 @@ if ('plot_correlation_matrix' %in% to_do) {
                             figdir=today_figdir)
 }
 
-if ('plot_diagnostic_datasheet' %in% to_do) {
+if (do == 'plot_diagnostic_datasheet') {
 
     for (subset in 1:Subsets) {
         data = read_tibble(filedir=tmpdir,
