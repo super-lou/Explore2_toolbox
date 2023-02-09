@@ -143,9 +143,10 @@ get_select = function (dataEXind, metaEXind, select="") {
 }
 
 
-# write_Warnings(dataEXind, metaEXind, codeLight="K2981910")
-write_Warnings = function (dataEXind, metaEXind, lim=5,
-                           resdir="", codeLight=NULL) {
+# W = find_Warnings(dataEXind, metaEXind, codeLight="A4362030", save=FALSE)
+# W[grepl("hydrologique", W$warning),]
+find_Warnings = function (dataEXind, metaEXind, lim=5,
+                          resdir="", codeLight=NULL, save=FALSE) {
 
     tick_range = list(
         "^KGE"=c(0.5, 1),
@@ -204,7 +205,7 @@ write_Warnings = function (dataEXind, metaEXind, lim=5,
         "^alphaQA$"=c(
             ":accentue/accentuent: la baisse au cours du temps du débit moyen annuel.",
             ":restitue/restituent: bien l'évolution au cours du temps du débit moyen annuel.",
-              ":accentue/accentuent: la hausse au cours du temps du débit moyen annuel."),
+            ":accentue/accentuent: la hausse au cours du temps du débit moyen annuel."),
 
         "^Q90$"=c(
             ":accentue/accentuent: l'intensité des basses eaux.",
@@ -238,7 +239,7 @@ write_Warnings = function (dataEXind, metaEXind, lim=5,
         code = Code[k]
 
         dataEXind_code = dataEXind[dataEXind$Code == code,]
-    
+        
         logicalCol = names(dataEXind_code)[sapply(dataEXind_code, class) == "logical"]
         dataEXind_code = dataEXind_code[!(names(dataEXind_code) %in% logicalCol)]
         metaEXind = metaEXind[!(metaEXind$var %in% logicalCol),]
@@ -247,9 +248,9 @@ write_Warnings = function (dataEXind, metaEXind, lim=5,
         vars2keep = vars2keep[!grepl("([_]obs)|([_]sim)", vars2keep)]
 
         dataEXind_code = dplyr::mutate(dataEXind_code,
-                                  dplyr::across(where(is.logical),
-                                                as.numeric),
-                                  .keep="all")
+                                       dplyr::across(where(is.logical),
+                                                     as.numeric),
+                                       .keep="all")
 
         dataEXind_code = dplyr::select(dataEXind_code, vars2keep)
 
@@ -349,6 +350,7 @@ write_Warnings = function (dataEXind, metaEXind, lim=5,
 
         line_KGE = stat_Lines[stat_Lines$var == "KGEracine",]
         line_Biais = stat_Lines[stat_Lines$var == "Biais",]
+
         if (nrow(line_KGE) == 1 & nrow(line_Biais) == 1) {            
             if (line_KGE$niveau == 0 & line_Biais$niveau == 0) {
                 text = "<b>Tous les modèles hydrologiques</b> semblent restituer de manière acceptable le régime."
@@ -368,8 +370,6 @@ write_Warnings = function (dataEXind, metaEXind, lim=5,
                 unlist(line_Biais$model[line_Biais$niveau != 0])
             model_NOK = c(model_KGE_NOK, model_Biais_NOK)
             model_NOK = model_NOK[!duplicated(model_NOK)]
-
-            print(model_NOK)
 
             if (length(model_OK) == 1) {
                 text = paste0("Les modèles hydrologiques ont des difficultés à reproduire le régime sauf ", model_OK)
@@ -399,9 +399,12 @@ write_Warnings = function (dataEXind, metaEXind, lim=5,
                                                warning=Warnings_code))
         }
     }
-    write_tibble(Warnings,
-                 filedir=resdir,
-                 filename="Warnings.fst")
+
+    if (save) {
+        write_tibble(Warnings,
+                     filedir=resdir,
+                     filename="Warnings.fst")
+    }
     
     return (Warnings)
 }

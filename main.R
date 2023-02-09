@@ -112,9 +112,6 @@ now = format(Sys.time(), "%H_%M_%S")
 resdir = file.path(computer_work_path, 'results')
 today_resdir = file.path(computer_work_path, 'results', today)
 now_resdir = file.path(computer_work_path, 'results', today, now)
-# if (!(file.exists(now_resdir))) {
-#   dir.create(now_resdir, recursive=TRUE)
-# }
 print(paste('now_resdir :', now_resdir))
 
 ### 3.2. Figures  ____________________________________________________
@@ -178,7 +175,6 @@ samplePeriod_opti =
 # Saving format to use to save analyse data
 saving_format =
     c(
-        'fst',
         'Rdata',
         'txt'
     )
@@ -235,12 +231,12 @@ verbose =
 models_to_diag =
     list(
         "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
         # "GRSD"="GRSD_20230202.Rdata",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
     )
@@ -257,22 +253,22 @@ models_to_proj = c(
         # "SMASH"=
     )
 
-group_of_models_to_use =
-    # NULL
-    list(
-        # "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        # "ORCHIDEE",
-        "SMASH",        
-        "Multi-Model"=
-            c("EROS", "J2000", "SIM2",
-              "MORDOR-SD", "MORDOR-TS", "SMASH")
-    )
+# group_of_models_to_use =
+#     # NULL
+#     list(
+#         # "CTRIP",
+#         "EROS",
+#         "GRSD",
+#         "J2000",
+#         "SIM2",
+#         "MORDOR-SD",
+#         "MORDOR-TS",
+#         # "ORCHIDEE",
+#         "SMASH",        
+#         "Multi-Model"=
+#             c("EROS", "J2000", "SIM2",
+#               "MORDOR-SD", "MORDOR-TS", "SMASH")
+#     )
 
 Colors_of_models = c(
     "CTRIP"="#a88d72", #marron
@@ -290,9 +286,9 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K2981910_HYDRO_QJM.txt' #ref
-        'A9402110_HYDRO_QJM.txt'
+        # 'A4362030_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
         # 'WSOULOIS_HYDRO_QJM.txt',
@@ -332,6 +328,24 @@ code_filenames_to_use =
 #     'Ex2D'
 #     # 'WIP'
 
+analyse_data = c(
+    # 'WIP'
+    # 'Ex2D/1_indicator/1_all',
+    'Ex2D/1_indicator/2_selection',
+    'Ex2D/2_serie'
+)
+
+read_saving = "ALL"
+
+var2search = c(
+    'meta',
+    'dataEXind',
+    'metaEXind',
+    'dataEXserie',
+    'metaEXserie',
+    'Warnings'
+)
+
 var_selection =
     # "all"
     c("KGEracine", "Biais$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
@@ -361,32 +375,18 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp',
+        # 'delete_tmp'
         # 'create_data',
-        # 'analyse_data'=c(
-            # 'WIP'
-            # 'Ex2D/1_indicator/1_all',
-            # 'Ex2D/1_indicator/2_selection',
-            # 'Ex2D/2_serie'
-        # ),
-        # 'read_tmp'
+        # 'analyse_data',
         # 'save_analyse'
-        # 'write_warnings'
-        # 'read_saving'=c(
-            # 'ALL/dataEXind.fst',
-            # 'ALL/metaEXind.fst',
-            # 'ALL/dataEXserie.fst',
-            # 'ALL/metaEXserie.fst',
-            # 'ALL/Warnings.fst'
-            # ),
+        # 'read_tmp'
+        # 'read_saving'
         # 'select_var'
+        # 'write_warnings'
         # 'plot_correlation_matrix'
         # 'plot_diagnostic_datasheet'        
         # 'create_data_proj'
     )
-
-
-
 
 # meta = extract_meta(computer_data_path, obs_dir, list.files(file.path(computer_data_path, obs_dir)))
 
@@ -477,21 +477,19 @@ library(ggtext)
 # potentialy useless
 # library(trend)
 
-names(to_do) = gsub("analyse_data[[:digit:]]+",
-                    "analyse_data",
-                    names(to_do))
-if ("analyse_data" %in% names(to_do)) {
-    analyse_data = to_do[names(to_do) == "analyse_data"]
-    to_do[names(to_do) == "analyse_data"] = "analyse_data"
+
+if ("delete_tmp" %in% to_do) {
+    delete_tmp = TRUE
+    to_do = to_do[to_do != "delete_tmp"]
+} else {
+    delete_tmp = FALSE
 }
 
-names(to_do) = gsub("read_saving[[:digit:]]+",
-                    "read_saving",
-                    names(to_do))
-if ("read_saving" %in% names(to_do)) {
-    read_saving = to_do[names(to_do) == "read_saving"]
-    read_saving = file.path(resdir, read_saving)
-    to_do[names(to_do) == "read_saving"] = "read_saving"
+if ("read_tmp" %in% to_do) {
+    read_tmp = TRUE
+    to_do = to_do[to_do != "read_tmp"]
+} else {
+    read_tmp = FALSE
 }
 
 codes_to_diag_SHP = read_shp(file.path(computer_data_path,
@@ -514,38 +512,58 @@ if (all(code_filenames_to_use == "all")) {
 nCodeALL = length(CodeALL)
 Subsets = ceiling(nCodeALL/nCode4write)
 
-for (do in to_do) {
+if (read_tmp | delete_tmp) {
+    source('script_management.R', encoding='UTF-8')
+}
 
-    if (do %in% c('read_tmp', 'delete_tmp')) {
-        source('script_management.R', encoding='UTF-8')
-    }
-    
-    if (any(do %in% c('create_data', 'analyse_data', 'create_data_proj'))) {    
-        for (subset in 1:Subsets) {
-            print(paste0(subset, "/", Subsets,
-                         " chunks of stations in analyse so ",
-                         round(subset/Subsets*100, 1), "%"))
-            CodeSUB = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
-            CodeSUB = CodeSUB[!is.na(CodeSUB)]
-            nCodeSUB = length(CodeSUB)
+if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {    
+    for (subset in 1:Subsets) {
 
-            if (any(do %in% c('create_data', 'create_data_proj'))) {
-                source('script_create.R', encoding='UTF-8')
-            }
-            if (is.null(data)) {
-                next
-            }
-            if (do == 'analyse_data') {
-                source('script_analyse.R', encoding='UTF-8')
-            }
+        file_test = c()
+        if ('create_data' %in% to_do) {
+            file_test = c(file_test,
+                          paste0("data_", subset, ".fst"))
+        }
+        if (any(grepl("(indicator)|(WIP)", analyse_data))) {
+            file_test = c(file_test,
+                          paste0("dataEXind_", subset, ".fst"))
+        }
+        if (any(grepl("serie", analyse_data))) {
+            file_test = c(file_test,
+                          paste0("dataEXserie_", subset))
+        }
+        print(paste0(subset, "/", Subsets,
+                     " chunks of stations in analyse so ",
+                     round(subset/Subsets*100, 1), "%"))
+        
+        if (all(file_test %in% list.files(tmpdir, include.dirs=TRUE))) {
+            next
+        }
+        
+        CodeSUB = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
+        CodeSUB = CodeSUB[!is.na(CodeSUB)]
+        nCodeSUB = length(CodeSUB)
+
+        if (any(c('create_data', 'create_data_proj') %in% to_do)) {
+            source('script_create.R', encoding='UTF-8')
+        }
+        if (is.null(data)) {
+            next
+        }
+        if ('analyse_data' %in% to_do) {
+            source('script_analyse.R', encoding='UTF-8')
         }
     }
+}
 
-    if (any(do %in% c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_saving'))) {
-        source('script_management.R', encoding='UTF-8')
-    }
+if (any(c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_saving') %in% to_do)) {
+    source('script_management.R', encoding='UTF-8')
+}
 
-    if (any(do %in% c('plot_correlation_matrix', 'plot_diagnostic_datasheet'))) {
-        source('script_layout.R', encoding='UTF-8')
-    }
+if ('plot_diagnostic_datasheet' %in% to_do) {
+    source('script_layout.R', encoding='UTF-8')
+}
+
+if ('plot_correlation_matrix' %in% to_do) {
+    source('script_layout.R', encoding='UTF-8')
 }

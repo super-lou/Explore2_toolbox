@@ -21,7 +21,7 @@
 
 
 ## 1. MANAGEMENT OF DATA ______________________________________________
-if (do == 'analyse_data') {
+if ('analyse_data' %in% to_do) {
 
     if (exists("meta")) {
         rm (meta)
@@ -148,32 +148,39 @@ if (do == 'analyse_data') {
     
 }
 
-if (do == 'save_analyse') {
+if ('save_analyse' %in% to_do) {
 
     print(paste0("Save extracted data and metadata in ",
                  paste0(saving_format, collapse=", ")))
-    
-    if ("fst" %in% saving_format) {
-        write_tibble(meta,
-                     filedir=today_resdir,
-                     filename=paste0("meta.fst"))
-        if (any(grepl("indicator", analyse_data))) {
-            write_tibble(metaEXind,
-                         filedir=today_resdir,
-                         filename=paste0("metaEXind.fst"))
-            write_tibble(dataEXind,
-                         filedir=today_resdir,
-                         filename=paste0("dataEXind.fst"))
-        }
-        if (any(grepl("serie", analyse_data))) {
-            write_tibble(metaEXserie,
-                         filedir=today_resdir,
-                         filename=paste0("metaEXserie.fst"))
-            write_tibble(dataEXserie,
-                         filedir=today_resdir,
-                         filename=paste0("dataEXserie.fst"))
-        }
+
+    if (!(file.exists(today_resdir))) {
+        dir.create(today_resdir, recursive=TRUE)
     }
+    file.copy(file.path(tmpdir,
+                        paste0("data_", 1:Subsets, ".fst")),
+              file.path(today_resdir,
+                        paste0("data_", 1:Subsets, ".fst")))
+    
+    write_tibble(meta,
+                 filedir=today_resdir,
+                 filename=paste0("meta.fst"))
+    if (any(grepl("indicator", analyse_data))) {
+        write_tibble(metaEXind,
+                     filedir=today_resdir,
+                     filename=paste0("metaEXind.fst"))
+        write_tibble(dataEXind,
+                     filedir=today_resdir,
+                     filename=paste0("dataEXind.fst"))
+    }
+    if (any(grepl("serie", analyse_data))) {
+        write_tibble(metaEXserie,
+                     filedir=today_resdir,
+                     filename=paste0("metaEXserie.fst"))
+        write_tibble(dataEXserie,
+                     filedir=today_resdir,
+                     filename=paste0("dataEXserie.fst"))
+    }
+
     if ("Rdata" %in% saving_format) {
         write_tibble(meta,
                      filedir=today_resdir,
@@ -218,31 +225,39 @@ if (do == 'save_analyse') {
     }  
 }
 
-if (do == 'read_saving') {
+if ('read_saving' %in% to_do) {
     print(paste0("Reading extracted data and metadata in ",
                  read_saving))
-    
-    Filenames = gsub("^.*[/]+", "", read_saving)
+    Paths = list.files(file.path(resdir, read_saving),
+                       pattern=paste0("(",
+                                      paste0(var2search,
+                                             collapse=")|("),
+                                      ")"),
+                       include.dirs=TRUE,
+                       full.names=TRUE)
+    Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
+    Paths[!grepl("[.]", Paths)] = paste0(Paths[!grepl("[.]", Paths)], ".fst")
+    Filenames = gsub("^.*[/]+", "", Paths)
     Filenames = gsub("[.].*$", "", Filenames)
     nFile = length(Filenames)
     for (i in 1:nFile) {
-        print(paste0(Filenames[i], " reads in ", read_saving[i]))
-        assign(Filenames[i], read_tibble(filepath=read_saving[i]))
+        print(paste0(Filenames[i], " reads in ", Paths[i]))
+        assign(Filenames[i], read_tibble(filepath=Paths[i]))
     } 
 }
 
-if (do == 'select_var') {
+if ('select_var' %in% to_do) {
     res = get_select(dataEXind, metaEXind, select=var_selection)
     dataEXind = res$dataEXind
     metaEXind = res$metaEXind
 }
 
-if (do == 'write_warnings') {
-    write_Warnings(dataEXind, metaEXind, lim=5,
-                   resdir=today_resdir)
+if ('write_warnings' %in% to_do) {
+    find_Warnings(dataEXind, metaEXind, lim=5,
+                  resdir=today_resdir, save=FALSE)
 }
 
-if (do == 'read_tmp') {
+if (read_tmp) {
     print(paste0("Reading tmp data in ", tmpdir))
     Path = list.files(tmpdir, full.names=TRUE)
     Filenames = gsub("^.*[/]+", "", Path)
@@ -254,7 +269,7 @@ if (do == 'read_tmp') {
     }
 }
 
-if (do == 'delete_tmp') {
+if (delete_tmp) {
     if (file.exists(tmpdir)) {
         unlink(tmpdir, recursive=TRUE)
     }

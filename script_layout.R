@@ -20,10 +20,39 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
+
+diagnostic_datasheet = function () {
+    Paths = list.files(file.path(resdir, read_saving),
+                       pattern="^data[_].*[.]fst$",
+                       include.dirs=TRUE,
+                       full.names=TRUE)
+    for (path in Paths) {
+        data = read_tibble(filepath=path) 
+        Code_tmp = levels(factor(data$Code))
+        if (any(Code_tmp %in% CodeALL)) {
+            data = data[data$Code %in% CodeALL,]
+            page_diagnostic_datasheet(
+                data,
+                meta,
+                dataEXind,
+                metaEXind,
+                dataEXserie,
+                Colors=Colors_of_models,
+                ModelGroup=group_of_models_to_use,
+                icon_path=icon_path,
+                Warnings=Warnings,
+                logo_path=logo_path,
+                Shapefiles=Shapefiles,
+                figdir=today_figdir)
+        }
+    }
+}
+
+
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
-if (do == 'plot_correlation_matrix') {
+if ('plot_correlation_matrix' %in% to_do) {
     page_correlation_matrix(dataEXind,
                             metaEXind,
                             ModelGroup=group_of_models_to_use,
@@ -32,42 +61,18 @@ if (do == 'plot_correlation_matrix') {
                             figdir=today_figdir)
 }
 
-if (do == 'plot_diagnostic_datasheet') {
-
-    for (subset in 1:Subsets) {
-        data = read_tibble(filedir=tmpdir,
-                           filename=paste0("data_",
-                                           subset,
-                                           ".fst"))
-        meta = read_tibble(filedir=tmpdir,
-                           filename=paste0("meta_",
-                                           subset,
-                                           ".fst"))
-        
-        # Shapefile importation in order to do it only once time
-        if (!exists("Shapefiles")) {
-            Shapefiles = load_shapefile(computer_data_path, data,
-                                        fr_shpdir, fr_shpname,
-                                        bs_shpdir, bs_shpname,
-                                        sbs_shpdir, sbs_shpname,
-                                        cbs_shpdir, cbs_shpname,
-                                        cbs_coord,
-                                        rv_shpdir, rv_shpname,
-                                        river_selection=river_selection,
-                                        toleranceRel=toleranceRel)
-        }
-        
-        page_diagnostic_datasheet(data,
-                                  meta,
-                                  dataEXind,
-                                  metaEXind,
-                                  dataEXserie,
-                                  Colors=Colors_of_models,
-                                  ModelGroup=group_of_models_to_use,
-                                  icon_path=icon_path,
-                                  Warnings=Warnings,
-                                  logo_path=logo_path,
-                                  Shapefiles=Shapefiles,
-                                  figdir=today_figdir)
+if ('plot_diagnostic_datasheet' %in% to_do) {
+    # Shapefile importation in order to do it only once time
+    if (!exists("Shapefiles")) {
+        Shapefiles = load_shapefile(computer_data_path, data,
+                                    fr_shpdir, fr_shpname,
+                                    bs_shpdir, bs_shpname,
+                                    sbs_shpdir, sbs_shpname,
+                                    cbs_shpdir, cbs_shpname,
+                                    cbs_coord,
+                                    rv_shpdir, rv_shpname,
+                                    river_selection=river_selection,
+                                    toleranceRel=toleranceRel)
     }
+    diagnostic_datasheet()
 }

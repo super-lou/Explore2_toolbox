@@ -87,7 +87,7 @@ create_data = function () {
         # Time gap
         meta = get_lacune(data_obs, meta)
         # Hydrograph
-        meta = get_hydrograph(data_obs, meta,
+        meta = get_hydrograph(data_obs, meta=meta,
                               period=period_diagnostic)$meta
         
         names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
@@ -158,13 +158,13 @@ create_data = function () {
 
 
 ## 1. CREATION OF DATA 4 DIAG ________________________________________
-if (do == 'create_data') {
+if ('create_data' %in% to_do) {
     create_data()
 }
 
 
 ## 2. CREATION OF DATA 4 PROJ ________________________________________
-if (do == 'create_data_proj') {
+if ('create_data_proj' %in% to_do) {
 
     Model = c()
     data_sim = tibble()
