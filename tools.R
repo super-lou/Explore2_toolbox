@@ -23,6 +23,8 @@
 NetCDF_to_tibble = function (NetCDF_path, type="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
+
+    print(NCdata)
     
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
                    origin=
@@ -143,9 +145,7 @@ get_select = function (dataEXind, metaEXind, select="") {
 }
 
 
-# W = find_Warnings(dataEXind, metaEXind, codeLight="A4362030", save=FALSE)
-# W[grepl("hydrologique", W$warning),]
-find_Warnings = function (dataEXind, metaEXind, lim=5,
+find_Warnings = function (dataEXind, metaEXind,
                           resdir="", codeLight=NULL, save=FALSE) {
 
     tick_range = list(
@@ -155,7 +155,7 @@ find_Warnings = function (dataEXind, metaEXind, lim=5,
 
     all_model = "<b>L'ensemble des modèles</b>"
     
-    tick_text = list(
+    tick_line = list(
         
         "^KGE"=c(
             ":reproduit/reproduisent: mal les observations.",
@@ -163,60 +163,64 @@ find_Warnings = function (dataEXind, metaEXind, lim=5,
             ":reproduit/reproduisent: mal les observations."),
         
         "^Biais$"=c(
-            ":a/ont: un biais positif important.",
+            ":a/ont: un biais négatif important.",
             ":a/ont: un biais acceptable.",
-            ":a/ont: un biais négatif important."),
-        
-        "^epsilon.*P.*DJF"=c(
-            ":n'est/ne sont: pas assez sensible aux variations de précipitations hivernales.",
-            ":a/ont: une bonne sensibilité aux variations de précipitations hivernales.",
-            ":est/sont: trop sensible aux variations de précipitations hivernales."),
-
-        "^epsilon.*P.*JJA"=c(
-            ":n'est/ne sont: pas assez sensible aux variations de précipitations estivales.",
-            ":a/ont: une bonne sensibilité aux variations de précipitations estivales.",
-            ":est/sont: trop sensible aux variations de précipitations estivales."),
+            ":a/ont: un biais positif important."),
 
         "^epsilon.*T.*DJF"=c(
             ":n'est/ne sont: pas assez sensible aux variations de température en hiver.",
-            ":a/ont: une bonne sensibilité aux variations de température en hiver.",
+            ":a/ont: une sensibilité acceptable aux variations de température en hiver.",
             ":est/sont: trop sensible aux variations de température en hiver."),
 
         "^epsilon.*T.*JJA"=c(
             ":n'est/ne sont: pas assez sensible aux variations de température en été.",
-            ":a/ont: une bonne sensibilité aux variations de température en été.",
+            ":a/ont: une sensibilité acceptable aux variations de température en été.",
             ":est/sont: trop sensible aux variations de température en été."),
 
+        "^epsilon.*P.*DJF"=c(
+            ":n'est/ne sont: pas assez sensible aux variations de précipitations hivernales.",
+            ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales.",
+            ":est/sont: trop sensible aux variations de précipitations hivernales."),
+
+        "^epsilon.*P.*JJA"=c(
+            ":n'est/ne sont: pas assez sensible aux variations de précipitations estivales.",
+            ":a/ont: une sensibilité acceptable aux variations de précipitations estivales.",
+            ":est/sont: trop sensible aux variations de précipitations estivales."),
+
         "^Q10$"=c(
-            ":atténue/atténuent: l'intensité des hautes eaux.",
-            ":restitue/restituent: bien l'intensité des hautes eaux.",
-            ":accentue/accentuent: l'intensité des hautes eaux."),
+            ":sous-estime/sous-estiment: les débits en hautes eaux.",
+            ":simule/simulent: de manière correcte les débits en hautes eaux.",
+            ":surestime/surestiment: les débits en hautes eaux."),
 
         "tQJXA"=c(
             ":produit/produisent: des crues trop tôt dans l'année.",
-            ":restitue/restituent: bien la temporalité annuelle des crues.",
+            ":simule/simulent: de manière correcte la temporalité annuelle des crues.",
             ":produit/produisent: des crues trop tard dans l'année."),
 
         "^alphaCDC$"=c(
-            ":atténue/atténuent: le régime des moyennes eaux.",
-            ":restitue/restituent: bien le régime des moyennes eaux.",
-            ":accentue/accentuent: le régime des moyennes eaux."),
+            ":simule/simulent: un régime des moyennes eaux pas suffisamment contrasté.",
+            ":simule/simulent: de manière correcte le régime des moyennes eaux.",
+            ":simule/simulent: un régime des moyennes eaux trop contrasté."),
 
         "^alphaQA$"=c(
-            ":accentue/accentuent: la baisse au cours du temps du débit moyen annuel.",
-            ":restitue/restituent: bien l'évolution au cours du temps du débit moyen annuel.",
-            ":accentue/accentuent: la hausse au cours du temps du débit moyen annuel."),
+            ":s'écarte/s'écartent: sensiblement de la tendance observée sur les débits moyens annuels.",
+            ":simule/simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel.",
+            ":s'écarte/s'écartent: sensiblement de la tendance observée sur les débits moyens annuels."),
 
         "^Q90$"=c(
-            ":accentue/accentuent: l'intensité des basses eaux.",
-            ":restitue/restituent: bien l'intensité des basses eaux.",
-            ":atténue/atténuent: l'intensité des basses eaux."),
+            ":sous-estime/sous-estiment: les débits en étiage.",
+            ":simule/simulent: de manière correcte les débits d'étiage.",
+            ":surestime/surestiment: les débits en étiage."),
 
         "tVCN10"=c(
             ":produit/produisent: des étiages trop tôt dans l'année.",
-            ":restitue/restituent: bien la temporalité annuelle des étiages.",
+            ":simule/simulent: de manière correcte temporalité annuelle des étiages.",
             ":produit/produisent: des étiages trop tard dans l'année."))
 
+    line_allOK = "<b>Tous les modèles hydrologiques</b> semblent simuler de manière acceptable le régime."
+    line_OK = "Les modèles hydrologiques semblent simuler de manière acceptable le régime sauf "
+    line_NOK = "Les modèles hydrologiques ont des difficultés à reproduire le régime sauf "
+    line_allNOK = "<b>Aucun modèle hydrologique</b> ne semble simuler de manière acceptable le régime."
 
     if (is.null(codeLight)) {
         Code = levels(factor(dataEXind$Code))  
@@ -229,6 +233,7 @@ find_Warnings = function (dataEXind, metaEXind, lim=5,
     nModel = length(Model)
     
     Warnings = dplyr::tibble()
+    allLines = dplyr::tibble()
     
     for (k in 1:nCode) {
 
@@ -276,7 +281,7 @@ find_Warnings = function (dataEXind, metaEXind, lim=5,
 
             range = unlist(tick_range[sapply(names(tick_range), grepl, var)],
                            use.names=FALSE)
-            text = tick_text[sapply(names(tick_text), grepl, var)][[1]]
+            lines = tick_line[sapply(names(tick_line), grepl, var)][[1]]
 
             for (j in 1:nModel) {
                 model = Model[j]
@@ -294,87 +299,98 @@ find_Warnings = function (dataEXind, metaEXind, lim=5,
                     Lines = dplyr::tibble(var=var,
                                           model=model,
                                           niveau=niveau,
-                                          text=text[id])
+                                          line=lines[id])
                 } else {
                     Lines =
                         dplyr::bind_rows(Lines,
                                          dplyr::tibble(var=var,
                                                        model=model,
                                                        niveau=niveau,
-                                                       text=text[id]))
+                                                       line=lines[id]))
                 }
             }
         }
-        stat_Lines =
+
+        allLines = dplyr::bind_rows(allLines,
+                                    dplyr::select(Lines, c(var,
+                                                           niveau,
+                                                           line)))
+            
+        statLines =
             dplyr::summarise(
                        dplyr::group_by(Lines, var, niveau),
                        n=dplyr::n(),
                        model=list(model[niveau==dplyr::cur_group()$niveau]),
-                       text=text[1],
+                       line=line[1],
                        .groups="drop")
 
-        for (i in 1:nrow(stat_Lines)) {
+        for (i in 1:nrow(statLines)) {
 
-            line = stat_Lines[i,]
+            Line = statLines[i,]
             
-            if (line$n == nModel) {
-                line$text =
+            if (Line$n == nModel) {
+                Line$line =
                     paste0(all_model, " ",
                            gsub("([:].*[/])|([:])",
                                 "",
-                                line$text))
+                                Line$line))
             } else {
                 model = paste0("<b>",
-                               unlist(line$model),
+                               unlist(Line$model),
                                "</b>")
-                if (line$n == 1) {
-                    line$text =
+                if (Line$n == 1) {
+                    Line$line =
                         paste0(model, " ",
                                gsub("([/].*[:])|([:])",
                                     "",
-                                    line$text))
+                                    Line$line))
                 } else {
                     model = paste0(
                         paste0(model[-length(model)],
                                collapse=", "),
                         " et ", model[length(model)])
-                    line$text =
+                    Line$line =
                         paste0(model, " ",
                                gsub("([:].*[/])|([:])",
                                     "",
-                                    line$text))
+                                    Line$line))
                 }
             }
-            stat_Lines[i,] = line
+            statLines[i,] = Line
         }
 
-        line_KGE = stat_Lines[stat_Lines$var == "KGEracine",]
-        line_Biais = stat_Lines[stat_Lines$var == "Biais",]
-
-        if (nrow(line_KGE) == 1 & nrow(line_Biais) == 1) {            
-            if (line_KGE$niveau == 0 & line_Biais$niveau == 0) {
-                text = "<b>Tous les modèles hydrologiques</b> semblent restituer de manière acceptable le régime."
+        Line_KGE = statLines[statLines$var == "KGEracine",]
+        Line_Biais = statLines[statLines$var == "Biais",]
+        
+        none = FALSE
+        if (nrow(Line_KGE) == 1 & nrow(Line_Biais) == 1) {            
+            if (Line_KGE$niveau == 0 & Line_Biais$niveau == 0) {
+                line = line_allOK
+                niveau = 1
+                line_model = line_allOK
             } else {
-                text = "<b>Aucun modèle hydrologique</b> ne semble restituer de manière acceptable le régime."
+                none = TRUE
+                line = line_allNOK
+                niveau = -1
+                line_model = line_allNOK
             }
 
         } else {            
-            model_KGE_OK = unlist(line_KGE$model[line_KGE$niveau == 0])
+            model_KGE_OK = unlist(Line_KGE$model[Line_KGE$niveau == 0])
             model_Biais_OK =
-                unlist(line_Biais$model[line_Biais$niveau == 0])
+                unlist(Line_Biais$model[Line_Biais$niveau == 0])
             model_OK = c(model_KGE_OK, model_Biais_OK)
             model_OK = model_OK[duplicated(model_OK)]
 
-            model_KGE_NOK = unlist(line_KGE$model[line_KGE$niveau != 0])
+            model_KGE_NOK = unlist(Line_KGE$model[Line_KGE$niveau != 0])
             model_Biais_NOK =
-                unlist(line_Biais$model[line_Biais$niveau != 0])
+                unlist(Line_Biais$model[Line_Biais$niveau != 0])
             model_NOK = c(model_KGE_NOK, model_Biais_NOK)
             model_NOK = model_NOK[!duplicated(model_NOK)]
 
-            if (length(model_OK) == 1) {
-                text = paste0("Les modèles hydrologiques ont des difficultés à reproduire le régime sauf ", model_OK)
-
-            } else {
+            if (length(model_OK) >= nModel/2) {
+                line = line_OK
+                niveau = 0.5
                 if (length(model_NOK) == 1) {
                     model = model_NOK
                 } else {
@@ -383,12 +399,29 @@ find_Warnings = function (dataEXind, metaEXind, lim=5,
                                collapse=", "),
                         " et ", model_NOK[length(model_NOK)])
                 }
-                text = paste0("Les modèles hydrologiques semblent restituer de manière acceptable le régime sauf ", model)
+                
+            } else {
+                line = line_NOK
+                niveau = -0.5
+                if (length(model_OK) == 1) {
+                    model = model_OK
+                } else {
+                    model = paste0(
+                        paste0(model_OK[-length(model_OK)],
+                               collapse=", "),
+                        " et ", model_OK[length(model_OK)])
+                }
             }
+            line_model = paste0(line, model)
         }
-        Warnings_code = stat_Lines$text[stat_Lines$niveau != 0]
-        Warnings_code = c(text, Warnings_code)
 
+        if (none) {
+            Warnings_code = line_model
+        } else {
+            Warnings_code = statLines$line[statLines$niveau != 0]
+            Warnings_code = c(line_model, Warnings_code)
+        }
+        
         if (nrow(Warnings) == 0) {
             Warnings = dplyr::tibble(Code=code,
                                      warning=Warnings_code)
@@ -398,13 +431,42 @@ find_Warnings = function (dataEXind, metaEXind, lim=5,
                                  dplyr::tibble(Code=code,
                                                warning=Warnings_code))
         }
+        allLines = dplyr::bind_rows(allLines,
+                                    dplyr::tibble(var="Général",
+                                                  niveau=niveau,
+                                                  line=line))
     }
+    
+    frq = dplyr::summarise(dplyr::group_by(allLines,
+                                           line),
+                           var=var[1],
+                           niveau=niveau[1],
+                           n=dplyr::n(),
+                           .groups="drop")
+    frq = dplyr::summarise(dplyr::group_by(frq,
+                                           var),
+                           n=n,
+                           Npv=sum(n),
+                           niveau=niveau,
+                           line=line,
+                           .groups="drop")
+    frq$npv_pct = frq$n/frq$Npv*100
 
     if (save) {
         write_tibble(Warnings,
                      filedir=resdir,
                      filename="Warnings.fst")
     }
-    
-    return (Warnings)
+    res = list(Warnings=Warnings, frq=frq)
+    return (res)
 }
+
+# W = find_Warnings(dataEXind, metaEXind,
+#                   # codeLight="A4362030",
+#                   save=FALSE)
+# Warnings = W$Warnings
+# frq = W$frq
+# frq_short=select(frq, c(var, niveau, npv_pct))
+# frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
+# frq_short$npv_pct = round(frq_short$npv_pct)
+# W[grepl("hydrologique", W$warning),]

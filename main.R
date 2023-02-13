@@ -286,8 +286,8 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910_HYDRO_QJM.txt' #ref
+        # 'all'
+        'K2981910_HYDRO_QJM.txt' #ref
         # 'A4362030_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -376,15 +376,15 @@ var_selection =
 to_do =
     c(
         # 'delete_tmp'
-        # 'create_data',
+        # 'create_data'
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving'
+        # 'read_saving',
         # 'select_var'
         # 'write_warnings'
         # 'plot_correlation_matrix'
-        # 'plot_diagnostic_datasheet'        
+        'plot_diagnostic_datasheet'        
         # 'create_data_proj'
     )
 

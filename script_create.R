@@ -137,9 +137,16 @@ create_data = function () {
                 }
             }
         }
-
+        
         if (propagate_NA) {
-            data$Q_sim[is.na(data$Q_obs)] = NA
+            NA_propagation = function (X, Ref) {
+                X[is.na(Ref)] = NA
+                return (X)
+            }
+            data = dplyr::mutate(data,
+                                 dplyr::across(where(is.numeric),
+                                               NA_propagation,
+                                               Ref=Q_obs))
         }
         
         data = dplyr::relocate(data, Q_obs, .before=Q_sim)

@@ -29,6 +29,7 @@ diagnostic_datasheet = function () {
     for (path in Paths) {
         data = read_tibble(filepath=path) 
         Code_tmp = levels(factor(data$Code))
+        
         if (any(Code_tmp %in% CodeALL)) {
             data = data[data$Code %in% CodeALL,]
             page_diagnostic_datasheet(
@@ -64,7 +65,7 @@ if ('plot_correlation_matrix' %in% to_do) {
 if ('plot_diagnostic_datasheet' %in% to_do) {
     # Shapefile importation in order to do it only once time
     if (!exists("Shapefiles")) {
-        Shapefiles = load_shapefile(computer_data_path, data,
+        Shapefiles = load_shapefile(computer_data_path, CodeALL,
                                     fr_shpdir, fr_shpname,
                                     bs_shpdir, bs_shpname,
                                     sbs_shpdir, sbs_shpname,

@@ -75,17 +75,13 @@ if ('analyse_data' %in% to_do) {
             
             for (i in 1:nVarsREL) {
                 varREL = VarsREL[i]
-
-                print(varREL)
                 
                 if (grepl("^HYP.*", varREL)) {
-                    print("a")
                     dataEXind[[varREL]] =
                         dataEXind[[paste0(varREL, "_sim")]] &
                         dataEXind[[paste0(varREL, "_obs")]]
 
                 } else if (grepl("(^t)|([{]t)", varREL)) {
-                    print("b")
                     dataEXind[[varREL]] =
                         circular_minus(
                             dataEXind[[paste0(varREL, "_sim")]],
@@ -93,20 +89,16 @@ if ('analyse_data' %in% to_do) {
                             period=365.25)/30.4375
 
                 } else if (grepl("(Rc)|(^epsilon)|(^alpha)", varREL)) {
-                    print("c")
                     dataEXind[[varREL]] =
                         dataEXind[[paste0(varREL, "_sim")]] /
                         dataEXind[[paste0(varREL, "_obs")]]
                     
                 } else {
-                    print("d")
                     dataEXind[[varREL]] =
                         (dataEXind[[paste0(varREL, "_sim")]] -
                          dataEXind[[paste0(varREL, "_obs")]]) /
                         dataEXind[[paste0(varREL, "_obs")]]
                 }
-                print("")
-                
                 dataEXind = dplyr::relocate(dataEXind,
                                             !!varREL,
                                             .after=!!paste0(varREL, "_sim"))
@@ -253,8 +245,8 @@ if ('select_var' %in% to_do) {
 }
 
 if ('write_warnings' %in% to_do) {
-    find_Warnings(dataEXind, metaEXind, lim=5,
-                  resdir=today_resdir, save=FALSE)
+    Warnings = find_Warnings(dataEXind, metaEXind,
+                             resdir=today_resdir, save=TRUE)
 }
 
 if (read_tmp) {
