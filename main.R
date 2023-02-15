@@ -56,7 +56,7 @@ obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
 obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Explore2/diagnostic"
 proj_dir = "Explore2/projection"
-codes_to_diag_SHPdir = "Explore2/reseauReferenceHYDRO"
+codes_to_diag_shp_dir = "Explore2/reseauReferenceHYDRO"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
@@ -86,21 +86,21 @@ icon_dir = 'icon'
 #### 2.3.3. Shapefile ________________________________________________
 shp_dir = 'map'
 # Path to the shapefile for france contour from 'computer_data_path' 
-fr_shpdir = file.path(shp_dir, 'france')
-fr_shpname = 'gadm36_FRA_0.shp'
+france_dir = file.path(shp_dir, 'france')
+france_file = 'gadm36_FRA_0.shp'
 # Path to the shapefile for basin shape from 'computer_data_path' 
-bs_shpdir = file.path(shp_dir, 'bassin')
-bs_shpname = 'BassinHydrographique.shp'
+bassinHydro_dir = file.path(shp_dir, 'bassinHydro')
+bassinHydro_file = 'bassinHydro.shp'
 # Path to the shapefile for sub-basin shape from 'computer_data_path' 
-sbs_shpdir = file.path(shp_dir, 'sous_bassin')
-sbs_shpname = 'SousBassinHydrographique.shp'
+regionHydro_dir = file.path(shp_dir, 'regionHydro')
+regionHydro_file = 'regionHydro.shp'
 # Path to the shapefile for station basins shape from 'computer_data_path' 
-cbs_shpdir = file.path(shp_dir, 'bassin_station')
-cbs_shpname = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
-cbs_coord = c('L93', 'L2')
+entiteHydro_dir = file.path(shp_dir, 'entiteHydro')
+entiteHydro_file = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
+entiteHydro_coord = c('L93', 'L2')
 # Path to the shapefile for river shape from 'computer_data_path' 
-rv_shpdir = file.path('map', 'river')
-rv_shpname = 'CoursEau_FXX.shp'
+river_dir = file.path('map', 'river')
+river_file = 'CoursEau_FXX.shp'
 
 
 ## 3. OUTPUT DIRECTORIES _____________________________________________
@@ -384,11 +384,15 @@ to_do =
         # 'select_var'
         # 'write_warnings'
         # 'plot_correlation_matrix'
-        'plot_diagnostic_datasheet'        
+        # 'plot_sheet_diagnostic_station'
+        'plot_sheet_diagnostic_region'
+
         # 'create_data_proj'
     )
 
 # meta = extract_meta(computer_data_path, obs_dir, list.files(file.path(computer_data_path, obs_dir)))
+
+
 
 
 
@@ -431,18 +435,18 @@ if (file.exists(dev_path)) {
     library(ASHE)
 }
 
-# Import dataSheep
+# Import dataSHEEP
 dev_path = file.path(dirname(dirname(computer_work_path)),
-                     'dataSheep_project', 'dataSheep', 'R')
+                     'dataSHEEP_project', 'dataSHEEP',
+                     "__SHEEP__")
+                     # 'Ex2D')
 if (file.exists(dev_path)) {
-    print('Loading dataSheep from local directory')
-    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+    print('Loading dataSHEEP')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
+                           recursive=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
-} else {
-    print('Loading dataSheep from package')
-    library(dataSheep)
 }
 
 # Import other library
@@ -492,9 +496,9 @@ if ("read_tmp" %in% to_do) {
     read_tmp = FALSE
 }
 
-codes_to_diag_SHP = read_shp(file.path(computer_data_path,
-                                       codes_to_diag_SHPdir))
-codes_to_diag = as.character(codes_to_diag_SHP$Code)
+codes_to_diag_shp = read_shp(file.path(computer_data_path,
+                                       codes_to_diag_shp_dir))
+codes_to_diag = as.character(codes_to_diag_shp$Code)
 if (all(code_filenames_to_use == "")) {
     stop ("No station selected")
 }
@@ -560,7 +564,11 @@ if (any(c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_
     source('script_management.R', encoding='UTF-8')
 }
 
-if ('plot_diagnostic_datasheet' %in% to_do) {
+if ('plot_sheet_diagnostic_station' %in% to_do) {
+    source('script_layout.R', encoding='UTF-8')
+}
+
+if ('plot_sheet_diagnostic_region' %in% to_do) {
     source('script_layout.R', encoding='UTF-8')
 }
 

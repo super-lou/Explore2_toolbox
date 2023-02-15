@@ -21,7 +21,7 @@
 
 
 
-diagnostic_datasheet = function () {
+plot_sheet_diagnostic_station = function () {
     Paths = list.files(file.path(resdir, read_saving),
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
@@ -32,7 +32,7 @@ diagnostic_datasheet = function () {
         
         if (any(Code_tmp %in% CodeALL)) {
             data = data[data$Code %in% CodeALL,]
-            page_diagnostic_datasheet(
+            sheet_diagnostic_station(
                 data,
                 meta,
                 dataEXind,
@@ -49,31 +49,52 @@ diagnostic_datasheet = function () {
     }
 }
 
-
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
 if ('plot_correlation_matrix' %in% to_do) {
-    page_correlation_matrix(dataEXind,
-                            metaEXind,
-                            ModelGroup=group_of_models_to_use,
-                            icon_path=icon_path,
-                            logo_path=logo_path,
-                            figdir=today_figdir)
+    sheet_correlation_matrix(dataEXind,
+                             metaEXind,
+                             ModelGroup=group_of_models_to_use,
+                             icon_path=icon_path,
+                             logo_path=logo_path,
+                             figdir=today_figdir)
 }
 
-if ('plot_diagnostic_datasheet' %in% to_do) {
-    # Shapefile importation in order to do it only once time
+if ('plot_sheet_diagnostic_station' %in% to_do) {
     if (!exists("Shapefiles")) {
-        Shapefiles = load_shapefile(computer_data_path, CodeALL,
-                                    fr_shpdir, fr_shpname,
-                                    bs_shpdir, bs_shpname,
-                                    sbs_shpdir, sbs_shpname,
-                                    cbs_shpdir, cbs_shpname,
-                                    cbs_coord,
-                                    rv_shpdir, rv_shpname,
-                                    river_selection=river_selection,
-                                    toleranceRel=toleranceRel)
+        Shapefiles = load_shapefile(
+            computer_data_path, CodeALL,
+            france_dir, france_file,
+            bassinHydro_dir, bassinHydro_file,
+            regionHydro_dir, regionHydro_file,
+            entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
+            river_dir, river_file, river_selection=river_selection,
+            toleranceRel=toleranceRel)
     }
-    diagnostic_datasheet()
+    plot_sheet_diagnostic_station()
+}
+
+if ('plot_sheet_diagnostic_region' %in% to_do) {
+    if (!exists("Shapefiles")) {
+        Shapefiles = load_shapefile(
+            computer_data_path, CodeALL,
+            france_dir, france_file,
+            bassinHydro_dir, bassinHydro_file,
+            regionHydro_dir, regionHydro_file,
+            entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
+            river_dir, river_file, river_selection=river_selection,
+            toleranceRel=toleranceRel)
+    }
+    sheet_diagnostic_region(meta,
+                            dataEXind,
+                            metaEXind,
+                            dataEXserie,
+                            Colors=Colors_of_models,
+                            ModelGroup=group_of_models_to_use,
+                            icon_path=icon_path,
+                            Warnings=Warnings,
+                            logo_path=logo_path,
+                            Shapefiles=Shapefiles,
+                            figdir=today_figdir)
 }
