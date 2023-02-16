@@ -286,8 +286,8 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910_HYDRO_QJM.txt' #ref
+        'all'
+        # 'K2981910_HYDRO_QJM.txt' #ref
         # 'A4362030_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -385,7 +385,8 @@ to_do =
         # 'write_warnings'
         # 'plot_correlation_matrix'
         # 'plot_sheet_diagnostic_station'
-        'plot_sheet_diagnostic_region'
+        # 'plot_sheet_diagnostic_region'
+        'plot_sheet_diagnostic_regime'
 
         # 'create_data_proj'
     )
@@ -393,8 +394,9 @@ to_do =
 # meta = extract_meta(computer_data_path, obs_dir, list.files(file.path(computer_data_path, obs_dir)))
 
 
-
-
+# regionHydro_path = file.path(computer_data_path, regionHydro_dir, regionHydro_file)
+# regionHydro = st_read(regionHydro_path)
+# regionHydro[regionHydro$CdRegionHy == "K",]
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
@@ -569,6 +571,10 @@ if ('plot_sheet_diagnostic_station' %in% to_do) {
 }
 
 if ('plot_sheet_diagnostic_region' %in% to_do) {
+    source('script_layout.R', encoding='UTF-8')
+}
+
+if ('plot_sheet_diagnostic_regime' %in% to_do) {
     source('script_layout.R', encoding='UTF-8')
 }
 

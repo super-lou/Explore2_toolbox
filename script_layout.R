@@ -61,7 +61,7 @@ if ('plot_correlation_matrix' %in% to_do) {
                              figdir=today_figdir)
 }
 
-if ('plot_sheet_diagnostic_station' %in% to_do) {
+if ('plot_sheet_diagnostic_station' %in% to_do | 'plot_sheet_diagnostic_region' %in% to_do | 'plot_sheet_diagnostic_regime' %in% to_do) {
     if (!exists("Shapefiles")) {
         Shapefiles = load_shapefile(
             computer_data_path, CodeALL,
@@ -72,29 +72,37 @@ if ('plot_sheet_diagnostic_station' %in% to_do) {
             river_dir, river_file, river_selection=river_selection,
             toleranceRel=toleranceRel)
     }
-    plot_sheet_diagnostic_station()
-}
 
-if ('plot_sheet_diagnostic_region' %in% to_do) {
-    if (!exists("Shapefiles")) {
-        Shapefiles = load_shapefile(
-            computer_data_path, CodeALL,
-            france_dir, france_file,
-            bassinHydro_dir, bassinHydro_file,
-            regionHydro_dir, regionHydro_file,
-            entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
-            river_dir, river_file, river_selection=river_selection,
-            toleranceRel=toleranceRel)
+    if ('plot_sheet_diagnostic_station') {
+        plot_sheet_diagnostic_station()
     }
-    sheet_diagnostic_region(meta,
-                            dataEXind,
-                            metaEXind,
-                            dataEXserie,
-                            Colors=Colors_of_models,
-                            ModelGroup=group_of_models_to_use,
-                            icon_path=icon_path,
-                            Warnings=Warnings,
-                            logo_path=logo_path,
-                            Shapefiles=Shapefiles,
-                            figdir=today_figdir)
+
+    if ('plot_sheet_diagnostic_region') {
+        sheet_diagnostic_region(meta,
+                                dataEXind,
+                                metaEXind,
+                                dataEXserie,
+                                Colors=Colors_of_models,
+                                ModelGroup=group_of_models_to_use,
+                                icon_path=icon_path,
+                                Warnings=Warnings,
+                                logo_path=logo_path,
+                                Shapefiles=Shapefiles,
+                                figdir=today_figdir)
+    }
+    
+    if ('plot_sheet_diagnostic_regime' %in% to_do) {
+        sheet_diagnostic_regime(meta,
+                                dataEXind,
+                                metaEXind,
+                                dataEXserie,
+                                group=group,
+                                Colors=Colors_of_models,
+                                ModelGroup=group_of_models_to_use,
+                                icon_path=icon_path,
+                                Warnings=Warnings,
+                                logo_path=logo_path,
+                                Shapefiles=Shapefiles,
+                                figdir=today_figdir)
+    }
 }
