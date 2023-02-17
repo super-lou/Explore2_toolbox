@@ -124,10 +124,7 @@ now_figdir = file.path(computer_work_path, 'figures', today, now)
 print(paste('now_figdir :', now_figdir))
 
 ### 3.3. Tmp  ________________________________________________________
-tmpdir = file.path(computer_work_path, "tmp")
-if (!(file.exists(tmpdir))) {
-    dir.create(tmpdir, recursive=TRUE)
-}
+tmpdir = "tmp"
 
 
 #  ___                               _                 
@@ -162,14 +159,14 @@ period_diagnostic = c('1976-01-01', '2019-12-31')
 #   the beginning of the hydrological year.
 # - A vector of two months and day to select a beginning and an end of
 #   the hydrological year.
-samplePeriod_opti =
-    # NULL
-    list(
-        'Hautes Eaux' = 'min',
-        'Écoulement Lents' = '09-01',
-        'Moyennes Eaux' = 'min',
-        'Basses Eaux' = c('05-01', '11-30')
-    )
+# samplePeriod_opti =
+#     # NULL
+#     list(
+#         'Hautes Eaux' = 'min',
+#         'Écoulement Lents' = '09-01',
+#         'Moyennes Eaux' = 'min',
+#         'Basses Eaux' = c('05-01', '11-30')
+#     )
 
 ### 1.3. Saving ______________________________________________________
 # Saving format to use to save analyse data
@@ -222,21 +219,21 @@ propagate_NA = TRUE
 nCode4write = 25
 
 verbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     list(
-        "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
         # "GRSD"="GRSD_20230202.Rdata",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
     )
@@ -286,8 +283,8 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910_HYDRO_QJM.txt' #ref
+        # 'all'
+        'K2981910_HYDRO_QJM.txt' #ref
         # 'A4362030_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -330,8 +327,8 @@ code_filenames_to_use =
 
 analyse_data = c(
     # 'WIP'
-    # 'Ex2D/1_indicator/1_all',
-    'Ex2D/1_indicator/2_selection',
+    # 'Ex2D/1_indicator/1_all'
+    # 'Ex2D/1_indicator/2_selection'
     'Ex2D/2_serie'
 )
 
@@ -375,9 +372,9 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp'
-        # 'create_data'
-        # 'analyse_data',
+        # 'delete_tmp',
+        # 'create_data',
+        'analyse_data'
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
@@ -386,7 +383,7 @@ to_do =
         # 'plot_correlation_matrix'
         # 'plot_sheet_diagnostic_station'
         # 'plot_sheet_diagnostic_region'
-        'plot_sheet_diagnostic_regime'
+        # 'plot_sheet_diagnostic_regime'
 
         # 'create_data_proj'
     )
@@ -521,6 +518,10 @@ Subsets = ceiling(nCodeALL/nCode4write)
 if (read_tmp | delete_tmp) {
     source('script_management.R', encoding='UTF-8')
 }
+tmppath = file.path(computer_work_path, tmpdir)
+if (!(file.exists(tmppath))) {
+    dir.create(tmppath, recursive=TRUE)
+}
 
 if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {    
     for (subset in 1:Subsets) {
@@ -542,7 +543,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
                      " chunks of stations in analyse so ",
                      round(subset/Subsets*100, 1), "%"))
         
-        if (all(file_test %in% list.files(tmpdir, include.dirs=TRUE))) {
+        if (all(file_test %in% list.files(tmppath, include.dirs=TRUE))) {
             next
         }
         

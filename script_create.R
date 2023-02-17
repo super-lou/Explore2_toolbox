@@ -86,9 +86,9 @@ create_data = function () {
         
         # Time gap
         meta = get_lacune(data_obs, meta)
-        # Hydrograph
-        meta = get_hydrograph(data_obs, meta=meta,
-                              period=period_diagnostic)$meta
+        # # Hydrograph
+        # meta = get_hydrograph(data_obs, meta=meta,
+        #                       period=period_diagnostic)$meta
         
         names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
 
@@ -153,10 +153,10 @@ create_data = function () {
         data = dplyr::relocate(data, T, .before=ET0)
 
         write_tibble(data,
-                     filedir=tmpdir,
+                     filedir=tmppath,
                      filename=paste0("data_", subset, ".fst"))
         write_tibble(meta,
-                     filedir=tmpdir,
+                     filedir=tmppath,
                      filename=paste0("meta_", subset, ".fst"))
     } else {
         data = NULL

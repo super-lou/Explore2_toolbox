@@ -27,7 +27,7 @@ if ('analyse_data' %in% to_do) {
         rm (meta)
     }
     for (subset in 1:Subsets) {
-        meta_tmp = read_tibble(filedir=tmpdir,
+        meta_tmp = read_tibble(filedir=tmppath,
                                filename=paste0("meta_",
                                                subset,
                                                ".fst"))
@@ -43,14 +43,14 @@ if ('analyse_data' %in% to_do) {
 
     if (any(grepl("indicator", analyse_data))) {
 
-        metaEXind = read_tibble(filedir=tmpdir,
+        metaEXind = read_tibble(filedir=tmppath,
                                 filename="metaEXind.fst")
         
         if (exists("dataEXind")) {
             rm (dataEXind)
         }
         for (subset in 1:Subsets) {
-            dataEXind_tmp = read_tibble(filedir=tmpdir,
+            dataEXind_tmp = read_tibble(filedir=tmppath,
                                         filename=paste0("dataEXind_",
                                                         subset,
                                                         ".fst"))
@@ -109,7 +109,7 @@ if ('analyse_data' %in% to_do) {
 
     if (any(grepl("serie", analyse_data))) {
 
-        metaEXserie = read_tibble(filedir=tmpdir,
+        metaEXserie = read_tibble(filedir=tmppath,
                                   filename="metaEXserie.fst")
         
         if (exists("dataEXserie")) {
@@ -117,7 +117,7 @@ if ('analyse_data' %in% to_do) {
         }
         for (subset in 1:Subsets) {
             dataEXserie_tmp = read_tibble(
-                filedir=tmpdir,
+                filedir=tmppath,
                 filename=paste0("dataEXserie_",
                                 subset,
                                 ".fst"))
@@ -148,7 +148,7 @@ if ('save_analyse' %in% to_do) {
     if (!(file.exists(today_resdir))) {
         dir.create(today_resdir, recursive=TRUE)
     }
-    file.copy(file.path(tmpdir,
+    file.copy(file.path(tmppath,
                         paste0("data_", 1:Subsets, ".fst")),
               file.path(today_resdir,
                         paste0("data_", 1:Subsets, ".fst")))
@@ -250,8 +250,8 @@ if ('write_warnings' %in% to_do) {
 }
 
 if (read_tmp) {
-    print(paste0("Reading tmp data in ", tmpdir))
-    Path = list.files(tmpdir, full.names=TRUE)
+    print(paste0("Reading tmp data in ", tmppath))
+    Path = list.files(tmppath, full.names=TRUE)
     Filenames = gsub("^.*[/]+", "", Path)
     Filenames = gsub("[.].*$", "", Filenames)
     nFile = length(Filenames)
@@ -259,10 +259,12 @@ if (read_tmp) {
         print(paste0(Filenames[i], " reads in ", Path[i]))
         assign(Filenames[i], read_tibble(filepath=Path[i]))
     }
+    read_tmp = FALSE
 }
 
 if (delete_tmp) {
-    if (file.exists(tmpdir)) {
-        unlink(tmpdir, recursive=TRUE)
+    if (file.exists(tmppath)) {
+        unlink(tmppath, recursive=TRUE)
     }
+    delete_tmp = FALSE
 }
