@@ -227,13 +227,13 @@ verbose =
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     list(
-        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
-        # "GRSD"="GRSD_20230202.Rdata",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        "GRSD"="GRSD_20230202.Rdata",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        "MORDOR-TS"="MordorTS_20221213.Rdata",
         # "ORCHIDEE",
         "SMASH"="SMASH_20220921.Rdata"
     )
@@ -328,7 +328,7 @@ code_filenames_to_use =
 analyse_data = c(
     # 'WIP'
     # 'Ex2D/1_indicator/1_all'
-    # 'Ex2D/1_indicator/2_selection'
+    'Ex2D/1_indicator/2_selection',
     'Ex2D/2_serie'
 )
 
@@ -372,9 +372,9 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp',
+        # 'delete_tmp'
         # 'create_data',
-        'analyse_data'
+        # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
@@ -382,7 +382,7 @@ to_do =
         # 'write_warnings'
         # 'plot_correlation_matrix'
         # 'plot_sheet_diagnostic_station'
-        # 'plot_sheet_diagnostic_region'
+        'plot_sheet_diagnostic_region'
         # 'plot_sheet_diagnostic_regime'
 
         # 'create_data_proj'

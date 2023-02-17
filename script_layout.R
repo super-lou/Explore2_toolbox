@@ -41,7 +41,7 @@ plot_sheet_diagnostic_station = function () {
                 Colors=Colors_of_models,
                 ModelGroup=group_of_models_to_use,
                 icon_path=icon_path,
-                Warnings=Warnings,
+                Warnings=Warnings$Warnings,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir)
@@ -73,11 +73,11 @@ if ('plot_sheet_diagnostic_station' %in% to_do | 'plot_sheet_diagnostic_region' 
             toleranceRel=toleranceRel)
     }
 
-    if ('plot_sheet_diagnostic_station') {
+    if ('plot_sheet_diagnostic_station' %in% to_do) {
         plot_sheet_diagnostic_station()
     }
 
-    if ('plot_sheet_diagnostic_region') {
+    if ('plot_sheet_diagnostic_region' %in% to_do) {
         sheet_diagnostic_region(meta,
                                 dataEXind,
                                 metaEXind,
@@ -85,7 +85,7 @@ if ('plot_sheet_diagnostic_station' %in% to_do | 'plot_sheet_diagnostic_region' 
                                 Colors=Colors_of_models,
                                 ModelGroup=group_of_models_to_use,
                                 icon_path=icon_path,
-                                Warnings=Warnings,
+                                Warnings=Warnings$Warnings,
                                 logo_path=logo_path,
                                 Shapefiles=Shapefiles,
                                 figdir=today_figdir)
@@ -96,11 +96,10 @@ if ('plot_sheet_diagnostic_station' %in% to_do | 'plot_sheet_diagnostic_region' 
                                 dataEXind,
                                 metaEXind,
                                 dataEXserie,
-                                group=group,
                                 Colors=Colors_of_models,
                                 ModelGroup=group_of_models_to_use,
                                 icon_path=icon_path,
-                                Warnings=Warnings,
+                                Warnings=Warnings$Warnings,
                                 logo_path=logo_path,
                                 Shapefiles=Shapefiles,
                                 figdir=today_figdir)
