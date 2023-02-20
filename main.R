@@ -219,8 +219,11 @@ propagate_NA = TRUE
 nCode4write = 25
 
 verbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
+
+document_filename = "Explore2_diagnostic"
+pdf_chunk = c('all')
 
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
@@ -283,8 +286,8 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910_HYDRO_QJM.txt' #ref
+        'all'
+        # 'K2981910_HYDRO_QJM.txt' #ref
         # 'A4362030_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -328,7 +331,7 @@ code_filenames_to_use =
 analyse_data = c(
     # 'WIP'
     # 'Ex2D/1_indicator/1_all'
-    'Ex2D/1_indicator/2_selection',
+    # 'Ex2D/1_indicator/2_selection',
     'Ex2D/2_serie'
 )
 
@@ -380,20 +383,35 @@ to_do =
         # 'read_saving',
         # 'select_var'
         # 'write_warnings'
-        # 'plot_correlation_matrix'
-        # 'plot_sheet_diagnostic_station'
-        'plot_sheet_diagnostic_region'
-        # 'plot_sheet_diagnostic_regime'
+        # 'plot'
 
         # 'create_data_proj'
     )
 
-# meta = extract_meta(computer_data_path, obs_dir, list.files(file.path(computer_data_path, obs_dir)))
+to_plot =
+    c(
+        # 'plot_correlation_matrix',
+        # 'plot_sheet_diagnostic_station',
+        # 'plot_sheet_diagnostic_region',
+        # 'plot_sheet_diagnostic_regime'
+    )
+
+# library(Rmpi)
+# mpi.scatter(x, type, rdata, root=0, comm=1)
+
+#Need 3 slaves to run properly
+#Or run mpi.spawn.Rslaves(nslaves=3)
+# num="123456789abcd"
+# scounts<-c(2,3,1,7)
+# mpi.bcast.cmd(strnum<-mpi.scatter(integer(1),type=1,rdata=integer(1),root=0))
+# strnum<-mpi.scatter(scounts,type=1,rdata=integer(1),root=0)
+# mpi.bcast.cmd(ans <- mpi.scatterv(string(1),scounts=0,type=3,rdata=string(strnum),
+# root=0))
+# mpi.scatterv(as.character(num),scounts=scounts,type=3,rdata=string(strnum),root=0)
+# mpi.remote.exec(ans)
 
 
-# regionHydro_path = file.path(computer_data_path, regionHydro_dir, regionHydro_file)
-# regionHydro = st_read(regionHydro_path)
-# regionHydro[regionHydro$CdRegionHy == "K",]
+
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  

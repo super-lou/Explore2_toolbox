@@ -100,7 +100,7 @@ create_data = function () {
 
         if (!is.null(complete_by) & complete_by != "") {
             model4complete = complete_by[complete_by %in% Model][1]
-            val2check = c("T", "Pl", "ET0", "Ps")
+            val2check = c("T", "ET0", "Pl", "Ps", "P")
             nVal2check = length(val2check)
             
             if (!is.na(model4complete)) {

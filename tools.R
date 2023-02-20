@@ -75,6 +75,7 @@ convert_diag_data = function (model, data) {
     if (grepl("EROS", model)) {
         names(data) = c("Code", "Date", "Q_sim",
                         "Pl", "ET0", "Ps", "T")
+        data$P = data$Pl + data$Ps
         data$Code = substr(data$Code, 1, 8)
 
     } else if (grepl("GRSD", model)) {
@@ -97,15 +98,19 @@ convert_diag_data = function (model, data) {
         data$Date = as.Date(data$Date)
         names(data) = c("Code", "Date", "Q_sim",
                         "Pl", "Ps", "T", "ET0")
+        data$P = data$Pl + data$Ps
         
     } else if (model == "MORDOR-TS") {
         data$Date = as.Date(data$Date)
         names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "Ps", "ET0")
+        data$P = data$Pl + data$Ps
         
     } else if (model == "SMASH") {
         names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "ET0", "Ps")
+        data$P = data$Pl + data$Ps
+        print(data)
     }
 
     data = dplyr::bind_cols(Model=model, data)

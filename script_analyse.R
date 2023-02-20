@@ -41,51 +41,6 @@ analyse_data_indicator = function () {
     data = dplyr::select(data, -c(Model, Code))
     data = dplyr::select(data, ID, everything())
 
-    # samplePeriodMOD = samplePeriod_opti
-    
-    # if (!is.null(samplePeriodMOD)) {
-    #     nTopic = length(samplePeriodMOD)        
-        
-    #     for (i in 1:nTopic) {
-            
-    #         spMOD = samplePeriodMOD[[i]]
-            
-    #         if (identical(spMOD, "min") | identical(spMOD, "max")) {
-
-    #             Code_opti = c()
-    #             sp_opti = c()
-    #             for (j in 1:nCode) {
-    #                 Code_opti = c(Code_opti,
-    #                               paste0(Model, "_", Code[j]))
-    #                 sp_opti =
-    #                     c(sp_opti,
-    #                       rep(paste0(formatC(meta[[paste0(spMOD,
-    #                                                       "QM")]][j],
-    #                                          width=2, flag="0"), '-01'),
-    #                           nModel))
-    #             }
-    #             sp = tibble(Code=Code_opti,
-    #                         sp=sp_opti)
-                
-    #         } else {
-    #             if (length(spMOD) == 2) {
-    #                 spMOD = list(spMOD)
-    #             }
-    #             Code_opti = c()
-    #             sp_opti = c()
-    #             for (j in 1:nCode) {
-    #                 Code_opti = c(Code_opti,
-    #                               paste0(Model, "_", Code[j]))
-    #                 sp_opti =
-    #                     c(sp_opti, rep(spMOD, nModel))
-    #             }
-    #             sp = tibble(Code=Code_opti,
-    #                         sp=sp_opti)
-    #         }
-    #         samplePeriodMOD[[i]] = sp
-    #     }
-    # }
-
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
                           CARD_dir=
@@ -134,51 +89,6 @@ analyse_data_serie = function () {
     data = dplyr::select(data, -c(Model, Code))
     data = dplyr::select(data, ID, everything())
 
-    # samplePeriodMOD = samplePeriod_opti
-    
-    # if (!is.null(samplePeriodMOD)) {
-    #     nTopic = length(samplePeriodMOD)        
-        
-    #     for (i in 1:nTopic) {
-            
-    #         spMOD = samplePeriodMOD[[i]]
-            
-    #         if (identical(spMOD, "min") | identical(spMOD, "max")) {
-
-    #             Code_opti = c()
-    #             sp_opti = c()
-    #             for (j in 1:nCode) {
-    #                 Code_opti = c(Code_opti,
-    #                               paste0(Model, "_", Code[j]))
-    #                 sp_opti =
-    #                     c(sp_opti,
-    #                       rep(paste0(formatC(meta[[paste0(spMOD,
-    #                                                       "QM")]][j],
-    #                                          width=2, flag="0"), '-01'),
-    #                           nModel))
-    #             }
-    #             sp = tibble(Code=Code_opti,
-    #                         sp=sp_opti)
-                
-    #         } else {
-    #             if (length(spMOD) == 2) {
-    #                 spMOD = list(spMOD)
-    #             }
-    #             Code_opti = c()
-    #             sp_opti = c()
-    #             for (j in 1:nCode) {
-    #                 Code_opti = c(Code_opti,
-    #                               paste0(Model, "_", Code[j]))
-    #                 sp_opti =
-    #                     c(sp_opti, rep(spMOD, nModel))
-    #             }
-    #             sp = tibble(Code=Code_opti,
-    #                         sp=sp_opti)
-    #         }
-    #         samplePeriodMOD[[i]] = sp
-    #     }
-    # }
-    
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
                           CARD_dir=
