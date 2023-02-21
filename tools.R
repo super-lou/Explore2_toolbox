@@ -327,55 +327,26 @@ find_Warnings = function (dataEXind, metaEXind,
                        line=line[1],
                        .groups="drop")
 
-        for (i in 1:nrow(statLines)) {
-
-            Line = statLines[i,]
-            
-            if (Line$n == nModel) {
-                Line$line =
-                    paste0(all_model, " ",
-                           gsub("([:].*[/])|([:])",
-                                "",
-                                Line$line))
-            } else {
-                model = paste0("<b>",
-                               unlist(Line$model),
-                               "</b>")
-                if (Line$n == 1) {
-                    Line$line =
-                        paste0(model, " ",
-                               gsub("([/].*[:])|([:])",
-                                    "",
-                                    Line$line))
-                } else {
-                    model = paste0(
-                        paste0(model[-length(model)],
-                               collapse=", "),
-                        " et ", model[length(model)])
-                    Line$line =
-                        paste0(model, " ",
-                               gsub("([:].*[/])|([:])",
-                                    "",
-                                    Line$line))
-                }
-            }
-            statLines[i,] = Line
-        }
-
         Line_KGE = statLines[statLines$var == "KGEracine",]
         Line_Biais = statLines[statLines$var == "Biais",]
         
-        none = FALSE
         if (nrow(Line_KGE) == 1 & nrow(Line_Biais) == 1) {            
             if (Line_KGE$niveau == 0 & Line_Biais$niveau == 0) {
                 line = line_allOK
                 niveau = 1
                 line_model = line_allOK
+                Warnings_code = statLines[statLines$niveau != 0,]
+                Warnings_code = Warnings_code[c("model", "line")]
+                Warnings_code =
+                    dplyr::bind_rows(dplyr::tibble(model=NA,
+                                                   line=line_model),
+                                     Warnings_code)
             } else {
-                none = TRUE
                 line = line_allNOK
                 niveau = -1
                 line_model = line_allNOK
+                Warnings_code = dplyr::tibble(model=NA,
+                                              line=line_model)
             }
 
         } else {            
@@ -416,23 +387,72 @@ find_Warnings = function (dataEXind, metaEXind,
                 }
             }
             line_model = paste0(line, model)
+
+            rm_NOK = function (X) {
+                X = X[!(X %in% model_NOK)]
+                if (length(X) == 0) {
+                    X = NA
+                }
+                return (X)
+            }
+            
+            Warnings_code = statLines[statLines$niveau != 0,]
+            Warnings_code = Warnings_code[c("model", "line")]
+            Warnings_code$model = lapply(Warnings_code$model, rm_NOK)
+            Warnings_code = Warnings_code[!is.na(Warnings_code$model),]
+            Warnings_code =
+                dplyr::bind_rows(dplyr::tibble(model=NULL,
+                                               line=line_model),
+                                 Warnings_code)
         }
 
-        if (none) {
-            Warnings_code = line_model
-        } else {
-            Warnings_code = statLines$line[statLines$niveau != 0]
-            Warnings_code = c(line_model, Warnings_code)
+        for (i in 1:nrow(Warnings_code)) {
+
+            Line = Warnings_code[i,]
+            if (is.null(unlist(Line$model))) {
+                next
+            }
+            
+            if (length(unlist(Line$model)) == nModel) {
+                Line$line =
+                    paste0(all_model, " ",
+                           gsub("([:].*[/])|([:])",
+                                "",
+                                Line$line))
+            } else {
+                model = paste0("<b>",
+                               unlist(Line$model),
+                               "</b>")
+                if (length(unlist(Line$model)) == 1) {
+                    Line$line =
+                        paste0(model, " ",
+                               gsub("([/].*[:])|([:])",
+                                    "",
+                                    Line$line))
+                } else {
+                    model = paste0(
+                        paste0(model[-length(model)],
+                               collapse=", "),
+                        " et ", model[length(model)])
+                    Line$line =
+                        paste0(model, " ",
+                               gsub("([:].*[/])|([:])",
+                                    "",
+                                    Line$line))
+                }
+            }
+            Warnings_code[i,] = Line
         }
-        
+
         if (nrow(Warnings) == 0) {
             Warnings = dplyr::tibble(Code=code,
-                                     warning=Warnings_code)
+                                     warning=Warnings_code$line)
         } else {
             Warnings =
                 dplyr::bind_rows(Warnings,
                                  dplyr::tibble(Code=code,
-                                               warning=Warnings_code))
+                                               warning=
+                                                   Warnings_code$line))
         }
         allLines = dplyr::bind_rows(allLines,
                                     dplyr::tibble(var="Général",
@@ -465,11 +485,12 @@ find_Warnings = function (dataEXind, metaEXind,
 }
 
 # W = find_Warnings(dataEXind, metaEXind,
-#                   # codeLight="A4362030",
+#                   codeLight="WSOULOIS",
 #                   save=FALSE)
-# Warnings = W$Warnings
-# frq = W$frq
+# W = find_Warnings(dataEXind, metaEXind)
+Warnings = W$Warnings
+frq = W$frq
 # frq_short=select(frq, c(var, niveau, npv_pct))
 # frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
 # frq_short$npv_pct = round(frq_short$npv_pct)
-# W[grepl("hydrologique", W$warning),]
+# Warnings[grepl("hydrologique", Warnings$warning),]

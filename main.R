@@ -286,8 +286,8 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910_HYDRO_QJM.txt' #ref
+        # 'all'
+        'K2981910_HYDRO_QJM.txt' #ref
         # 'A4362030_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -376,24 +376,25 @@ var_selection =
 to_do =
     c(
         # 'delete_tmp'
-        # 'create_data',
+        # 'create_data'
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'select_var'
         # 'write_warnings'
-        # 'plot'
+        'plot'
 
         # 'create_data_proj'
     )
 
 to_plot =
     c(
-        # 'plot_correlation_matrix',
-        # 'plot_sheet_diagnostic_station',
-        # 'plot_sheet_diagnostic_region',
-        # 'plot_sheet_diagnostic_regime'
+        'summary'
+        # 'correlation_matrix',
+        # 'sheet_diagnostic_station',
+        # 'sheet_diagnostic_region',
+        # 'sheet_diagnostic_regime'
     )
 
 # library(Rmpi)
@@ -585,18 +586,6 @@ if (any(c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_
     source('script_management.R', encoding='UTF-8')
 }
 
-if ('plot_sheet_diagnostic_station' %in% to_do) {
-    source('script_layout.R', encoding='UTF-8')
-}
-
-if ('plot_sheet_diagnostic_region' %in% to_do) {
-    source('script_layout.R', encoding='UTF-8')
-}
-
-if ('plot_sheet_diagnostic_regime' %in% to_do) {
-    source('script_layout.R', encoding='UTF-8')
-}
-
-if ('plot_correlation_matrix' %in% to_do) {
+if ('plot' %in% to_do) {
     source('script_layout.R', encoding='UTF-8')
 }

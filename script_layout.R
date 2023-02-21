@@ -47,7 +47,7 @@ plot_sheet_diagnostic_station = function (df_page=NULL) {
                 Colors=Colors_of_models,
                 ModelGroup=group_of_models_to_use,
                 icon_path=icon_path,
-                Warnings=Warnings$Warnings,
+                Warnings=Warnings,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=file.path(today_figdir_leaf,
@@ -75,11 +75,13 @@ if ('sheet_diagnostic_station' %in% to_plot |
 }
 
 
-if ('summary' %in% to_plot) {
-    df_page = tibble(section='Sommaire', subsection=NA, n=1)
-} else {
-    df_page = tibble()
-}
+# if ('summary' %in% to_plot) {
+#     df_page = tibble(section='Sommaire', subsection=NA, n=1)
+# } else {
+#     df_page = tibble()
+# }
+
+print(df_page)
 
 if ('correlation_matrix' %in% to_plot) {
     df_page = sheet_correlation_matrix(
@@ -93,6 +95,8 @@ if ('correlation_matrix' %in% to_plot) {
         df_page=df_page)
 }
 
+print(df_page)
+
 if ('sheet_diagnostic_regime' %in% to_plot) {
     df_page = sheet_diagnostic_regime(
         meta,
@@ -102,13 +106,15 @@ if ('sheet_diagnostic_regime' %in% to_plot) {
         Colors=Colors_of_models,
         ModelGroup=group_of_models_to_use,
         icon_path=icon_path,
-        Warnings=Warnings$Warnings,
+        Warnings=Warnings,
         logo_path=logo_path,
         Shapefiles=Shapefiles,
         figdir=file.path(today_figdir_leaf,
                          "diagnostic_regime"),
         df_page=df_page)
 }
+
+print(df_page)
 
 if ('sheet_diagnostic_region' %in% to_plot) {
     df_page = sheet_diagnostic_region(
@@ -119,7 +125,7 @@ if ('sheet_diagnostic_region' %in% to_plot) {
         Colors=Colors_of_models,
         ModelGroup=group_of_models_to_use,
         icon_path=icon_path,
-        Warnings=Warnings$Warnings,
+        Warnings=Warnings,
         logo_path=logo_path,
         Shapefiles=Shapefiles,
         figdir=file.path(today_figdir_leaf,
@@ -127,20 +133,25 @@ if ('sheet_diagnostic_region' %in% to_plot) {
         df_page=df_page)
 }
 
-if ('plot_sheet_diagnostic_station' %in% to_plot) {
+print(df_page)
+
+if ('sheet_diagnostic_station' %in% to_plot) {
     df_page = plot_sheet_diagnostic_station(df_page=df_page)
 }
 
+print(df_page)
+
 if ('summary' %in% to_plot) {
     sheet_summary(df_page,
-                  foot_note,
-                  foot_height,
+                  title="title", subtitle="subtitle",
                   logo_path=logo_path,
                   figdir=today_figdir_leaf)
 }
 
 # Combine independant pages into one PDF
-details = file.info(list.files(today_figdir_leaf, full.names=TRUE))
+details = file.info(list.files(today_figdir_leaf,
+                               recursive=TRUE,
+                               full.names=TRUE))
 details = details[with(details, order(as.POSIXct(mtime))),]
 listfile_path = rownames(details)
 
