@@ -20,7 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-NetCDF_to_tibble = function (NetCDF_path, type="diag") {
+NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
     
@@ -49,6 +49,13 @@ NetCDF_to_tibble = function (NetCDF_path, type="diag") {
     } else if ("Q" %in% names(NCdata$var)) {
         QRaw = ncdf4::ncvar_get(NCdata, "Q")
     }
+
+    if (model == "ORCHIDEE") {
+        PRaw = ncdf4::ncvar_get(NCdata, "P")
+        PlRaw = ncdf4::ncvar_get(NCdata, "Pl")
+        PsRaw = ncdf4::ncvar_get(NCdata, "Ps")
+        TRaw = ncdf4::ncvar_get(NCdata, "T")
+    }
     
     ncdf4::nc_close(NCdata)
 
@@ -56,18 +63,39 @@ NetCDF_to_tibble = function (NetCDF_path, type="diag") {
     Code = CodeRaw[CodeOrder]
     nCode = length(Code)
     nDate = length(Date)
-    dimCode = dim(QRaw) == nCode
-    if (dimCode[1]) {
+
+    if (model == "ORCHIDEE") {
         Q_sim = QRaw[CodeOrder,]
-    } else if (dimCode[2]) {
-        Q_sim = QRaw[, CodeOrder]
+        P = PRaw[CodeOrder,]
+        Pl = PlRaw[CodeOrder,]
+        Ps = PsRaw[CodeOrder,]
+        T = TRaw[CodeOrder,]
+        data = tibble(
+            Code=rep(Code, each=nDate),
+            Date=rep(Date, times=nCode),
+            Q_sim=c(t(Q_sim)),
+            P=c(t(P)),
+            Pl=c(t(Pl)),
+            Ps=c(t(Ps)),
+            T=c(t(T))
+        )
+        return (data)
+
+    } else { 
+        dimCode = dim(QRaw) == nCode
+        if (dimCode[1]) {
+            Q_sim = QRaw[CodeOrder,]
+            
+        } else if (dimCode[2]) {
+            Q_sim = QRaw[, CodeOrder]
+        }
+        data = tibble(
+            Code=rep(Code, each=nDate),
+            Date=rep(Date, times=nCode),
+            Q_sim=c(t(Q_sim))
+        )    
+        return (data)
     }
-    data = tibble(
-        Code=rep(Code, each=nDate),
-        Date=rep(Date, times=nCode),
-        Q_sim=c(t(Q_sim))
-    )    
-    return (data)
 }
 
 convert_diag_data = function (model, data) {
@@ -105,12 +133,16 @@ convert_diag_data = function (model, data) {
         names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "Ps", "ET0")
         data$P = data$Pl + data$Ps
-        
+
+    } else if (model == "ORCHIDEE") {
+        names(data) = c("Code", "Date", "Q_sim",
+                        "P", "Pl", "Ps", "T")
+        data$T = data$T - 273.15
+
     } else if (model == "SMASH") {
         names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "ET0", "Ps")
         data$P = data$Pl + data$Ps
-        print(data)
     }
 
     data = dplyr::bind_cols(Model=model, data)
@@ -225,6 +257,9 @@ find_Warnings = function (dataEXind, metaEXind,
     line_NOK = "Les modèles hydrologiques ont des difficultés à reproduire le régime sauf "
     line_allNOK = "<b>Aucun modèle hydrologique</b> ne semble simuler de manière acceptable le régime."
 
+    orderVar = c("Général", "^KGE", "^Biais$", "^Q[[:digit:]]+$",
+                 "[{]t.*[}])", "^alpha", "^epsilon.*")
+
     if (is.null(codeLight)) {
         Code = levels(factor(dataEXind$Code))  
     } else {
@@ -336,16 +371,18 @@ find_Warnings = function (dataEXind, metaEXind,
                 niveau = 1
                 line_model = line_allOK
                 Warnings_code = statLines[statLines$niveau != 0,]
-                Warnings_code = Warnings_code[c("model", "line")]
+                Warnings_code = Warnings_code[c("var", "model", "line")]
                 Warnings_code =
-                    dplyr::bind_rows(dplyr::tibble(model=NA,
+                    dplyr::bind_rows(dplyr::tibble(var="Général",
+                                                   model=NA,
                                                    line=line_model),
                                      Warnings_code)
             } else {
                 line = line_allNOK
                 niveau = -1
                 line_model = line_allNOK
-                Warnings_code = dplyr::tibble(model=NA,
+                Warnings_code = dplyr::tibble(var="Général",
+                                              model=NA,
                                               line=line_model)
             }
 
@@ -397,15 +434,22 @@ find_Warnings = function (dataEXind, metaEXind,
             }
             
             Warnings_code = statLines[statLines$niveau != 0,]
-            Warnings_code = Warnings_code[c("model", "line")]
+            Warnings_code = Warnings_code[c("var", "model", "line")]
             Warnings_code$model = lapply(Warnings_code$model, rm_NOK)
             Warnings_code = Warnings_code[!is.na(Warnings_code$model),]
+            
             Warnings_code =
-                dplyr::bind_rows(dplyr::tibble(model=NULL,
+                dplyr::bind_rows(dplyr::tibble(var="Général",
+                                               model=NA,
                                                line=line_model),
                                  Warnings_code)
         }
 
+        allLines = dplyr::bind_rows(allLines,
+                                    dplyr::tibble(var="Général",
+                                                  niveau=niveau,
+                                                  line=line))
+        
         for (i in 1:nrow(Warnings_code)) {
 
             Line = Warnings_code[i,]
@@ -444,6 +488,17 @@ find_Warnings = function (dataEXind, metaEXind,
             Warnings_code[i,] = Line
         }
 
+
+        warningsOrder = c()
+        for (i in 1:nrow(Warnings_code)) {
+            var = Warnings_code$var[i]
+            warningsOrder = c(warningsOrder,
+                              which(sapply(orderVar, grepl,
+                                           x=var)))
+        }
+        warningsOrder = order(warningsOrder)
+        Warnings_code = Warnings_code[warningsOrder,]
+        
         if (nrow(Warnings) == 0) {
             Warnings = dplyr::tibble(Code=code,
                                      warning=Warnings_code$line)
@@ -454,10 +509,6 @@ find_Warnings = function (dataEXind, metaEXind,
                                                warning=
                                                    Warnings_code$line))
         }
-        allLines = dplyr::bind_rows(allLines,
-                                    dplyr::tibble(var="Général",
-                                                  niveau=niveau,
-                                                  line=line))
     }
     
     frq = dplyr::summarise(dplyr::group_by(allLines,
@@ -485,11 +536,11 @@ find_Warnings = function (dataEXind, metaEXind,
 }
 
 # W = find_Warnings(dataEXind, metaEXind,
-#                   codeLight="WSOULOIS",
+#                   codeLight="K2981910",
 #                   save=FALSE)
 # W = find_Warnings(dataEXind, metaEXind)
-Warnings = W$Warnings
-frq = W$frq
+# Warnings = W$Warnings
+# frq = W$frq
 # frq_short=select(frq, c(var, niveau, npv_pct))
 # frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
 # frq_short$npv_pct = round(frq_short$npv_pct)

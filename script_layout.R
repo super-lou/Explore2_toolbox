@@ -35,7 +35,7 @@ plot_sheet_diagnostic_station = function (df_page=NULL) {
     for (path in Paths) {
         data = read_tibble(filepath=path) 
         Code_tmp = levels(factor(data$Code))
-        
+
         if (any(Code_tmp %in% CodeALL)) {
             data = data[data$Code %in% CodeALL,]
             df_page = sheet_diagnostic_station(
@@ -75,13 +75,11 @@ if ('sheet_diagnostic_station' %in% to_plot |
 }
 
 
-# if ('summary' %in% to_plot) {
-#     df_page = tibble(section='Sommaire', subsection=NA, n=1)
-# } else {
-#     df_page = tibble()
-# }
-
-print(df_page)
+if ('summary' %in% to_plot) {
+    df_page = tibble(section='Sommaire', subsection=NA, n=1)
+} else {
+    df_page = tibble()
+}
 
 if ('correlation_matrix' %in% to_plot) {
     df_page = sheet_correlation_matrix(
@@ -94,8 +92,6 @@ if ('correlation_matrix' %in% to_plot) {
                          "diagnostic_correlation_matrix"),
         df_page=df_page)
 }
-
-print(df_page)
 
 if ('sheet_diagnostic_regime' %in% to_plot) {
     df_page = sheet_diagnostic_regime(
@@ -114,8 +110,6 @@ if ('sheet_diagnostic_regime' %in% to_plot) {
         df_page=df_page)
 }
 
-print(df_page)
-
 if ('sheet_diagnostic_region' %in% to_plot) {
     df_page = sheet_diagnostic_region(
         meta,
@@ -133,13 +127,9 @@ if ('sheet_diagnostic_region' %in% to_plot) {
         df_page=df_page)
 }
 
-print(df_page)
-
 if ('sheet_diagnostic_station' %in% to_plot) {
     df_page = plot_sheet_diagnostic_station(df_page=df_page)
 }
-
-print(df_page)
 
 if ('summary' %in% to_plot) {
     sheet_summary(df_page,

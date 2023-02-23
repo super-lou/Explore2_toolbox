@@ -45,6 +45,7 @@ create_data = function () {
                     
                 } else if (grepl(".*[.]nc", path)) {
                     data_tmp = NetCDF_to_tibble(path,
+                                                model=model,
                                                 type="diag")
                 }
                 

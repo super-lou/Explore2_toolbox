@@ -237,7 +237,7 @@ models_to_diag =
         "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         "MORDOR-TS"="MordorTS_20221213.Rdata",
-        # "ORCHIDEE",
+        "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
         "SMASH"="SMASH_20220921.Rdata"
     )
 complete_by = "SMASH"
@@ -288,7 +288,7 @@ code_filenames_to_use =
     c(
         # 'all'
         'K2981910_HYDRO_QJM.txt' #ref
-        # 'A4362030_HYDRO_QJM.txt'
+        # 'O3084320_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
         # 'WSOULOIS_HYDRO_QJM.txt',
@@ -331,7 +331,7 @@ code_filenames_to_use =
 analyse_data = c(
     # 'WIP'
     # 'Ex2D/1_indicator/1_all'
-    # 'Ex2D/1_indicator/2_selection',
+    'Ex2D/1_indicator/2_selection',
     'Ex2D/2_serie'
 )
 
@@ -376,26 +376,29 @@ var_selection =
 to_do =
     c(
         # 'delete_tmp'
-        # 'create_data'
+        # 'create_data',
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
-        # 'select_var'
+        # 'select_var',
         # 'write_warnings'
         'plot'
-
+        
         # 'create_data_proj'
     )
 
 to_plot =
     c(
-        'summary'
+        # 'summary'
         # 'correlation_matrix',
-        # 'sheet_diagnostic_station',
-        # 'sheet_diagnostic_region',
+        'sheet_diagnostic_station'
+        # 'sheet_diagnostic_region'
         # 'sheet_diagnostic_regime'
     )
+
+# dataEXind = dplyr::filter(dataEXind, Model != "ORCHIDEE") 
+
 
 # library(Rmpi)
 # mpi.scatter(x, type, rdata, root=0, comm=1)
@@ -412,7 +415,25 @@ to_plot =
 # mpi.remote.exec(ans)
 
 
+# dataEXserieQM_obs =
+#     dplyr::summarise(dplyr::group_by(dataEXserie$QM, Code, Month),
+#                      QM=select_good(QM_obs),
+#                      .groups="drop")
+# dataEXseriePA_med = dplyr::summarise(dplyr::group_by(dataEXserie$PA,
+#                                                      Code, Date),
+#                                      PAs=median(PAs, na.rm=TRUE),
+#                                      PAl=median(PAl, na.rm=TRUE),
+#                                      PA=median(PA, na.rm=TRUE),
+#                                      .groups="drop")
+# find_regimeHydro(dataEXserieQM_obs, 2, dataEXseriePA_med)
 
+
+
+            # from mpi4py import MPI
+            # comm = MPI.COMM_WORLD
+            # size = comm.Get_size()
+            # rank = comm.Get_rank()
+            # for t in time_list[int(rank*(len(time_list)/size+.5)):int((rank+1)*(len(time_list)/size+.5))]:
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
