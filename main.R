@@ -356,8 +356,15 @@ to_plot =
 ## 0. LIBRARIES ______________________________________________________
 # Computer
 computer = Sys.info()["nodename"]
-computer_file_list = list.files(pattern="computer[_].*[.]R")
+computer_file_list = list.files(path=lib_path,
+                                pattern="computer[_].*[.]R")
 computer_list = gsub("(computer[_])|([.]R)", "", computer_file_list)
+
+print(computer)
+print(computer_file_list)
+print(computer_list)
+
+
 computer_file = computer_file_list[sapply(computer_list,
                                           grepl, computer)]
 source(computer_file, encoding='UTF-8')
