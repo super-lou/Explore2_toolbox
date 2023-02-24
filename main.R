@@ -219,8 +219,8 @@ propagate_NA = TRUE
 nCode4write = 25
 
 verbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 document_filename = "Explore2_diagnostic"
 pdf_chunk = c('all')
@@ -230,14 +230,14 @@ pdf_chunk = c('all')
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     list(
-        "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
-        "GRSD"="GRSD_20230202.Rdata",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
-        "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
+        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        # "GRSD"="GRSD_20230202.Rdata",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        # "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
         "SMASH"="SMASH_20220921.Rdata"
     )
 complete_by = "SMASH"
@@ -329,10 +329,10 @@ code_filenames_to_use =
 #     # 'WIP'
 
 analyse_data = c(
-    # 'WIP'
+    'WIP'
     # 'Ex2D/1_indicator/1_all'
-    'Ex2D/1_indicator/2_selection',
-    'Ex2D/2_serie'
+    # 'Ex2D/1_indicator/2_selection',
+    # 'Ex2D/2_serie'
 )
 
 read_saving = "ALL"
@@ -375,9 +375,9 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp'
+        # 'delete_tmp',
         # 'create_data',
-        # 'analyse_data',
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
@@ -392,9 +392,9 @@ to_plot =
     c(
         # 'summary'
         # 'correlation_matrix',
-        'sheet_diagnostic_station'
+        # 'sheet_diagnostic_station'
         # 'sheet_diagnostic_region'
-        # 'sheet_diagnostic_regime'
+        'sheet_diagnostic_regime'
     )
 
 # dataEXind = dplyr::filter(dataEXind, Model != "ORCHIDEE") 

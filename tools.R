@@ -23,6 +23,8 @@
 NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
+
+    print(NCdata)
     
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
                    origin=
@@ -65,6 +67,9 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
     nDate = length(Date)
 
     if (model == "ORCHIDEE") {
+
+        print(QRaw)
+        
         Q_sim = QRaw[CodeOrder,]
         P = PRaw[CodeOrder,]
         Pl = PlRaw[CodeOrder,]
