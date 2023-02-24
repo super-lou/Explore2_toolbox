@@ -372,7 +372,8 @@ print(computer_list)
 
 computer_file = computer_file_list[sapply(computer_list,
                                           grepl, computer)]
-source(computer_file, encoding='UTF-8')
+source(file.path(lib_path, computer_file),
+       encoding='UTF-8')
 
 # Sets working directory
 setwd(computer_work_path)
