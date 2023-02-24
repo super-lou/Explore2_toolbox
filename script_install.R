@@ -24,7 +24,7 @@ if (!require(dplyr)) install.packages("dplyr")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(qpdf)) install.packages("qpdf")
 if (!require(gridExtra)) install.packages("gridExtra")
-if (!require(gridtext)) install.packages("gridtext")
+# if (!require(gridtext)) install.packages("gridtext") #nope
 if (!require(ggh4x)) install.packages("ggh4x")
 if (!require(rgdal)) install.packages("rgdal")
 if (!require(shadowtext)) install.packages("shadowtext")
