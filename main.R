@@ -40,97 +40,10 @@
 # of this toolbox.
 
 
-#  ___  _  _                 _                   _                   
-# | __|(_)| | ___  ___   ___| |_  _ _  _  _  __ | |_  _  _  _ _  ___ 
-# | _| | || |/ -_)(_-<  (_-<|  _|| '_|| || |/ _||  _|| || || '_|/ -_)
-# |_|  |_||_|\___|/__/  /__/ \__||_|   \_,_|\__| \__| \_,_||_|  \___|
-## 1. WORKING DIRECTORY ______________________________________________
-# Work path
-computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/Ex2D_toolbox'
-
-
-## 2. INPUT DIRECTORIES ______________________________________________
-### 2.1. Data ________________________________________________________
-computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
-obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
-obs_format = "_HYDRO_QJM.txt"
-diag_dir = "Explore2/diagnostic"
-proj_dir = "Explore2/projection"
-codes_to_diag_shp_dir = "Explore2/reseauReferenceHYDRO"
-
-### 2.2. Variables ___________________________________________________
-# Name of the directory that regroups all variables information
-CARD_path = file.path(gsub("[/]project[/].*$", "",
-                           computer_work_path),
-                      "project",
-                      "CARD_project",
-                      "CARD")
-# Name of the tool directory that includes all the functions needed to
-# calculate a variable
-init_tools_dir = '__tools__'
-# Name of the default parameters file for a variable
-init_var_file = '__default__.R'
-
-### 2.3. Resources ___________________________________________________
-resources_path = file.path(computer_work_path, 'resources')
-if (!(file.exists(resources_path))) {
-  dir.create(resources_path)
-}
-print(paste('resources_path :', resources_path))
-#### 2.3.1. Logo _____________________________________________________
-logo_dir = 'logo'
-
-#### 2.3.2. Icon _____________________________________________________
-icon_dir = 'icon'
-
-#### 2.3.3. Shapefile ________________________________________________
-shp_dir = 'map'
-# Path to the shapefile for france contour from 'computer_data_path' 
-france_dir = file.path(shp_dir, 'france')
-france_file = 'gadm36_FRA_0.shp'
-# Path to the shapefile for basin shape from 'computer_data_path' 
-bassinHydro_dir = file.path(shp_dir, 'bassinHydro')
-bassinHydro_file = 'bassinHydro.shp'
-# Path to the shapefile for sub-basin shape from 'computer_data_path' 
-regionHydro_dir = file.path(shp_dir, 'regionHydro')
-regionHydro_file = 'regionHydro.shp'
-# Path to the shapefile for station basins shape from 'computer_data_path' 
-entiteHydro_dir = file.path(shp_dir, 'entiteHydro')
-entiteHydro_file = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
-entiteHydro_coord = c('L93', 'L2')
-# Path to the shapefile for river shape from 'computer_data_path' 
-river_dir = file.path('map', 'river')
-river_file = 'CoursEau_FXX.shp'
-
-
-## 3. OUTPUT DIRECTORIES _____________________________________________
-### 3.0. Info ________________________________________________________
-today = format(Sys.Date(), "%Y_%m_%d")
-now = format(Sys.time(), "%H_%M_%S")
-
-### 3.1. Results _____________________________________________________
-resdir = file.path(computer_work_path, 'results')
-today_resdir = file.path(computer_work_path, 'results', today)
-now_resdir = file.path(computer_work_path, 'results', today, now)
-print(paste('now_resdir :', now_resdir))
-
-### 3.2. Figures  ____________________________________________________
-figdir = file.path(computer_work_path, 'figures')
-today_figdir = file.path(computer_work_path, 'figures', today)
-now_figdir = file.path(computer_work_path, 'figures', today, now)
-# if (!(file.exists(now_figdir))) {
-#   dir.create(now_figdir, recursive=TRUE)
-# }
-print(paste('now_figdir :', now_figdir))
-
-### 3.3. Tmp  ________________________________________________________
-tmpdir = "tmp"
-
-
-#  ___                               _                 
-# | _ \ __ _  _ _  __ _  _ __   ___ | |_  ___  _ _  ___
-# |  _// _` || '_|/ _` || '  \ / -_)|  _|/ -_)| '_|(_-<
-# |_|  \__,_||_|  \__,_||_|_|_|\___| \__|\___||_|  /__/ ______________
+#  __  __        _       
+# |  \/  | __ _ (_) _ _  
+# | |\/| |/ _` || || ' \ 
+# |_|  |_|\__,_||_||_||_| ____________________________________________
 ## 1. ANALYSIS _______________________________________________________
 ### 1.1. Period ______________________________________________________
 # Periods of time to perform analyses
@@ -380,10 +293,10 @@ to_do =
         # 'analyse_data'
         # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
-        # 'select_var',
+        'read_saving',
+        'select_var'
         # 'write_warnings'
-        'plot'
+        # 'plot'
         
         # 'create_data_proj'
     )
@@ -394,7 +307,7 @@ to_plot =
         # 'correlation_matrix',
         # 'sheet_diagnostic_station'
         # 'sheet_diagnostic_region'
-        'sheet_diagnostic_regime'
+        # 'sheet_diagnostic_regime'
     )
 
 # dataEXind = dplyr::filter(dataEXind, Model != "ORCHIDEE") 
@@ -441,13 +354,17 @@ to_plot =
 # |___||_||_||_| \__||_|\__,_||_||_|/__/\__,_| \__||_|\___/|_||_| ____
 ##### /!\ Do not touch if you are not aware #####
 ## 0. LIBRARIES ______________________________________________________
+# Computer
+computer = Sys.info()["nodename"]
+source(paste0("computer_", computer, ".R"), encoding='UTF-8')
+
 # Sets working directory
 setwd(computer_work_path)
 
 source('tools.R', encoding='UTF-8')
 
 # Import EXstat
-dev_path = file.path(dirname(dirname(computer_work_path)),
+dev_path = file.path(dev_lib_path,
                      'EXstat_project', 'EXstat', 'R')
 if (file.exists(dev_path)) {
     print('Loading EXstat from local directory')
@@ -461,7 +378,7 @@ if (file.exists(dev_path)) {
 }
 
 # Import ASHE
-dev_path = file.path(dirname(dirname(computer_work_path)),
+dev_path = file.path(dev_lib_path,
                      'ASHE_project', 'ASHE', 'R')
 if (file.exists(dev_path)) {
     print('Loading ASHE from local directory')
@@ -475,7 +392,7 @@ if (file.exists(dev_path)) {
 }
 
 # Import dataSHEEP
-dev_path = file.path(dirname(dirname(computer_work_path)),
+dev_path = file.path(dev_lib_path,
                      'dataSHEEP_project', 'dataSHEEP',
                      "__SHEEP__")
                      # 'Ex2D')
