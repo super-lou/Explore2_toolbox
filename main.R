@@ -356,7 +356,11 @@ to_plot =
 ## 0. LIBRARIES ______________________________________________________
 # Computer
 computer = Sys.info()["nodename"]
-source(paste0("computer_", computer, ".R"), encoding='UTF-8')
+computer_file_list = list.files(pattern="computer[_].*[.]R")
+computer_list = gsub("(computer[_])|([.]R)", "", computer_file_list)
+computer_file = computer_file_list[sapply(computer_list,
+                                          grepl, computer)]
+source(computer_file, encoding='UTF-8')
 
 # Sets working directory
 setwd(computer_work_path)
@@ -365,7 +369,7 @@ source('tools.R', encoding='UTF-8')
 
 # Import EXstat
 dev_path = file.path(dev_lib_path,
-                     'EXstat_project', 'EXstat', 'R')
+                     c('', 'EXstat_project'), 'EXstat', 'R')
 if (file.exists(dev_path)) {
     print('Loading EXstat from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
@@ -379,7 +383,7 @@ if (file.exists(dev_path)) {
 
 # Import ASHE
 dev_path = file.path(dev_lib_path,
-                     'ASHE_project', 'ASHE', 'R')
+                     c('', 'ASHE_project'), 'ASHE', 'R')
 if (file.exists(dev_path)) {
     print('Loading ASHE from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
@@ -393,7 +397,7 @@ if (file.exists(dev_path)) {
 
 # Import dataSHEEP
 dev_path = file.path(dev_lib_path,
-                     'dataSHEEP_project', 'dataSHEEP',
+                     c('', 'dataSHEEP_project'), 'dataSHEEP',
                      "__SHEEP__")
                      # 'Ex2D')
 if (file.exists(dev_path)) {
