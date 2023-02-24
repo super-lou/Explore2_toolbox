@@ -47,13 +47,15 @@
 ## 1. WORKING DIRECT|_|ORY ___________________________________________
 # Work path
 computer_work_path = '/home/herautl/scratch'
+# Ex2D_toolbox path
+lib_path = '/home/herautl/library/Ex2D_toolbox'
 # Library path for package dev
-dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
+dev_lib_path = '/home/herautl/library'
 
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
-computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
+computer_data_path = '/home/herautl/data'
 obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
 obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Explore2/diagnostic"
@@ -62,30 +64,14 @@ codes_to_diag_shp_dir = "Explore2/reseauReferenceHYDRO"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
-CARD_path = file.path(gsub("[/]project[/].*$", "",
-                           computer_work_path),
-                      "project",
-                      "CARD_project",
-                      "CARD")
+CARD_path = file.path(dev_lib_path, "CARD")
 # Name of the tool directory that includes all the functions needed to
 # calculate a variable
 init_tools_dir = '__tools__'
 # Name of the default parameters file for a variable
 init_var_file = '__default__.R'
 
-### 2.3. Resources ___________________________________________________
-resources_path = file.path(computer_work_path, 'resources')
-if (!(file.exists(resources_path))) {
-  dir.create(resources_path)
-}
-print(paste('resources_path :', resources_path))
-#### 2.3.1. Logo _____________________________________________________
-logo_dir = 'logo'
-
-#### 2.3.2. Icon _____________________________________________________
-icon_dir = 'icon'
-
-#### 2.3.3. Shapefile ________________________________________________
+#### 2.3. Shapefile ________________________________________________
 shp_dir = 'map'
 # Path to the shapefile for france contour from 'computer_data_path' 
 france_dir = file.path(shp_dir, 'france')
@@ -103,6 +89,18 @@ entiteHydro_coord = c('L93', 'L2')
 # Path to the shapefile for river shape from 'computer_data_path' 
 river_dir = file.path('map', 'river')
 river_file = 'CoursEau_FXX.shp'
+
+### 2.4. Resources ___________________________________________________
+resources_path = file.path(dev_lib_path, "Ex2D_toolbox", 'resources')
+if (!(file.exists(resources_path))) {
+  dir.create(resources_path)
+}
+print(paste('resources_path :', resources_path))
+#### 2.4.1. Logo _____________________________________________________
+logo_dir = 'logo'
+
+#### 2.4.2. Icon _____________________________________________________
+icon_dir = 'icon'
 
 
 ## 3. OUTPUT DIRECTORIES _____________________________________________

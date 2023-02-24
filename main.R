@@ -365,7 +365,7 @@ source(computer_file, encoding='UTF-8')
 # Sets working directory
 setwd(computer_work_path)
 
-source('tools.R', encoding='UTF-8')
+source(file.path(lib_path, 'tools.R'), encoding='UTF-8')
 
 # Import EXstat
 dev_path = file.path(dev_lib_path,
@@ -477,7 +477,8 @@ nCodeALL = length(CodeALL)
 Subsets = ceiling(nCodeALL/nCode4write)
 
 if (read_tmp | delete_tmp) {
-    source('script_management.R', encoding='UTF-8')
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
 }
 tmppath = file.path(computer_work_path, tmpdir)
 if (!(file.exists(tmppath))) {
@@ -513,21 +514,25 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         nCodeSUB = length(CodeSUB)
 
         if (any(c('create_data', 'create_data_proj') %in% to_do)) {
-            source('script_create.R', encoding='UTF-8')
+            source(file.path(lib_path, 'script_create.R'),
+                   encoding='UTF-8')
         }
         if (is.null(data)) {
             next
         }
         if ('analyse_data' %in% to_do) {
-            source('script_analyse.R', encoding='UTF-8')
+            source(file.path(lib_path, 'script_analyse.R'),
+                   encoding='UTF-8')
         }
     }
 }
 
 if (any(c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_saving') %in% to_do)) {
-    source('script_management.R', encoding='UTF-8')
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
 }
 
 if ('plot' %in% to_do) {
-    source('script_layout.R', encoding='UTF-8')
+    source(file.path(lib_path, 'script_layout.R'),
+           encoding='UTF-8')
 }

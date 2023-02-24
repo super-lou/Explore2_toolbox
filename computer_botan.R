@@ -47,6 +47,8 @@
 ## 1. WORKING DIRECT|_|ORY ___________________________________________
 # Work path
 computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/Ex2D_toolbox'
+# Ex2D_toolbox path
+lib_path = computer_work_path
 # Library path for package dev
 dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
 
