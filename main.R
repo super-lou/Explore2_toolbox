@@ -44,6 +44,11 @@
 # |  \/  | __ _ (_) _ _  
 # | |\/| |/ _` || || ' \ 
 # |_|  |_|\__,_||_||_||_| ____________________________________________
+# Ex2D_toolbox path
+lib_path =
+    #computer_work_path
+    '/home/herautl/library/Ex2D_toolbox'
+    
 ## 1. ANALYSIS _______________________________________________________
 ### 1.1. Period ______________________________________________________
 # Periods of time to perform analyses

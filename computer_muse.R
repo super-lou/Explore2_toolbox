@@ -47,8 +47,6 @@
 ## 1. WORKING DIRECT|_|ORY ___________________________________________
 # Work path
 computer_work_path = '/home/herautl/scratch'
-# Ex2D_toolbox path
-lib_path = '/home/herautl/library/Ex2D_toolbox'
 # Library path for package dev
 dev_lib_path = '/home/herautl/library'
 
