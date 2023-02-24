@@ -423,25 +423,25 @@ if (file.exists(dev_path)) {
 }
 
 # Import other library
-if (!require(dplyr)) install.packages("dplyr")
-if (!require(ggplot2)) install.packages("ggplot2")
-if (!require(qpdf)) install.packages("qpdf")
-if (!require(gridExtra)) install.packages("gridExtra")
-if (!require(gridtext)) install.packages("gridtext")
-if (!require(ggh4x)) install.packages("ggh4x")
-if (!require(rgdal)) install.packages("rgdal")
-if (!require(shadowtext)) install.packages("shadowtext")
-if (!require(png)) install.packages("png")
-if (!require(ggrepel)) install.packages("ggrepel")
-if (!require(latex2exp)) install.packages("latex2exp")
-if (!require(sf)) install.packages("sf")
-if (!require(stringr)) install.packages("stringr")
-if (!require(ggtext)) install.packages("ggtext")
+library(dplyr)
+library(ggplot2)
+library(qpdf)
+library(gridExtra)
+library(gridtext)
+library(ggh4x)
+library(rgdal)
+library(shadowtext)
+library(png)
+library(ggrepel)
+library(latex2exp)
+library(sf)
+library(stringr)
+library(ggtext)
 # already ::
-if (!require(ncdf4)) install.packages("ncdf4")
-if (!require(rgeos)) install.packages("rgeos")
-if (!require(lubridate)) install.packages("lubridate")
-if (!require(sp)) install.packages("sp")
+# library(ncdf4)
+# library(rgeos)
+# library(lubridate)
+# library(sp)
 
 
 if ("delete_tmp" %in% to_do) {
