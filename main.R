@@ -46,7 +46,7 @@
 # |_|  |_|\__,_||_||_||_| ____________________________________________
 # Ex2D_toolbox path
 lib_path =
-    #computer_work_path
+    # "./"
     '/home/herautl/library/Ex2D_toolbox'
     
 ## 1. ANALYSIS _______________________________________________________
@@ -427,14 +427,14 @@ library(dplyr)
 library(ggplot2)
 library(qpdf)
 library(gridExtra)
-library(gridtext)
+# library(gridtext)
 library(ggh4x)
 library(rgdal)
 library(shadowtext)
 library(png)
 library(ggrepel)
 library(latex2exp)
-library(sf)
+# library(sf)
 library(stringr)
 library(ggtext)
 # already ::
