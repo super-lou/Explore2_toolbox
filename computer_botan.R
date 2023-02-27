@@ -44,11 +44,13 @@
 #  / __| ___  _ __   _ __  _  _ | |_  ___  _ _ 
 # | (__ / _ \| '  \ | '_ \| || ||  _|/ -_)| '_|
 #  \___|\___/|_|_|_|| .__/ \_,_| \__|\___||_|  
-## 1. WORKING DIRECT|_|ORY ___________________________________________
+## 1. INFO ________ |_| ______________________________________________
 # Work path
 computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/Ex2D_toolbox'
 # Library path for package dev
 dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
+# Is it parallelized
+MPI = FALSE
 
 
 ## 2. INPUT DIRECTORIES ______________________________________________

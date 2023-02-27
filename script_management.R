@@ -22,14 +22,15 @@
 
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
-
+    
     if (exists("meta")) {
         rm (meta)
     }
-    for (subset in 1:Subsets) {
+    for (i in 1:nSubsets) {
+        subset_name = names(Subsets)[i]
         meta_tmp = read_tibble(filedir=tmppath,
                                filename=paste0("meta_",
-                                               subset,
+                                               subset_name,
                                                ".fst"))
         if (!exists("meta")) {
             meta = meta_tmp
@@ -49,10 +50,11 @@ if ('analyse_data' %in% to_do) {
         if (exists("dataEXind")) {
             rm (dataEXind)
         }
-        for (subset in 1:Subsets) {
+        for (i in 1:nSubsets) {
+            subset_name = names(Subsets)[i]
             dataEXind_tmp = read_tibble(filedir=tmppath,
                                         filename=paste0("dataEXind_",
-                                                        subset,
+                                                        subset_name,
                                                         ".fst"))
             if (!exists("dataEXind")) {
                 dataEXind = dataEXind_tmp
@@ -115,11 +117,12 @@ if ('analyse_data' %in% to_do) {
         if (exists("dataEXserie")) {
             rm (dataEXserie)
         }
-        for (subset in 1:Subsets) {
+        for (i in 1:nSubsets) {
+            subset_name = names(Subsets)[i]
             dataEXserie_tmp = read_tibble(
                 filedir=tmppath,
                 filename=paste0("dataEXserie_",
-                                subset,
+                                subset_name,
                                 ".fst"))
             if (!exists("dataEXserie")) {
                 dataEXserie = dataEXserie_tmp
@@ -141,7 +144,7 @@ if ('analyse_data' %in% to_do) {
 }
 
 if ('save_analyse' %in% to_do) {
-
+    print("### Saving analyses")
     print(paste0("Save extracted data and metadata in ",
                  paste0(saving_format, collapse=", ")))
 
@@ -218,6 +221,7 @@ if ('save_analyse' %in% to_do) {
 }
 
 if ('read_saving' %in% to_do) {
+    print("### Reading saving")
     print(paste0("Reading extracted data and metadata in ",
                  read_saving))
     Paths = list.files(file.path(resdir, read_saving),
@@ -239,17 +243,20 @@ if ('read_saving' %in% to_do) {
 }
 
 if ('select_var' %in% to_do) {
+    print("### Selecting variables")
     res = get_select(dataEXind, metaEXind, select=var_selection)
     dataEXind = res$dataEXind
     metaEXind = res$metaEXind
 }
 
 if ('write_warnings' %in% to_do) {
+    print("### Writing warnings")
     Warnings = find_Warnings(dataEXind, metaEXind,
                              resdir=today_resdir, save=TRUE)
 }
 
 if (read_tmp) {
+    print("### Reading tmp")
     print(paste0("Reading tmp data in ", tmppath))
     Path = list.files(tmppath, full.names=TRUE)
     Filenames = gsub("^.*[/]+", "", Path)
@@ -263,6 +270,7 @@ if (read_tmp) {
 }
 
 if (delete_tmp) {
+    print("### Deleting tmp")
     if (file.exists(tmppath)) {
         unlink(tmppath, recursive=TRUE)
     }

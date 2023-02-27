@@ -23,8 +23,6 @@
 NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
-
-    print(NCdata)
     
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
                    origin=
@@ -67,8 +65,6 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
     nDate = length(Date)
 
     if (model == "ORCHIDEE") {
-
-        print(QRaw)
         
         Q_sim = QRaw[CodeOrder,]
         P = PRaw[CodeOrder,]
@@ -115,7 +111,6 @@ convert_diag_data = function (model, data) {
         names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "ET0", "S")
         data$Date = as.Date(data$Date)
-        # data = dplyr::arrange(data, Code)
         data = dplyr::select(data, -"S")
         
     } else if (grepl("J2000", model)) {

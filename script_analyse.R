@@ -23,11 +23,11 @@
 analyse_data_indicator = function () {
     data = read_tibble(filedir=tmppath,
                        filename=paste0("data_",
-                                       subset,
+                                       subset_name,
                                        ".fst"))
     meta = read_tibble(filedir=tmppath,
                        filename=paste0("meta_",
-                                       subset,
+                                       subset_name,
                                        ".fst"))
 
     Model = levels(factor(data$Model))
@@ -61,7 +61,7 @@ analyse_data_indicator = function () {
     
     write_tibble(dataEXind,
                  filedir=tmppath,
-                 filename=paste0("dataEXind_", subset, ".fst"))
+                 filename=paste0("dataEXind_", subset_name, ".fst"))
     write_tibble(metaEXind,
                  filedir=tmppath,
                  filename="metaEXind.fst")
@@ -71,11 +71,11 @@ analyse_data_indicator = function () {
 analyse_data_serie = function () {
     data = read_tibble(filedir=tmppath,
                        filename=paste0("data_",
-                                       subset,
+                                       subset_name,
                                        ".fst"))
     meta = read_tibble(filedir=tmppath,
                        filename=paste0("meta_",
-                                       subset,
+                                       subset_name,
                                        ".fst"))
 
     Model = levels(factor(data$Model))
@@ -115,7 +115,7 @@ analyse_data_serie = function () {
     
     write_tibble(dataEXserie,
                  filedir=tmppath,
-                 filename=paste0("dataEXserie_", subset, ".fst"))
+                 filename=paste0("dataEXserie_", subset_name, ".fst"))
     write_tibble(metaEXserie,
                  filedir=tmppath,
                  filename="metaEXserie.fst")
@@ -126,10 +126,12 @@ analyse_data_serie = function () {
 if ('analyse_data' %in% to_do) {
     
     if (any(grepl("(indicator)|(WIP)", analyse_data))) {
+        print("### Analysing data for criteria extraction")
         analyse_data_indicator()
     }
 
     if (any(grepl("serie", analyse_data))) {
+        print("### Analysing data for time series extraction")
         analyse_data_serie()
     }
 }

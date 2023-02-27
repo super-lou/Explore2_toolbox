@@ -46,8 +46,8 @@
 # |_|  |_|\__,_||_||_||_| ____________________________________________
 # Ex2D_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Ex2D_toolbox'
+    "./"
+    # '/home/herautl/library/Ex2D_toolbox'
     
 ## 1. ANALYSIS _______________________________________________________
 ### 1.1. Period ______________________________________________________
@@ -134,11 +134,11 @@ exXprob = 0.01
 
 propagate_NA = TRUE
 
-nCode4write = 25
+nCode4RAM = 25
 
 verbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 document_filename = "Explore2_diagnostic"
 pdf_chunk = c('all')
@@ -148,14 +148,14 @@ pdf_chunk = c('all')
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     list(
-        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
-        # "GRSD"="GRSD_20230202.Rdata",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        # "MORDOR-TS"="MordorTS_20221213.Rdata",
-        # "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
+        "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        "GRSD"="GRSD_20230202.Rdata",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        "MORDOR-TS"="MordorTS_20221213.Rdata",
+        "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
         "SMASH"="SMASH_20220921.Rdata"
     )
 complete_by = "SMASH"
@@ -204,8 +204,8 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910_HYDRO_QJM.txt' #ref
+        'all'
+        # 'K2981910_HYDRO_QJM.txt' #ref
         # 'O3084320_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -213,12 +213,12 @@ code_filenames_to_use =
         # 'XVENEON1_HYDRO_QJM.txt',
         # 'XVENEON2_HYDRO_QJM.txt'
         # "X0454010_HYDRO_QJM.txt"
-        # '^A'
+        # '^A',
         # '^H'
         # '^I',
         # '^J'
-        # '^K'
-        # '^M',
+        # '^K',
+        # '^M'
         # '^U'
         # '^V',
         # '^W'
@@ -247,10 +247,10 @@ code_filenames_to_use =
 #     # 'WIP'
 
 analyse_data = c(
-    'WIP'
-    # 'Ex2D/1_indicator/1_all'
+    # 'WIP'
+    'Ex2D/1_indicator/1_all',
     # 'Ex2D/1_indicator/2_selection',
-    # 'Ex2D/2_serie'
+    'Ex2D/2_serie'
 )
 
 read_saving = "ALL"
@@ -293,13 +293,13 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp',
-        # 'create_data',
-        # 'analyse_data'
-        # 'save_analyse'
+        # 'delete_tmp'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
-        'read_saving',
-        'select_var'
+        # 'read_saving',
+        # 'select_var'
         # 'write_warnings'
         # 'plot'
         
@@ -346,13 +346,6 @@ to_plot =
 # find_regimeHydro(dataEXserieQM_obs, 2, dataEXseriePA_med)
 
 
-
-            # from mpi4py import MPI
-            # comm = MPI.COMM_WORLD
-            # size = comm.Get_size()
-            # rank = comm.Get_rank()
-            # for t in time_list[int(rank*(len(time_list)/size+.5)):int((rank+1)*(len(time_list)/size+.5))]:
-
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
 #  | | | ' \ | ||  _|| |/ _` || || |(_-</ _` ||  _|| |/ _ \| ' \ 
@@ -361,29 +354,24 @@ to_plot =
 ## 0. LIBRARIES ______________________________________________________
 # Computer
 computer = Sys.info()["nodename"]
+print(paste0("Computer ", computer))
 computer_file_list = list.files(path=lib_path,
                                 pattern="computer[_].*[.]R")
 computer_list = gsub("(computer[_])|([.]R)", "", computer_file_list)
-
-print(computer)
-print(computer_file_list)
-print(computer_list)
-
-
 computer_file = computer_file_list[sapply(computer_list,
                                           grepl, computer)]
-source(file.path(lib_path, computer_file),
-       encoding='UTF-8')
+computer_path = file.path(lib_path, computer_file)
+print(paste0("So reading file ", computer_path))
+source(computer_path, encoding='UTF-8')
 
 # Sets working directory
 setwd(computer_work_path)
-
 source(file.path(lib_path, 'tools.R'), encoding='UTF-8')
 
 # Import EXstat
 dev_path = file.path(dev_lib_path,
                      c('', 'EXstat_project'), 'EXstat', 'R')
-if (file.exists(dev_path)) {
+if (any(file.exists(dev_path))) {
     print('Loading EXstat from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
     for (path in list_path) {
@@ -397,7 +385,7 @@ if (file.exists(dev_path)) {
 # Import ASHE
 dev_path = file.path(dev_lib_path,
                      c('', 'ASHE_project'), 'ASHE', 'R')
-if (file.exists(dev_path)) {
+if (any(file.exists(dev_path))) {
     print('Loading ASHE from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
     for (path in list_path) {
@@ -413,7 +401,7 @@ dev_path = file.path(dev_lib_path,
                      c('', 'dataSHEEP_project'), 'dataSHEEP',
                      "__SHEEP__")
                      # 'Ex2D')
-if (file.exists(dev_path)) {
+if (any(file.exists(dev_path))) {
     print('Loading dataSHEEP')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
                            recursive=TRUE)
@@ -423,21 +411,21 @@ if (file.exists(dev_path)) {
 }
 
 # Import other library
+print("Importing library")
 library(dplyr)
 library(ggplot2)
 library(qpdf)
 library(gridExtra)
-# library(gridtext) #nope
+library(gridtext) #nope
 library(ggh4x)
 library(rgdal)
 library(shadowtext)
 library(png)
 library(ggrepel)
 library(latex2exp)
-# library(sf) #nope
+library(sf) #nope
 library(stringr)
-# library(ggtext) #nope
-
+library(ggtext) #nope
 # already ::
 # library(ncdf4)
 # library(rgeos)
@@ -477,9 +465,10 @@ if (all(code_filenames_to_use == "all")) {
     CodeALL = codes_to_use[okCode]
 }
 nCodeALL = length(CodeALL)
-Subsets = ceiling(nCodeALL/nCode4write)
+Subsets = ceiling(nCodeALL/nCode4RAM)
 
 if (read_tmp | delete_tmp) {
+    print("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
@@ -488,31 +477,88 @@ if (!(file.exists(tmppath))) {
     dir.create(tmppath, recursive=TRUE)
 }
 
-if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {    
-    for (subset in 1:Subsets) {
+if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
+
+    if (all(c('create_data', 'analyse_data') %in% to_do)) {
+        print("## CREATING AND ANALYSING DATA")
+    } else if ('create_data' %in% to_do) {
+        print("## CREATING DATA")
+    } else if ('analyse_data' %in% to_do) {
+        print("## ANALYSING DATA")
+    } else {
+        print("Maybe you can start by creating data")
+    }
+
+    if (MPI) {
+        library(Rmpi)
+        rank = mpi.comm.rank(comm=0)
+        size = mpi.comm.size (comm=0)
+    } else {
+        rank = 0
+        size = 1
+    }
+
+    firstLetterALL = substr(CodeALL, 1, 1)
+    IdCode = cumsum(table(firstLetterALL))
+
+    Subsets = list()
+    for (i in 1:length(IdCode)) {
+        Id = IdCode[i]
+        if (i == 1) {
+            id = 1    
+        } else {
+            id = IdCode[i-1] + 1
+        }
+        names(id) = NULL
+        name = names(Id)
+        names(Id) = NULL
+        n = 1
+        while (id+nCode4RAM < Id) {
+            Subsets = append(Subsets, list(c(id, id+nCode4RAM)))
+            names(Subsets)[length(Subsets)] = paste0(name, n)
+            id = id+nCode4RAM+1
+            n = n+1
+        }
+        if (id != Id) {
+            Subsets = append(Subsets, list(c(id, Id)))
+            names(Subsets)[length(Subsets)] = paste0(name, n)
+        }
+    }
+    
+    nSubsets = length(Subsets)
+    Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
+                      as.integer((rank+1)*(nSubsets/size+.5))]
+    Subsets = Subsets[!is.na(names(Subsets))]
+    nSubsets = length(Subsets)
+    
+    for (i in 1:nSubsets) {
+
+        subset = Subsets[[i]]
+        subset_name = names(Subsets)[i]
 
         file_test = c()
         if ('create_data' %in% to_do) {
             file_test = c(file_test,
-                          paste0("data_", subset, ".fst"))
+                          paste0("data_", subset_name, ".fst"))
         }
         if (any(grepl("(indicator)|(WIP)", analyse_data))) {
             file_test = c(file_test,
-                          paste0("dataEXind_", subset, ".fst"))
+                          paste0("dataEXind_", subset_name, ".fst"))
         }
         if (any(grepl("serie", analyse_data))) {
             file_test = c(file_test,
-                          paste0("dataEXserie_", subset))
+                          paste0("dataEXserie_", subset_name))
         }
-        print(paste0(subset, "/", Subsets,
+        print(paste0(i, "/", nSubsets,
                      " chunks of stations in analyse so ",
-                     round(subset/Subsets*100, 1), "%"))
+                     round(i/nSubsets*100, 1), "%"))
         
         if (all(file_test %in% list.files(tmppath, include.dirs=TRUE))) {
             next
         }
         
-        CodeSUB = CodeALL[((subset-1)*nCode4write+1):(subset*nCode4write)]
+        # CodeSUB = CodeALL[((subset-1)*nCode4RAM+1):(subset*nCode4RAM)]
+        CodeSUB = CodeALL[subset[1]:subset[2]]
         CodeSUB = CodeSUB[!is.na(CodeSUB)]
         nCodeSUB = length(CodeSUB)
 
@@ -531,11 +577,13 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
 }
 
 if (any(c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_saving') %in% to_do)) {
+    print("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
 
 if ('plot' %in% to_do) {
+    print("## PLOTTING DATA")
     source(file.path(lib_path, 'script_layout.R'),
            encoding='UTF-8')
 }

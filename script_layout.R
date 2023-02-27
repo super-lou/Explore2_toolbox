@@ -63,6 +63,7 @@ if ('sheet_diagnostic_station' %in% to_plot |
     'sheet_diagnostic_region' %in% to_plot |
     'sheet_diagnostic_regime' %in% to_plot) {
     if (!exists("Shapefiles")) {
+        print("### Loading shapefiles")
         Shapefiles = load_shapefile(
             computer_data_path, CodeALL,
             france_dir, france_file,
@@ -76,12 +77,14 @@ if ('sheet_diagnostic_station' %in% to_plot |
 
 
 if ('summary' %in% to_plot) {
+    print("### Plotting summary")
     df_page = tibble(section='Sommaire', subsection=NA, n=1)
 } else {
     df_page = tibble()
 }
 
 if ('correlation_matrix' %in% to_plot) {
+    print("### Plotting correlation matrix")
     df_page = sheet_correlation_matrix(
         dataEXind,
         metaEXind,
@@ -94,6 +97,7 @@ if ('correlation_matrix' %in% to_plot) {
 }
 
 if ('sheet_diagnostic_regime' %in% to_plot) {
+    print("### Plotting sheet diagnostic regime")
     df_page = sheet_diagnostic_regime(
         meta,
         dataEXind,
@@ -111,6 +115,7 @@ if ('sheet_diagnostic_regime' %in% to_plot) {
 }
 
 if ('sheet_diagnostic_region' %in% to_plot) {
+    print("### Plotting sheet diagnostic region")
     df_page = sheet_diagnostic_region(
         meta,
         dataEXind,
@@ -128,6 +133,7 @@ if ('sheet_diagnostic_region' %in% to_plot) {
 }
 
 if ('sheet_diagnostic_station' %in% to_plot) {
+    print("### Plotting sheet diagnostic station")
     df_page = plot_sheet_diagnostic_station(df_page=df_page)
 }
 
@@ -152,6 +158,7 @@ if ('summary' %in% to_plot) {
 }
 
 if (pdf_chunk == 'all') {
+    print("### Merging pdf")
     pdf_combine(input=listfile_path,
                 output=docpath)
 }

@@ -21,9 +21,10 @@
 
 
 create_data = function () {
+
+    print("### Simulated data")
     Model = c()
     data_sim = tibble()
-
     for (i in 1:length(models_to_diag)) {
 
         model = names(models_to_diag)[[i]]
@@ -59,7 +60,8 @@ create_data = function () {
     }
     
     if (nrow(data_sim) > 0) {
-
+        print("### Observation data")
+        
         Code_available = levels(factor(data_sim$Code))
         Code = Code_available[Code_available %in% CodeSUB]
         Code_filename = paste0(Code, obs_format)
@@ -69,12 +71,14 @@ create_data = function () {
         # Extract metadata about selected stations
         meta = extract_meta(computer_data_path,
                             obs_dir,
-                            Code_filename)
+                            Code_filename,
+                            verbose=FALSE)
         # Extract data about selected stations
         data_obs = extract_data(computer_data_path,
                                 obs_dir,
                                 Code_filename,
-                                val2keep=c(val_E2=0))
+                                val2keep=c(val_E2=0),
+                                verbose=FALSE)
 
         data_obs =
             dplyr::filter(data_obs,
@@ -87,9 +91,6 @@ create_data = function () {
         
         # Time gap
         meta = get_lacune(data_obs, meta)
-        # # Hydrograph
-        # meta = get_hydrograph(data_obs, meta=meta,
-        #                       period=period_diagnostic)$meta
         
         names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
 
@@ -155,10 +156,10 @@ create_data = function () {
 
         write_tibble(data,
                      filedir=tmppath,
-                     filename=paste0("data_", subset, ".fst"))
+                     filename=paste0("data_", subset_name, ".fst"))
         write_tibble(meta,
                      filedir=tmppath,
-                     filename=paste0("meta_", subset, ".fst"))
+                     filename=paste0("meta_", subset_name, ".fst"))
     } else {
         data = NULL
     }
