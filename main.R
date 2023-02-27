@@ -148,15 +148,15 @@ pdf_chunk = c('all')
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     list(
-        "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
-        "GRSD"="GRSD_20230202.Rdata",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        # "GRSD"="GRSD_20230223.nc",
+        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
         "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         "MORDOR-TS"="MordorTS_20221213.Rdata",
         "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
-        "SMASH"="SMASH_20220921.Rdata"
+        "SMASH"="SMASH_20230222.nc"
     )
 complete_by = "SMASH"
 
@@ -204,8 +204,8 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910_HYDRO_QJM.txt' #ref
+        # 'all'
+        'K2981910_HYDRO_QJM.txt' #ref
         # 'O3084320_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt',
         # 'WDORON02_HYDRO_QJM.txt',
@@ -248,8 +248,8 @@ code_filenames_to_use =
 
 analyse_data = c(
     # 'WIP'
-    'Ex2D/1_indicator/1_all',
-    # 'Ex2D/1_indicator/2_selection',
+    # 'Ex2D/1_indicator/1_all',
+    'Ex2D/1_indicator/2_selection',
     'Ex2D/2_serie'
 )
 
@@ -293,13 +293,13 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        'delete_tmp',
+        'create_data'
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
-        # 'select_var'
+        # 'select_var',
         # 'write_warnings'
         # 'plot'
         
@@ -310,7 +310,7 @@ to_plot =
     c(
         # 'summary'
         # 'correlation_matrix',
-        # 'sheet_diagnostic_station'
+        'sheet_diagnostic_station'
         # 'sheet_diagnostic_region'
         # 'sheet_diagnostic_regime'
     )
@@ -344,6 +344,15 @@ to_plot =
 #                                      PA=median(PA, na.rm=TRUE),
 #                                      .groups="drop")
 # find_regimeHydro(dataEXserieQM_obs, 2, dataEXseriePA_med)
+
+
+# Error in `dplyr::summarise()` at EXstat/R/process_extraction.R:1286:16:
+# ! Problem while computing `ValueEX1 = f(...)`.
+# ℹ The error occurred in group 4072: Code = "SMASH_A6541110", Date_g = "1993".
+# Caused by error in `f()`:
+# ! objet 'period_select' introuvable
+# Run `rlang::last_error()` to see where the error occurred.
+# There were 50 or more warnings (use warnings() to see the first 50)
 
 
 #  ___        _  _    _        _  _            _    _            
@@ -427,6 +436,7 @@ library(sf) #nope
 library(stringr)
 library(ggtext) #nope
 # already ::
+# library(grid)
 # library(ncdf4)
 # library(rgeos)
 # library(lubridate)
@@ -465,14 +475,14 @@ if (all(code_filenames_to_use == "all")) {
     CodeALL = codes_to_use[okCode]
 }
 nCodeALL = length(CodeALL)
-Subsets = ceiling(nCodeALL/nCode4RAM)
+# Subsets = ceiling(nCodeALL/nCode4RAM)
 
+tmppath = file.path(computer_work_path, tmpdir)
 if (read_tmp | delete_tmp) {
     print("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
-tmppath = file.path(computer_work_path, tmpdir)
 if (!(file.exists(tmppath))) {
     dir.create(tmppath, recursive=TRUE)
 }
@@ -520,6 +530,9 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
             n = n+1
         }
         if (id != Id) {
+            Subsets = append(Subsets, list(c(id, Id)))
+            names(Subsets)[length(Subsets)] = paste0(name, n)
+        } else if (id == Id & Id == 1) {
             Subsets = append(Subsets, list(c(id, Id)))
             names(Subsets)[length(Subsets)] = paste0(name, n)
         }

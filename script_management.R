@@ -42,7 +42,7 @@ if ('analyse_data' %in% to_do) {
     meta = meta[order(meta$Code),]
     
 
-    if (any(grepl("indicator", analyse_data))) {
+    if (any(grepl("(indicator)|(WIP)", analyse_data))) {
 
         metaEXind = read_tibble(filedir=tmppath,
                                 filename="metaEXind.fst")
@@ -151,15 +151,18 @@ if ('save_analyse' %in% to_do) {
     if (!(file.exists(today_resdir))) {
         dir.create(today_resdir, recursive=TRUE)
     }
-    file.copy(file.path(tmppath,
-                        paste0("data_", 1:Subsets, ".fst")),
-              file.path(today_resdir,
-                        paste0("data_", 1:Subsets, ".fst")))
+    data_paths = list.files(tmppath,
+                            pattern="data[_].*[.]fst",
+                            full.names=TRUE)
+    data_files = list.files(tmppath,
+                            pattern="data[_].*[.]fst")
+    file.copy(data_paths,
+              file.path(today_resdir, data_files))
     
     write_tibble(meta,
                  filedir=today_resdir,
                  filename=paste0("meta.fst"))
-    if (any(grepl("indicator", analyse_data))) {
+    if (any(grepl("(indicator)|(WIP)", analyse_data))) {
         write_tibble(metaEXind,
                      filedir=today_resdir,
                      filename=paste0("metaEXind.fst"))
@@ -180,7 +183,7 @@ if ('save_analyse' %in% to_do) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.Rdata"))
-        if (any(grepl("indicator", analyse_data))) {
+        if (any(grepl("(indicator)|(WIP)", analyse_data))) {
             write_tibble(metaEXind,
                          filedir=today_resdir,
                          filename=paste0("metaEXind.Rdata"))
@@ -201,7 +204,7 @@ if ('save_analyse' %in% to_do) {
         write_tibble(meta,
                      filedir=today_resdir,
                      filename=paste0("meta.txt"))
-        if (any(grepl("indicator", analyse_data))) {
+        if (any(grepl("(indicator)|(WIP)", analyse_data))) {
             write_tibble(metaEXind,
                          filedir=today_resdir,
                          filename=paste0("metaEXind.txt"))
