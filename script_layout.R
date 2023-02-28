@@ -32,6 +32,8 @@ plot_sheet_diagnostic_station = function (df_page=NULL) {
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
                        full.names=TRUE)
+    letterPaths = gsub("(.*[_])|([[:digit:]][.]fst)", "", Paths)
+    Paths = Paths[letterPaths %in% substr(CodeALL, 1, 1)]
     for (path in Paths) {
         data = read_tibble(filepath=path) 
         Code_tmp = levels(factor(data$Code))

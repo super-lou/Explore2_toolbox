@@ -196,7 +196,7 @@ Colors_of_models = c(
     "SIM2"="#384a54", #bleu foncé
     "MORDOR-SD"="#d8714e", #orange
     "MORDOR-TS"="#ae473e", #rouge
-    "ORCHIDEE"="#f5c8c3", #rose
+    "ORCHIDEE"="#efa59d", #"#f5c8c3" #rose
     "SMASH"="#f6ba62" #mimosa    
 )
 
@@ -293,16 +293,15 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        'delete_tmp',
-        'create_data'
+        # 'delete_tmp',
+        # 'create_data'
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'select_var',
         # 'write_warnings'
-        # 'plot'
-        
+        'plot'
         # 'create_data_proj'
     )
 

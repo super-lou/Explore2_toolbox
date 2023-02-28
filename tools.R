@@ -260,8 +260,9 @@ find_Warnings = function (dataEXind, metaEXind,
 
     tick_range = list(
         "^KGE"=c(0.5, 1),
+        "^Biais$"=c(-0.2, 0.2),
         "(^epsilon.*)|(^alpha)"=c(0.5, 2),
-        "(^Biais$)|(^Q[[:digit:]]+$)|([{]t.*[}])"=c(-1, 1))
+        "(^Q[[:digit:]]+$)|([{]t.*[}])"=c(-1, 1))
 
     all_model = "<b>L'ensemble des modèles</b>"
     
@@ -332,8 +333,9 @@ find_Warnings = function (dataEXind, metaEXind,
     line_NOK = "Les modèles hydrologiques ont des difficultés à reproduire le régime sauf "
     line_allNOK = "<b>Aucun modèle hydrologique</b> ne semble simuler de manière acceptable le régime."
 
-    orderVar = c("Général", "^KGE", "^Biais$", "^Q[[:digit:]]+$",
-                 "[{]t.*[}])", "^alpha", "^epsilon.*")
+    orderVar = c("Général", "^RAT.*T$", "^KGE",
+                 "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}])",
+                 "^alpha", "^epsilon.*")
 
     if (is.null(codeLight)) {
         Code = levels(factor(dataEXind$Code))  
@@ -387,6 +389,17 @@ find_Warnings = function (dataEXind, metaEXind,
         nVar = length(Var)
         
         Lines = dplyr::tibble()
+
+
+
+
+        # RAT_T
+        ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT)."
+        ":montre/montrent: une faible robustesse temporelle à la température (test RAT)."
+
+        # RAT_P
+        ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT)."
+        ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT)."
         
         for (i in 1:nVar) {
             var = Var[i]
