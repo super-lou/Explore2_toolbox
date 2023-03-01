@@ -24,9 +24,6 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
 
-    print(model)
-    print(NCdata)
-    
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
                    origin=
                        as.Date(str_extract(
@@ -262,7 +259,8 @@ find_Warnings = function (dataEXind, metaEXind,
         "^KGE"=c(0.5, 1),
         "^Biais$"=c(-0.2, 0.2),
         "(^epsilon.*)|(^alpha)"=c(0.5, 2),
-        "(^Q[[:digit:]]+$)|([{]t.*[}])"=c(-1, 1))
+        "(^Q[[:digit:]]+$)|([{]t.*[}])"=c(-1, 1),
+        "^RAT"=c(TRUE, FALSE))
 
     all_model = "<b>L'ensemble des modèles</b>"
     
@@ -326,8 +324,88 @@ find_Warnings = function (dataEXind, metaEXind,
         "tVCN10"=c(
             ":produit/produisent: des étiages trop tôt dans l'année.",
             ":simule/simulent: de manière correcte temporalité annuelle des étiages.",
-            ":produit/produisent: des étiages trop tard dans l'année."))
+            ":produit/produisent: des étiages trop tard dans l'année."),
 
+        "RAT_T"=c(
+            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT).",
+            ":montre/montrent: une faible robustesse temporelle à la température (test RAT)."),
+
+        "RAT_P"=c(
+            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT).",
+            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT)."))
+
+    
+    tick_nline = list(
+        
+        "^KGE"=c(
+            ":reproduit/reproduisent: correctement les observations.",
+            ":reproduit/reproduisent: mal les observations.",
+            ":reproduit/reproduisent: correctement les observations."),
+        
+        "^Biais$"=c(
+            ":a/ont: un biais acceptable.",
+            ":a/ont: un biais important.",
+            ":a/ont: un biais acceptable."),
+
+        "^epsilon.*T.*DJF"=c(
+            ":a/ont: une sensibilité acceptable aux variations de température en hiver.",
+            ":n'est/ne sont: pas correctement sensible aux variations de température en hiver.",
+            ":a/ont: une sensibilité acceptable aux variations de température en hiver."),
+
+        "^epsilon.*T.*JJA"=c(
+            ":a/ont: une sensibilité acceptable aux variations de température en été.",
+            ":n'est/ne sont: pas correctement sensible aux variations de température en été.",
+            ":a/ont: une sensibilité acceptable aux variations de température en été."),
+
+        "^epsilon.*P.*DJF"=c(
+            ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales.",
+            ":n'est/ne sont: pas correctement sensible aux variations de précipitations hivernales.",
+            ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales."),
+
+        "^epsilon.*P.*JJA"=c(
+            ":a/ont: une sensibilité acceptable aux variations de précipitations estivales.",
+            ":n'est/ne sont: pas correctement sensible aux variations de précipitations estivales.",
+            ":a/ont: une sensibilité acceptable aux variations de précipitations estivales."),
+
+        "^Q10$"=c(
+            ":simule/simulent: de manière correcte les débits en hautes eaux.",
+            "ne :simule/simulent: pas de manière correcte les débits en hautes eaux.",
+            ":simule/simulent: de manière correcte les débits en hautes eaux."),
+
+        "tQJXA"=c(
+            ":simule/simulent: de manière correcte la temporalité annuelle des crues.",
+            "ne :simule/simulent: pas de manière correcte la temporalité annuelle des crues.",
+            ":simule/simulent: de manière correcte la temporalité annuelle des crues."),
+
+        "^alphaCDC$"=c(
+            ":simule/simulent: de manière correcte le régime des moyennes eaux.",
+            "ne :simule/simulent: pas de manière correcte le régime des moyennes eaux.",
+            ":simule/simulent: de manière correcte le régime des moyennes eaux."),
+
+        "^alphaQA$"=c(
+            ":simule/simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel.",
+            ":s'écarte/s'écartent: sensiblement de la tendance observée sur les débits moyens annuels.",
+            ":simule/simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel."),
+
+        "^Q90$"=c(
+            ":simule/simulent: de manière correcte les débits d'étiage.",
+            "ne :simule/simulent: pas de manière correcte les débits d'étiage.",
+            ":simule/simulent: de manière correcte les débits d'étiage."),
+
+        "tVCN10"=c(
+            ":simule/simulent: de manière correcte temporalité annuelle des étiages.",
+           "ne :simule/simulent: pas de manière correcte temporalité annuelle des étiages.",
+            ":simule/simulent: de manière correcte temporalité annuelle des étiages."),
+
+        "RAT_T"=c(
+            ":montre/montrent: une faible robustesse temporelle à la température (test RAT).",
+            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT)."),
+
+        "RAT_P"=c(
+            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT).",
+            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT)."))
+    
+    
     line_allOK = "<b>Tous les modèles hydrologiques</b> semblent simuler de manière acceptable le régime."
     line_OK = "Les modèles hydrologiques semblent simuler de manière acceptable le régime sauf "
     line_NOK = "Les modèles hydrologiques ont des difficultés à reproduire le régime sauf "
@@ -352,7 +430,7 @@ find_Warnings = function (dataEXind, metaEXind,
     
     for (k in 1:nCode) {
 
-        if ((k-1) %% 10 == 0) {
+        if ((k-1) %% 25 == 0) {
             print(paste0(round(k/nCode*100), " %"))
         }
         
@@ -360,9 +438,9 @@ find_Warnings = function (dataEXind, metaEXind,
 
         dataEXind_code = dataEXind[dataEXind$Code == code,]
         
-        logicalCol = names(dataEXind_code)[sapply(dataEXind_code, class) == "logical"]
-        dataEXind_code = dataEXind_code[!(names(dataEXind_code) %in% logicalCol)]
-        metaEXind = metaEXind[!(metaEXind$var %in% logicalCol),]
+        # logicalCol = names(dataEXind_code)[sapply(dataEXind_code, class) == "logical"]
+        # dataEXind_code = dataEXind_code[!(names(dataEXind_code) %in% logicalCol)]
+        # metaEXind = metaEXind[!(metaEXind$var %in% logicalCol),]
         
         vars2keep = names(dataEXind_code)
         vars2keep = vars2keep[!grepl("([_]obs)|([_]sim)", vars2keep)]
@@ -371,14 +449,15 @@ find_Warnings = function (dataEXind, metaEXind,
                                        dplyr::across(where(is.logical),
                                                      as.numeric),
                                        .keep="all")
-
+        
         dataEXind_code = dplyr::select(dataEXind_code, vars2keep)
-
+        
         Model = levels(factor(dataEXind_code$Model))
         nModel = length(Model)
-
+        
         dataEXind_code_tmp = dataEXind_code
-        dataEXind_code_tmp = dplyr::select(dataEXind_code_tmp, -c(Code, Model))
+        dataEXind_code_tmp = dplyr::select(dataEXind_code_tmp,
+                                           -c(Code, Model))
 
         matchVar = match(names(dataEXind_code_tmp), metaEXind$var)
         matchVar = matchVar[!is.na(matchVar)]
@@ -389,26 +468,22 @@ find_Warnings = function (dataEXind, metaEXind,
         nVar = length(Var)
         
         Lines = dplyr::tibble()
-
-
-
-
-        # RAT_T
-        ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT)."
-        ":montre/montrent: une faible robustesse temporelle à la température (test RAT)."
-
-        # RAT_P
-        ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT)."
-        ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT)."
         
         for (i in 1:nVar) {
             var = Var[i]
             x = dataEXind_code[[var]]
 
-            range = unlist(tick_range[sapply(names(tick_range), grepl, var)],
+            range = unlist(tick_range[sapply(names(tick_range),
+                                             grepl, var)],
                            use.names=FALSE)
-            lines = tick_line[sapply(names(tick_line), grepl, var)][[1]]
 
+            lines = tick_line[sapply(names(tick_line),
+                                     grepl,
+                                     var)][[1]]
+            nlines = tick_nline[sapply(names(tick_nline),
+                                       grepl,
+                                       var)][[1]]
+            
             for (j in 1:nModel) {
                 model = Model[j]
                 x = dataEXind_code[dataEXind_code$Model == model,][[var]]
@@ -416,23 +491,31 @@ find_Warnings = function (dataEXind, metaEXind,
                     next 
                 }
 
-                low = c(-Inf, range)
-                up = c(range, Inf)
-                id = which(low <= x & x <= up)
-                niveau = (id-2)
+                if (is.logical(range)) {
+                    id = which(range == x)
+                    niveau = id-1
+                } else {
+                    low = c(-Inf, range)
+                    up = c(range, Inf)
+                    id = which(low <= x & x <= up)
+                    niveau = (id-2)
+                }
                 
                 if (nrow(Lines) == 0) {
                     Lines = dplyr::tibble(var=var,
                                           model=model,
                                           niveau=niveau,
-                                          line=lines[id])
+                                          line=lines[id],
+                                          nline=nlines[id])
                 } else {
                     Lines =
                         dplyr::bind_rows(Lines,
-                                         dplyr::tibble(var=var,
-                                                       model=model,
-                                                       niveau=niveau,
-                                                       line=lines[id]))
+                                         dplyr::tibble(
+                                                    var=var,
+                                                    model=model,
+                                                    niveau=niveau,
+                                                    line=lines[id],
+                                                    nline=nlines[id]))
                 }
             }
         }
@@ -440,14 +523,18 @@ find_Warnings = function (dataEXind, metaEXind,
         allLines = dplyr::bind_rows(allLines,
                                     dplyr::select(Lines, c(var,
                                                            niveau,
-                                                           line)))
+                                                           line,
+                                                           nline)))
             
         statLines =
             dplyr::summarise(
                        dplyr::group_by(Lines, var, niveau),
                        n=dplyr::n(),
-                       model=list(model[niveau==dplyr::cur_group()$niveau]),
+                       model=
+                           list(model[niveau ==
+                                      dplyr::cur_group()$niveau]),
                        line=line[1],
+                       nline=nline[1],
                        .groups="drop")
 
         Line_KGE = statLines[statLines$var == "KGEracine",]
@@ -459,11 +546,13 @@ find_Warnings = function (dataEXind, metaEXind,
                 niveau = 1
                 line_model = line_allOK
                 Warnings_code = statLines[statLines$niveau != 0,]
-                Warnings_code = Warnings_code[c("var", "model", "line")]
+                Warnings_code = Warnings_code[c("var", "model",
+                                                "line", "nline")]
                 Warnings_code =
                     dplyr::bind_rows(dplyr::tibble(var="Général",
                                                    model=NA,
-                                                   line=line_model),
+                                                   line=line_model,
+                                                   nline=NA),
                                      Warnings_code)
             } else {
                 line = line_allNOK
@@ -471,7 +560,8 @@ find_Warnings = function (dataEXind, metaEXind,
                 line_model = line_allNOK
                 Warnings_code = dplyr::tibble(var="Général",
                                               model=NA,
-                                              line=line_model)
+                                              line=line_model,
+                                              nline=NA)
             }
 
         } else {            
@@ -490,28 +580,20 @@ find_Warnings = function (dataEXind, metaEXind,
             if (length(model_OK) >= nModel/2) {
                 line = line_OK
                 niveau = 0.5
-                if (length(model_NOK) == 1) {
-                    model = model_NOK
-                } else {
-                    model = paste0(
-                        paste0(model_NOK[-length(model_NOK)],
-                               collapse=", "),
-                        " et ", model_NOK[length(model_NOK)])
-                }
-                
+                models = paste0("<b>", model_NOK, "</b>")
             } else {
                 line = line_NOK
                 niveau = -0.5
-                if (length(model_OK) == 1) {
-                    model = model_OK
-                } else {
-                    model = paste0(
-                        paste0(model_OK[-length(model_OK)],
-                               collapse=", "),
-                        " et ", model_OK[length(model_OK)])
-                }
+                models = paste0("<b>", model_OK, "</b>")
             }
-            line_model = paste0(line, model)
+            models_len = length(models)
+            if (models_len > 1) {
+                models = paste0(
+                    paste0(models[-models_len],
+                           collapse=", "),
+                    " et ", models[models_len])
+            }
+            line_model = paste0(line, models, ".")
 
             rm_NOK = function (X) {
                 X = X[!(X %in% model_NOK)]
@@ -522,21 +604,24 @@ find_Warnings = function (dataEXind, metaEXind,
             }
             
             Warnings_code = statLines[statLines$niveau != 0,]
-            Warnings_code = Warnings_code[c("var", "model", "line")]
+            Warnings_code = Warnings_code[c("var", "model",
+                                            "line", "nline")]
             Warnings_code$model = lapply(Warnings_code$model, rm_NOK)
             Warnings_code = Warnings_code[!is.na(Warnings_code$model),]
             
             Warnings_code =
                 dplyr::bind_rows(dplyr::tibble(var="Général",
                                                model=NA,
-                                               line=line_model),
+                                               line=line_model,
+                                               nline=NA),
                                  Warnings_code)
         }
 
         allLines = dplyr::bind_rows(allLines,
                                     dplyr::tibble(var="Général",
                                                   niveau=niveau,
-                                                  line=line))
+                                                  line=line,
+                                                  nline=NA))
         
         for (i in 1:nrow(Warnings_code)) {
 
@@ -552,26 +637,73 @@ find_Warnings = function (dataEXind, metaEXind,
                                 "",
                                 Line$line))
             } else {
-                model = paste0("<b>",
-                               unlist(Line$model),
-                               "</b>")
-                if (length(unlist(Line$model)) == 1) {
-                    Line$line =
-                        paste0(model, " ",
-                               gsub("([/].*[:])|([:])",
-                                    "",
-                                    Line$line))
+                # model = paste0("<b>",
+                #                unlist(Line$model),
+                #                "</b>")
+                # if (length(unlist(Line$model)) == 1) {
+                #     Line$line =
+                #         paste0(model, " ",
+                #                gsub("([/].*[:])|([:])",
+                #                     "",
+                #                     Line$line))
+                # } else {
+                #     model = paste0(
+                #         paste0(model[-length(model)],
+                #                collapse=", "),
+                #         " et ", model[length(model)])
+                #     Line$line =
+                #         paste0(model, " ",
+                #                gsub("([:].*[/])|([:])",
+                #                     "",
+                #                     Line$line))
+                # }
+
+                ##
+                models = unlist(Line$model)
+                models_len = length(models)
+                if (models_len >= nModel/2) {
+                    models = Model[!(Model %in% models)]
+                    models_len = length(models)
+                    models_str = paste0("<b>", models, "</b>")
+                    if (models_len == 1) {
+                        Line$line =
+                            paste0("Seul ", models_str, " ",
+                                   gsub("([/].*[:])|([:])",
+                                        "",
+                                        Line$nline))
+                    } else {
+                        models_str = paste0(
+                            paste0(models_str[-models_len],
+                                   collapse=", "),
+                            " et ", models_str[models_len])
+                        Line$line =
+                            paste0("Seuls ", models_str, " ",
+                                   gsub("([:].*[/])|([:])",
+                                        "",
+                                        Line$nline))
+                    }
+                    
                 } else {
-                    model = paste0(
-                        paste0(model[-length(model)],
-                               collapse=", "),
-                        " et ", model[length(model)])
-                    Line$line =
-                        paste0(model, " ",
-                               gsub("([:].*[/])|([:])",
-                                    "",
-                                    Line$line))
+                    models_str = paste0("<b>", models, "</b>")
+                    if (models_len == 1) {
+                        Line$line =
+                            paste0(models_str, " ",
+                                   gsub("([/].*[:])|([:])",
+                                        "",
+                                        Line$line))
+                    } else {
+                        models_str = paste0(
+                            paste0(models_str[-models_len],
+                                   collapse=", "),
+                            " et ", models_str[models_len])
+                        Line$line =
+                            paste0(models_str, " ",
+                                   gsub("([:].*[/])|([:])",
+                                        "",
+                                        Line$line))
+                    }
                 }
+                ##
             }
             Warnings_code[i,] = Line
         }
@@ -624,8 +756,8 @@ find_Warnings = function (dataEXind, metaEXind,
 }
 
 # W = find_Warnings(dataEXind, metaEXind,
-#                   codeLight="K2981910",
-#                   save=FALSE)
+                  # codeLight="K2981910",
+                  # save=FALSE)
 # W = find_Warnings(dataEXind, metaEXind)
 # Warnings = W$Warnings
 # frq = W$frq

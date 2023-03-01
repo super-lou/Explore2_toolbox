@@ -205,14 +205,14 @@ code_filenames_to_use =
     # ''
     c(
         # 'all'
-        'K2981910_HYDRO_QJM.txt' #ref
+        # 'K2981910_HYDRO_QJM.txt' #ref
         # 'O3084320_HYDRO_QJM.txt'
-        # 'WDORON01_HYDRO_QJM.txt',
-        # 'WDORON02_HYDRO_QJM.txt',
-        # 'WSOULOIS_HYDRO_QJM.txt',
-        # 'XVENEON1_HYDRO_QJM.txt',
-        # 'XVENEON2_HYDRO_QJM.txt'
-        # "X0454010_HYDRO_QJM.txt"
+        # 'WDORON01_HYDRO_QJM.txt'
+        'WDORON02_HYDRO_QJM.txt',
+        'WSOULOIS_HYDRO_QJM.txt',
+        'XVENEON1_HYDRO_QJM.txt',
+        'XVENEON2_HYDRO_QJM.txt',
+        "X0454010_HYDRO_QJM.txt"
         # '^A',
         # '^H'
         # '^I',
@@ -266,7 +266,7 @@ var2search = c(
 
 var_selection =
     # "all"
-    c("KGEracine", "Biais$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "Q10", "median{tQJXA}", "alphaQA", "alphaCDC", "Q90", "median{tVCN10}")
+    c("KGEracine", "Biais$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "RAT_P", "Q10", "median{tQJXA}", "^alphaQA", "^alphaCDC", "Q90", "median{tVCN10}")
 
 
 ### 3.4. Steps _______________________________________________________
