@@ -245,7 +245,7 @@ if ('read_saving' %in% to_do) {
     } 
 }
 
-if ('select_var' %in% to_do) {
+if ('var_selection' %in% to_do) {
     print("### Selecting variables")
     res = get_select(dataEXind, metaEXind, select=var_selection)
     dataEXind = res$dataEXind

@@ -140,18 +140,15 @@ verbose =
     FALSE
     # TRUE
 
-document_filename = "Explore2_diagnostic"
-pdf_chunk = c('all')
-
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 ### 3.1. Models ______________________________________________________
 models_to_diag =
     list(
-        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
-        # "GRSD"="GRSD_20230223.nc",
-        # "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        "GRSD"="GRSD_20230223.nc",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
         "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         "MORDOR-TS"="MordorTS_20221213.Rdata",
@@ -208,22 +205,23 @@ code_filenames_to_use =
         # 'K2981910_HYDRO_QJM.txt' #ref
         # 'O3084320_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt'
-        'WDORON02_HYDRO_QJM.txt',
-        'WSOULOIS_HYDRO_QJM.txt',
-        'XVENEON1_HYDRO_QJM.txt',
-        'XVENEON2_HYDRO_QJM.txt',
-        "X0454010_HYDRO_QJM.txt"
+        # 'WDORON02_HYDRO_QJM.txt',
+        # 'WSOULOIS_HYDRO_QJM.txt',
+        # 'XVENEON1_HYDRO_QJM.txt',
+        # 'XVENEON2_HYDRO_QJM.txt',
+        # "X0454010_HYDRO_QJM.txt"
         # '^A',
         # '^H'
         # '^I',
         # '^J'
-        # '^K',
+        # '^K'
         # '^M'
         # '^U'
         # '^V',
         # '^W'
-        # '^X'
-        # '^Y'
+        
+        '^G',
+        '^R'
     )
 
 ### 3.3. Variables ___________________________________________________
@@ -293,26 +291,41 @@ var_selection =
 #    'datasheet' : datasheet of trend analyses for each stations
 to_do =
     c(
-        # 'delete_tmp',
-        # 'create_data'
+        # 'delete_tmp'
+        # 'create_data',
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
-        # 'select_var',
+        # 'var_selection'
         # 'write_warnings'
-        'plot'
+        # 'plot_sheet'
+        'plot_doc'
         # 'create_data_proj'
     )
 
-to_plot =
+plot_sheet =
     c(
         # 'summary'
         # 'correlation_matrix',
-        'sheet_diagnostic_station'
-        # 'sheet_diagnostic_region'
-        # 'sheet_diagnostic_regime'
+        # 'diagnostic_station'
+        # 'diagnostic_region'
+        # 'diagnostic_regime'
     )
+
+
+default_doc_name = "Diagnostic Hydrologique"
+plot_doc =
+    list(
+        name='Diagnostic Hydrologique Régional',
+        chunk='region',
+        'summary',
+        'diagnostic_region',
+        'diagnostic_station'
+    )
+
+
+
 
 # dataEXind = dplyr::filter(dataEXind, Model != "ORCHIDEE") 
 
@@ -588,13 +601,13 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
     }
 }
 
-if (any(c('analyse_data', 'save_analyse', 'select_var', 'write_warnings', 'read_saving') %in% to_do)) {
+if (any(c('analyse_data', 'save_analyse', 'var_selection', 'write_warnings', 'read_saving') %in% to_do)) {
     print("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
 
-if ('plot' %in% to_do) {
+if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
     print("## PLOTTING DATA")
     source(file.path(lib_path, 'script_layout.R'),
            encoding='UTF-8')
