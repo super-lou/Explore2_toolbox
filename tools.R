@@ -580,20 +580,20 @@ find_Warnings = function (dataEXind, metaEXind,
             if (length(model_OK) >= nModel/2) {
                 line = line_OK
                 niveau = 0.5
-                models = paste0("<b>", model_NOK, "</b>")
+                models = paste0("<b>", model_NOK, ".</b>")
             } else {
                 line = line_NOK
                 niveau = -0.5
-                models = paste0("<b>", model_OK, "</b>")
+                models = paste0("<b>", model_OK, ".</b>")
             }
             models_len = length(models)
             if (models_len > 1) {
                 models = paste0(
                     paste0(models[-models_len],
                            collapse=", "),
-                    " et ", models[models_len])
+                    " et ", models[models_len], ".")
             }
-            line_model = paste0(line, models, ".")
+            line_model = paste0(line, models)
 
             rm_NOK = function (X) {
                 X = X[!(X %in% model_NOK)]
@@ -661,7 +661,7 @@ find_Warnings = function (dataEXind, metaEXind,
                 ##
                 models = unlist(Line$model)
                 models_len = length(models)
-                if (models_len >= nModel/2) {
+                if (models_len > nModel/2) {
                     models = Model[!(Model %in% models)]
                     models_len = length(models)
                     models_str = paste0("<b>", models, "</b>")

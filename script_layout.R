@@ -47,7 +47,8 @@ plot_sheet_diagnostic_station = function (today_figdir_leaf,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
-                df_page=df_page)
+                df_page=df_page,
+                verbose=verbose)
         }
     }
     return (df_page)
@@ -57,20 +58,17 @@ plot_sheet_diagnostic_station = function (today_figdir_leaf,
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
-if ('diagnostic_station' %in% plot_sheet |
-    'diagnostic_region' %in% plot_sheet |
-    'diagnostic_regime' %in% plot_sheet) {
-    if (!exists("Shapefiles")) {
-        print("### Loading shapefiles")
-        Shapefiles = load_shapefile(
-            computer_data_path, CodeALL,
-            france_dir, france_file,
-            bassinHydro_dir, bassinHydro_file,
-            regionHydro_dir, regionHydro_file,
-            entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
-            river_dir, river_file, river_selection=river_selection,
-            toleranceRel=toleranceRel)
-    }
+
+if (!exists("Shapefiles")) {
+    print("### Loading shapefiles")
+    Shapefiles = load_shapefile(
+        computer_data_path, CodeALL,
+        france_dir, france_file,
+        bassinHydro_dir, bassinHydro_file,
+        regionHydro_dir, regionHydro_file,
+        entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
+        river_dir, river_file, river_selection=river_selection,
+        toleranceRel=toleranceRel)
 }
 
 
@@ -106,19 +104,24 @@ for (i in 1:nChunk) {
     Code_to_plot = chunkCode[[i]]
     chunkname = names(chunkCode)[i]
 
+    doc_name_ns = gsub(" ", "_", doc_name)
+    
     if (!is.null(chunkname)) {
-        doc_chunkname = paste0(doc_name, "_",
+        doc_chunkname = paste0(doc_name_ns, "_",
                                gsub(" ", "_", chunkname))
         today_figdir_leaf = file.path(today_figdir,
                                       doc_chunkname, "PDF")
     } else if ('plot_doc' %in% to_do) {
-        today_figdir_leaf = file.path(today_figdir, doc_name,
+        today_figdir_leaf = file.path(today_figdir, doc_name_ns,
                                       "PDF")
     } else {
         today_figdir_leaf = today_figdir
     }
 
     dataEXind_to_plot = dataEXind[dataEXind$Code %in% Code_to_plot,]
+    if (nrow(dataEXind_to_plot) == 0) {
+        next
+    }
     dataEXserie_to_plot = list()
     for (j in 1:length(dataEXserie)) {
         dataEXserie_to_plot = append(
@@ -137,6 +140,21 @@ for (i in 1:nChunk) {
 
         if (sheet == 'correlation_matrix') {
             print("### Plotting correlation matrix")
+            group_of_models_to_use =
+                list(
+                    "CTRIP",
+                    "EROS",
+                    "GRSD",
+                    "J2000",
+                    "SIM2",
+                    "MORDOR-SD",
+                    "MORDOR-TS",
+                    "ORCHIDEE",
+                    "SMASH",        
+                    "Multi-Model"=
+                        c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
+                          "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
+                )
             df_page = sheet_correlation_matrix(
                 dataEXind_to_plot,
                 metaEXind,
@@ -144,7 +162,8 @@ for (i in 1:nChunk) {
                 icon_path=icon_path,
                 logo_path=logo_path,
                 figdir=today_figdir_leaf,
-                df_page=df_page)
+                df_page=df_page,
+                verbose=verbose)
         }
 
         if (sheet == 'diagnostic_regime') {
@@ -155,13 +174,13 @@ for (i in 1:nChunk) {
                 metaEXind,
                 dataEXserie_to_plot,
                 Colors=Colors_of_models,
-                ModelGroup=group_of_models_to_use,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
-                df_page=df_page)
+                df_page=df_page,
+                verbose=verbose)
         }
 
 
@@ -173,20 +192,21 @@ for (i in 1:nChunk) {
                 metaEXind,
                 dataEXserie_to_plot,
                 Colors=Colors_of_models,
-                ModelGroup=group_of_models_to_use,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
-                df_page=df_page)
+                df_page=df_page,
+                verbose=verbose)
         }
 
         if (sheet == 'diagnostic_station') {
             print("### Plotting sheet diagnostic station")
             df_page = plot_sheet_diagnostic_station(
                 today_figdir_leaf=today_figdir_leaf,
-                df_page=df_page)
+                df_page=df_page,
+                verbose=verbose)
         }
     }
 
@@ -222,8 +242,8 @@ for (i in 1:nChunk) {
         } else {
             pdf_combine(input=listfile_path,
                         output=file.path(today_figdir,
-                                         doc_name,
-                                         paste0(doc_name,
+                                         doc_name_ns,
+                                         paste0(doc_name_ns,
                                                     ".pdf")))
         }
     }

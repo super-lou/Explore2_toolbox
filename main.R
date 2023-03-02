@@ -137,8 +137,8 @@ propagate_NA = TRUE
 nCode4RAM = 25
 
 verbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
@@ -168,23 +168,6 @@ models_to_proj = c(
         # "SMASH"=
     )
 
-# group_of_models_to_use =
-#     # NULL
-#     list(
-#         # "CTRIP",
-#         "EROS",
-#         "GRSD",
-#         "J2000",
-#         "SIM2",
-#         "MORDOR-SD",
-#         "MORDOR-TS",
-#         # "ORCHIDEE",
-#         "SMASH",        
-#         "Multi-Model"=
-#             c("EROS", "J2000", "SIM2",
-#               "MORDOR-SD", "MORDOR-TS", "SMASH")
-#     )
-
 Colors_of_models = c(
     "CTRIP"="#a88d72", #marron
     "EROS"="#cecd8d", #vert clair
@@ -201,7 +184,7 @@ Colors_of_models = c(
 code_filenames_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K2981910_HYDRO_QJM.txt' #ref
         # 'O3084320_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt'
@@ -210,18 +193,22 @@ code_filenames_to_use =
         # 'XVENEON1_HYDRO_QJM.txt',
         # 'XVENEON2_HYDRO_QJM.txt',
         # "X0454010_HYDRO_QJM.txt"
-        # '^A',
+        # '^A'
+        # '^X'
+        # 'X0454010_HYDRO_QJM.txt',
+        # 'XVENEON1_HYDRO_QJM.txt'
+        
         # '^H'
-        # '^I',
+        # '^I'
         # '^J'
         # '^K'
         # '^M'
         # '^U'
-        # '^V',
+        # '^V'
         # '^W'
         
-        '^G',
-        '^R'
+        # '^G'
+        # '^R'
     )
 
 ### 3.3. Variables ___________________________________________________
@@ -310,21 +297,63 @@ plot_sheet =
         # 'correlation_matrix',
         # 'diagnostic_station'
         # 'diagnostic_region'
-        # 'diagnostic_regime'
+        'diagnostic_regime'
     )
 
 
 default_doc_name = "Diagnostic Hydrologique"
 plot_doc =
+    # list(
+    #     name='Diagnostic Hydrologique Choix des Indicateurs',
+    #     chunk='all',
+    #     'summary',
+    #     'correlation_matrix'
+    # )
     list(
-        name='Diagnostic Hydrologique Régional',
-        chunk='region',
+        name='Diagnostic Hydrologique par Régime',
+        chunk='all',
         'summary',
-        'diagnostic_region',
-        'diagnostic_station'
+        'diagnostic_regime'
     )
+    # list(
+    #     name='Diagnostic Hydrologique Régional',
+    #     chunk='region',
+    #     'summary',
+    #     'diagnostic_region',
+    #     'diagnostic_station'
+    # )
 
 
+# default_doc_name = "Diagnostic Hydrologique"
+# plot_doc =
+#     c(
+#         # "matrix"
+#         # 'regime'
+#         # 'region'
+#     )
+
+# doc_matrix =
+#     list(
+#         name='Diagnostic Hydrologique Choix des Indicateurs',
+#         chunk='all',
+#         'summary',
+#         'correlation_matrix'
+#     )
+# doc_regime =
+#     list(
+#         name='Diagnostic Hydrologique par Régime',
+#         chunk='all',
+#         'summary',
+#         'diagnostic_regime'
+#     )
+# doc_region =
+#     list(
+#         name='Diagnostic Hydrologique Régional',
+#         chunk='region',
+#         'summary',
+#         'diagnostic_region',
+#         'diagnostic_station'
+#     )
 
 
 # dataEXind = dplyr::filter(dataEXind, Model != "ORCHIDEE") 
@@ -576,7 +605,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         }
         print(paste0(i, "/", nSubsets,
                      " chunks of stations in analyse so ",
-                     round(i/nSubsets*100, 1), "%"))
+                     round(i/nSubsets*100, 1), "% done"))
         
         if (all(file_test %in% list.files(tmppath, include.dirs=TRUE))) {
             next
