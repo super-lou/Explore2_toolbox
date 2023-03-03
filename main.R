@@ -20,11 +20,6 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-# Main script that regroups all command lines needed to interact with
-# this toolbox. Choose your parameters before executing all the script
-# (RStudio : Ctrl+Alt+R) or line by line.
-
-
 #  ___         __                         _    _                
 # |_ _| _ _   / _| ___  _ _  _ __   __ _ | |_ (_) ___  _ _   ___
 #  | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ (_-<
@@ -33,127 +28,148 @@
 # first Louis Héraut who is the main developer. If it is not possible,
 # Éric Sauquet is the main referent at INRAE to contact.
 #
-# Louis Héraut : <louis.heraut@inrae.fr>
+# Louis Héraut : <https://github.com/super-lou>
+#                <louis.heraut@inrae.fr>
+#                 
 # Éric Sauquet : <eric.sauquet@inrae.fr>
 #
-# See the 'README.txt' file for more information about the utilisation
+# See the 'README.md' file for more information about the utilisation
 # of this toolbox.
 
 
-#  __  __        _       
-# |  \/  | __ _ (_) _ _  
-# | |\/| |/ _` || || ' \ 
-# |_|  |_|\__,_||_||_||_| ____________________________________________
+#  ___                            
+# | _ \ _ _  ___  __  ___  ___ ___
+# |  _/| '_|/ _ \/ _|/ -_)(_-<(_-<
+# |_|  |_|  \___/\__|\___|/__//__/ ___________________________________
+## 1. REQUIREMENTS ___________________________________________________
 # Ex2D_toolbox path
 lib_path =
     "./"
-    # '/home/herautl/library/Ex2D_toolbox'
-    
-## 1. ANALYSIS _______________________________________________________
-### 1.1. Period ______________________________________________________
-# Periods of time to perform analyses
-period_diagnostic = c('1976-01-01', '2019-12-31')
+# '/home/herautl/library/Ex2D_toolbox'
 
-### 1.2. Sampling period _____________________________________________
-#### 1.2.1 Mode of sampling __________________________________________
-# Mode of selection of the hydrological period. Options are : 
-# - 'fixed' : Hydrological year is selected with the hydrological year
-#             noted in the variable file in 'CARD_dir'
-# - 'optimale' : Hydrological period is determined for each station by
-#                following rules listed in the next variable.
-# samplePeriod_mode =
-#     'fixed'
-#     # 'optimale'
-
-#### 1.2.2. Optimisation options _____________________________________
-# Parameters for the optimal selection of the hydrological year. As
-# you can see, the optimisation is separated between each hydrological
-# topic. You must therefore select an optimisation for each topic. The
-# possibilities are:
-# - 'min' or 'max' to choose the month associated with the minimum or
-#   maximum of the mean monthly flow as the beginning of the
-#   hydrological year.
-# - A month and a day separated by a '-' in order to directly select
-#   the beginning of the hydrological year.
-# - A vector of two months and day to select a beginning and an end of
-#   the hydrological year.
-# samplePeriod_opti =
-#     # NULL
-#     list(
-#         'Hautes Eaux' = 'min',
-#         'Écoulement Lents' = '09-01',
-#         'Moyennes Eaux' = 'min',
-#         'Basses Eaux' = c('05-01', '11-30')
-#     )
-
-### 1.3. Saving ______________________________________________________
-# Saving format to use to save analyse data
-saving_format =
-    c(
-        'Rdata',
-        'txt'
-    )
-
-
-## 2. PLOTTING  ______________________________________________________
-### 2.1. Map _________________________________________________________
-#### 2.1.1. Zone _____________________________________________________
-zone_to_show = 'France'
-
-#### 2.1.2. Hydrological network _____________________________________
-# If the hydrological network needs to be plot
-river_selection =
-    # 'none'
-    c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
-    # 'all'
-
-#### 2.1.3. Shapefiles simplification ________________________________
-# Tolerance of the simplification algorithm for shapefile in sf
-toleranceRel =
-    # 1000 # normal map
-    10000 # mini map
-
-### 2.2. Foot note ___________________________________________________
-# Which logo do you want to show in the footnote
-logo_to_show =
-    c(
-        Explore2='LogoExplore2.png'
-    )
-
-### 2.3. Other _______________________________________________________ 
-# Graphical selection of period for a zoom
-axis_xlim =
-    NULL
-# c('1982-01-01', '1983-01-01')
-
-# Probability used to define the min and max quantile needed for
-# colorbar extremes. For example, if set to 0.01, quartile 1 and
-# quantile 99 will be used as the minimum and maximum values to assign
-# to minmimal maximum colors.
-exXprob = 0.01
-
-propagate_NA = TRUE
-
-nCode4RAM = 25
-
+# Display information along process
 verbose =
     # FALSE
     TRUE
 
 
-## 3. WHAT YOU WANT TO DO ____________________________________________
-### 3.1. Models ______________________________________________________
+## 2. GENERAL PROCESSES ______________________________________________
+# This to_do vector regroups all the different step you want to do.
+# For example if you write 'create_data', a tibble of hydrological
+# data will be created according to the info you provide in the ## 1.
+# CREATE_DATA section of the STEPS part below. If you also add
+# 'analyse_data' in the vector, the analyse will also be perfom
+# following the creation of data. But if you only write, for example,
+# 'plot_sheet', without having previously execute the code to have
+# loading data to plot, it will results in a failure.
+#
+# Options are listed below with associated results after '>' :
+#
+# - 'delete_tmp' :
+#     Delete temporary data in the tmpdir/.
+#     > Permanently erase temporary data.
+#
+# - 'create_data' :
+#     Creation of tibble of data that will be saved in tmpdir/. The
+#     data will be saved in '.fst' format which is a fast reading and
+#     writting format. Each data tibble go with its meta tibble that
+#     regroup info about the data. Those files are named with a '_'
+#     followed by a capital letter that correspond to the first letter
+#     of the hydrological station codes that are stored in it. A file
+#     contain nCode4RAM stations, so each nCode4RAM stations a
+#     different file is created with a digit in its name to specify
+#     it.
+#     > tmpdir/data_K1.fst :
+#        A '.fst' file that contain the tibble of created data.
+#     > tmpdir/meta_K1.fst :
+#        An other '.fst' file that contain info about the data file.
+#
+# - 'analyse_data' :
+#     Perfom the requested analysis on the created data contained in
+#     the tmpdir/. Details about the analysis are given with the
+#     analyse_data variable in the ## 2. ANALYSE_DATA section of the
+#     STEPS part below. This variable needs to be a path to a CARD
+#     directory. See CARD toolbox for more info
+#     https://github.com/super-lou/CARD.
+#     > tmpdir/dataEXind_K1.fst : 
+#        If the CARD directory contains 'indicator' this '.fst' file
+#        will be created.
+#     > tmpdir/metaEXind_K1.fst :
+#        Info about variables stored in dataEXind_K1.fst.
+#     > tmpdir/dataEXserie_K1/ : 
+#        If the CARD directory contains 'serie' this directory that
+#        contains a '.fst' file for each serie variable extracted
+#        will be created.
+#     > tmpdir/metaEXserie_K1.fst :
+#        Info about variables stored in dataEXserie_K1.
+#
+# - 'save_analyse' :
+#     Saves all the data contained in the tmpdir/ to the resdir/. The
+#     format used is specified in the saving_format variable of the 
+#     ## 3. SAVE_ANALYSE section of the STEPS part.
+#     > Moves all temporary data in tmpdir/ to the resdir/.
+#
+# - 'read_tmp' :
+#     Load in RAM all the data stored in '.fst' files in the tmpdir/.
+#     > For example, if there is a tmpdir/metaEXind_K1.fst file, a
+#       data called metaEXind_K1 will be created in the current R
+#       process that contained the data stored in the previous files.
+
+to_do =
+    c(
+        # 'delete_tmp'
+        # 'create_data'
+        'analyse_data'
+        # 'save_analyse'
+        # 'read_tmp'
+        # 'read_saving',
+        # 'var_selection'
+        # 'write_warnings'
+        # 'plot_sheet'
+        # 'plot_doc'
+        # 'create_data_proj'
+    )
+
+## 3. PLOTTING PROCESSES _____________________________________________
+### 3.1. Sheet _______________________________________________________
+plot_sheet =
+    c(
+        # 'summary'
+        # 'correlation_matrix',
+        # 'diagnostic_station'
+        # 'diagnostic_region'
+        'diagnostic_regime'
+    )
+
+### 3.2. Document ____________________________________________________
+plot_doc =
+    c(
+        # "matrix"
+        'regime'
+        # 'region'
+    )
+
+
+#  ___  _                  
+# / __|| |_  ___  _ __  ___
+# \__ \|  _|/ -_)| '_ \(_-<
+# |___/ \__|\___|| .__//__/ __________________________________________
+## 1. CREATE_DATA|_| _________________________________________________ 
+period_diagnostic = c('1976-01-01', '2019-12-31')
+propagate_NA = TRUE
+nCode4RAM = 25
+
 models_to_diag =
     list(
-        "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
-        "GRSD"="GRSD_20230223.nc",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
-        "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
-        "SMASH"="SMASH_20230222.nc"
+        # "CTRIP"="CTRIP_diagnostic_20230124.nc",
+        # "EROS"=c("ErosBretagne_20230131.Rdata", "ErosLoire_20230131.Rdata"),
+        # "GRSD"="GRSD_20230223.nc",
+        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata"
+        # "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
+        # "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
+        # "MORDOR-TS"="MordorTS_20221213.Rdata",
+        # "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc"
+        # "SMASH"="SMASH_20230222.nc"
     )
 complete_by = "SMASH"
 
@@ -166,26 +182,13 @@ models_to_proj = c(
         # "MORDOR-TS"="debit_Loire_CNRM-CERFACS-CNRM-CM5_historical_r1i1p1_CNRM-ALADIN63_v2_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_19510101-20051231.nc"
         # "ORCHIDEE",
         # "SMASH"=
-    )
-
-Colors_of_models = c(
-    "CTRIP"="#a88d72", #marron
-    "EROS"="#cecd8d", #vert clair
-    "GRSD"="#619c6c", #vert foncé
-    "J2000"="#74aeb9", #bleur clair
-    "SIM2"="#384a54", #bleu foncé
-    "MORDOR-SD"="#d8714e", #orange
-    "MORDOR-TS"="#ae473e", #rouge
-    "ORCHIDEE"="#efa59d", #"#f5c8c3" #rose
-    "SMASH"="#f6ba62" #mimosa    
 )
 
-### 3.2. Code ________________________________________________________
 code_filenames_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910_HYDRO_QJM.txt' #ref
+        # 'all'
+        'K2981910_HYDRO_QJM.txt' #ref
         # 'O3084320_HYDRO_QJM.txt'
         # 'WDORON01_HYDRO_QJM.txt'
         # 'WDORON02_HYDRO_QJM.txt',
@@ -211,7 +214,8 @@ code_filenames_to_use =
         # '^R'
     )
 
-### 3.3. Variables ___________________________________________________
+
+## 2. ANALYSE_DATA ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
 # analyse. If no subdirectory is selected, all variable files will be
 # used in 'CARD_dir' (which is may be too much).
@@ -233,11 +237,18 @@ code_filenames_to_use =
 
 analyse_data = c(
     # 'WIP'
-    # 'Ex2D/1_indicator/1_all',
-    'Ex2D/1_indicator/2_selection',
-    'Ex2D/2_serie'
+    # 'Ex2D/1_indicator/1_all'
+    'Ex2D/1_indicator/2_selection'
+    # 'Ex2D/2_serie'
 )
 
+
+## 3. SAVE_ANALYSE ___________________________________________________
+# Saving format to use to save analyse data
+saving_format = c('Rdata', 'txt')
+
+
+## 4. READ_SAVING ____________________________________________________
 read_saving = "ALL"
 
 var2search = c(
@@ -249,131 +260,80 @@ var2search = c(
     'Warnings'
 )
 
+
+## 5. VAR_SELECTION __________________________________________________
 var_selection =
     # "all"
     c("KGEracine", "Biais$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "RAT_P", "Q10", "median{tQJXA}", "^alphaQA", "^alphaCDC", "Q90", "median{tVCN10}")
 
 
-### 3.4. Steps _______________________________________________________
-# This vector regroups all the different step you want to do. For
-# example if you write 'station_extraction', the extraction of the
-# data for the station will be done. If you add also
-# 'station_analyse', the extraction and then the trend analyse will be
-# done. But if you only write, for example, 'station_plot', without
-# having previously execute the code with 'station_extraction' and
-# 'station_analyse', it will results in a failure.
-#
-# Options are listed below with associated results after '>' :
-#
-# - 'station_extraction' : Extraction of data and meta data tibbles
-#                          about stations
-#                          > 'data' 
-#                          > 'df_meta'
-#
-# - 'station_trend_analyse' : Trend analyses of stations data
-#                             > 'df_XEx' : tibble of extracted data
-#                             > 'df_Xtrend' : tibble of trend results
-#
-# - 'station_trend_plot' : Plotting of trend analyses of stations
-#    'datasheet' : datasheet of trend analyses for each stations
-to_do =
+## 6. PLOT_SHEET _____________________________________________________
+# If the hydrological network needs to be plot
+river_selection =
+    # 'none'
+    c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
+# 'all'
+
+# Tolerance of the simplification algorithm for shapefile in sf
+toleranceRel =
+    # 1000 # normal map
+    10000 # mini map
+
+# Which logo do you want to show in the footnote
+logo_to_show =
     c(
-        # 'delete_tmp'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
-        # 'read_tmp'
-        # 'read_saving',
-        # 'var_selection'
-        # 'write_warnings'
-        # 'plot_sheet'
-        'plot_doc'
-        # 'create_data_proj'
+        Explore2='LogoExplore2.png'
     )
 
-plot_sheet =
-    c(
-        # 'summary'
-        # 'correlation_matrix',
-        # 'diagnostic_station'
-        # 'diagnostic_region'
-        'diagnostic_regime'
-    )
+# Probability used to define the min and max quantile needed for
+# colorbar extremes. For example, if set to 0.01, quartile 1 and
+# quantile 99 will be used as the minimum and maximum values to assign
+# to minmimal maximum colors.
+exXprob = 0.01
+
+Colors_of_models = c(
+    "CTRIP"="#a88d72", #marron
+    "EROS"="#cecd8d", #vert clair
+    "GRSD"="#619c6c", #vert foncé
+    "J2000"="#74aeb9", #bleur clair
+    "SIM2"="#384a54", #bleu foncé
+    "MORDOR-SD"="#d8714e", #orange
+    "MORDOR-TS"="#ae473e", #rouge
+    "ORCHIDEE"="#efa59d", #"#f5c8c3" #rose
+    "SMASH"="#f6ba62" #mimosa    
+)
 
 
+## 7. PLOT_DOC _______________________________________________________
 default_doc_name = "Diagnostic Hydrologique"
-plot_doc =
-    # list(
-    #     name='Diagnostic Hydrologique Choix des Indicateurs',
-    #     chunk='all',
-    #     'summary',
-    #     'correlation_matrix'
-    # )
+doc_matrix =
+    list(
+        name='Diagnostic Hydrologique Choix des Indicateurs',
+        chunk='all',
+        'summary',
+        'correlation_matrix'
+    )
+doc_regime =
     list(
         name='Diagnostic Hydrologique par Régime',
         chunk='all',
         'summary',
         'diagnostic_regime'
     )
-    # list(
-    #     name='Diagnostic Hydrologique Régional',
-    #     chunk='region',
-    #     'summary',
-    #     'diagnostic_region',
-    #     'diagnostic_station'
-    # )
+doc_region =
+    list(
+        name='Diagnostic Hydrologique Régional',
+        chunk='region',
+        'summary',
+        'diagnostic_region',
+        'diagnostic_station'
+    )
 
 
-# default_doc_name = "Diagnostic Hydrologique"
-# plot_doc =
-#     c(
-#         # "matrix"
-#         # 'regime'
-#         # 'region'
-#     )
-
-# doc_matrix =
-#     list(
-#         name='Diagnostic Hydrologique Choix des Indicateurs',
-#         chunk='all',
-#         'summary',
-#         'correlation_matrix'
-#     )
-# doc_regime =
-#     list(
-#         name='Diagnostic Hydrologique par Régime',
-#         chunk='all',
-#         'summary',
-#         'diagnostic_regime'
-#     )
-# doc_region =
-#     list(
-#         name='Diagnostic Hydrologique Régional',
-#         chunk='region',
-#         'summary',
-#         'diagnostic_region',
-#         'diagnostic_station'
-#     )
-
-
-# dataEXind = dplyr::filter(dataEXind, Model != "ORCHIDEE") 
-
-
-# library(Rmpi)
-# mpi.scatter(x, type, rdata, root=0, comm=1)
-
-#Need 3 slaves to run properly
-#Or run mpi.spawn.Rslaves(nslaves=3)
-# num="123456789abcd"
-# scounts<-c(2,3,1,7)
-# mpi.bcast.cmd(strnum<-mpi.scatter(integer(1),type=1,rdata=integer(1),root=0))
-# strnum<-mpi.scatter(scounts,type=1,rdata=integer(1),root=0)
-# mpi.bcast.cmd(ans <- mpi.scatterv(string(1),scounts=0,type=3,rdata=string(strnum),
-# root=0))
-# mpi.scatterv(as.character(num),scounts=scounts,type=3,rdata=string(strnum),root=0)
-# mpi.remote.exec(ans)
-
-
+#  ___               __  _   
+# |   \  _ _  __ _  / _|| |_ 
+# | |) || '_|/ _` ||  _||  _|
+# |___/ |_|  \__,_||_|   \__| ________________________________________
 # dataEXserieQM_obs =
 #     dplyr::summarise(dplyr::group_by(dataEXserie$QM, Code, Month),
 #                      QM=select_good(QM_obs),
@@ -496,6 +456,10 @@ if ("read_tmp" %in% to_do) {
     to_do = to_do[to_do != "read_tmp"]
 } else {
     read_tmp = FALSE
+}
+
+if ('plot_doc' %in% to_do) {
+    plot_doc = get(paste0("doc_", plot_doc[1]))
 }
 
 codes_to_diag_shp = read_shp(file.path(computer_data_path,
