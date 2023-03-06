@@ -21,7 +21,8 @@
 
 
 plot_sheet_diagnostic_station = function (today_figdir_leaf,
-                                          df_page=NULL) {
+                                          df_page=NULL,
+                                          verbose=FALSE) {
     Paths = list.files(file.path(resdir, read_saving),
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
@@ -41,7 +42,6 @@ plot_sheet_diagnostic_station = function (today_figdir_leaf,
                 metaEXind,
                 dataEXserie,
                 Colors=Colors_of_models,
-                ModelGroup=group_of_models_to_use,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
@@ -138,7 +138,7 @@ for (i in 1:nChunk) {
             df_page = tibble(section='Sommaire', subsection=NA, n=1)
         }
 
-        if (sheet == 'correlation_matrix') {
+        if (sheet == 'diagnostic_matrix') {
             print("### Plotting correlation matrix")
             group_of_models_to_use =
                 list(
@@ -282,16 +282,16 @@ for (i in 1:nChunk) {
 #     df_page = tibble()
 # }
 
-# if ('correlation_matrix' %in% plot_sheet) {
+# if ('diagnostic_matrix' %in% plot_sheet) {
 #     print("### Plotting correlation matrix")
-#     df_page = sheet_correlation_matrix(
+#     df_page = sheet_diagnostic_matrix(
 #         dataEXind,
 #         metaEXind,
 #         ModelGroup=group_of_models_to_use,
 #         icon_path=icon_path,
 #         logo_path=logo_path,
 #         figdir=file.path(today_figdir_leaf,
-#                          "diagnostic_correlation_matrix"),
+#                          "diagnostic_diagnostic_matrix"),
 #         df_page=df_page)
 # }
 

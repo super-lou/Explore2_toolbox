@@ -50,9 +50,6 @@ create_data = function () {
                                                 type="diag")
                 }
 
-                print(levels(factor(data_tmp$Code)))
-                
-                
                 data_tmp = convert_diag_data(model, data_tmp)
                 data_tmp = data_tmp[data_tmp$Code %in% CodeSUB,]
                 data_tmp = data_tmp[order(data_tmp$Code),]
@@ -62,8 +59,6 @@ create_data = function () {
         }
     }
 
-    print(data_sim)
-    
     if (nrow(data_sim) > 0) {
         print("### Observation data")
         

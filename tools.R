@@ -55,7 +55,6 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
         QRaw = ncdf4::ncvar_get(NCdata, "Q")
         SRaw = ncdf4::ncvar_get(NCdata, "surface_model")
-        PRaw = ncdf4::ncvar_get(NCdata, "P")
         TRaw = ncdf4::ncvar_get(NCdata, "T")
         ET0Raw = ncdf4::ncvar_get(NCdata, "ET0")
         ncdf4::nc_close(NCdata)
@@ -63,7 +62,6 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
         CodeOrder = order(CodeRaw)
         Code = CodeRaw[CodeOrder]
         Q_sim = QRaw[CodeOrder,]
-        P = PRaw[CodeOrder,]
         T = TRaw[CodeOrder,]
         ET0 = ET0Raw[CodeOrder,]
 
@@ -72,7 +70,6 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
         data = dplyr::tibble(Code=rep(Code, each=nDate),
                              Date=rep(Date, times=nCode),
                              Q_sim=c(t(Q_sim)),
-                             P=c(t(P)),
                              T=c(t(T)),
                              ET0=c(t(ET0)))
         
