@@ -156,10 +156,10 @@ to_do =
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
-        # 'criteria_selection',
+        # 'criteria_selection'
         # 'write_warnings'
         # 'plot_sheet'
-        'plot_doc'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
@@ -233,8 +233,9 @@ code_filenames_to_use =
         # 'WSOULOIS_HYDRO_QJM.txt',
         # 'XVENEON1_HYDRO_QJM.txt',
         # 'XVENEON2_HYDRO_QJM.txt',
-        # "X0454010_HYDRO_QJM.txt"
-        # 'A4362030_HYDRO_QJM.txt'
+        # 'A4362030_HYDRO_QJM.txt',
+        # 'A9942010_HYDRO_QJM.txt',
+        # 'X0454010_HYDRO_QJM.txt'
         # '^X'
         # 'X0454010_HYDRO_QJM.txt',
         # 'XVENEON1_HYDRO_QJM.txt'

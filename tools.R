@@ -756,9 +756,9 @@ find_Warnings = function (dataEXind, metaEXind,
                   # codeLight="K2981910",
                   # save=FALSE)
 # W = find_Warnings(dataEXind, metaEXind)
-# Warnings = W$Warnings
-# frq = W$frq
-# frq_short=select(frq, c(var, niveau, npv_pct))
-# frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
-# frq_short$npv_pct = round(frq_short$npv_pct)
+Warnings = W$Warnings
+frq = W$frq
+frq_short=select(frq, c(var, niveau, npv_pct))
+frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
+frq_short$npv_pct = round(frq_short$npv_pct)
 # Warnings[grepl("hydrologique", Warnings$warning),]

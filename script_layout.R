@@ -20,7 +20,10 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-plot_sheet_diagnostic_station = function (today_figdir_leaf,
+plot_sheet_diagnostic_station = function (dataEXind_to_plot,
+                                          dataEXserie_to_plot,
+                                          Code_to_plot,
+                                          today_figdir_leaf,
                                           df_page=NULL,
                                           verbose=FALSE) {
     Paths = list.files(file.path(resdir, read_saving),
@@ -28,19 +31,19 @@ plot_sheet_diagnostic_station = function (today_figdir_leaf,
                        include.dirs=TRUE,
                        full.names=TRUE)
     letterPaths = gsub("(.*[_])|([[:digit:]][.]fst)", "", Paths)
-    Paths = Paths[letterPaths %in% substr(CodeALL, 1, 1)]
+    Paths = Paths[letterPaths %in% substr(Code_to_plot, 1, 1)]
     for (path in Paths) {
         data = read_tibble(filepath=path) 
         Code_tmp = levels(factor(data$Code))
 
-        if (any(Code_tmp %in% CodeALL)) {
-            data = data[data$Code %in% CodeALL,]
+        if (any(Code_tmp %in% Code_to_plot)) {
+            data = data[data$Code %in% Code_to_plot,]
             df_page = sheet_diagnostic_station(
                 data,
                 meta,
-                dataEXind,
+                dataEXind_to_plot,
                 metaEXind,
-                dataEXserie,
+                dataEXserie_to_plot,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
@@ -204,6 +207,9 @@ for (i in 1:nChunk) {
         if (sheet == 'diagnostic_station') {
             print("### Plotting sheet diagnostic station")
             df_page = plot_sheet_diagnostic_station(
+                dataEXind_to_plot,
+                dataEXserie_to_plot,
+                Code_to_plot,
                 today_figdir_leaf=today_figdir_leaf,
                 df_page=df_page,
                 verbose=verbose)
