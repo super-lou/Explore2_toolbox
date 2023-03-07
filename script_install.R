@@ -19,7 +19,13 @@
 # along with Ex2D_toolbox R toolbox.
 # If not, see <https://www.gnu.org/licenses/>.
 
-
+# module load cv-standard
+# module load gcc/4.9.3
+# module load python
+# module load geos
+# module load proj
+# module load gdal
+# module load R/3.6.3
 if (!require(dplyr)) install.packages("dplyr")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(qpdf)) install.packages("qpdf")
