@@ -79,8 +79,8 @@ verbose =
 #     contain nCode4RAM stations, so each nCode4RAM stations a
 #     different file is created with a digit in its name to specify
 #     it. The selection of station code is done in the
-#     code_filenames_to_use variable of the ## 1. CREATE_DATA section
-#     of the STEPS part below and the model used are selected in the
+#     codes_to_use variable of the ## 1. CREATE_DATA section of the
+#     STEPS part below and the model used are selected in the
 #     variable models_to_diag of that same previous section.
 #     > tmpdir/data_K1.fst :
 #        A fst file that contain the tibble of created data.
@@ -152,28 +152,56 @@ to_do =
     c(
         # 'delete_tmp',
         # 'create_data',
-        # 'analyse_data',
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection'
         # 'write_warnings'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
 
+
 ## 3. PLOTTING PROCESSES _____________________________________________
 ### 3.1. Sheet _______________________________________________________
-# The use of this plot_sheet vector is quite similar to the to_do vector. It regroups all the different datasheet you want to plot individually. For example if you write 'diagnostic_station', the data previously analysed saved and read will be use to plot the diagnostic datasheet for a specific station  
-# loading data to plot, it will results in a failure.
+# The use of this plot_sheet vector is quite similar to the to_do
+# vector. It regroups all the different datasheet you want to plot
+# individually. For example if you write 'diagnostic_station', the
+# data previously analysed saved and read will be use to plot the
+# diagnostic datasheet for specific stations.  
 #
 # Options are listed below with associated results after '>' :
+#
+# - 'summary' :
+#     Plots the summary page of a selection of pages.
+#     > figdir/sommaire.pdf
+#
+# - 'diagnostic_matrix' :
+#     Plots diagnostic correlation matrix of every criteria for each
+#     model.
+#     > figdir/matrice_correlation_J2000.pdf
+#
+# - 'diagnostic_station' :
+#     Plots diagnostic station pages for each station selected.
+#     > figdir/K2981910_diagnostic_datasheet.pdf
+#
+# - 'diagnostic_region' :
+#     Plots diagnostic region pages for each hydrological region of
+#     available stations.
+#     > figdir/Loire_K_diagnostic_datasheet.pdf
+#
+# - 'diagnostic_regime' :
+#     Plots diagnostic regime pages for each hydrological regime of
+#     available stations.
+#     > figdir/Pluvial_modérément_contrasté_diagnostic_datasheet.pdf
+
 plot_sheet =
     c(
         # 'summary'
-        'diagnostic_matrix'
-        # 'diagnostic_station'
+        # 'diagnostic_matrix'
+        'diagnostic_station'
         # 'diagnostic_region'
         # 'diagnostic_regime'
     )
@@ -202,7 +230,7 @@ models_to_diag =
         "EROS"=c("ErosBretagne_20230131.Rdata",
                  "ErosLoire_20230131.Rdata"),
         "GRSD"="GRSD_20230223.nc",
-        "J2000"="DATA_DIAGNOSTIC_EXPLORE2_J2000.Rdata",
+        "J2000"="J2000_20230308_safran_diagnostic.nc",
         "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
         "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
         "MORDOR-TS"="MordorTS_20221213.Rdata",
@@ -222,35 +250,28 @@ models_to_proj = c(
         # "SMASH"=
 )
 
-code_filenames_to_use =
+codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910_HYDRO_QJM.txt' #ref
-        # 'O3084320_HYDRO_QJM.txt'
-        # 'WDORON01_HYDRO_QJM.txt'
-        # 'WDORON02_HYDRO_QJM.txt',
-        # 'WSOULOIS_HYDRO_QJM.txt',
-        # 'XVENEON1_HYDRO_QJM.txt',
-        # 'XVENEON2_HYDRO_QJM.txt',
-        # 'A4362030_HYDRO_QJM.txt',
-        # 'A9942010_HYDRO_QJM.txt',
-        # 'X0454010_HYDRO_QJM.txt'
+        # 'all'
+        'K2981910' #ref
+        # 'O3084320'
+        # 'WDORON01'
+        # 'WDORON02',
+        # 'WSOULOIS',
+        # 'XVENEON1',
+        # 'XVENEON2',
+        # 'A4362030',
+        # 'A9942010',
+        # 'X0454010'
         # '^X'
-        # 'X0454010_HYDRO_QJM.txt',
-        # 'XVENEON1_HYDRO_QJM.txt'
+        # 'X0454010',
+        # 'XVENEON1'
         
-        # '^H'
-        # '^I'
-        # '^J'
-        # '^K'
-        # '^M'
-        # '^U'
-        # '^V'
-        # '^W'
-        
-        # '^G'
-        # '^R'
+        # 'K1363010',
+        # 'K1341810',
+        # "M0014110",
+        # "M0050620"
     )
 
 
@@ -389,6 +410,38 @@ doc_diagnostic_region =
 # There were 50 or more warnings (use warnings() to see the first 50)
 
 
+
+# [1] "width"
+# [1] 0mm+0mm                          0cm                             
+# [3] 0cm                              sum(1grobwidth, max(1.5mm, 0pt))
+# [5] 1null                            0cm                             
+# [7] 0cm                              0pt                             
+# [9] 0mm+0mm                         
+# [1] ""
+# [1] "maxWidth"
+# [1] max(0mm+0mm, 0mm+0mm)                                                  
+# [2] max(0cm, 0cm)                                                          
+# [3] max(0cm, 0cm)                                                          
+# [4] max(sum(1grobwidth, max(1.5mm, 0pt)), sum(1grobwidth, max(1.5mm, 0pt)))
+# [5] max(1null, 1null)                                                      
+# [6] max(0cm, 0cm)                                                          
+# [7] max(0cm, 0cm)                                                          
+# [8] max(0pt, 0pt)                                                          
+# [9] max(0mm+0mm, 0mm+0mm)  
+
+# [1] "maxWidth"
+# [1] max(0mm, 0mm+0mm, 0mm, 0mm+0mm)
+# [2] max(0cm, 0cm, 0cm, 0cm)
+# [3] max(0cm, 0cm, 0cm, 0cm)
+# [4] max(sum(0cm, max(0pt, 0pt)), sum(1grobwidth, max(1.5mm, 0pt)), sum(0cm, max(0pt, 0pt)), sum(1grobwidth, max(1.5mm, 0pt)))
+# [5] max(1null, 1null, 1null, 1null)
+# [6] max(0cm, 0cm, 0cm, 0cm)
+# [7] max(0cm, 0cm, 0cm, 0cm)
+# [8] max(0pt, 0pt, 0pt, 0pt)
+# [9] max(0mm, 0mm+0mm, 0mm, 0mm+0mm)
+
+
+
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
 #  | | | ' \ | ||  _|| |/ _` || || |(_-</ _` ||  _|| |/ _ \| ' \ 
@@ -475,7 +528,13 @@ library(ggtext) #nope
 # library(rgeos)
 # library(lubridate)
 # library(sp)
+# library(patchwork)
 
+
+# a="
+# 112
+# 221
+# "
 
 if ("delete_tmp" %in% to_do) {
     delete_tmp = TRUE
@@ -498,17 +557,16 @@ if ('plot_doc' %in% to_do) {
 codes_to_diag_shp = read_shp(file.path(computer_data_path,
                                        codes_to_diag_shp_dir))
 codes_to_diag = as.character(codes_to_diag_shp$Code)
-if (all(code_filenames_to_use == "")) {
+if (all(codes_to_use == "")) {
     stop ("No station selected")
 }
 
-if (all(code_filenames_to_use == "all")) {
+if (all(codes_to_use == "all")) {
     CodeALL = codes_to_diag
 } else {
-    code_filenames_to_use = convert_regexp(computer_data_path,
-                                           obs_dir,
-                                           code_filenames_to_use)
-    codes_to_use = gsub("[_].*$", "", code_filenames_to_use)
+    codes_to_use = convert_regexp(computer_data_path,
+                                  obs_dir,
+                                  codes_to_use)
     okCode = codes_to_use %in% codes_to_diag
     CodeALL = codes_to_use[okCode]
 }

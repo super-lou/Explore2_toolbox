@@ -74,7 +74,37 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
                              ET0=c(t(ET0)))
         
     } else if (grepl("J2000", model)) {
-        NULL
+        CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
+        CodeRaw = substr(CodeRaw, 1, 8) ##### !!!!!
+        QRaw = ncdf4::ncvar_get(NCdata, "Q")
+        SRaw = ncdf4::ncvar_get(NCdata, "surface_model")
+        PRaw = ncdf4::ncvar_get(NCdata, "P")
+        PlRaw = ncdf4::ncvar_get(NCdata, "Pl")
+        PsRaw = ncdf4::ncvar_get(NCdata, "Ps")
+        TRaw = ncdf4::ncvar_get(NCdata, "T")
+        ET0Raw = ncdf4::ncvar_get(NCdata, "ET0")
+        ncdf4::nc_close(NCdata)
+        
+        CodeOrder = order(CodeRaw)
+        Code = CodeRaw[CodeOrder]
+        Q_sim = QRaw[CodeOrder,]
+        S = SRaw[CodeOrder]
+        P = PRaw[CodeOrder,]
+        Pl = PlRaw[CodeOrder,]
+        Ps = PsRaw[CodeOrder,]
+        T = TRaw[CodeOrder,]
+        ET0 = ET0Raw[CodeOrder,]
+        
+        nCode = length(Code)
+        nDate = length(Date)
+        data = dplyr::tibble(Code=rep(Code, each=nDate),
+                             Date=rep(Date, times=nCode),
+                             Q_sim=c(t(Q_sim)),
+                             P=c(t(P)),
+                             Pl=c(t(Pl)),
+                             Ps=c(t(Ps)),
+                             T=c(t(T)),
+                             ET0=c(t(ET0)))
         
     } else if (model == "SIM2") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
@@ -174,26 +204,11 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
 
 convert_diag_data = function (model, data) {
 
-    if (grepl("CTRIP", model)) {
-        NULL
-            
-    } else if (grepl("EROS", model)) {
+    if (grepl("EROS", model)) {
         names(data) = c("Code", "Date", "Q_sim",
                         "Pl", "ET0", "Ps", "T")
         data$P = data$Pl + data$Ps
         data$Code = substr(data$Code, 1, 8)
-
-    } else if (grepl("GRSD", model)) {
-        NULL
-        
-    } else if (grepl("J2000", model)) {
-        data$Date = as.Date(data$Date)
-        names(data) = c("Date", "Code", "Q_sim",
-                        "ET0", "T", "Pl", "Ps", "P")
-        data = dplyr::select(data, -"P")
-        
-    } else if (model == "SIM2") {
-        NULL
         
     } else if (model == "MORDOR-SD") {
         data$Date = as.Date(data$Date)
@@ -206,25 +221,13 @@ convert_diag_data = function (model, data) {
         names(data) = c("Code", "Date", "Q_sim",
                         "T", "Pl", "Ps", "ET0")
         data$P = data$Pl + data$Ps
-
-    } else if (model == "ORCHIDEE") {
-        NULL
-
-    } else if (model == "SMASH") {
-        NULL
     }
-
     data = dplyr::bind_cols(Model=model, data)
-    
     return (data)
 }
 
 
-read_shp = function (path) {
-    shp = st_read(path)
-    shp = st_transform(shp, 2154) 
-    return (shp)
-}
+
 
 
 get_select = function (dataEXind, metaEXind, select="") {
@@ -274,24 +277,24 @@ find_Warnings = function (dataEXind, metaEXind,
             ":a/ont: un biais positif important."),
 
         "^epsilon.*T.*DJF"=c(
-            ":n'est/ne sont: pas assez sensible aux variations de température en hiver.",
+            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de température en hiver.",
             ":a/ont: une sensibilité acceptable aux variations de température en hiver.",
-            ":est/sont: trop sensible aux variations de température en hiver."),
+            ":est/sont: trop :sensible/sensibles: aux variations de température en hiver."),
 
         "^epsilon.*T.*JJA"=c(
-            ":n'est/ne sont: pas assez sensible aux variations de température en été.",
+            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de température en été.",
             ":a/ont: une sensibilité acceptable aux variations de température en été.",
-            ":est/sont: trop sensible aux variations de température en été."),
+            ":est/sont: trop :sensible/sensibles: aux variations de température en été."),
 
         "^epsilon.*P.*DJF"=c(
-            ":n'est/ne sont: pas assez sensible aux variations de précipitations hivernales.",
+            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de précipitations hivernales.",
             ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales.",
-            ":est/sont: trop sensible aux variations de précipitations hivernales."),
+            ":est/sont: trop :sensible/sensibles: aux variations de précipitations hivernales."),
 
         "^epsilon.*P.*JJA"=c(
-            ":n'est/ne sont: pas assez sensible aux variations de précipitations estivales.",
+            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de précipitations estivales.",
             ":a/ont: une sensibilité acceptable aux variations de précipitations estivales.",
-            ":est/sont: trop sensible aux variations de précipitations estivales."),
+            ":est/sont: trop :sensible/sensibles: aux variations de précipitations estivales."),
 
         "^Q10$"=c(
             ":sous-estime/sous-estiment: les débits en hautes eaux.",
@@ -324,12 +327,12 @@ find_Warnings = function (dataEXind, metaEXind,
             ":produit/produisent: des étiages trop tard dans l'année."),
 
         "RAT_T"=c(
-            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT).",
-            ":montre/montrent: une faible robustesse temporelle à la température (test RAT)."),
+            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT<sub>T</sub>).",
+            ":montre/montrent: une faible robustesse temporelle à la température (test RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT).",
-            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT)."))
+            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT<sub>P</sub>).",
+            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT<sub>P</sub>)."))
 
     
     tick_nline = list(
@@ -346,22 +349,22 @@ find_Warnings = function (dataEXind, metaEXind,
 
         "^epsilon.*T.*DJF"=c(
             ":a/ont: une sensibilité acceptable aux variations de température en hiver.",
-            ":n'est/ne sont: pas correctement sensible aux variations de température en hiver.",
+            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de température en hiver.",
             ":a/ont: une sensibilité acceptable aux variations de température en hiver."),
 
         "^epsilon.*T.*JJA"=c(
             ":a/ont: une sensibilité acceptable aux variations de température en été.",
-            ":n'est/ne sont: pas correctement sensible aux variations de température en été.",
+            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de température en été.",
             ":a/ont: une sensibilité acceptable aux variations de température en été."),
 
         "^epsilon.*P.*DJF"=c(
             ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales.",
-            ":n'est/ne sont: pas correctement sensible aux variations de précipitations hivernales.",
+            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de précipitations hivernales.",
             ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales."),
 
         "^epsilon.*P.*JJA"=c(
             ":a/ont: une sensibilité acceptable aux variations de précipitations estivales.",
-            ":n'est/ne sont: pas correctement sensible aux variations de précipitations estivales.",
+            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de précipitations estivales.",
             ":a/ont: une sensibilité acceptable aux variations de précipitations estivales."),
 
         "^Q10$"=c(
@@ -395,18 +398,18 @@ find_Warnings = function (dataEXind, metaEXind,
             ":simule/simulent: de manière correcte temporalité annuelle des étiages."),
 
         "RAT_T"=c(
-            ":montre/montrent: une faible robustesse temporelle à la température (test RAT).",
-            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT)."),
+            ":montre/montrent: une faible robustesse temporelle à la température (test RAT<sub>T</sub>).",
+            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT).",
-            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT)."))
+            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT<sub>P</sub>).",
+            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT<sub>P</sub>)."))
     
     
-    line_allOK = "<b>Tous les modèles hydrologiques</b> semblent simuler de manière acceptable le régime."
-    line_OK = "Les modèles hydrologiques semblent simuler de manière acceptable le régime sauf "
-    line_NOK = "Les modèles hydrologiques ont des difficultés à reproduire le régime sauf "
-    line_allNOK = "<b>Aucun modèle hydrologique</b> ne semble simuler de manière acceptable le régime."
+    line_allOK = "<b>Tous les modèles</b> semblent simuler de manière acceptable le régime."
+    line_OK = "Les modèles semblent simuler de manière acceptable le régime sauf "
+    line_NOK = "Les modèles ont des difficultés à reproduire le régime sauf "
+    line_allNOK = "<b>Aucun modèle</b> ne semble simuler de manière acceptable le régime."
 
     orderVar = c("Général", "^RAT.*T$", "^KGE",
                  "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}])",
@@ -577,11 +580,11 @@ find_Warnings = function (dataEXind, metaEXind,
             if (length(model_OK) >= nModel/2) {
                 line = line_OK
                 niveau = 0.5
-                models = paste0("<b>", model_NOK, ".</b>")
+                models = paste0("<b>", model_NOK, "</b>")
             } else {
                 line = line_NOK
                 niveau = -0.5
-                models = paste0("<b>", model_OK, ".</b>")
+                models = paste0("<b>", model_OK, "</b>")
             }
             models_len = length(models)
             if (models_len > 1) {
@@ -630,7 +633,7 @@ find_Warnings = function (dataEXind, metaEXind,
             if (length(unlist(Line$model)) == nModel) {
                 Line$line =
                     paste0(all_model, " ",
-                           gsub("([:].*[/])|([:])",
+                           gsub("([/].*[:])|([:])",
                                 "",
                                 Line$line))
             } else {
@@ -756,9 +759,9 @@ find_Warnings = function (dataEXind, metaEXind,
                   # codeLight="K2981910",
                   # save=FALSE)
 # W = find_Warnings(dataEXind, metaEXind)
-Warnings = W$Warnings
-frq = W$frq
-frq_short=select(frq, c(var, niveau, npv_pct))
-frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
-frq_short$npv_pct = round(frq_short$npv_pct)
+# Warnings = W$Warnings
+# frq = W$frq
+# frq_short=select(frq, c(var, niveau, npv_pct))
+# frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
+# frq_short$npv_pct = round(frq_short$npv_pct)
 # Warnings[grepl("hydrologique", Warnings$warning),]

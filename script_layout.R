@@ -95,9 +95,11 @@ if (is.null(doc_chunk)) {
 } else if (doc_chunk == "all") {
     chunkCode = list(CodeALL)
     
-} else if (doc_chunk == "region") { 
-    chunkCode = split(CodeALL, factor(substr(CodeALL, 1, 1)))
-    names(chunkCode) = iRegHydro()[names(chunkCode)]
+} else if (doc_chunk == "region") {
+    letter = factor(substr(CodeALL, 1, 1))
+    chunkCode = split(CodeALL, letter)
+    names(chunkCode) = paste0(iRegHydro()[names(chunkCode)],
+                              " - ", levels(letter))
 }
 
 nChunk = length(chunkCode)
@@ -111,7 +113,9 @@ for (i in 1:nChunk) {
     
     if (!is.null(chunkname)) {
         doc_chunkname = paste0(doc_name_ns, "_",
-                               gsub(" ", "_", chunkname))
+                               gsub(" ", "_",
+                                    gsub(" [-] ", "_",
+                                         chunkname)))
         today_figdir_leaf = file.path(today_figdir,
                                       doc_chunkname, "PDF")
     } else if ('plot_doc' %in% to_do) {
