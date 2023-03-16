@@ -16,7 +16,7 @@
 # General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Ex2D_toolbox R toolbox.
+# along with Ex2D_toolbox R toolbox.OCOC
 # If not, see <https://www.gnu.org/licenses/>.
 
 
@@ -148,6 +148,10 @@ verbose =
 #       those individual file in a specific directory of the figdir/
 #       directory.
 
+mode =
+    # "diag"
+    "proj"
+
 to_do =
     c(
         # 'delete_tmp',
@@ -156,9 +160,9 @@ to_do =
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
-        # 'criteria_selection'
+        # 'criteria_selection',
         # 'write_warnings'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -224,31 +228,26 @@ period_diagnostic = c('1976-01-01', '2019-12-31')
 propagate_NA = TRUE
 nCode4RAM = 25
 
-models_to_diag =
-    list(
-        "CTRIP"="CTRIP_diagnostic_20230124.nc",
-        "EROS"=c("ErosBretagne_20230131.Rdata",
-                 "ErosLoire_20230131.Rdata"),
-        "GRSD"="GRSD_20230223.nc",
-        "J2000"="J2000_20230308_safran_diagnostic.nc",
-        "SIM2"="Debits_modcou_19580801_20210731_day_METADATA.nc",
-        "MORDOR-SD"="MORDOR-SD_20221912.Rdata",
-        "MORDOR-TS"="MordorTS_20221213.Rdata",
-        "ORCHIDEE"="MODEL_ORCHIDEE_KWR-RZ1-RATIO-19760101_20191231.nc",
-        "SMASH"="SMASH_20230303.nc"
+projs_to_use =
+    c(
+        # 'all'
+        "ALADIN"
+        # "rcp45"
     )
-complete_by = "SMASH"
 
-models_to_proj = c(
+models_to_use =
+    c(
         # "CTRIP",
         # "EROS",
         # "GRSD",
-        # "J2000"=
-        # "SIM2"=
-        # "MORDOR-TS"="debit_Loire_CNRM-CERFACS-CNRM-CM5_historical_r1i1p1_CNRM-ALADIN63_v2_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_19510101-20051231.nc"
+        "J2000"
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
         # "ORCHIDEE",
-        # "SMASH"=
-)
+        # "SMASH"
+    )
+complete_by = "SMASH"
 
 codes_to_use =
     # ''
@@ -290,9 +289,9 @@ codes_to_use =
 #   topic group.
 
 analyse_data = c(
-    'WIP'
+    # 'WIP'
     # 'Ex2D/1_indicator/1_all',
-    # 'Ex2D/1_indicator/2_selection'
+    'Ex2D/1_indicator/2_selection'
     # 'Ex2D/2_serie'
 )
 
@@ -384,63 +383,6 @@ doc_diagnostic_region =
     )
 
 
-#  ___               __  _   
-# |   \  _ _  __ _  / _|| |_ 
-# | |) || '_|/ _` ||  _||  _|
-# |___/ |_|  \__,_||_|   \__| ________________________________________
-# dataEXserieQM_obs =
-#     dplyr::summarise(dplyr::group_by(dataEXserie$QM, Code, Month),
-#                      QM=select_good(QM_obs),
-#                      .groups="drop")
-# dataEXseriePA_med = dplyr::summarise(dplyr::group_by(dataEXserie$PA,
-#                                                      Code, Date),
-#                                      PAs=median(PAs, na.rm=TRUE),
-#                                      PAl=median(PAl, na.rm=TRUE),
-#                                      PA=median(PA, na.rm=TRUE),
-#                                      .groups="drop")
-# find_regimeHydro(dataEXserieQM_obs, 2, dataEXseriePA_med)
-
-
-# Error in `dplyr::summarise()` at EXstat/R/process_extraction.R:1286:16:
-# ! Problem while computing `ValueEX1 = f(...)`.
-# ℹ The error occurred in group 4072: Code = "SMASH_A6541110", Date_g = "1993".
-# Caused by error in `f()`:
-# ! objet 'period_select' introuvable
-# Run `rlang::last_error()` to see where the error occurred.
-# There were 50 or more warnings (use warnings() to see the first 50)
-
-
-
-# [1] "width"
-# [1] 0mm+0mm                          0cm                             
-# [3] 0cm                              sum(1grobwidth, max(1.5mm, 0pt))
-# [5] 1null                            0cm                             
-# [7] 0cm                              0pt                             
-# [9] 0mm+0mm                         
-# [1] ""
-# [1] "maxWidth"
-# [1] max(0mm+0mm, 0mm+0mm)                                                  
-# [2] max(0cm, 0cm)                                                          
-# [3] max(0cm, 0cm)                                                          
-# [4] max(sum(1grobwidth, max(1.5mm, 0pt)), sum(1grobwidth, max(1.5mm, 0pt)))
-# [5] max(1null, 1null)                                                      
-# [6] max(0cm, 0cm)                                                          
-# [7] max(0cm, 0cm)                                                          
-# [8] max(0pt, 0pt)                                                          
-# [9] max(0mm+0mm, 0mm+0mm)  
-
-# [1] "maxWidth"
-# [1] max(0mm, 0mm+0mm, 0mm, 0mm+0mm)
-# [2] max(0cm, 0cm, 0cm, 0cm)
-# [3] max(0cm, 0cm, 0cm, 0cm)
-# [4] max(sum(0cm, max(0pt, 0pt)), sum(1grobwidth, max(1.5mm, 0pt)), sum(0cm, max(0pt, 0pt)), sum(1grobwidth, max(1.5mm, 0pt)))
-# [5] max(1null, 1null, 1null, 1null)
-# [6] max(0cm, 0cm, 0cm, 0cm)
-# [7] max(0cm, 0cm, 0cm, 0cm)
-# [8] max(0pt, 0pt, 0pt, 0pt)
-# [9] max(0mm, 0mm+0mm, 0mm, 0mm+0mm)
-
-
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
@@ -528,13 +470,7 @@ library(ggtext) #nope
 # library(rgeos)
 # library(lubridate)
 # library(sp)
-# library(patchwork)
 
-
-# a="
-# 112
-# 221
-# "
 
 if ("delete_tmp" %in% to_do) {
     delete_tmp = TRUE
@@ -554,23 +490,109 @@ if ('plot_doc' %in% to_do) {
     plot_doc = get(paste0("doc_", plot_doc[1]))
 }
 
-codes_to_diag_shp = read_shp(file.path(computer_data_path,
-                                       codes_to_diag_shp_dir))
-codes_to_diag = as.character(codes_to_diag_shp$Code)
+
+apply_grepl = function (x, table) {
+    return (table[grepl(x, table)])
+}
+convert2bool = function (X, true) {
+    ok = X == true
+    X[ok] = TRUE
+    X[!ok] = FALSE
+    return (X)
+}
+
+
+if (mode == "proj") {
+    projs_selection_data = read_tibble(file.path(computer_data_path,
+                                                 projs_selection_file))
+    cols = c("historical", 'rcp26', 'rcp45', 'rcp85')
+    names(projs_selection_data)[3:6] = cols
+    projs_selection_data =
+        dplyr::mutate(projs_selection_data,
+                      dplyr::across(.cols=cols,
+                                    .fns=convert2bool, true="x"))
+    projs_selection_data =
+        tidyr::pivot_longer(projs_selection_data, cols, "EXP")
+    projs_selection_data$value = as.logical(projs_selection_data$value)
+    projs_selection_data = dplyr::filter(projs_selection_data, value)
+    projs_selection_data = dplyr::select(projs_selection_data, -"value")
+
+    BC = c("ADAMONT", "CDFt")
+    projs_selection_data = tidyr::crossing(projs_selection_data,
+                                           BC, Model=models_to_use)
+    projs_selection_data$ID =
+        paste0(projs_selection_data$GCM, "|",
+               projs_selection_data$EXP, "|",
+               projs_selection_data$RCM, "|",
+               projs_selection_data$BC, "|",
+               projs_selection_data$Model)
+    
+    projs_selection_data$regexp =
+        paste0(".*", 
+               gsub("[|]", ".*", projs_selection_data$ID),
+               ".*")
+    
+    projs_path = list.files(file.path(computer_data_path, proj_dir))
+    
+    if (all(projs_to_use == "all")) {
+        files_to_use =
+            unlist(lapply(projs_selection_data$regexp, apply_grepl,
+                          table=projs_path))
+        ok =  sapply(lapply(projs_selection_data$regexp,
+                            grepl, x=files_to_use), any)
+        names(files_to_use) = projs_selection_data$ID[ok]    
+
+    } else {
+        projs_to_use = unlist(lapply(projs_to_use, apply_grepl,
+                                     table=projs_selection_data$regexp))
+        projs_to_use_name =
+            projs_selection_data$ID[projs_selection_data$regexp %in%
+                                projs_to_use]
+        files_to_use = lapply(projs_to_use, apply_grepl,
+                              table=projs_path)
+        names(files_to_use) = projs_to_use_name
+        files_to_use = unlist(files_to_use)
+        files_to_use = as.list(files_to_use)
+    }
+}
+
+
+if (mode == "diag") {
+    models_to_use_name = models_to_use
+    models_path = list.files(file.path(computer_data_path, diag_dir))
+    files_to_use = lapply(models_to_use, apply_grepl, table=models_path)
+    names(files_to_use) = models_to_use_name
+    files_to_use = files_to_use[sapply(files_to_use, length) > 0]
+}
+
+
+codes_selection_data = read_tibble(file.path(computer_data_path,
+                                             codes_selection_file))
+if (mode == "diag") {
+    ref = 1
+} else if (mode == "proj") {
+    ref = c(0, 1)
+}
+codes8_selection =
+    codes_selection_data$CODE[codes_selection_data$Référence %in% ref]
+codes10_selection =
+    codes_selection_data$SuggestionCode[codes_selection_data$Référence %in% ref]
 if (all(codes_to_use == "")) {
     stop ("No station selected")
 }
-
 if (all(codes_to_use == "all")) {
-    CodeALL = codes_to_diag
+    CodeALL8 = codes8_selection
+    CodeALL10 = codes10_selection
 } else {
     codes_to_use = convert_regexp(computer_data_path,
                                   obs_dir,
                                   codes_to_use)
-    okCode = codes_to_use %in% codes_to_diag
-    CodeALL = codes_to_use[okCode]
+    okCode = codes_to_use %in% codes8_selection
+    CodeALL8 = codes_to_use[okCode]
+    CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
 }
-nCodeALL = length(CodeALL)
+nCodeALL = length(CodeALL10)
+
 
 tmppath = file.path(computer_work_path, tmpdir)
 if (read_tmp | delete_tmp) {
@@ -603,7 +625,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         size = 1
     }
 
-    firstLetterALL = substr(CodeALL, 1, 1)
+    firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
 
     Subsets = list()
@@ -666,9 +688,11 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         }
         
         # CodeSUB = CodeALL[((subset-1)*nCode4RAM+1):(subset*nCode4RAM)]
-        CodeSUB = CodeALL[subset[1]:subset[2]]
-        CodeSUB = CodeSUB[!is.na(CodeSUB)]
-        nCodeSUB = length(CodeSUB)
+        CodeSUB8 = CodeALL8[subset[1]:subset[2]]
+        CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
+        CodeSUB10 = CodeALL10[subset[1]:subset[2]]
+        CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
+        nCodeSUB = length(CodeSUB10)
 
         if (any(c('create_data', 'create_data_proj') %in% to_do)) {
             source(file.path(lib_path, 'script_create.R'),

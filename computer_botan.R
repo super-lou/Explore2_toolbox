@@ -60,7 +60,8 @@ obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
 obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Explore2/diagnostic"
 proj_dir = "Explore2/projection"
-codes_to_diag_shp_dir = "Explore2/reseauReferenceHYDRO"
+codes_selection_file = "Explore2/Selection points simulation V20230221.txt"
+projs_selection_file = "Explore2/ensembleProjectionClimatExplore2.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information

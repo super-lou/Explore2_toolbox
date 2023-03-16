@@ -34,7 +34,7 @@ analyse_data_indicator = function () {
     nModel = length(Model)
     
     Code_available = levels(factor(data$Code))
-    Code = Code_available[Code_available %in% CodeSUB]
+    Code = Code_available[Code_available %in% CodeSUB10]
     nCode = length(Code)
             
     data$ID = paste0(data$Model, "_", data$Code)
@@ -82,7 +82,7 @@ analyse_data_serie = function () {
     nModel = length(Model)
     
     Code_available = levels(factor(data$Code))
-    Code = Code_available[Code_available %in% CodeSUB]
+    Code = Code_available[Code_available %in% CodeSUB10]
     nCode = length(Code)
         
     data$ID = paste0(data$Model, "_", data$Code)

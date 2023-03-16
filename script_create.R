@@ -25,10 +25,10 @@ create_data = function () {
     print("### Simulated data")
     Model = c()
     data_sim = tibble()
-    for (i in 1:length(models_to_diag)) {
+    for (i in 1:length(files_to_use)) {
 
-        model = names(models_to_diag)[[i]]
-        model_file = models_to_diag[[i]]
+        model = names(files_to_use)[[i]]
+        model_file = files_to_use[[i]]
         
         model_path = file.path(computer_data_path,
                                diag_dir, model_file)
@@ -51,7 +51,11 @@ create_data = function () {
                 }
 
                 data_tmp = convert_diag_data(model, data_tmp)
-                data_tmp = data_tmp[data_tmp$Code %in% CodeSUB,]
+                if (nchar(data_tmp$Code[1]) == 8) {
+                    data_tmp$Code = codes10_selection[match(data_tmp$Code,
+                                                            codes8_selection)]
+                }
+                data_tmp = data_tmp[data_tmp$Code %in% CodeSUB10,]
                 data_tmp = data_tmp[order(data_tmp$Code),]
 
                 data_sim = dplyr::bind_rows(data_sim, data_tmp)
@@ -59,24 +63,26 @@ create_data = function () {
         }
     }
 
-    if (nrow(data_sim) > 0) {
+    if (nrow(data_sim) > 0 & mode == "diag") {
         print("### Observation data")
         
-        Code_available = levels(factor(data_sim$Code))
-        Code = Code_available[Code_available %in% CodeSUB]
-        Code_filename = paste0(Code, obs_format)
-        nCode = length(Code)
+        Code10_available = levels(factor(data_sim$Code))
+        Code10 = Code10_available[Code10_available %in% CodeSUB10]
+        Code8 = codes8_selection[match(Code10,
+                                       codes10_selection)]
+        Code8_filename = paste0(Code8, obs_format)
+        nCode = length(Code10)
         
 
         # Extract metadata about selected stations
         meta = extract_meta(computer_data_path,
                             obs_dir,
-                            Code_filename,
+                            Code8_filename,
                             verbose=FALSE)
         # Extract data about selected stations
         data_obs = extract_data(computer_data_path,
                                 obs_dir,
-                                Code_filename,
+                                Code8_filename,
                                 val2keep=c(val_E2=0),
                                 verbose=FALSE)
 
@@ -85,6 +91,11 @@ create_data = function () {
                           dplyr::between(Date,
                                          as.Date(period_diagnostic[1]),
                                          as.Date(period_diagnostic[2])))
+
+        meta$Code = codes10_selection[match(meta$Code,
+                                            codes8_selection)]
+        data_obs$Code = codes10_selection[match(data_obs$Code,
+                                                codes8_selection)]
         
         meta = meta[order(meta$Code),] 
         data_obs = data_obs[order(data_obs$Code),]
@@ -140,7 +151,7 @@ create_data = function () {
             }
         }
         
-        if (propagate_NA) {
+        if (propagate_NA & mode == "diag") {
             NA_propagation = function (X, Ref) {
                 X[is.na(Ref)] = NA
                 return (X)
@@ -149,9 +160,9 @@ create_data = function () {
                                  dplyr::across(where(is.numeric),
                                                NA_propagation,
                                                Ref=Q_obs))
+            data = dplyr::relocate(data, Q_obs, .before=Q_sim)
         }
         
-        data = dplyr::relocate(data, Q_obs, .before=Q_sim)
         data = dplyr::relocate(data, T, .before=ET0)
 
         write_tibble(data,
@@ -169,42 +180,4 @@ create_data = function () {
 ## 1. CREATION OF DATA 4 DIAG ________________________________________
 if ('create_data' %in% to_do) {
     create_data()
-}
-
-
-## 2. CREATION OF DATA 4 PROJ ________________________________________
-if ('create_data_proj' %in% to_do) {
-
-    Model = c()
-    data_sim = tibble()
-
-    for (i in 1:length(models_to_proj)) {
-
-        model = names(models_to_proj)[i]
-        model_file = models_to_proj[i]
-        
-        model_path = file.path(computer_data_path,
-                               proj_dir, model_file)
-        
-        if (file.exists(model_path)) {
-            Model = c(Model, model)
-
-            print(paste0("Get simulated data from ", model,
-                         " in ", model_path))
-            
-            if (grepl(".*[.]Rdata", model_path)) {
-                data_tmp = read_tibble(filepath=model_path)
-                
-            } else if (grepl(".*[.]nc", model_path)) {
-                data_tmp = NetCDF_to_tibble(model_path,
-                                            type="proj")
-            }
-
-            data_tmp = data_tmp[data_tmp$Code %in% Code,]
-            data_tmp = data_tmp[order(data_tmp$Code),]
-            data_tmp = convert_diag_data(model, data_tmp)
-
-            data_sim = dplyr::bind_rows(data_sim, data_tmp)
-        }
-    }
 }
