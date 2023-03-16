@@ -23,37 +23,45 @@
 create_data = function () {
 
     print("### Simulated data")
-    Model = c()
+    Chain = c()
     data_sim = tibble()
     for (i in 1:length(files_to_use)) {
 
-        model = names(files_to_use)[[i]]
-        model_file = files_to_use[[i]]
-        
-        model_path = file.path(computer_data_path,
-                               diag_dir, model_file)
+        chain = names(files_to_use)[i]
+        file = files_to_use[[i]]
 
-        for (path in model_path) {
+        if (mode == "proj") {
+            dir = proj_dir
+        } else if (mode == "diag") {
+            dir = diag_dir
+        }
+        path = file.path(computer_data_path,
+                         dir, file)
+
+        for (p in path) {
         
             if (file.exists(path)) {
-                Model = c(Model, model)
+                Chain = c(Chain, chain)
 
-                print(paste0("Get simulated data from ", model,
-                             " in ", path))
+                print(paste0("Get simulated data from ", chain,
+                             " in ", p))
                 
-                if (grepl(".*[.]Rdata", path)) {
-                    data_tmp = read_tibble(filepath=path)
+                if (grepl(".*[.]Rdata", p)) {
+                    data_tmp = read_tibble(filepath=p)
                     
-                } else if (grepl(".*[.]nc", path)) {
-                    data_tmp = NetCDF_to_tibble(path,
-                                                model=model,
-                                                type="diag")
+                } else if (grepl(".*[.]nc", p)) {
+                    data_tmp = NetCDF_to_tibble(p,
+                                                chain=chain,
+                                                mode=mode)
                 }
 
-                data_tmp = convert_diag_data(model, data_tmp)
+                if (mode == "diag") { ###
+                    data_tmp = convert_diag_data(chain, data_tmp)
+                }
                 if (nchar(data_tmp$Code[1]) == 8) {
-                    data_tmp$Code = codes10_selection[match(data_tmp$Code,
-                                                            codes8_selection)]
+                    data_tmp$Code =
+                        codes10_selection[match(data_tmp$Code,
+                                                codes8_selection)]
                 }
                 data_tmp = data_tmp[data_tmp$Code %in% CodeSUB10,]
                 data_tmp = data_tmp[order(data_tmp$Code),]
@@ -62,10 +70,31 @@ create_data = function () {
             }
         }
     }
+    
+    if (nrow(data_sim) > 0) {
+        id = match(CodeSUB10, codes10_selection)
+        meta =
+            dplyr::tibble(
+                       Code=CodeSUB10,
+                       Nom=codes_selection_data$SuggestionNOM[id],
+                       Region_Hydro=
+                           iRegHydro()[substr(CodeSUB10, 1, 1)],
+                       Source=codes_selection_data$SOURCE[id],
+                       Référence=
+                           codes_selection_data$Référence[id],
+                       XL93_m=
+                           codes_selection_data$XL93[id],
+                       YL93_m=
+                           codes_selection_data$YL93[id],
+                       Surface_km2=
+                           codes_selection_data$S_HYDRO[id])
 
-    if (nrow(data_sim) > 0 & mode == "diag") {
-        print("### Observation data")
-        
+        meta$Nom = gsub("L[']", "L ", meta$Nom)
+        meta$Nom = gsub(" A ", " à ",
+                        stringr::str_to_title(meta$Nom))
+        meta$Nom = gsub("^L ", "L'", meta$Nom)
+        meta$Nom = gsub(" l ", " l'", meta$Nom)
+
         Code10_available = levels(factor(data_sim$Code))
         Code10 = Code10_available[Code10_available %in% CodeSUB10]
         Code8 = codes8_selection[match(Code10,
@@ -73,104 +102,122 @@ create_data = function () {
         Code8_filename = paste0(Code8, obs_format)
         nCode = length(Code10)
         
-
         # Extract metadata about selected stations
-        meta = extract_meta(computer_data_path,
-                            obs_dir,
-                            Code8_filename,
-                            verbose=FALSE)
-        # Extract data about selected stations
-        data_obs = extract_data(computer_data_path,
+        meta_obs = extract_meta(computer_data_path,
                                 obs_dir,
                                 Code8_filename,
-                                val2keep=c(val_E2=0),
                                 verbose=FALSE)
-
-        data_obs =
-            dplyr::filter(data_obs,
-                          dplyr::between(Date,
-                                         as.Date(period_diagnostic[1]),
-                                         as.Date(period_diagnostic[2])))
-
-        meta$Code = codes10_selection[match(meta$Code,
-                                            codes8_selection)]
-        data_obs$Code = codes10_selection[match(data_obs$Code,
-                                                codes8_selection)]
+        meta_obs$Code =
+            codes10_selection[match(meta_obs$Code,
+                                    codes8_selection)]
+        meta = dplyr::left_join(meta,
+                                dplyr::select(meta_obs,
+                                              Code,
+                                              Gestionnaire,
+                                              Altitude_m),
+                                by="Code")
         
-        meta = meta[order(meta$Code),] 
-        data_obs = data_obs[order(data_obs$Code),]
+        meta = dplyr::arrange(meta, Code)
         
-        # Time gap
-        meta = get_lacune(data_obs, meta)
         
-        names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
+        if (mode == "diag") {
+            print("### Observation data")
 
-        data = dplyr::inner_join(data_sim,
-                                 data_obs,
-                                 by=c("Code", "Date"))
-        
-        nModel = length(Model)
-
-        if (!is.null(complete_by) & complete_by != "") {
-            model4complete = complete_by[complete_by %in% Model][1]
-            val2check = c("T", "ET0", "Pl", "Ps", "P")
-            nVal2check = length(val2check)
+            Model = Chain
             
-            if (!is.na(model4complete)) {
-                data_model4complete =
-                    data[data$Model == model4complete,]
-                data_model4complete =
-                    dplyr::select(data_model4complete,
-                                  -Model)
-                
-                for (model in Model) {
-                    data_model = data[data$Model == model,]
-                    data_model = dplyr::select(data_model,
-                                               -Model)
+            # Extract data about selected stations
+            data_obs = extract_data(computer_data_path,
+                                    obs_dir,
+                                    Code8_filename,
+                                    val2keep=c(val_E2=0),
+                                    verbose=FALSE)
 
-                    for (i in 1:nVal2check) {
-                        col = val2check[i]
-                        
-                        if (all(is.na(data_model[[col]]))) {
-                            data_model =
-                                dplyr::left_join(
-                                           dplyr::select(data_model, -col),
-                                           dplyr::select(data_model4complete,
-                                                         c("Date",
-                                                           "Code",
-                                                           col)),
-                                           by=c("Code", "Date"))
-                        }
-                    }
-                    data_model = dplyr::bind_cols(Model=model,
-                                                  data_model)
-                    data_model = data_model[names(data)]
+            data_obs =
+                dplyr::filter(
+                           data_obs,
+                           dplyr::between(
+                                      Date,
+                                      as.Date(period_diagnostic[1]),
+                                      as.Date(period_diagnostic[2])))
+
+            data_obs$Code = codes10_selection[match(data_obs$Code,
+                                                    codes8_selection)]
+            
+            data_obs = dplyr::arrange(data_obs, Code)
+            meta = get_lacune(data_obs, meta)
+            
+            names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
+
+            data = dplyr::inner_join(data_sim,
+                                     data_obs,
+                                     by=c("Code", "Date"))
+            
+            nModel = length(Model)
+
+            if (!is.null(complete_by) & complete_by != "") {
+                model4complete = complete_by[complete_by %in% Model][1]
+                val2check = c("T", "ET0", "Pl", "Ps", "P")
+                nVal2check = length(val2check)
+                
+                if (!is.na(model4complete)) {
+                    data_model4complete =
+                        data[data$Model == model4complete,]
+                    data_model4complete =
+                        dplyr::select(data_model4complete,
+                                      -Model)
                     
-                    data[data$Model == model,] = data_model
+                    for (model in Model) {
+                        data_model = data[data$Model == model,]
+                        data_model = dplyr::select(data_model,
+                                                   -Model)
+
+                        for (i in 1:nVal2check) {
+                            col = val2check[i]
+                            
+                            if (all(is.na(data_model[[col]]))) {
+                                data_model =
+                                    dplyr::left_join(
+                                               dplyr::select(data_model, -col),
+                                               dplyr::select(data_model4complete,
+                                                             c("Date",
+                                                               "Code",
+                                                               col)),
+                                               by=c("Code", "Date"))
+                            }
+                        }
+                        data_model = dplyr::bind_cols(Model=model,
+                                                      data_model)
+                        data_model = data_model[names(data)]
+                        
+                        data[data$Model == model,] = data_model
+                    }
                 }
             }
-        }
-        
-        if (propagate_NA & mode == "diag") {
-            NA_propagation = function (X, Ref) {
-                X[is.na(Ref)] = NA
-                return (X)
+            if (propagate_NA) {
+                NA_propagation = function (X, Ref) {
+                    X[is.na(Ref)] = NA
+                    return (X)
+                }
+                data = dplyr::mutate(data,
+                                     dplyr::across(where(is.numeric),
+                                                   NA_propagation,
+                                                   Ref=Q_obs))
+                data = dplyr::relocate(data, Q_obs, .before=Q_sim)
             }
-            data = dplyr::mutate(data,
-                                 dplyr::across(where(is.numeric),
-                                               NA_propagation,
-                                               Ref=Q_obs))
-            data = dplyr::relocate(data, Q_obs, .before=Q_sim)
+            data = dplyr::relocate(data, T, .before=ET0)
+
+        } else if (mode == "proj") {
+            data = data_sim
+            
         }
         
-        data = dplyr::relocate(data, T, .before=ET0)
-
         write_tibble(data,
                      filedir=tmppath,
                      filename=paste0("data_", subset_name, ".fst"))
         write_tibble(meta,
                      filedir=tmppath,
                      filename=paste0("meta_", subset_name, ".fst"))
+        
     } else {
         data = NULL
     }

@@ -149,16 +149,16 @@ verbose =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
-        # 'delete_tmp',
-        # 'create_data',
+        'delete_tmp',
+        'create_data',
         # 'analyse_data'
         # 'save_analyse'
-        # 'read_tmp'
+        'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
@@ -230,8 +230,8 @@ nCode4RAM = 25
 
 projs_to_use =
     c(
-        # 'all'
-        "ALADIN"
+        'all'
+        # "ALADIN"
         # "rcp45"
     )
 
@@ -253,7 +253,7 @@ codes_to_use =
     # ''
     c(
         # 'all'
-        'K2981910' #ref
+        # 'K2981910' #ref
         # 'O3084320'
         # 'WDORON01'
         # 'WDORON02',
@@ -267,9 +267,9 @@ codes_to_use =
         # 'X0454010',
         # 'XVENEON1'
         
-        # 'K1363010',
-        # 'K1341810',
-        # "M0014110",
+        'K1363010',
+        'K1341810',
+        "M0014110"
         # "M0050620"
     )
 
@@ -471,34 +471,23 @@ library(ggtext) #nope
 # library(lubridate)
 # library(sp)
 
-
-if ("delete_tmp" %in% to_do) {
-    delete_tmp = TRUE
-    to_do = to_do[to_do != "delete_tmp"]
-} else {
-    delete_tmp = FALSE
-}
-
-if ("read_tmp" %in% to_do) {
-    read_tmp = TRUE
-    to_do = to_do[to_do != "read_tmp"]
-} else {
-    read_tmp = FALSE
-}
-
-if ('plot_doc' %in% to_do) {
-    plot_doc = get(paste0("doc_", plot_doc[1]))
-}
-
-
 apply_grepl = function (x, table) {
     return (table[grepl(x, table)])
 }
+
 convert2bool = function (X, true) {
     ok = X == true
     X[ok] = TRUE
     X[!ok] = FALSE
     return (X)
+}
+
+
+delete_tmp = FALSE
+read_tmp = FALSE
+
+if ('plot_doc' %in% to_do) {
+    plot_doc = get(paste0("doc_", plot_doc[1]))
 }
 
 
@@ -595,11 +584,14 @@ nCodeALL = length(CodeALL10)
 
 
 tmppath = file.path(computer_work_path, tmpdir)
-if (read_tmp | delete_tmp) {
+if ("delete_tmp" %in% to_do) {
+    delete_tmp = TRUE
+    to_do = to_do[to_do != "delete_tmp"]
     print("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
+
 if (!(file.exists(tmppath))) {
     dir.create(tmppath, recursive=TRUE)
 }
@@ -711,6 +703,14 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
 if (any(c('analyse_data', 'save_analyse',
           'criteria_selection', 'write_warnings',
           'read_saving') %in% to_do)) {
+    print("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
+}
+
+if ("read_tmp" %in% to_do) {
+    read_tmp = TRUE
+    to_do = to_do[to_do != "read_tmp"]
     print("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')

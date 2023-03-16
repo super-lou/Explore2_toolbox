@@ -20,7 +20,8 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
+NetCDF_to_tibble = function (NetCDF_path,
+                             chain="", mode="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
 
@@ -32,171 +33,169 @@ NetCDF_to_tibble = function (NetCDF_path, model="", type="diag") {
                            "[0-9]+-[0-9]+-[0-9]+")))
 
     Date = as.Date(as.character(Date), origin=as.Date("1970-01-01"))
+    nDate = length(Date)
 
-    if (grepl("CTRIP", model)) {
-        CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-        QRaw = ncdf4::ncvar_get(NCdata, "Q")
-        ncdf4::nc_close(NCdata)
-        
-        CodeOrder = order(CodeRaw)
-        Code = CodeRaw[CodeOrder]
-        Q_sim = QRaw[CodeOrder,]
-
-        nCode = length(Code)
-        nDate = length(Date)
-        data = dplyr::tibble(Code=rep(Code, each=nDate),
-                             Date=rep(Date, times=nCode),
-                             Q_sim=c(t(Q_sim)))
-        
-    } else if (grepl("EROS", model)) {
-        NULL
-        
-    } else if (grepl("GRSD", model)) {
-        CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-        QRaw = ncdf4::ncvar_get(NCdata, "Q")
-        SRaw = ncdf4::ncvar_get(NCdata, "surface_model")
-        TRaw = ncdf4::ncvar_get(NCdata, "T")
-        ET0Raw = ncdf4::ncvar_get(NCdata, "ET0")
-        ncdf4::nc_close(NCdata)
-        
-        CodeOrder = order(CodeRaw)
-        Code = CodeRaw[CodeOrder]
-        Q_sim = QRaw[CodeOrder,]
-        T = TRaw[CodeOrder,]
-        ET0 = ET0Raw[CodeOrder,]
-
-        nCode = length(Code)
-        nDate = length(Date)
-        data = dplyr::tibble(Code=rep(Code, each=nDate),
-                             Date=rep(Date, times=nCode),
-                             Q_sim=c(t(Q_sim)),
-                             T=c(t(T)),
-                             ET0=c(t(ET0)))
-        
-    } else if (grepl("J2000", model)) {
-        CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-        CodeRaw = substr(CodeRaw, 1, 8) ##### !!!!!
-        QRaw = ncdf4::ncvar_get(NCdata, "Q")
-        SRaw = ncdf4::ncvar_get(NCdata, "surface_model")
-        PRaw = ncdf4::ncvar_get(NCdata, "P")
-        PlRaw = ncdf4::ncvar_get(NCdata, "Pl")
-        PsRaw = ncdf4::ncvar_get(NCdata, "Ps")
-        TRaw = ncdf4::ncvar_get(NCdata, "T")
-        ET0Raw = ncdf4::ncvar_get(NCdata, "ET0")
-        ncdf4::nc_close(NCdata)
-        
-        CodeOrder = order(CodeRaw)
-        Code = CodeRaw[CodeOrder]
-        Q_sim = QRaw[CodeOrder,]
-        S = SRaw[CodeOrder]
-        P = PRaw[CodeOrder,]
-        Pl = PlRaw[CodeOrder,]
-        Ps = PsRaw[CodeOrder,]
-        T = TRaw[CodeOrder,]
-        ET0 = ET0Raw[CodeOrder,]
-        
-        nCode = length(Code)
-        nDate = length(Date)
-        data = dplyr::tibble(Code=rep(Code, each=nDate),
-                             Date=rep(Date, times=nCode),
-                             Q_sim=c(t(Q_sim)),
-                             P=c(t(P)),
-                             Pl=c(t(Pl)),
-                             Ps=c(t(Ps)),
-                             T=c(t(T)),
-                             ET0=c(t(ET0)))
-        
-    } else if (model == "SIM2") {
-        CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-        QRaw = ncdf4::ncvar_get(NCdata, "debit")
-        SRaw = ncdf4::ncvar_get(NCdata, "surface_mod")
-        ncdf4::nc_close(NCdata)
-
-        CodeOrder = order(CodeRaw)
-        Code = CodeRaw[CodeOrder]
-        nCode = length(Code)
-        nDate = length(Date)
-        
-        dimCode = dim(QRaw) == nCode
-        if (dimCode[1]) {
-            Q_sim = QRaw[CodeOrder,]
+    if (mode == "diag") {
             
-        } else if (dimCode[2]) {
-            Q_sim = QRaw[, CodeOrder]
+        if (chain == "EROS") {
+            NULL
+            
+        } else if (chain == "SIM2") {
+            CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
+            QRaw = ncdf4::ncvar_get(NCdata, "debit")
+            SRaw = ncdf4::ncvar_get(NCdata, "surface_mod")
+            ncdf4::nc_close(NCdata)
+
+            CodeOrder = order(CodeRaw)
+            Code = CodeRaw[CodeOrder]
+            nCode = length(Code)
+            nDate = length(Date)
+            
+            dimCode = dim(QRaw) == nCode
+            if (dimCode[1]) {
+                Q_sim = QRaw[CodeOrder,]
+                
+            } else if (dimCode[2]) {
+                Q_sim = QRaw[, CodeOrder]
+            }
+            data = dplyr::tibble(
+                              Code=rep(Code, each=nDate),
+                              Date=rep(Date, times=nCode),
+                              Q_sim=c(t(Q_sim))
+                          )    
+            return (data)
+            
+        } else if (chain == "MORDOR-SD") {
+            NULL
+            
+        } else if (chain == "MORDOR-TS") {
+            NULL
+            
+        } else if (chain %in% c("CTRIP", "GRSD", "ORCHIDEE",
+                                "SMASH", "J2000")) {
+            CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
+            CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
+            CodeOrder = order(CodeRawSUB10)
+            Code = CodeRawSUB10[CodeOrder]
+            nCode = length(Code)
+            
+            station = match(CodeRawSUB10, CodeRaw)
+            start = min(station)
+            count = max(station) - start + 1
+            station = station - start + 1
+            
+            Q_sim = ncdf4::ncvar_get(NCdata, "Q",
+                                     start=c(start, 1),
+                                     count=c(count, -1))
+            Q_sim = Q_sim[station,]
+            Q_sim = Q_sim[CodeOrder,]
+            Q_sim = c(t(Q_sim))
+            
+            data = dplyr::tibble(Code=rep(Code, each=nDate),
+                                 Date=rep(Date, times=nCode),
+                                 Q_sim=Q_sim)
+            
+            if (!(chain %in% c("CTRIP", "GRSD"))) {
+                S = ncdf4::ncvar_get(NCdata, "surface_model",
+                                     start=start,
+                                     count=count)
+                S = S[station]
+                S = S[CodeOrder]
+                ######## data
+            }
+            
+            if (!(chain %in% c("GRSD"))) {
+                P = ncdf4::ncvar_get(NCdata, "P",
+                                     start=c(start, 1),
+                                     count=c(count, -1))
+                P = P[station,]
+                P = P[CodeOrder,]
+                P = c(t(P))
+                data = dplyr::bind_cols(data, P=P)
+                
+                Pl = ncdf4::ncvar_get(NCdata, "Pl",
+                                      start=c(start, 1),
+                                      count=c(count, -1))
+                Pl = Pl[station,]
+                Pl = Pl[CodeOrder,]
+                Pl = c(t(Pl))
+                data = dplyr::bind_cols(data, Pl=Pl)
+                
+                Ps = ncdf4::ncvar_get(NCdata, "Ps",
+                                      start=c(start, 1),
+                                      count=c(count, -1))
+                Ps = Ps[station,]
+                Ps = Ps[CodeOrder,]
+                Ps = c(t(Ps))
+                data = dplyr::bind_cols(data, Ps=Ps)
+            }
+            
+            if (!(chain %in% c("CTRIP"))) {
+                T = ncdf4::ncvar_get(NCdata, "T",
+                                     start=c(start, 1),
+                                     count=c(count, -1))
+                T = T[station,]
+                T = T[CodeOrder,]
+                T = c(t(T))
+                data = dplyr::bind_cols(data, T=T)
+            }
+            
+            if (!(chain %in% c("CTRIP", "ORCHIDEE"))) {
+                ET0 = ncdf4::ncvar_get(NCdata, "ET0",
+                                       start=c(start, 1),
+                                       count=c(count, -1))
+                ET0 = ET0[station,]
+                ET0 = ET0[CodeOrder,]
+                ET0 = c(t(ET0))
+                data = dplyr::bind_cols(data, ET0=ET0)
+            }
+            
+            ncdf4::nc_close(NCdata)
+            
+            if (chain == "ORCHIDEE") {
+                data$T = data$T - 273.15
+            }
         }
-        data = dplyr::tibble(
-            Code=rep(Code, each=nDate),
-            Date=rep(Date, times=nCode),
-            Q_sim=c(t(Q_sim))
-        )    
-        return (data)
-    
-    } else if (model == "MORDOR-SD") {
-        NULL
         
-    } else if (model == "MORDOR-TS") {
-        NULL
-        
-    } else if (model == "ORCHIDEE") {
-        CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-        QRaw = ncdf4::ncvar_get(NCdata, "Q")
-        SRaw = ncdf4::ncvar_get(NCdata, "surface_model")
-        PRaw = ncdf4::ncvar_get(NCdata, "P")
-        PlRaw = ncdf4::ncvar_get(NCdata, "Pl")
-        PsRaw = ncdf4::ncvar_get(NCdata, "Ps")
-        TRaw = ncdf4::ncvar_get(NCdata, "T")
-        ncdf4::nc_close(NCdata)
-        
-        CodeOrder = order(CodeRaw)
-        Code = CodeRaw[CodeOrder]
-        Q_sim = QRaw[CodeOrder,]
-        S = SRaw[CodeOrder]
-        P = PRaw[CodeOrder,]
-        Pl = PlRaw[CodeOrder,]
-        Ps = PsRaw[CodeOrder,]
-        T = TRaw[CodeOrder,] - 273.15
+        data = dplyr::bind_cols(Model=chain, data)
 
+        
+    } else if (mode == "proj") {        
+        CodeRaw = ncdf4::ncvar_get(NCdata, "code")
+        CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
+        CodeOrder = order(CodeRawSUB10)
+        Code = CodeRawSUB10[CodeOrder]
         nCode = length(Code)
-        nDate = length(Date)
+        
+        station = match(CodeRawSUB10, CodeRaw)
+        start = min(station)
+        count = max(station) - start + 1
+        station = station - start + 1
+        
+        Q_sim = ncdf4::ncvar_get(NCdata, "debit",
+                                 start=c(start, 1),
+                                 count=c(count, -1))
+        Q_sim = Q_sim[station,]
+        Q_sim = Q_sim[CodeOrder,]
+        Q_sim = c(t(Q_sim))
+        
+        S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
+                             start=start,
+                             count=count)
+        S = S[station]
+        S = S[CodeOrder]
+        
+        ncdf4::nc_close(NCdata)
+
         data = dplyr::tibble(Code=rep(Code, each=nDate),
                              Date=rep(Date, times=nCode),
-                             Q_sim=c(t(Q_sim)),
-                             P=c(t(P)),
-                             Pl=c(t(Pl)),
-                             Ps=c(t(Ps)),
-                             T=c(t(T)))
-
-    } else if (model == "SMASH") {
-        CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-        QRaw = ncdf4::ncvar_get(NCdata, "Q")
-        SRaw = ncdf4::ncvar_get(NCdata, "surface_model")
-        PRaw = ncdf4::ncvar_get(NCdata, "P")
-        PlRaw = ncdf4::ncvar_get(NCdata, "Pl")
-        PsRaw = ncdf4::ncvar_get(NCdata, "Ps")
-        TRaw = ncdf4::ncvar_get(NCdata, "T")
-        ET0Raw = ncdf4::ncvar_get(NCdata, "ET0")
-        ncdf4::nc_close(NCdata)
+                             Q_sim=Q_sim)
         
-        CodeOrder = order(CodeRaw)
-        Code = CodeRaw[CodeOrder]
-        Q_sim = QRaw[CodeOrder,]
-        S = SRaw[CodeOrder]
-        P = PRaw[CodeOrder,]
-        Pl = PlRaw[CodeOrder,]
-        Ps = PsRaw[CodeOrder,]
-        T = TRaw[CodeOrder,]
-        ET0 = ET0Raw[CodeOrder,]
-        
-        nCode = length(Code)
-        nDate = length(Date)
-        data = dplyr::tibble(Code=rep(Code, each=nDate),
-                             Date=rep(Date, times=nCode),
-                             Q_sim=c(t(Q_sim)),
-                             P=c(t(P)),
-                             Pl=c(t(Pl)),
-                             Ps=c(t(Ps)),
-                             T=c(t(T)),
-                             ET0=c(t(ET0)))
+        IDvalue = unlist(strsplit(chain, "[|]"))
+        IDname = c("GCM", "EXP", "RCM", "BC", "Model")
+        ID = dplyr::tibble(!!!IDvalue)
+        names(ID) = IDname
+        data = dplyr::bind_cols(ID, data)
     }
     
     return (data)
@@ -222,7 +221,6 @@ convert_diag_data = function (model, data) {
                         "T", "Pl", "Ps", "ET0")
         data$P = data$Pl + data$Ps
     }
-    data = dplyr::bind_cols(Model=model, data)
     return (data)
 }
 
