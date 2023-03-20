@@ -156,9 +156,9 @@ to_do =
     c(
         'delete_tmp',
         'create_data',
-        'analyse_data',
+        'analyse_data'
         # 'save_analyse'
-        'read_tmp'
+        # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
@@ -621,7 +621,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         library(Rmpi)
         rank = mpi.comm.rank(comm=0)
         size = mpi.comm.size (comm=0)
-        print(paste0("Thread ", rank, "/", size))
+        print(paste0("Thread ", rank+1, "/", size))
         
     } else {
         rank = 0
@@ -670,7 +670,8 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         subset = Subsets[[i]]
         subset_name = names(Subsets)[i]
 
-        print(paste0("Subset ", subset_name, ": ", subset))
+        print(paste0("Subset ", subset_name, ": ",
+                     paste0(subset, collapse=" -> ")))
         
         file_test = c()
         if ('create_data' %in% to_do) {
