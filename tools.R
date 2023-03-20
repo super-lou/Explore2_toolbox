@@ -24,7 +24,7 @@ NetCDF_to_tibble = function (NetCDF_path,
                              chain="", mode="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
-
+    
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
                    origin=
                        as.Date(str_extract(
@@ -95,7 +95,7 @@ NetCDF_to_tibble = function (NetCDF_path,
                                  Date=rep(Date, times=nCode),
                                  Q_sim=Q_sim)
             
-            if (!(chain %in% c("CTRIP", "GRSD"))) {
+            if (!(chain %in% c("CTRIP"))) {
                 S = ncdf4::ncvar_get(NCdata, "surface_model",
                                      start=start,
                                      count=count)

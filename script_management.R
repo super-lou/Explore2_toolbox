@@ -243,7 +243,7 @@ if (!read_tmp & !delete_tmp) {
         for (i in 1:nFile) {
             print(paste0(Filenames[i], " reads in ", Paths[i]))
             assign(Filenames[i], read_tibble(filepath=Paths[i]))
-        } 
+        }
     }
 
     if ('criteria_selection' %in% to_do) {
@@ -265,13 +265,21 @@ if (!read_tmp & !delete_tmp) {
     if (read_tmp) {
         print("### Reading tmp")
         print(paste0("Reading tmp data in ", tmppath))
-        Path = list.files(tmppath, full.names=TRUE)
-        Filenames = gsub("^.*[/]+", "", Path)
+        Paths = list.files(tmppath,
+                           pattern=paste0("(",
+                                          paste0(var2search,
+                                                 collapse=")|("),
+                                          ")"),
+                           include.dirs=TRUE,
+                           full.names=TRUE)
+        Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
+        Paths[!grepl("[.]", Paths)] = paste0(Paths[!grepl("[.]", Paths)], ".fst")
+        Filenames = gsub("^.*[/]+", "", Paths)
         Filenames = gsub("[.].*$", "", Filenames)
         nFile = length(Filenames)
         for (i in 1:nFile) {
-            print(paste0(Filenames[i], " reads in ", Path[i]))
-            assign(Filenames[i], read_tibble(filepath=Path[i]))
+            print(paste0(Filenames[i], " reads in ", Paths[i]))
+            assign(Filenames[i], read_tibble(filepath=Paths[i]))
         }
         read_tmp = FALSE
     }

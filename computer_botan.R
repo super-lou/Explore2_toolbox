@@ -46,7 +46,7 @@
 #  \___|\___/|_|_|_|| .__/ \_,_| \__|\___||_|  
 ## 1. INFO ________ |_| ______________________________________________
 # Work path
-computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Ex2D_project/Ex2D_toolbox'
+computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox'
 # Library path for package dev
 dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
 # Is it parallelized

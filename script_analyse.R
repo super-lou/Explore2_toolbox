@@ -36,24 +36,33 @@ analyse_data_indicator = function () {
     Code_available = levels(factor(data$Code))
     Code = Code_available[Code_available %in% CodeSUB10]
     nCode = length(Code)
-            
-    data$ID = paste0(data$Model, "_", data$Code)
-    data = dplyr::select(data, -c(Model, Code))
-    data = dplyr::select(data, ID, everything())
 
+    ID_colnames = names(dplyr::select(data, where(is.character)))    
+    data = tidyr::unite(data, "ID", where(is.character), sep="_")
+
+    if (mode == "proj") {
+        variable_names = c(Q="Q_sim")
+    } else {
+        variable_names = NULL
+    }
+    
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
                           CARD_dir=
                               analyse_data[grepl("(indicator)|(WIP)",
                                                  analyse_data)][1],
                           period=period_diagnostic,
-                          # samplePeriod_by_topic=samplePeriodMOD,
                           simplify_by="ID",
+                          no_lim=no_lim,
+                          variable_names=variable_names,
                           verbose=verbose)
 
     dataEXind = res$dataEX
     metaEXind = res$metaEX
-    
+
+    dataEXind = tidyr::separate(dataEXind, col="ID",
+                                into=ID_colnames, sep="_")
+        
     dataEXind$Model = gsub("[_].*$", "", dataEXind$ID)
     dataEXind$Code = gsub("^.*[_]", "", dataEXind$ID)
     dataEXind = dplyr::select(dataEXind, -ID)
@@ -84,33 +93,43 @@ analyse_data_serie = function () {
     Code_available = levels(factor(data$Code))
     Code = Code_available[Code_available %in% CodeSUB10]
     nCode = length(Code)
-        
-    data$ID = paste0(data$Model, "_", data$Code)
-    data = dplyr::select(data, -c(Model, Code))
-    data = dplyr::select(data, ID, everything())
 
+    ID_colnames = names(dplyr::select(data, where(is.character)))    
+    data = tidyr::unite(data, "ID", where(is.character), sep="_")
+
+    if (mode == "proj") {
+        variable_names = c(Q="Q_sim")
+    } else {
+        variable_names = NULL
+    }
+    
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
                           CARD_dir=
                               analyse_data[grepl("serie",
                                                  analyse_data)][1],
                           period=period_diagnostic,
-                          # samplePeriod_by_topic=samplePeriodMOD,
                           simplify_by=NULL,
+                          no_lim=no_lim,
+                          variable_names=variable_names,
                           verbose=verbose)
 
     dataEXserie = res$dataEX
     metaEXserie = res$metaEX
 
     for (i in 1:length(dataEXserie)) {
-        dataEXserie[[i]]$Model = gsub("[_].*$", "",
-                                      dataEXserie[[i]]$ID)
-        dataEXserie[[i]]$Code = gsub("^.*[_]", "",
-                                     dataEXserie[[i]]$ID)
-        dataEXserie[[i]] = dplyr::select(dataEXserie[[i]], -ID)
-        dataEXserie[[i]] = dplyr::select(dataEXserie[[i]],
-                                         Model, Code,
-                                         dplyr::everything())
+        dataEXserie[[i]] = tidyr::separate(dataEXserie[[i]],
+                                           col="ID",
+                                           into=ID_colnames,
+                                           sep="_")
+        # dataEXserie[[i]]$Model = gsub("[_].*$", "",
+        #                               dataEXserie[[i]]$ID)
+        # dataEXserie[[i]]$Code = gsub("^.*[_]", "",
+        #                              dataEXserie[[i]]$ID)
+        # dataEXserie[[i]] = dplyr::select(dataEXserie[[i]], -ID)
+        # dataEXserie[[i]] = dplyr::select(dataEXserie[[i]],
+        #                                  Model, Code,
+        #                                  dplyr::everything())
     }
     
     write_tibble(dataEXserie,

@@ -45,7 +45,7 @@
 # Ex2D_toolbox path
 lib_path =
     "./"
-# '/home/herautl/library/Ex2D_toolbox'
+# '/home/herautl/library/Explore2_toolbox'
 
 # Display information along process
 verbose =
@@ -149,14 +149,14 @@ verbose =
 #       directory.
 
 mode =
-    "diag"
-    # "proj"
+    # "diag"
+    "proj"
 
 to_do =
     c(
         'delete_tmp',
         'create_data',
-        # 'analyse_data'
+        'analyse_data',
         # 'save_analyse'
         'read_tmp'
         # 'read_saving',
@@ -239,7 +239,7 @@ models_to_use =
     c(
         # "CTRIP",
         # "EROS",
-        # "GRSD",
+        # "GRSD"
         "J2000"
         # "SIM2",
         # "MORDOR-SD",
@@ -290,10 +290,13 @@ codes_to_use =
 
 analyse_data = c(
     # 'WIP'
-    # 'Ex2D/1_indicator/1_all',
-    'Ex2D/1_indicator/2_selection'
-    # 'Ex2D/2_serie'
+    # 'Explore2_diag/001_indicator/001_all',
+    # 'Explore2_diag/001_indicator/002_selection'
+    # 'Explore2_diag/002_serie'
+    'Explore2_proj/001_serie'
 )
+
+no_lim = TRUE
 
 
 ## 3. SAVE_ANALYSE ___________________________________________________
@@ -308,7 +311,8 @@ var2search = c(
     'meta',
     'dataEXind',
     'metaEXind',
-    'dataEXserie',
+    # 'dataEXserie',
+    'dataEXserie*',
     'metaEXserie',
     'Warnings'
 )
@@ -521,7 +525,8 @@ if (mode == "proj") {
                gsub("[|]", ".*", projs_selection_data$ID),
                ".*")
     
-    projs_path = list.files(file.path(computer_data_path, proj_dir))
+    projs_path = list.files(file.path(computer_data_path, proj_dir),
+                            recursive=TRUE)
     
     if (all(projs_to_use == "all")) {
         files_to_use =
