@@ -621,10 +621,13 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         library(Rmpi)
         rank = mpi.comm.rank(comm=0)
         size = mpi.comm.size (comm=0)
+        print(paste0("Thread ", rank, "/", size))
+        
     } else {
         rank = 0
         size = 1
     }
+
 
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
@@ -667,6 +670,8 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         subset = Subsets[[i]]
         subset_name = names(Subsets)[i]
 
+        print(paste0("Subset ", subset_name, ": ", subset))
+        
         file_test = c()
         if ('create_data' %in% to_do) {
             file_test = c(file_test,
@@ -688,7 +693,6 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
             next
         }
         
-        # CodeSUB = CodeALL[((subset-1)*nCode4RAM+1):(subset*nCode4RAM)]
         CodeSUB8 = CodeALL8[subset[1]:subset[2]]
         CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
         CodeSUB10 = CodeALL10[subset[1]:subset[2]]

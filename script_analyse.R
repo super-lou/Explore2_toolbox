@@ -117,6 +117,8 @@ analyse_data_serie = function () {
     dataEXserie = res$dataEX
     metaEXserie = res$metaEX
 
+    print(res)
+
     for (i in 1:length(dataEXserie)) {
         dataEXserie[[i]] = tidyr::separate(dataEXserie[[i]],
                                            col="ID",
