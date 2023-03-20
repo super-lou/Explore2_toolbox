@@ -468,13 +468,14 @@ library(latex2exp)
 require(sf) #nope
 library(stringr)
 library(ggtext)
-library(tidyr)
 # already ::
+# library(tidyr)
 # library(grid)
 # library(ncdf4)
 # library(rgeos)
 # library(lubridate)
 # library(sp)
+# library(fst)
 
 apply_grepl = function (x, table) {
     return (table[grepl(x, table)])
@@ -498,10 +499,7 @@ if ('plot_doc' %in% to_do) {
 
 if (mode == "proj") {
     projs_selection_data = read_tibble(file.path(computer_data_path,
-                                                 projs_selection_file))
-
-    print(projs_selection_data)
-    
+                                                 projs_selection_file))  
     cols = c("historical", 'rcp26', 'rcp45', 'rcp85')
     names(projs_selection_data)[3:6] = cols
     projs_selection_data =
