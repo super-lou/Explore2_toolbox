@@ -395,6 +395,12 @@ doc_diagnostic_region =
 ##### /!\ Do not touch if you are not aware #####
 ## 0. LIBRARIES ______________________________________________________
 # Computer
+
+# library(Rmpi)
+# rank = mpi.comm.rank(comm=0)
+# size = mpi.comm.size (comm=0)
+# print(paste0("Thread ", rank+1, "/", size))
+
 computer = Sys.info()["nodename"]
 print(paste0("Computer ", computer))
 computer_file_list = list.files(path=lib_path,
@@ -618,7 +624,8 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
     }
 
     if (MPI) {
-        library(Rmpi)
+        # ns = mpi.universe.size() - 1
+        # mpi.spawn.Rslaves(nslaves=ns)
         rank = mpi.comm.rank(comm=0)
         size = mpi.comm.size (comm=0)
         print(paste0("Thread ", rank+1, "/", size))
