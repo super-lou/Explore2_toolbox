@@ -625,8 +625,8 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
 
     if (MPI) {
         library(Rmpi)
-        # ns = mpi.universe.size() - 1
-        # mpi.spawn.Rslaves(nslaves=ns)
+        ns = mpi.universe.size() - 1
+        mpi.spawn.Rslaves(nslaves=ns)
         rank = mpi.comm.rank(comm=0)
         size = mpi.comm.size (comm=0)
         print(paste0("Thread ", rank+1, "/", size))
