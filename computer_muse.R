@@ -92,7 +92,7 @@ river_dir = file.path('map', 'river')
 river_file = 'CoursEau_FXX.shp'
 
 ### 2.4. Resources ___________________________________________________
-resources_path = file.path(dev_lib_path, "Ex2D_toolbox", 'resources')
+resources_path = file.path(dev_lib_path, "Explore2_toolbox", 'resources')
 if (!(file.exists(resources_path))) {
   dir.create(resources_path)
 }
