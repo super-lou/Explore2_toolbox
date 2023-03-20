@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Ex2D_toolbox path
 lib_path =
-    "./"
-# '/home/herautl/library/Explore2_toolbox'
+    # "./"
+'/home/herautl/library/Explore2_toolbox'
 
 # Display information along process
 verbose =
@@ -263,13 +263,13 @@ codes_to_use =
         # 'A4362030',
         # 'A9942010',
         # 'X0454010'
-        # '^X'
+        '^K'
         # 'X0454010',
         # 'XVENEON1'
         
-        'K1363010',
-        'K1341810',
-        "M0014110"
+        # 'K1363010',
+        # 'K1341810',
+        # "M0014110"
         # "M0050620"
     )
 
