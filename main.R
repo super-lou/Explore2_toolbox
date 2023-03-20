@@ -458,16 +458,16 @@ library(dplyr)
 library(ggplot2)
 library(qpdf)
 library(gridExtra)
-library(gridtext) #nope
+library(gridtext)
 library(ggh4x)
-library(rgdal)
+require(rgdal)
 library(shadowtext)
 library(png)
 library(ggrepel)
 library(latex2exp)
-# library(sf) #nope
+require(sf) #nope
 library(stringr)
-library(ggtext) #nope
+library(ggtext)
 # already ::
 # library(grid)
 # library(ncdf4)
