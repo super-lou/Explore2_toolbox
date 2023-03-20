@@ -465,7 +465,7 @@ library(shadowtext)
 library(png)
 library(ggrepel)
 library(latex2exp)
-library(sf) #nope
+# library(sf) #nope
 library(stringr)
 library(ggtext) #nope
 # already ::
