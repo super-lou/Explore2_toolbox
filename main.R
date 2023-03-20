@@ -499,6 +499,9 @@ if ('plot_doc' %in% to_do) {
 if (mode == "proj") {
     projs_selection_data = read_tibble(file.path(computer_data_path,
                                                  projs_selection_file))
+
+    print(projs_selection_data)
+    
     cols = c("historical", 'rcp26', 'rcp45', 'rcp85')
     names(projs_selection_data)[3:6] = cols
     projs_selection_data =
@@ -506,7 +509,9 @@ if (mode == "proj") {
                       dplyr::across(.cols=cols,
                                     .fns=convert2bool, true="x"))
     projs_selection_data =
-        tidyr::pivot_longer(projs_selection_data, cols, "EXP")
+        tidyr::pivot_longer(data=projs_selection_data,
+                            cols=cols,
+                            names_to="EXP")
     projs_selection_data$value = as.logical(projs_selection_data$value)
     projs_selection_data = dplyr::filter(projs_selection_data, value)
     projs_selection_data = dplyr::select(projs_selection_data, -"value")
