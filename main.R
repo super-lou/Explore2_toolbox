@@ -468,6 +468,7 @@ library(latex2exp)
 require(sf) #nope
 library(stringr)
 library(ggtext)
+library(tidyr)
 # already ::
 # library(grid)
 # library(ncdf4)

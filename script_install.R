@@ -27,6 +27,7 @@
 # module load gdal
 # module load R/3.6.3
 if (!require(dplyr)) install.packages("dplyr")
+if (!require(dplyr)) install.packages("tidyr")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(qpdf)) install.packages("qpdf")
 if (!require(gridExtra)) install.packages("gridExtra")
