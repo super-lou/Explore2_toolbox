@@ -28,13 +28,17 @@ if (!read_tmp & !delete_tmp) {
             Root = rep(0, times=size)
             Root[1] = 1
             post(paste0("Waiting other : ",
-                        paste0(Root, collapse="")))
+                        paste0(gsub("1", "#", 
+                                    gsub("0", "[_]",
+                                         Root)), collapse="")))
             for (root in 1:(size-1)) {
                 Root[root+1] = mpi.recv(0, type=2, source=root,
                                         tag=1, comm=0)
                 post(paste0("End signal received from rank ", root))
-                post(paste0("Waiting other : ",
-                            paste0(Root, collapse="")))
+                post("Waiting other : ")
+                post(paste0(gsub("1", "#", 
+                                 gsub("0", "[_]",
+                                      Root)), collapse=""))
             }
         }
         
