@@ -667,6 +667,9 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
                       as.integer((rank+1)*(nSubsets/size+.5))]
     Subsets = Subsets[!is.na(names(Subsets))]
     nSubsets = length(Subsets)
+
+    print(paste0("For rank ", rank, ": ", Subsets))
+    print(nSubsets)
     
     for (i in 1:nSubsets) {
 
