@@ -58,6 +58,12 @@ create_data = function () {
                 if (mode == "diag") { ###
                     data_tmp = convert_diag_data(chain, data_tmp)
                 }
+
+                if (is.null(data_tmp)) {
+                    data_sim = NULL
+                    next
+                }
+                
                 if (nchar(data_tmp$Code[1]) == 8) {
                     data_tmp$Code =
                         codes10_selection[match(data_tmp$Code,
@@ -70,8 +76,8 @@ create_data = function () {
             }
         }
     }
-    
-    if (nrow(data_sim) > 0) {
+
+    if (!is.null(data_sim)) {
         id = match(CodeSUB10, codes10_selection)
         meta =
             dplyr::tibble(
@@ -107,15 +113,18 @@ create_data = function () {
                                 obs_dir,
                                 Code8_filename,
                                 verbose=FALSE)
-        meta_obs$Code =
-            codes10_selection[match(meta_obs$Code,
-                                    codes8_selection)]
-        meta = dplyr::left_join(meta,
-                                dplyr::select(meta_obs,
-                                              Code,
-                                              Gestionnaire,
-                                              Altitude_m),
-                                by="Code")
+
+        if (nrow(meta_obs) > 0) {
+            meta_obs$Code =
+                codes10_selection[match(meta_obs$Code,
+                                        codes8_selection)]
+            meta = dplyr::left_join(meta,
+                                    dplyr::select(meta_obs,
+                                                  Code,
+                                                  Gestionnaire,
+                                                  Altitude_m),
+                                    by="Code")
+        }
         
         meta = dplyr::arrange(meta, Code)
         
@@ -217,14 +226,18 @@ create_data = function () {
         write_tibble(meta,
                      filedir=tmppath,
                      filename=paste0("meta_", subset_name, ".fst"))
+        res = TRUE
         
     } else {
         data = NULL
+        res = FALSE
     }
+    
+    return (res)
 }
 
 
 ## 1. CREATION OF DATA 4 DIAG ________________________________________
 if ('create_data' %in% to_do) {
-    create_data()
+    create_ok = create_data()
 }

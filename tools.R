@@ -39,10 +39,7 @@ NetCDF_to_tibble = function (NetCDF_path,
 
     if (mode == "diag") {
             
-        if (chain == "EROS") {
-            NULL
-            
-        } else if (chain == "SIM2") {
+        if (chain == "SIM2") {
             CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
             QRaw = ncdf4::ncvar_get(NCdata, "debit")
             SRaw = ncdf4::ncvar_get(NCdata, "surface_mod")
@@ -69,11 +66,9 @@ NetCDF_to_tibble = function (NetCDF_path,
             
         } else if (chain == "MORDOR-SD") {
             NULL
-            
-        } else if (chain == "MORDOR-TS") {
-            NULL
-            
-        } else if (chain %in% c("CTRIP", "GRSD", "ORCHIDEE",
+
+        } else if (chain %in% c("CTRIP", "EROS", "GRSD",
+                                "MORDOR-TS", "ORCHIDEE",
                                 "SMASH", "J2000")) {
             CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
             CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
@@ -89,8 +84,9 @@ NetCDF_to_tibble = function (NetCDF_path,
             Q_sim = ncdf4::ncvar_get(NCdata, "Q",
                                      start=c(start, 1),
                                      count=c(count, -1))
-            Q_sim = Q_sim[station,]
-            Q_sim = Q_sim[CodeOrder,]
+            Q_sim = matrix(Q_sim, nrow=count)
+            Q_sim = Q_sim[station,,drop=FALSE]
+            Q_sim = Q_sim[CodeOrder,,drop=FALSE]
             Q_sim = c(t(Q_sim))
             
             data = dplyr::tibble(Code=rep(Code, each=nDate),
@@ -110,24 +106,27 @@ NetCDF_to_tibble = function (NetCDF_path,
                 P = ncdf4::ncvar_get(NCdata, "P",
                                      start=c(start, 1),
                                      count=c(count, -1))
-                P = P[station,]
-                P = P[CodeOrder,]
+                P = matrix(P, nrow=count)
+                P = P[station,,drop=FALSE]
+                P = P[CodeOrder,,drop=FALSE]
                 P = c(t(P))
                 data = dplyr::bind_cols(data, P=P)
                 
                 Pl = ncdf4::ncvar_get(NCdata, "Pl",
                                       start=c(start, 1),
                                       count=c(count, -1))
-                Pl = Pl[station,]
-                Pl = Pl[CodeOrder,]
+                Pl = matrix(Pl, nrow=count)
+                Pl = Pl[station,,drop=FALSE]
+                Pl = Pl[CodeOrder,,drop=FALSE]
                 Pl = c(t(Pl))
                 data = dplyr::bind_cols(data, Pl=Pl)
                 
                 Ps = ncdf4::ncvar_get(NCdata, "Ps",
                                       start=c(start, 1),
                                       count=c(count, -1))
-                Ps = Ps[station,]
-                Ps = Ps[CodeOrder,]
+                Ps = matrix(Ps, nrow=count)
+                Ps = Ps[station,,drop=FALSE]
+                Ps = Ps[CodeOrder,,drop=FALSE]
                 Ps = c(t(Ps))
                 data = dplyr::bind_cols(data, Ps=Ps)
             }
@@ -136,8 +135,9 @@ NetCDF_to_tibble = function (NetCDF_path,
                 T = ncdf4::ncvar_get(NCdata, "T",
                                      start=c(start, 1),
                                      count=c(count, -1))
-                T = T[station,]
-                T = T[CodeOrder,]
+                T = matrix(T, nrow=count)
+                T = T[station,,drop=FALSE]
+                T = T[CodeOrder,,drop=FALSE]
                 T = c(t(T))
                 data = dplyr::bind_cols(data, T=T)
             }
@@ -146,8 +146,9 @@ NetCDF_to_tibble = function (NetCDF_path,
                 ET0 = ncdf4::ncvar_get(NCdata, "ET0",
                                        start=c(start, 1),
                                        count=c(count, -1))
-                ET0 = ET0[station,]
-                ET0 = ET0[CodeOrder,]
+                ET0 = matrix(ET0, nrow=count)
+                ET0 = ET0[station,,drop=FALSE]
+                ET0 = ET0[CodeOrder,,drop=FALSE]
                 ET0 = c(t(ET0))
                 data = dplyr::bind_cols(data, ET0=ET0)
             }
@@ -170,15 +171,19 @@ NetCDF_to_tibble = function (NetCDF_path,
         nCode = length(Code)
         
         station = match(CodeRawSUB10, CodeRaw)
+        if (length(station) == 0) {
+            return (NULL)
+        }
         start = min(station)
         count = max(station) - start + 1
         station = station - start + 1
-        
+
         Q_sim = ncdf4::ncvar_get(NCdata, "debit",
                                  start=c(start, 1),
                                  count=c(count, -1))
-        Q_sim = Q_sim[station,]
-        Q_sim = Q_sim[CodeOrder,]
+        Q_sim = matrix(Q_sim, nrow=count)
+        Q_sim = Q_sim[station,,drop=FALSE]
+        Q_sim = Q_sim[CodeOrder,,drop=FALSE]
         Q_sim = c(t(Q_sim))
         
         S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
@@ -203,24 +208,13 @@ NetCDF_to_tibble = function (NetCDF_path,
     return (data)
 }
 
+
 convert_diag_data = function (model, data) {
 
-    if (grepl("EROS", model)) {
-        names(data) = c("Code", "Date", "Q_sim",
-                        "Pl", "ET0", "Ps", "T")
-        data$P = data$Pl + data$Ps
-        data$Code = substr(data$Code, 1, 8)
-        
-    } else if (model == "MORDOR-SD") {
+    if (model == "MORDOR-SD") {
         data$Date = as.Date(data$Date)
         names(data) = c("Code", "Date", "Q_sim",
                         "Pl", "Ps", "T", "ET0")
-        data$P = data$Pl + data$Ps
-        
-    } else if (model == "MORDOR-TS") {
-        data$Date = as.Date(data$Date)
-        names(data) = c("Code", "Date", "Q_sim",
-                        "T", "Pl", "Ps", "ET0")
         data$P = data$Pl + data$Ps
     }
     return (data)

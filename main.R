@@ -151,9 +151,9 @@ to_do =
     c(
         'delete_tmp',
         'create_data',
-        'analyse_data',
+        'analyse_data'
         # 'save_analyse'
-        'read_tmp'
+        # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
@@ -228,7 +228,7 @@ verbose =
 ## 1. CREATE_DATA|_| _________________________________________________ 
 period_diagnostic = c('1976-01-01', '2019-12-31')
 propagate_NA = TRUE
-nCode4RAM = 1
+nCode4RAM = 25
 
 projs_to_use =
     c(
@@ -256,22 +256,11 @@ codes_to_use =
     c(
         # 'all'
         # 'K2981910' #ref
-        # 'O3084320'
-        # 'WDORON01'
-        # 'WDORON02',
-        # 'WSOULOIS',
-        # 'XVENEON1',
-        # 'XVENEON2',
-        # 'A4362030',
-        # 'A9942010',
-        # 'X0454010'
-        # '^K'
-        # 'X0454010',
-        # 'XVENEON1'
-
+        
         'K1363010',
-        'K1341810'
-        # "M0014110",
+        'V0144010'
+        # 'K1341810'
+        # "M0014110"
         # "M0050620"
     )
 
@@ -653,13 +642,13 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
             id = id+nCode4RAM+1
             n = n+1
         }
-        if (id != Id) {
-            Subsets = append(Subsets, list(c(id, Id)))
-            names(Subsets)[length(Subsets)] = paste0(name, n)
-        } else if (id == Id & Id == 1) {
-            Subsets = append(Subsets, list(c(id, Id)))
-            names(Subsets)[length(Subsets)] = paste0(name, n)
-        }
+        # if (id != Id) {
+        Subsets = append(Subsets, list(c(id, Id)))
+        names(Subsets)[length(Subsets)] = paste0(name, n)
+        # } else if (id == Id & Id == 1) {
+            # Subsets = append(Subsets, list(c(id, Id)))
+            # names(Subsets)[length(Subsets)] = paste0(name, n)
+        # }
     }
     
     nSubsets = length(Subsets)
@@ -670,6 +659,10 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
 
     print(paste0("For rank ", rank, ": ", Subsets))
     print(nSubsets)
+
+    if (size > nSubsets) {
+        stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
+    }
     
     for (i in 1:nSubsets) {
 
@@ -710,7 +703,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
             source(file.path(lib_path, 'script_create.R'),
                    encoding='UTF-8')
         }
-        if (is.null(data)) {
+        if (!create_ok) {
             next
         }
         if ('analyse_data' %in% to_do) {
