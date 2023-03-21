@@ -55,7 +55,7 @@ analyse_data_indicator = function () {
                           simplify_by="ID",
                           no_lim=no_lim,
                           variable_names=variable_names,
-                          verbose=verbose)
+                          verbose=subverbose)
 
     dataEXind = res$dataEX
     metaEXind = res$metaEX
@@ -112,7 +112,7 @@ analyse_data_serie = function () {
                           simplify_by=NULL,
                           no_lim=no_lim,
                           variable_names=variable_names,
-                          verbose=verbose)
+                          verbose=subverbose)
 
     dataEXserie = res$dataEX
     metaEXserie = res$metaEX

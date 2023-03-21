@@ -219,7 +219,9 @@ plot_doc =
 verbose =
     # FALSE
     TRUE
-
+subverbose =
+    FALSE
+    # TRUE
 
 #  ___  _                  
 # / __|| |_  ___  _ __  ___

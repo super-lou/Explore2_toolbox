@@ -111,7 +111,7 @@ create_data = function () {
         meta_obs = extract_meta(computer_data_path,
                                 obs_dir,
                                 Code8_filename,
-                                verbose=FALSE)
+                                verbose=subverbose)
 
         if (nrow(meta_obs) > 0) {
             meta_obs$Code =
@@ -138,7 +138,7 @@ create_data = function () {
                                     obs_dir,
                                     Code8_filename,
                                     val2keep=c(val_E2=0),
-                                    verbose=FALSE)
+                                    verbose=subverbose)
 
             data_obs =
                 dplyr::filter(

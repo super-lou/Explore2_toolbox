@@ -25,7 +25,7 @@ plot_sheet_diagnostic_station = function (dataEXind_to_plot,
                                           Code_to_plot,
                                           today_figdir_leaf,
                                           df_page=NULL,
-                                          verbose=FALSE) {
+                                          subverbose=FALSE) {
     Paths = list.files(file.path(resdir, read_saving),
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
@@ -51,7 +51,7 @@ plot_sheet_diagnostic_station = function (dataEXind_to_plot,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
-                verbose=verbose)
+                verbose=subverbose)
         }
     }
     return (df_page)
@@ -170,7 +170,7 @@ for (i in 1:nChunk) {
                 logo_path=logo_path,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
-                verbose=verbose)
+                verbose=subverbose)
         }
 
         if (sheet == 'diagnostic_regime') {
@@ -187,7 +187,7 @@ for (i in 1:nChunk) {
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
-                verbose=verbose)
+                verbose=subverbose)
         }
 
 
@@ -205,7 +205,7 @@ for (i in 1:nChunk) {
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
-                verbose=verbose)
+                verbose=subverbose)
         }
 
         if (sheet == 'diagnostic_station') {
@@ -216,7 +216,7 @@ for (i in 1:nChunk) {
                 Code_to_plot,
                 today_figdir_leaf=today_figdir_leaf,
                 df_page=df_page,
-                verbose=verbose)
+                subverbose=subverbose)
         }
     }
 
