@@ -652,6 +652,10 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
     }
     
     nSubsets = length(Subsets)
+    if (size > nSubsets) {
+        stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
+    }
+    
     Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
                       as.integer((rank+1)*(nSubsets/size+.5))]
     Subsets = Subsets[!is.na(names(Subsets))]
@@ -659,10 +663,6 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
 
     print(paste0("For rank ", rank, ": ", Subsets))
     print(nSubsets)
-
-    if (size > nSubsets) {
-        stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
-    }
     
     for (i in 1:nSubsets) {
 
