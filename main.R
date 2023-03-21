@@ -217,8 +217,8 @@ plot_doc =
 ## 4. OTHER __________________________________________________________
 # Display information along process
 verbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 
 #  ___  _                  

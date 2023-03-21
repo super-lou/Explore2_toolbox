@@ -108,7 +108,6 @@ create_data = function () {
         Code8_filename = paste0(Code8, obs_format)
         nCode = length(Code10)
         
-        # Extract metadata about selected stations
         meta_obs = extract_meta(computer_data_path,
                                 obs_dir,
                                 Code8_filename,
