@@ -22,7 +22,7 @@
 
 create_data = function () {
 
-    print("### Simulated data")
+    post("### Simulated data")
     Chain = c()
     data_sim = tibble()
     for (i in 1:length(files_to_use)) {
@@ -39,12 +39,12 @@ create_data = function () {
                          dir, file)
 
         for (p in path) {
-        
+            
             if (file.exists(path)) {
                 Chain = c(Chain, chain)
 
-                print(paste0("Get simulated data from ", chain,
-                             " in ", p))
+                post(paste0("Get simulated data from ", chain,
+                            " in ", p))
                 
                 if (grepl(".*[.]Rdata", p)) {
                     data_tmp = read_tibble(filepath=p)
@@ -130,7 +130,7 @@ create_data = function () {
         
         
         if (mode == "diag") {
-            print("### Observation data")
+            post("### Observation data")
 
             Model = Chain
             

@@ -472,7 +472,6 @@ if (MPI) {
     library(Rmpi)
     rank = mpi.comm.rank(comm=0)
     size = mpi.comm.size (comm=0)
-    print(paste0("Thread ", rank+1, "/", size))
 } else {
     rank = 0
     size = 1
@@ -600,7 +599,7 @@ tmppath = file.path(computer_work_path, tmpdir)
 if ("delete_tmp" %in% to_do) {
     delete_tmp = TRUE
     to_do = to_do[to_do != "delete_tmp"]
-    print("## MANAGING DATA")
+    post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
@@ -612,13 +611,13 @@ if (!(file.exists(tmppath)) & rank == 0) {
 if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
 
     if (all(c('create_data', 'analyse_data') %in% to_do)) {
-        print("## CREATING AND ANALYSING DATA")
+        post("## CREATING AND ANALYSING DATA")
     } else if ('create_data' %in% to_do) {
-        print("## CREATING DATA")
+        post("## CREATING DATA")
     } else if ('analyse_data' %in% to_do) {
-        print("## ANALYSING DATA")
+        post("## ANALYSING DATA")
     } else {
-        print("Maybe you can start by creating data")
+        post("Maybe you can start by creating data")
     }
 
     firstLetterALL = substr(CodeALL10, 1, 1)
@@ -642,13 +641,8 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
             id = id+nCode4RAM+1
             n = n+1
         }
-        # if (id != Id) {
         Subsets = append(Subsets, list(c(id, Id)))
         names(Subsets)[length(Subsets)] = paste0(name, n)
-        # } else if (id == Id & Id == 1) {
-            # Subsets = append(Subsets, list(c(id, Id)))
-            # names(Subsets)[length(Subsets)] = paste0(name, n)
-        # }
     }
     
     nSubsets = length(Subsets)
@@ -661,16 +655,15 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
     Subsets = Subsets[!is.na(names(Subsets))]
     nSubsets = length(Subsets)
 
-    print(paste0("For rank ", rank, ": ", Subsets))
-    print(nSubsets)
+    post(paste0("All subsets ", Subsets))
     
     for (i in 1:nSubsets) {
 
         subset = Subsets[[i]]
         subset_name = names(Subsets)[i]
 
-        print(paste0("Subset ", subset_name, ": ",
-                     paste0(subset, collapse=" -> ")))
+        post(paste0("For subset ", subset_name, ": ",
+                    paste0(subset, collapse=" -> ")))
         
         file_test = c()
         if ('create_data' %in% to_do) {
@@ -685,9 +678,9 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
             file_test = c(file_test,
                           paste0("dataEXserie_", subset_name))
         }
-        print(paste0(i, "/", nSubsets,
-                     " chunks of stations in analyse so ",
-                     round(i/nSubsets*100, 1), "% done"))
+        post(paste0(i, "/", nSubsets,
+                    " chunks of stations in analyse so ",
+                    round(i/nSubsets*100, 1), "% done"))
         
         if (all(file_test %in% list.files(tmppath, include.dirs=TRUE))) {
             next
@@ -716,7 +709,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
 if (any(c('analyse_data', 'save_analyse',
           'criteria_selection', 'write_warnings',
           'read_saving') %in% to_do)) {
-    print("## MANAGING DATA")
+    post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
@@ -724,13 +717,13 @@ if (any(c('analyse_data', 'save_analyse',
 if ("read_tmp" %in% to_do) {
     read_tmp = TRUE
     to_do = to_do[to_do != "read_tmp"]
-    print("## MANAGING DATA")
+    post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
 
 if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
-    print("## PLOTTING DATA")
+    post("## PLOTTING DATA")
     source(file.path(lib_path, 'script_layout.R'),
            encoding='UTF-8')
 }

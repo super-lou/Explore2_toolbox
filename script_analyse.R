@@ -117,21 +117,11 @@ analyse_data_serie = function () {
     dataEXserie = res$dataEX
     metaEXserie = res$metaEX
 
-    print(res)
-
     for (i in 1:length(dataEXserie)) {
         dataEXserie[[i]] = tidyr::separate(dataEXserie[[i]],
                                            col="ID",
                                            into=ID_colnames,
                                            sep="_")
-        # dataEXserie[[i]]$Model = gsub("[_].*$", "",
-        #                               dataEXserie[[i]]$ID)
-        # dataEXserie[[i]]$Code = gsub("^.*[_]", "",
-        #                              dataEXserie[[i]]$ID)
-        # dataEXserie[[i]] = dplyr::select(dataEXserie[[i]], -ID)
-        # dataEXserie[[i]] = dplyr::select(dataEXserie[[i]],
-        #                                  Model, Code,
-        #                                  dplyr::everything())
     }
     
     write_tibble(dataEXserie,
@@ -147,12 +137,12 @@ analyse_data_serie = function () {
 if ('analyse_data' %in% to_do) {
     
     if (any(grepl("(indicator)|(WIP)", analyse_data))) {
-        print("### Analysing data for criteria extraction")
+        post("### Analysing data for criteria extraction")
         analyse_data_indicator()
     }
 
     if (any(grepl("serie", analyse_data))) {
-        print("### Analysing data for time series extraction")
+        post("### Analysing data for time series extraction")
         analyse_data_serie()
     }
 }

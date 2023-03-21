@@ -63,7 +63,7 @@ icon_path = file.path(resources_path, icon_dir)
 
 
 if (!exists("Shapefiles")) {
-    print("### Loading shapefiles")
+    post("### Loading shapefiles")
     Shapefiles = load_shapefile(
         computer_data_path, CodeALL,
         france_dir, france_file,
@@ -141,12 +141,12 @@ for (i in 1:nChunk) {
     for (sheet in plot_list) {
 
         if (sheet == 'summary') {
-            print("### Plotting summary")
+            post("### Plotting summary")
             df_page = tibble(section='Sommaire', subsection=NA, n=1)
         }
 
         if (sheet == 'diagnostic_matrix') {
-            print("### Plotting correlation matrix")
+            post("### Plotting correlation matrix")
             group_of_models_to_use =
                 list(
                     "CTRIP",
@@ -174,7 +174,7 @@ for (i in 1:nChunk) {
         }
 
         if (sheet == 'diagnostic_regime') {
-            print("### Plotting sheet diagnostic regime")
+            post("### Plotting sheet diagnostic regime")
             df_page = sheet_diagnostic_regime(
                 meta,
                 dataEXind_to_plot,
@@ -192,7 +192,7 @@ for (i in 1:nChunk) {
 
 
         if (sheet == 'diagnostic_region') {
-            print("### Plotting sheet diagnostic region")
+            post("### Plotting sheet diagnostic region")
             df_page = sheet_diagnostic_region(
                 meta,
                 dataEXind_to_plot,
@@ -209,7 +209,7 @@ for (i in 1:nChunk) {
         }
 
         if (sheet == 'diagnostic_station') {
-            print("### Plotting sheet diagnostic station")
+            post("### Plotting sheet diagnostic station")
             df_page = plot_sheet_diagnostic_station(
                 dataEXind_to_plot,
                 dataEXserie_to_plot,
@@ -230,7 +230,7 @@ for (i in 1:nChunk) {
 
     
     if ('plot_doc' %in% to_do) {
-        print("### Merging pdf")
+        post("### Merging pdf")
         details = file.info(list.files(today_figdir_leaf,
                                        recursive=TRUE,
                                        full.names=TRUE))

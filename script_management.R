@@ -27,14 +27,14 @@ if (!read_tmp & !delete_tmp) {
         if (MPI) {
             Root = rep(0, times=size)
             Root[1] = 1
-            print(paste0("Waiting other : ",
-                         paste0(Root, collapse="")))
+            post(paste0("Waiting other : ",
+                        paste0(Root, collapse="")))
             for (root in 1:(size-1)) {
                 Root[root+1] = mpi.recv(0, type=2, source=root,
                                         tag=1, comm=0)
-                print(paste0("End signal received from rank ", root))
-                print(paste0("Waiting other : ",
-                             paste0(Root, collapse="")))
+                post(paste0("End signal received from rank ", root))
+                post(paste0("Waiting other : ",
+                            paste0(Root, collapse="")))
             }
         }
         
@@ -160,8 +160,8 @@ if (!read_tmp & !delete_tmp) {
         }
 
         if ('save_analyse' %in% to_do) {
-            print("### Saving analyses")
-            print(paste0("Save extracted data and metadata in ",
+            post("### Saving analyses")
+            post(paste0("Save extracted data and metadata in ",
                          paste0(saving_format, collapse=", ")))
 
             if (!(file.exists(today_resdir))) {
@@ -242,13 +242,13 @@ if (!read_tmp & !delete_tmp) {
     } else {
         if (MPI) {
             mpi.send(1, type=2, dest=0, tag=1, comm=0)
-            print(paste0("End signal from root ", rank)) 
+            post(paste0("End signal from root ", rank)) 
         }
     }
 
     if ('read_saving' %in% to_do) {
-        print("### Reading saving")
-        print(paste0("Reading extracted data and metadata in ",
+        post("### Reading saving")
+        post(paste0("Reading extracted data and metadata in ",
                      read_saving))
         Paths = list.files(file.path(resdir, read_saving),
                            pattern=paste0("(",
@@ -263,13 +263,13 @@ if (!read_tmp & !delete_tmp) {
         Filenames = gsub("[.].*$", "", Filenames)
         nFile = length(Filenames)
         for (i in 1:nFile) {
-            print(paste0(Filenames[i], " reads in ", Paths[i]))
+            post(paste0(Filenames[i], " reads in ", Paths[i]))
             assign(Filenames[i], read_tibble(filepath=Paths[i]))
         }
     }
 
     if ('criteria_selection' %in% to_do) {
-        print("### Selecting variables")
+        post("### Selecting variables")
         res = get_select(dataEXind, metaEXind,
                          select=criteria_selection)
         dataEXind = res$dataEXind
@@ -277,7 +277,7 @@ if (!read_tmp & !delete_tmp) {
     }
 
     if ('write_warnings' %in% to_do) {
-        print("### Writing warnings")
+        post("### Writing warnings")
         Warnings = find_Warnings(dataEXind, metaEXind,
                                  resdir=today_resdir, save=TRUE)
     }
@@ -285,8 +285,8 @@ if (!read_tmp & !delete_tmp) {
     
 } else {
     if (read_tmp) {
-        print("### Reading tmp")
-        print(paste0("Reading tmp data in ", tmppath))
+        post("### Reading tmp")
+        post(paste0("Reading tmp data in ", tmppath))
         Paths = list.files(tmppath,
                            pattern=paste0("(",
                                           paste0(var2search,
@@ -300,14 +300,14 @@ if (!read_tmp & !delete_tmp) {
         Filenames = gsub("[.].*$", "", Filenames)
         nFile = length(Filenames)
         for (i in 1:nFile) {
-            print(paste0(Filenames[i], " reads in ", Paths[i]))
+            post(paste0(Filenames[i], " reads in ", Paths[i]))
             assign(Filenames[i], read_tibble(filepath=Paths[i]))
         }
         read_tmp = FALSE
     }
 
     if (delete_tmp) {
-        print("### Deleting tmp")
+        post("### Deleting tmp")
         if (file.exists(tmppath) & rank == 0) {
             unlink(tmppath, recursive=TRUE)
         }
