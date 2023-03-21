@@ -151,8 +151,8 @@ to_do =
     c(
         'delete_tmp',
         'create_data',
-        'analyse_data'
-        # 'save_analyse'
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
