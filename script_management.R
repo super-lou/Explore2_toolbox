@@ -28,7 +28,7 @@ if (!read_tmp & !delete_tmp) {
             Root = rep(0, times=size)
             Root[1] = 1
             for (root in 1:size) {
-                Root[root+1] = mpi.recv(0, type=1, source=root,
+                Root[root+1] = mpi.recv(0, type=2, source=root,
                                         tag=1, comm=0)
                 print(paste0("End signal received from rank ", root))
                 print(paste0("Waiting other : ", Root))
@@ -238,7 +238,7 @@ if (!read_tmp & !delete_tmp) {
 
     } else {
         if (MPI) {
-            mpi.send(1, type=1, dest=0, tag=1, comm=0)
+            mpi.send(1, type=2, dest=0, tag=1, comm=0)
             print(paste0("End signal from root ", rank)) 
         }
     }
