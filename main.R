@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Ex2D_toolbox path
 lib_path =
-    # "./"
-'/home/herautl/library/Explore2_toolbox'
+    "./"
+# '/home/herautl/library/Explore2_toolbox'
 
 # Display information along process
 verbose =
@@ -149,14 +149,14 @@ verbose =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
         'delete_tmp',
-        'create_data',
-        'analyse_data'
+        'create_data'
+        # 'analyse_data'
         # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
@@ -237,10 +237,10 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
+        "CTRIP"
         # "EROS",
         # "GRSD"
-        "J2000"
+        # "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
@@ -395,12 +395,6 @@ doc_diagnostic_region =
 ##### /!\ Do not touch if you are not aware #####
 ## 0. LIBRARIES ______________________________________________________
 # Computer
-
-# library(Rmpi)
-# rank = mpi.comm.rank(comm=0)
-# size = mpi.comm.size (comm=0)
-# print(paste0("Thread ", rank+1, "/", size))
-
 computer = Sys.info()["nodename"]
 print(paste0("Computer ", computer))
 computer_file_list = list.files(path=lib_path,
@@ -483,6 +477,17 @@ library(ggtext)
 # library(sp)
 # library(fst)
 
+
+if (MPI) {
+    library(Rmpi)
+    rank = mpi.comm.rank(comm=0)
+    size = mpi.comm.size (comm=0)
+    print(paste0("Thread ", rank+1, "/", size))
+} else {
+    rank = 0
+    size = 1
+}
+
 apply_grepl = function (x, table) {
     return (table[grepl(x, table)])
 }
@@ -494,6 +499,9 @@ convert2bool = function (X, true) {
     return (X)
 }
 
+if (!(file.exists(resources_path)) & rank == 0) {
+  dir.create(resources_path)
+}
 
 delete_tmp = FALSE
 read_tmp = FALSE
@@ -607,7 +615,7 @@ if ("delete_tmp" %in% to_do) {
            encoding='UTF-8')
 }
 
-if (!(file.exists(tmppath))) {
+if (!(file.exists(tmppath)) & rank == 0) {
     dir.create(tmppath, recursive=TRUE)
 }
 
@@ -622,20 +630,6 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
     } else {
         print("Maybe you can start by creating data")
     }
-
-    if (MPI) {
-        library(Rmpi)
-        ns = mpi.universe.size() - 1
-        mpi.spawn.Rslaves(nslaves=ns)
-        rank = mpi.comm.rank(comm=0)
-        size = mpi.comm.size (comm=0)
-        print(paste0("Thread ", rank+1, "/", size))
-        
-    } else {
-        rank = 0
-        size = 1
-    }
-
 
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))

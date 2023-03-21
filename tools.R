@@ -24,6 +24,8 @@ NetCDF_to_tibble = function (NetCDF_path,
                              chain="", mode="diag") {
     
     NCdata = ncdf4::nc_open(NetCDF_path)
+
+    print(NCdata)
     
     Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
                    origin=

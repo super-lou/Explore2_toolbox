@@ -78,10 +78,6 @@ init_var_file = '__default__.R'
 
 ### 2.3. Resources ___________________________________________________
 resources_path = file.path(computer_work_path, 'resources')
-if (!(file.exists(resources_path))) {
-  dir.create(resources_path)
-}
-print(paste('resources_path :', resources_path))
 #### 2.3.1. Logo _____________________________________________________
 logo_dir = 'logo'
 
@@ -117,16 +113,11 @@ now = format(Sys.time(), "%H_%M_%S")
 resdir = file.path(computer_work_path, 'results')
 today_resdir = file.path(computer_work_path, 'results', today)
 now_resdir = file.path(computer_work_path, 'results', today, now)
-print(paste('now_resdir :', now_resdir))
 
 ### 3.2. Figures  ____________________________________________________
 figdir = file.path(computer_work_path, 'figures')
 today_figdir = file.path(computer_work_path, 'figures', today)
 now_figdir = file.path(computer_work_path, 'figures', today, now)
-# if (!(file.exists(now_figdir))) {
-#   dir.create(now_figdir, recursive=TRUE)
-# }
-print(paste('now_figdir :', now_figdir))
 
 ### 3.3. Tmp  ________________________________________________________
 tmpdir = "tmp"
