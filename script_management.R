@@ -24,13 +24,15 @@
 if (!read_tmp & !delete_tmp) {
 
     if (rank == 0) {
-        Root = rep(0, times=size)
-        Root[1] = 1
-        for (root in 1:size) {
-            Root[root+1] = mpi.recv(0, type=1, source=root,
-                                    tag=1, comm=0)
-            print(paste0("End signal received from rank ", root))
-            print(paste0("Waiting other : ", Root))
+        if (MPI) {
+            Root = rep(0, times=size)
+            Root[1] = 1
+            for (root in 1:size) {
+                Root[root+1] = mpi.recv(0, type=1, source=root,
+                                        tag=1, comm=0)
+                print(paste0("End signal received from rank ", root))
+                print(paste0("Waiting other : ", Root))
+            }
         }
         
         if ('analyse_data' %in% to_do) {
@@ -235,8 +237,10 @@ if (!read_tmp & !delete_tmp) {
         }
 
     } else {
-        mpi.send(1, type=1, dest=0, tag=1, comm=0)
-        print(paste0("End signal from root ", rank)) 
+        if (MPI) {
+            mpi.send(1, type=1, dest=0, tag=1, comm=0)
+            print(paste0("End signal from root ", rank)) 
+        }
     }
 
     if ('read_saving' %in% to_do) {

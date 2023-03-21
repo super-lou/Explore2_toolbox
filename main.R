@@ -42,15 +42,10 @@
 # |  _/| '_|/ _ \/ _|/ -_)(_-<(_-<
 # |_|  |_|  \___/\__|\___|/__//__/ ___________________________________
 ## 1. REQUIREMENTS ___________________________________________________
-# Ex2D_toolbox path
+# Explore2_toolbox path
 lib_path =
-    "./"
-# '/home/herautl/library/Explore2_toolbox'
-
-# Display information along process
-verbose =
-    # FALSE
-    TRUE
+    # "./"
+'/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,16 +144,16 @@ verbose =
 #       directory.
 
 mode =
-    "diag"
-    # "proj"
+    # "diag"
+    "proj"
 
 to_do =
     c(
         'delete_tmp',
-        'create_data'
-        # 'analyse_data'
+        'create_data',
+        'analyse_data',
         # 'save_analyse'
-        # 'read_tmp'
+        'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
@@ -219,6 +214,13 @@ plot_doc =
     )
 
 
+## 4. OTHER __________________________________________________________
+# Display information along process
+verbose =
+    FALSE
+    # TRUE
+
+
 #  ___  _                  
 # / __|| |_  ___  _ __  ___
 # \__ \|  _|/ -_)| '_ \(_-<
@@ -226,21 +228,21 @@ plot_doc =
 ## 1. CREATE_DATA|_| _________________________________________________ 
 period_diagnostic = c('1976-01-01', '2019-12-31')
 propagate_NA = TRUE
-nCode4RAM = 25
+nCode4RAM = 1
 
 projs_to_use =
     c(
-        'all'
-        # "ALADIN"
+        # 'all'
+        "rcp85.*ALADIN.*ADAMONT"
         # "rcp45"
     )
 
 models_to_use =
     c(
-        "CTRIP"
+        # "CTRIP"
         # "EROS",
         # "GRSD"
-        # "J2000"
+        "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
@@ -263,13 +265,13 @@ codes_to_use =
         # 'A4362030',
         # 'A9942010',
         # 'X0454010'
-        '^K'
+        # '^K'
         # 'X0454010',
         # 'XVENEON1'
-        
-        # 'K1363010',
-        # 'K1341810',
-        # "M0014110"
+
+        'K1363010',
+        'K1341810'
+        # "M0014110",
         # "M0050620"
     )
 
@@ -311,8 +313,7 @@ var2search = c(
     'meta',
     'dataEXind',
     'metaEXind',
-    # 'dataEXserie',
-    'dataEXserie*',
+    'dataEXserie',
     'metaEXserie',
     'Warnings'
 )
