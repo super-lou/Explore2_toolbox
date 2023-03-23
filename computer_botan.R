@@ -49,8 +49,6 @@
 computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox'
 # Library path for package dev
 dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
-# Is it parallelized
-MPI = FALSE
 
 
 ## 2. INPUT DIRECTORIES ______________________________________________

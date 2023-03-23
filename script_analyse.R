@@ -51,7 +51,7 @@ analyse_data_indicator = function () {
                           CARD_dir=
                               analyse_data[grepl("(indicator)|(WIP)",
                                                  analyse_data)][1],
-                          period=period_diagnostic,
+                          period=period_analyse,
                           simplify_by="ID",
                           no_lim=no_lim,
                           variable_names=variable_names,
@@ -108,7 +108,7 @@ analyse_data_serie = function () {
                           CARD_dir=
                               analyse_data[grepl("serie",
                                                  analyse_data)][1],
-                          period=period_diagnostic,
+                          period=period_analyse,
                           simplify_by=NULL,
                           no_lim=no_lim,
                           variable_names=variable_names,

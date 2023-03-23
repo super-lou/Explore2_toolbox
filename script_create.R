@@ -25,10 +25,10 @@ create_data = function () {
     post("### Simulated data")
     Chain = c()
     data_sim = tibble()
-    for (i in 1:length(files_to_use)) {
-
-        chain = names(files_to_use)[i]
-        file = files_to_use[[i]]
+    
+    for (i in 1:length(files)) {    
+        file = files[i]
+        chain = names_files[i]
 
         if (mode == "proj") {
             dir = proj_dir
@@ -145,8 +145,8 @@ create_data = function () {
                            data_obs,
                            dplyr::between(
                                       Date,
-                                      as.Date(period_diagnostic[1]),
-                                      as.Date(period_diagnostic[2])))
+                                      as.Date(period_analyse[1]),
+                                      as.Date(period_analyse[2])))
 
             data_obs$Code = codes10_selection[match(data_obs$Code,
                                                     codes8_selection)]

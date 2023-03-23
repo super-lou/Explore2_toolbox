@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-'/home/herautl/library/Explore2_toolbox'
+    "./"
+# '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,10 +149,10 @@ mode =
 
 to_do =
     c(
-        'delete_tmp',
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'delete_tmp'
+        'create_data'
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -223,19 +223,27 @@ subverbose =
     FALSE
     # TRUE
 
+# Which type of MPI is used
+MPI =
+    # ""
+    "File"
+    # "Code"
+
+
 #  ___  _                  
 # / __|| |_  ___  _ __  ___
 # \__ \|  _|/ -_)| '_ \(_-<
 # |___/ \__|\___|| .__//__/ __________________________________________
 ## 1. CREATE_DATA|_| _________________________________________________ 
-period_diagnostic = c('1976-01-01', '2019-12-31')
+period_analyse_diag = c('1976-01-01', '2019-12-31')
+period_analyse_proj = NULL
 propagate_NA = TRUE
 nCode4RAM = 25
 
 projs_to_use =
     c(
         'all'
-        # "ALADIN.*ADAMONT"
+        # "rcp45.*ALADIN.*ADAMONT"
         # "rcp45"
     )
 
@@ -256,8 +264,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "^K"
         # 'K1363010',
         # 'V0144010',
@@ -471,7 +479,7 @@ library(ggtext)
 # library(fst)
 
 
-if (MPI) {
+if (MPI != "") {
     library(Rmpi)
     rank = mpi.comm.rank(comm=0)
     size = mpi.comm.size (comm=0)
@@ -489,6 +497,12 @@ convert2bool = function (X, true) {
     X[ok] = TRUE
     X[!ok] = FALSE
     return (X)
+}
+
+if (mode == "diag") {
+    period_analyse = period_analyse_diag
+} else if (mode == "proj") {
+    period_analyse = period_analyse_proj
 }
 
 if (!(file.exists(resources_path)) & rank == 0) {
@@ -558,16 +572,16 @@ if (mode == "proj") {
         files_to_use = unlist(files_to_use)
         files_to_use = as.list(files_to_use)
     }
-}
-
-
-if (mode == "diag") {
+    
+} else if (mode == "diag") {
     models_to_use_name = models_to_use
     models_path = list.files(file.path(computer_data_path, diag_dir))
     files_to_use = lapply(models_to_use, apply_grepl, table=models_path)
     names(files_to_use) = models_to_use_name
     files_to_use = files_to_use[sapply(files_to_use, length) > 0]
 }
+
+nFiles_to_use = length(files_to_use)
 
 
 codes_selection_data = read_tibble(file.path(computer_data_path,
@@ -652,59 +666,86 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
     if (size > nSubsets) {
         stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
     }
+
+
+    if (by_files | MPI == "File") {
+        if (MPI == "File") {
+            files_to_use =
+                files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
+                             as.integer((rank+1)*(nFiles_to_use/size+.5))]
+            files_to_use = files_to_use[!is.na(names(files_to_use))]
+        }
+        Files = as.list(files_to_use)
+    } else {
+        Files = list(files_to_use)
+    }
+    nFiles = length(Files)
+
+    if (MPI == "Code") {
+        Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
+                          as.integer((rank+1)*(nSubsets/size+.5))]
+        Subsets = Subsets[!is.na(names(Subsets))]
+        nSubsets = length(Subsets)
+    }
     
-    Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
-                      as.integer((rank+1)*(nSubsets/size+.5))]
-    Subsets = Subsets[!is.na(names(Subsets))]
-    nSubsets = length(Subsets)
-
-    post(paste0("All subsets ", Subsets))
-    
-    for (i in 1:nSubsets) {
-
-        subset = Subsets[[i]]
-        subset_name = names(Subsets)[i]
-
-        post(paste0("For subset ", subset_name, ": ",
-                    paste0(subset, collapse=" -> ")))
+    for (k in 1:nFiles) {
+        files = Files[[k]]
+        files_name = names(Files)[k]
         
-        file_test = c()
-        if ('create_data' %in% to_do) {
-            file_test = c(file_test,
-                          paste0("data_", subset_name, ".fst"))
-        }
-        if (any(grepl("(indicator)|(WIP)", analyse_data))) {
-            file_test = c(file_test,
-                          paste0("dataEXind_", subset_name, ".fst"))
-        }
-        if (any(grepl("serie", analyse_data))) {
-            file_test = c(file_test,
-                          paste0("dataEXserie_", subset_name))
-        }
-        post(paste0(i, "/", nSubsets,
-                    " chunks of stations in analyse so ",
-                    round(i/nSubsets*100, 1), "% done"))
-        
-        if (all(file_test %in% list.files(tmppath, include.dirs=TRUE))) {
-            next
-        }
-        
-        CodeSUB8 = CodeALL8[subset[1]:subset[2]]
-        CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
-        CodeSUB10 = CodeALL10[subset[1]:subset[2]]
-        CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
-        nCodeSUB = length(CodeSUB10)
+        post(paste0("All subsets: ", paste0(Subsets, collase=" ")))
+        for (i in 1:nSubsets) {
 
-        if (any(c('create_data', 'create_data_proj') %in% to_do)) {
-            source(file.path(lib_path, 'script_create.R'),
-                   encoding='UTF-8')
-        }
-        if (!create_ok) {
-            next
-        }
-        if ('analyse_data' %in% to_do) {
-            source(file.path(lib_path, 'script_analyse.R'),
-                   encoding='UTF-8')
+            subset = Subsets[[i]]
+            subset_name = names(Subsets)[i]
+
+            if (by_files | MPI == "File") {
+                subset_name = paste0(gsub("[|]", "_", files_name),
+                                     "_"
+                                     subset_name)
+            }
+
+            post(paste0("For subset ", subset_name, ": ",
+                        paste0(subset, collapse=" -> ")))
+            
+            file_test = c()
+            if ('create_data' %in% to_do) {
+                file_test = c(file_test,
+                              paste0("data_", subset_name, ".fst"))
+            }
+            if (any(grepl("(indicator)|(WIP)", analyse_data))) {
+                file_test = c(file_test,
+                              paste0("dataEXind_", subset_name, ".fst"))
+            }
+            if (any(grepl("serie", analyse_data))) {
+                file_test = c(file_test,
+                              paste0("dataEXserie_", subset_name))
+            }
+            post(paste0(i, "/", nSubsets,
+                        " chunks of stations in analyse so ",
+                        round(i/nSubsets*100, 1), "% done"))
+            
+            if (all(file_test %in% list.files(tmppath,
+                                              include.dirs=TRUE))) {
+                next
+            }
+            
+            CodeSUB8 = CodeALL8[subset[1]:subset[2]]
+            CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
+            CodeSUB10 = CodeALL10[subset[1]:subset[2]]
+            CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
+            nCodeSUB = length(CodeSUB10)
+
+            if (any(c('create_data', 'create_data_proj') %in% to_do)) {
+                source(file.path(lib_path, 'script_create.R'),
+                       encoding='UTF-8')
+            }
+            if (!create_ok) {
+                next
+            }
+            if ('analyse_data' %in% to_do) {
+                source(file.path(lib_path, 'script_analyse.R'),
+                       encoding='UTF-8')
+            }
         }
     }
 }

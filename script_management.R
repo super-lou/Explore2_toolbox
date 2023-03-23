@@ -23,8 +23,8 @@
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if (!read_tmp & !delete_tmp) {
 
-    if (rank == 0) {
-        if (MPI) {
+    if (MPI == "Code" & rank == 0 | MPI != "Code") {
+        if (MPI == "Code" & rank == 0) {
             Root = rep(0, times=size)
             Root[1] = 1
             post(paste0("Waiting other : ",
@@ -243,11 +243,9 @@ if (!read_tmp & !delete_tmp) {
             }
         }
 
-    } else {
-        if (MPI) {
-            mpi.send(1, type=2, dest=0, tag=1, comm=0)
-            post(paste0("End signal from root ", rank)) 
-        }
+    } else if (MPI == "Code") {
+        mpi.send(1, type=2, dest=0, tag=1, comm=0)
+        post(paste0("End signal from root ", rank)) 
     }
 
     if ('read_saving' %in% to_do) {
