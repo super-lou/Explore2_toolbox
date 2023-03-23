@@ -60,7 +60,7 @@ create_data = function () {
                 }
 
                 if (is.null(data_tmp)) {
-                    data_sim = NULL
+                    data_tmp = NULL
                     next
                 }
                 

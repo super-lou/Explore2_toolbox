@@ -154,7 +154,7 @@ to_do =
         'analyse_data',
         'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
+        # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -234,14 +234,14 @@ nCode4RAM = 25
 
 projs_to_use =
     c(
-        # 'all'
-        "rcp85.*ALADIN.*ADAMONT"
+        'all'
+        # "ALADIN.*ADAMONT"
         # "rcp45"
     )
 
 models_to_use =
     c(
-        # "CTRIP"
+        # "CTRIP",
         # "EROS",
         # "GRSD"
         "J2000"
@@ -256,13 +256,13 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K2981910' #ref
-        
-        'K1363010',
-        'V0144010'
-        # 'K1341810'
-        # "M0014110"
+        # "^K"
+        # 'K1363010',
+        # 'V0144010',
+        # 'K1341810',
+        # "M0014110",
         # "M0050620"
     )
 
@@ -298,10 +298,11 @@ saving_format = c('Rdata', 'txt')
 
 
 ## 4. READ_SAVING ____________________________________________________
-read_saving = "ALL"
+read_saving = "2023_03_22"
 
 var2search = c(
     'meta',
+    'data',
     'dataEXind',
     'metaEXind',
     'dataEXserie',
