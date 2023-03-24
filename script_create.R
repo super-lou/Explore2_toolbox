@@ -28,7 +28,7 @@ create_data = function () {
     
     for (i in 1:length(files)) {    
         file = files[i]
-        chain = names_files[i]
+        chain = files_name[i]
 
         if (mode == "proj") {
             dir = proj_dir

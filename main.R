@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-# '/home/herautl/library/Explore2_toolbox'
+    # "./"
+'/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,10 +149,10 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp'
-        'create_data'
-        # 'analyse_data',
-        # 'save_analyse'
+        'delete_tmp',
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -243,7 +243,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
-        # "rcp45.*ALADIN.*ADAMONT"
+        # "ALADIN.*ADAMONT"
         # "rcp45"
     )
 
@@ -264,12 +264,12 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910', #ref
         # "^K"
         # 'K1363010',
         # 'V0144010',
-        # 'K1341810',
+        # 'K1341810'
         # "M0014110",
         # "M0050620"
     )
@@ -301,12 +301,17 @@ no_lim = TRUE
 
 
 ## 3. SAVE_ANALYSE ___________________________________________________
+# If one input file need to give one output file
+by_files =
+    TRUE
+    # FALSE
+
 # Saving format to use to save analyse data
 saving_format = c('Rdata', 'txt')
 
 
 ## 4. READ_SAVING ____________________________________________________
-read_saving = "2023_03_22"
+read_saving = "2023_03_24/CNRM-CM5_rcp26_ALADIN63_ADAMONT_J2000"
 
 var2search = c(
     'meta',
@@ -625,7 +630,7 @@ if (!(file.exists(tmppath)) & rank == 0) {
     dir.create(tmppath, recursive=TRUE)
 }
 
-if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
+if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
     if (all(c('create_data', 'analyse_data') %in% to_do)) {
         post("## CREATING AND ANALYSING DATA")
@@ -633,7 +638,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         post("## CREATING DATA")
     } else if ('analyse_data' %in% to_do) {
         post("## ANALYSING DATA")
-    } else {
+    } else if (!('save_analyse' %in% to_do)) {
         post("Maybe you can start by creating data")
     }
 
@@ -652,10 +657,10 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
         name = names(Id)
         names(Id) = NULL
         n = 1
-        while (id+nCode4RAM < Id) {
-            Subsets = append(Subsets, list(c(id, id+nCode4RAM)))
+        while (id+nCode4RAM-1 < Id) {
+            Subsets = append(Subsets, list(c(id, id+nCode4RAM-1)))
             names(Subsets)[length(Subsets)] = paste0(name, n)
-            id = id+nCode4RAM+1
+            id = id+nCode4RAM
             n = n+1
         }
         Subsets = append(Subsets, list(c(id, Id)))
@@ -691,17 +696,15 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
     for (k in 1:nFiles) {
         files = Files[[k]]
         files_name = names(Files)[k]
+        files_name_opt = gsub("[|]", "_", files_name)
         
         post(paste0("All subsets: ", paste0(Subsets, collase=" ")))
         for (i in 1:nSubsets) {
-
             subset = Subsets[[i]]
             subset_name = names(Subsets)[i]
-
             if (by_files | MPI == "File") {
-                subset_name = paste0(gsub("[|]", "_", files_name),
-                                     "_"
-                                     subset_name)
+                subset_name = paste0(files_name_opt,
+                                     "_", subset_name)
             }
 
             post(paste0("For subset ", subset_name, ": ",
@@ -735,7 +738,7 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
             CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
             nCodeSUB = length(CodeSUB10)
 
-            if (any(c('create_data', 'create_data_proj') %in% to_do)) {
+            if ('create_data' %in% to_do) {
                 source(file.path(lib_path, 'script_create.R'),
                        encoding='UTF-8')
             }
@@ -746,12 +749,19 @@ if (any(c('create_data', 'analyse_data', 'create_data_proj') %in% to_do)) {
                 source(file.path(lib_path, 'script_analyse.R'),
                        encoding='UTF-8')
             }
+            print("")
         }
+
+        if (any(c('analyse_data', 'save_analyse') %in% to_do)) {
+            post("## MANAGING DATA")
+            source(file.path(lib_path, 'script_management.R'),
+                   encoding='UTF-8')
+        }
+        print("")
     }
 }
 
-if (any(c('analyse_data', 'save_analyse',
-          'criteria_selection', 'write_warnings',
+if (any(c('criteria_selection', 'write_warnings',
           'read_saving') %in% to_do)) {
     post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),

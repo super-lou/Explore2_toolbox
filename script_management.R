@@ -49,6 +49,10 @@ if (!read_tmp & !delete_tmp) {
             }
             for (i in 1:nSubsets) {
                 subset_name = names(Subsets)[i]
+                if (by_files | MPI == "File") {
+                    subset_name = paste0(files_name_opt,
+                                         "_", subset_name)
+                }
                 meta_tmp = read_tibble(filedir=tmppath,
                                        filename=paste0("meta_",
                                                        subset_name,
@@ -73,6 +77,10 @@ if (!read_tmp & !delete_tmp) {
                 }
                 for (i in 1:nSubsets) {
                     subset_name = names(Subsets)[i]
+                    if (by_files | MPI == "File") {
+                        subset_name = paste0(files_name_opt,
+                                             "_", subset_name)
+                    }
                     dataEXind_tmp = read_tibble(filedir=tmppath,
                                                 filename=paste0("dataEXind_",
                                                                 subset_name,
@@ -80,7 +88,8 @@ if (!read_tmp & !delete_tmp) {
                     if (!exists("dataEXind")) {
                         dataEXind = dataEXind_tmp
                     } else {
-                        dataEXind = dplyr::bind_rows(dataEXind, dataEXind_tmp)
+                        dataEXind = dplyr::bind_rows(dataEXind,
+                                                     dataEXind_tmp)
                     }
                 }
                 rm (dataEXind_tmp)
@@ -111,7 +120,8 @@ if (!read_tmp & !delete_tmp) {
                                     dataEXind[[paste0(varREL, "_obs")]],
                                     period=365.25)/30.4375
 
-                        } else if (grepl("(Rc)|(^epsilon)|(^alpha)", varREL)) {
+                        } else if (grepl("(Rc)|(^epsilon)|(^alpha)",
+                                         varREL)) {
                             dataEXind[[varREL]] =
                                 dataEXind[[paste0(varREL, "_sim")]] /
                                 dataEXind[[paste0(varREL, "_obs")]]
@@ -122,9 +132,10 @@ if (!read_tmp & !delete_tmp) {
                                  dataEXind[[paste0(varREL, "_obs")]]) /
                                 dataEXind[[paste0(varREL, "_obs")]]
                         }
-                        dataEXind = dplyr::relocate(dataEXind,
-                                                    !!varREL,
-                                                    .after=!!paste0(varREL, "_sim"))
+                        dataEXind =
+                            dplyr::relocate(dataEXind,
+                                            !!varREL,
+                                            .after=!!paste0(varREL, "_sim"))
                     }
                 }
             }
@@ -140,6 +151,10 @@ if (!read_tmp & !delete_tmp) {
                 }
                 for (i in 1:nSubsets) {
                     subset_name = names(Subsets)[i]
+                    if (by_files | MPI == "File") {
+                        subset_name = paste0(files_name_opt,
+                                             "_", subset_name)
+                    }
                     dataEXserie_tmp = read_tibble(
                         filedir=tmppath,
                         filename=paste0("dataEXserie_",
@@ -168,76 +183,94 @@ if (!read_tmp & !delete_tmp) {
             post(paste0("Save extracted data and metadata in ",
                          paste0(saving_format, collapse=", ")))
 
-            if (!(file.exists(today_resdir))) {
-                dir.create(today_resdir, recursive=TRUE)
+            files_name_regexp = gsub("[_]", "[_]",
+                                     gsub("[-]", "[-]",
+                                          files_name_opt))
+            
+            if (by_files | MPI == "File") {
+                today_resdir_tmp = file.path(today_resdir,
+                                             files_name_opt)
+                pattern = paste0("data[_]", files_name_regexp,
+                                 ".*", "[.]fst")
+            } else {
+                today_resdir_tmp = today_resdir
+                pattern = "data[_].*[.]fst"
             }
+
+            if (!(file.exists(today_resdir_tmp))) {
+                dir.create(today_resdir_tmp, recursive=TRUE)
+            }
+
             data_paths = list.files(tmppath,
-                                    pattern="data[_].*[.]fst",
+                                    pattern=pattern,
                                     full.names=TRUE)
-            data_files = list.files(tmppath,
-                                    pattern="data[_].*[.]fst")
+            data_files = gsub("[_][_]", "_",
+                              gsub(files_name_regexp, "",
+                                   basename(data_paths)))
+
             file.copy(data_paths,
-                      file.path(today_resdir, data_files))
+                      file.path(today_resdir_tmp, data_files))
             
             write_tibble(meta,
-                         filedir=today_resdir,
+                         filedir=today_resdir_tmp,
                          filename=paste0("meta.fst"))
+            
             if (any(grepl("(indicator)|(WIP)", analyse_data))) {
                 write_tibble(metaEXind,
-                             filedir=today_resdir,
+                             filedir=today_resdir_tmp,
                              filename=paste0("metaEXind.fst"))
                 write_tibble(dataEXind,
-                             filedir=today_resdir,
+                             filedir=today_resdir_tmp,
                              filename=paste0("dataEXind.fst"))
             }
             if (any(grepl("serie", analyse_data))) {
                 write_tibble(metaEXserie,
-                             filedir=today_resdir,
+                             filedir=today_resdir_tmp,
                              filename=paste0("metaEXserie.fst"))
                 write_tibble(dataEXserie,
-                             filedir=today_resdir,
+                             filedir=today_resdir_tmp,
                              filename=paste0("dataEXserie.fst"))
             }
 
             if ("Rdata" %in% saving_format) {
                 write_tibble(meta,
-                             filedir=today_resdir,
+                             filedir=today_resdir_tmp,
                              filename=paste0("meta.Rdata"))
                 if (any(grepl("(indicator)|(WIP)", analyse_data))) {
                     write_tibble(metaEXind,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("metaEXind.Rdata"))
                     write_tibble(dataEXind,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("dataEXind.Rdata"))
                 }
                 if (any(grepl("serie", analyse_data))) {
                     write_tibble(metaEXserie,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("metaEXserie.Rdata"))
                     write_tibble(dataEXserie,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("dataEXserie.Rdata"))
                 }
             }    
             if ("txt" %in% saving_format) {
                 write_tibble(meta,
-                             filedir=today_resdir,
+                             filedir=today_resdir_tmp,
                              filename=paste0("meta.txt"))
                 if (any(grepl("(indicator)|(WIP)", analyse_data))) {
                     write_tibble(metaEXind,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("metaEXind.txt"))
                     write_tibble(dataEXind,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("dataEXind.txt"))
                 }
                 if (any(grepl("serie", analyse_data))) {
                     write_tibble(metaEXserie,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("metaEXserie.txt"))
                     write_tibble(dataEXserie,
-                                 filedir=today_resdir,
+                                 filedir=today_resdir_tmp,
                                  filename=paste0("dataEXserie.txt"))
                 }
             }
