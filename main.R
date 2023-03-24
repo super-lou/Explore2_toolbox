@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -690,6 +690,9 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
         }
     }
+
+    post(paste0("All ", nFiles, " files: ",
+                paste0(names(Files), collapse=" ")))
     
     for (k in 1:nFiles) {
         files = Files[[k]]
@@ -698,7 +701,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
         Create_ok = c()
         
-        post(paste0("All subsets: ", paste0(Subsets, collase=" ")))
+        # post(paste0("All subsets: ", paste0(Subsets, collapse=" ")))
         for (i in 1:nSubsets) {
             subset = Subsets[[i]]
             subset_name = names(Subsets)[i]
