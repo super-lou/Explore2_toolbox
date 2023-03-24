@@ -45,7 +45,7 @@
 # Explore2_toolbox path
 lib_path =
     # "./"
-'/home/herautl/library/Explore2_toolbox'
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,7 +149,7 @@ mode =
 
 to_do =
     c(
-        'delete_tmp',
+        # 'delete_tmp',
         'create_data',
         'analyse_data',
         'save_analyse'

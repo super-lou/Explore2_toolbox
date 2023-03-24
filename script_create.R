@@ -60,7 +60,6 @@ create_data = function () {
                 }
 
                 if (is.null(data_tmp)) {
-                    data_tmp = NULL
                     next
                 }
                 
@@ -77,7 +76,8 @@ create_data = function () {
         }
     }
 
-    if (!is.null(data_sim)) {
+
+    if (nrow(data_sim) > 0) {
         id = match(CodeSUB10, codes10_selection)
         meta =
             dplyr::tibble(
@@ -107,11 +107,15 @@ create_data = function () {
                                        codes10_selection)]
         Code8_filename = paste0(Code8, obs_format)
         nCode = length(Code10)
-        
-        meta_obs = extract_meta(computer_data_path,
-                                obs_dir,
-                                Code8_filename,
-                                verbose=subverbose)
+
+        if (length(Code8) > 0) {
+            meta_obs = extract_meta(computer_data_path,
+                                    obs_dir,
+                                    Code8_filename,
+                                    verbose=subverbose)
+        } else {
+            meta_obs = dplyr::tibble()
+        }
 
         if (nrow(meta_obs) > 0) {
             meta_obs$Code =
@@ -216,7 +220,6 @@ create_data = function () {
 
         } else if (mode == "proj") {
             data = data_sim
-            
         }
         
         write_tibble(data,
