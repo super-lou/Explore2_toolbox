@@ -226,8 +226,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "File"
-    # "Code"
+    "file"
+    # "code"
 
 
 #  ___  _                  
@@ -668,25 +668,30 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     }
     nSubsets = length(Subsets)
 
-    if (by_files | MPI == "File") {
+    if (by_files | MPI == "file") {
 
         print("aaaaaaaaaaa")
-
-        if (MPI == "File") {
+        print(MPI)
+        
+        if (MPI == "file") {
             
             print("bbbbbbbbbbbb")
             
             Files = files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
                                  as.integer((rank+1)*(nFiles_to_use/size+.5))]
             Files = Files[!is.na(names(Files))]
+            Files = as.list(Files)
+            
+        } else {
+            Files = as.list(files_to_use)
         }
-        Files = as.list(Files)
+        
     } else {
         Files = list(files_to_use)
     }
     nFiles = length(Files)
 
-    if (MPI == "Code") {
+    if (MPI == "code") {
         Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
                           as.integer((rank+1)*(nSubsets/size+.5))]
         Subsets = Subsets[!is.na(names(Subsets))]
@@ -710,7 +715,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         for (i in 1:nSubsets) {
             subset = Subsets[[i]]
             subset_name = names(Subsets)[i]
-            if (by_files | MPI == "File") {
+            if (by_files | MPI == "file") {
                 subset_name = paste0(files_name_opt,
                                      "_", subset_name)
             }

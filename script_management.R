@@ -23,8 +23,8 @@
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if (!read_tmp & !delete_tmp) {
 
-    if (MPI == "Code" & rank == 0 | MPI != "Code") {
-        if (MPI == "Code" & rank == 0) {
+    if (MPI == "code" & rank == 0 | MPI != "Code") {
+        if (MPI == "code" & rank == 0) {
             Root = rep(0, times=size)
             Root[1] = 1
             post(paste0("Waiting other : ",
@@ -49,7 +49,7 @@ if (!read_tmp & !delete_tmp) {
             }
             for (i in 1:nSubsets) {
                 subset_name = names(Subsets)[i]
-                if (by_files | MPI == "File") {
+                if (by_files | MPI == "file") {
                     subset_name = paste0(files_name_opt,
                                          "_", subset_name)
                 }
@@ -77,7 +77,7 @@ if (!read_tmp & !delete_tmp) {
                 }
                 for (i in 1:nSubsets) {
                     subset_name = names(Subsets)[i]
-                    if (by_files | MPI == "File") {
+                    if (by_files | MPI == "file") {
                         subset_name = paste0(files_name_opt,
                                              "_", subset_name)
                     }
@@ -151,7 +151,7 @@ if (!read_tmp & !delete_tmp) {
                 }
                 for (i in 1:nSubsets) {
                     subset_name = names(Subsets)[i]
-                    if (by_files | MPI == "File") {
+                    if (by_files | MPI == "file") {
                         subset_name = paste0(files_name_opt,
                                              "_", subset_name)
                     }
@@ -187,7 +187,7 @@ if (!read_tmp & !delete_tmp) {
                                      gsub("[-]", "[-]",
                                           files_name_opt))
             
-            if (by_files | MPI == "File") {
+            if (by_files | MPI == "file") {
                 today_resdir_tmp = file.path(today_resdir,
                                              files_name_opt)
                 pattern = paste0("data[_]", files_name_regexp,
@@ -276,7 +276,7 @@ if (!read_tmp & !delete_tmp) {
             }
         }
 
-    } else if (MPI == "Code") {
+    } else if (MPI == "code") {
         mpi.send(1, type=2, dest=0, tag=1, comm=0)
         post(paste0("End signal from root ", rank)) 
     }
