@@ -487,7 +487,7 @@ library(ggtext)
 if (MPI != "") {
     library(Rmpi)
     rank = mpi.comm.rank(comm=0)
-    size = mpi.comm.size (comm=0)
+    size = mpi.comm.size(comm=0)
 } else {
     rank = 0
     size = 1
