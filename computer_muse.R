@@ -49,8 +49,6 @@
 computer_work_path = '/home/herautl/scratch'
 # Library path for package dev
 dev_lib_path = '/home/herautl/library'
-# Is it parallelized
-MPI = TRUE
 
 
 ## 2. INPUT DIRECTORIES ______________________________________________
