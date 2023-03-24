@@ -264,9 +264,9 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K2981910', #ref
-        "^A"
+        # "^A"
         # 'K1363010',
         # 'V0144010',
         # 'K1341810'
@@ -666,12 +666,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         Subsets = append(Subsets, list(c(id, Id)))
         names(Subsets)[length(Subsets)] = paste0(name, n)
     }
-    
     nSubsets = length(Subsets)
-    if (size > nSubsets) {
-        stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
-    }
-
 
     if (by_files | MPI == "File") {
         if (MPI == "File") {
@@ -691,6 +686,9 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                           as.integer((rank+1)*(nSubsets/size+.5))]
         Subsets = Subsets[!is.na(names(Subsets))]
         nSubsets = length(Subsets)
+        if (size > nSubsets) {
+            stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
+        }
     }
     
     for (k in 1:nFiles) {
