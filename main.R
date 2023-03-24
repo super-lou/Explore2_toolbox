@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -264,9 +264,9 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
+        # 'all'
         # 'K2981910', #ref
-        # "^K"
+        "^A"
         # 'K1363010',
         # 'V0144010',
         # 'K1341810'
@@ -697,6 +697,8 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         files = Files[[k]]
         files_name = names(Files)[k]
         files_name_opt = gsub("[|]", "_", files_name)
+
+        Create_ok = c()
         
         post(paste0("All subsets: ", paste0(Subsets, collase=" ")))
         for (i in 1:nSubsets) {
@@ -742,20 +744,23 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 source(file.path(lib_path, 'script_create.R'),
                        encoding='UTF-8')
             }
-            if (!create_ok) {
-                next
-            }
-            if ('analyse_data' %in% to_do) {
-                source(file.path(lib_path, 'script_analyse.R'),
-                       encoding='UTF-8')
+            Create_ok = c(Create_ok, create_ok)
+            
+            if (create_ok) {
+                if ('analyse_data' %in% to_do) {
+                    source(file.path(lib_path, 'script_analyse.R'),
+                           encoding='UTF-8')
+                }
             }
             print("")
         }
 
-        if (any(c('analyse_data', 'save_analyse') %in% to_do)) {
-            post("## MANAGING DATA")
-            source(file.path(lib_path, 'script_management.R'),
-                   encoding='UTF-8')
+        if (any(Create_ok)) {
+            if (any(c('analyse_data', 'save_analyse') %in% to_do)) {
+                post("## MANAGING DATA")
+                source(file.path(lib_path, 'script_management.R'),
+                       encoding='UTF-8')
+            }
         }
         print("")
     }

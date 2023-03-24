@@ -135,14 +135,24 @@ analyse_data_serie = function () {
 
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
-    
-    if (any(grepl("(indicator)|(WIP)", analyse_data))) {
-        post("### Analysing data for criteria extraction")
-        analyse_data_indicator()
-    }
 
-    if (any(grepl("serie", analyse_data))) {
-        post("### Analysing data for time series extraction")
-        analyse_data_serie()
+    test_path = file.path(tmppath,
+                          paste0("data_", subset_name, ".fst"))
+
+    print("")
+    print("test")
+    print(test_path)
+    print("")
+    
+    if (file.exists(test_path)) {
+        if (any(grepl("(indicator)|(WIP)", analyse_data))) {
+            post("### Analysing data for criteria extraction")
+            analyse_data_indicator()
+        }
+
+        if (any(grepl("serie", analyse_data))) {
+            post("### Analysing data for time series extraction")
+            analyse_data_serie()
+        }
     }
 }
