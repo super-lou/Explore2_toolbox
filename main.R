@@ -669,13 +669,18 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     nSubsets = length(Subsets)
 
     if (by_files | MPI == "File") {
+
+        print("aaaaaaaaaaa")
+
         if (MPI == "File") {
-            files_to_use =
-                files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
-                             as.integer((rank+1)*(nFiles_to_use/size+.5))]
-            files_to_use = files_to_use[!is.na(names(files_to_use))]
+            
+            print("bbbbbbbbbbbb")
+            
+            Files = files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
+                                 as.integer((rank+1)*(nFiles_to_use/size+.5))]
+            Files = Files[!is.na(names(Files))]
         }
-        Files = as.list(files_to_use)
+        Files = as.list(Files)
     } else {
         Files = list(files_to_use)
     }
