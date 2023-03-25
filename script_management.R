@@ -53,9 +53,10 @@ if (!read_tmp & !delete_tmp) {
                     subset_name = paste0(files_name_opt,
                                          "_", subset_name)
                 }
-                post(subset_name)
                 filename = paste0("meta_", subset_name, ".fst")
-                if (file.exists(filename)) {
+                post(filename)
+                post(file.exists(file.path(tmppath, filename)))
+                if (file.exists(file.path(tmppath, filename))) {
                     meta_tmp = read_tibble(filedir=tmppath,
                                            filename=filename)
                     if (!exists("meta")) {
@@ -75,7 +76,7 @@ if (!read_tmp & !delete_tmp) {
             if (any(grepl("(indicator)|(WIP)", analyse_data))) {
 
                 filename = "metaEXind.fst"
-                if (file.exists(filename)) {
+                if (file.exists(file.path(tmppath, filename))) {
                     metaEXind = read_tibble(filedir=tmppath,
                                             filename=filename)
                 }
@@ -91,7 +92,7 @@ if (!read_tmp & !delete_tmp) {
                     }
                     filename = paste0("dataEXind_",
                                       subset_name, ".fst")
-                    if (file.exists(filename)) {
+                    if (file.exists(file.path(tmppath, filename))) {
                         dataEXind_tmp = read_tibble(filedir=tmppath,
                                                     filename=filename)
                         if (!exists("dataEXind")) {
@@ -160,7 +161,7 @@ if (!read_tmp & !delete_tmp) {
             if (any(grepl("serie", analyse_data))) {
 
                 filename = "metaEXserie.fst"
-                if (file.exists(filename)) {
+                if (file.exists(file.path(tmppath, filename))) {
                     metaEXserie = read_tibble(filedir=tmppath,
                                               filename=filename)
                 }
@@ -176,7 +177,7 @@ if (!read_tmp & !delete_tmp) {
                     }
                     filename = paste0("dataEXserie_",
                                       subset_name, ".fst")
-                    if (file.exists(filename)) {
+                    if (file.exists(file.path(tmppath, filename))) {
                         dataEXserie_tmp = read_tibble(
                             filedir=tmppath,
                             filename=filename)
