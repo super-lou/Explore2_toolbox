@@ -175,8 +175,6 @@ if (!read_tmp & !delete_tmp) {
                     }
                     dirname = paste0("dataEXserie_",
                                      subset_name)
-                    post(dirname)
-                    post(file.exists(file.path(tmppath, dirname)))
                     if (file.exists(file.path(tmppath, dirname))) {
                         dataEXserie_tmp = read_tibble(
                             filedir=tmppath,
