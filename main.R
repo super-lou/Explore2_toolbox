@@ -150,8 +150,8 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'create_data',
-        'analyse_data',
+        # 'create_data',
+        # 'analyse_data',
         'save_analyse'
         # 'read_tmp'
         # 'read_saving'
