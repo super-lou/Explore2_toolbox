@@ -139,11 +139,6 @@ if ('analyse_data' %in% to_do) {
     test_path = file.path(tmppath,
                           paste0("data_", subset_name, ".fst"))
 
-    print("")
-    print("test")
-    print(test_path)
-    print("")
-    
     if (file.exists(test_path)) {
         if (any(grepl("(indicator)|(WIP)", analyse_data))) {
             post("### Analysing data for criteria extraction")

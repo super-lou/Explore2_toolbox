@@ -23,7 +23,7 @@
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if (!read_tmp & !delete_tmp) {
 
-    if (MPI == "code" & rank == 0 | MPI != "Code") {
+    if (MPI == "code" & rank == 0 | MPI != "code") {
         if (MPI == "code" & rank == 0) {
             Root = rep(0, times=size)
             Root[1] = 1
@@ -53,14 +53,15 @@ if (!read_tmp & !delete_tmp) {
                     subset_name = paste0(files_name_opt,
                                          "_", subset_name)
                 }
-                meta_tmp = read_tibble(filedir=tmppath,
-                                       filename=paste0("meta_",
-                                                       subset_name,
-                                                       ".fst"))
-                if (!exists("meta")) {
-                    meta = meta_tmp
-                } else {
-                    meta = dplyr::bind_rows(meta, meta_tmp)
+                filename = paste0("meta_", subset_name, ".fst")
+                if (file.exists(filename)) {
+                    meta_tmp = read_tibble(filedir=tmppath,
+                                           filename=filename)
+                    if (!exists("meta")) {
+                        meta = meta_tmp
+                    } else {
+                        meta = dplyr::bind_rows(meta, meta_tmp)
+                    }
                 }
             }
             rm (meta_tmp)
@@ -69,8 +70,11 @@ if (!read_tmp & !delete_tmp) {
 
             if (any(grepl("(indicator)|(WIP)", analyse_data))) {
 
-                metaEXind = read_tibble(filedir=tmppath,
-                                        filename="metaEXind.fst")
+                filename = "metaEXind.fst"
+                if (file.exists(filename)) {
+                    metaEXind = read_tibble(filedir=tmppath,
+                                            filename=filename)
+                }
                 
                 if (exists("dataEXind")) {
                     rm (dataEXind)
@@ -81,15 +85,17 @@ if (!read_tmp & !delete_tmp) {
                         subset_name = paste0(files_name_opt,
                                              "_", subset_name)
                     }
-                    dataEXind_tmp = read_tibble(filedir=tmppath,
-                                                filename=paste0("dataEXind_",
-                                                                subset_name,
-                                                                ".fst"))
-                    if (!exists("dataEXind")) {
-                        dataEXind = dataEXind_tmp
-                    } else {
-                        dataEXind = dplyr::bind_rows(dataEXind,
-                                                     dataEXind_tmp)
+                    filename = paste0("dataEXind_",
+                                      subset_name, ".fst")
+                    if (file.exists(filename)) {
+                        dataEXind_tmp = read_tibble(filedir=tmppath,
+                                                    filename=filename)
+                        if (!exists("dataEXind")) {
+                            dataEXind = dataEXind_tmp
+                        } else {
+                            dataEXind = dplyr::bind_rows(dataEXind,
+                                                         dataEXind_tmp)
+                        }
                     }
                 }
                 rm (dataEXind_tmp)
@@ -140,11 +146,13 @@ if (!read_tmp & !delete_tmp) {
                 }
             }
 
-
             if (any(grepl("serie", analyse_data))) {
 
-                metaEXserie = read_tibble(filedir=tmppath,
-                                          filename="metaEXserie.fst")
+                filename = "metaEXserie.fst"
+                if (file.exists(filename)) {
+                    metaEXserie = read_tibble(filedir=tmppath,
+                                              filename=filename)
+                }
                 
                 if (exists("dataEXserie")) {
                     rm (dataEXserie)
@@ -155,25 +163,29 @@ if (!read_tmp & !delete_tmp) {
                         subset_name = paste0(files_name_opt,
                                              "_", subset_name)
                     }
-                    dataEXserie_tmp = read_tibble(
-                        filedir=tmppath,
-                        filename=paste0("dataEXserie_",
-                                        subset_name,
-                                        ".fst"))
-                    if (!exists("dataEXserie")) {
-                        dataEXserie = dataEXserie_tmp
-                    } else {
-                        for (i in 1:length(dataEXserie)) {
-                            dataEXserie[[i]] =
-                                dplyr::bind_rows(dataEXserie[[i]],
-                                                 dataEXserie_tmp[[i]])
+                    filename = paste0("dataEXserie_",
+                                      subset_name, ".fst")
+                    if (file.exists(filename)) {
+                        dataEXserie_tmp = read_tibble(
+                            filedir=tmppath,
+                            filename=filename)
+                        if (!exists("dataEXserie")) {
+                            dataEXserie = dataEXserie_tmp
+                        } else {
+                            for (i in 1:length(dataEXserie)) {
+                                dataEXserie[[i]] =
+                                    dplyr::bind_rows(
+                                               dataEXserie[[i]],
+                                               dataEXserie_tmp[[i]])
+                            }
                         }
                     }
                 }
                 rm (dataEXserie_tmp)
                 
                 for (i in 1:length(dataEXserie)) {
-                    dataEXserie[[i]] = dataEXserie[[i]][order(dataEXserie[[i]]$Model),]
+                    dataEXserie[[i]] =
+                        dataEXserie[[i]][order(dataEXserie[[i]]$Model),]
                 }
             }    
         }
