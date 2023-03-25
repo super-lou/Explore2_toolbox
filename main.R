@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,11 +150,11 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
-        'read_saving'
+        # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -265,7 +265,7 @@ codes_to_use =
     # ''
     c(
         'all'
-        # 'K2981910', #ref
+        # 'K2981910' #ref
         # "^A"
         # 'K1363010',
         # 'V0144010',
@@ -307,7 +307,9 @@ by_files =
     # FALSE
 
 # Saving format to use to save analyse data
-saving_format = c('Rdata', 'txt')
+saving_format =
+    ""
+    # c('Rdata', 'txt')
 
 
 ## 4. READ_SAVING ____________________________________________________
