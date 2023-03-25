@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,11 +150,11 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving'
+        'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -311,16 +311,16 @@ saving_format = c('Rdata', 'txt')
 
 
 ## 4. READ_SAVING ____________________________________________________
-read_saving = "2023_03_24/CNRM-CM5_rcp26_ALADIN63_ADAMONT_J2000"
+read_saving = "2023_03_25/"
 
 var2search = c(
-    'meta',
-    'data',
-    'dataEXind',
-    'metaEXind',
-    'dataEXserie',
-    'metaEXserie',
-    'Warnings'
+    # 'meta',
+    # 'data',
+    # 'dataEXind',
+    # 'metaEXind',
+    'dataEXserie'
+    # 'metaEXserie',
+    # 'Warnings'
 )
 
 
