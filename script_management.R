@@ -53,6 +53,7 @@ if (!read_tmp & !delete_tmp) {
                     subset_name = paste0(files_name_opt,
                                          "_", subset_name)
                 }
+                post(subset_name)
                 filename = paste0("meta_", subset_name, ".fst")
                 if (file.exists(filename)) {
                     meta_tmp = read_tibble(filedir=tmppath,
@@ -64,8 +65,11 @@ if (!read_tmp & !delete_tmp) {
                     }
                 }
             }
-            rm (meta_tmp)
-            meta = meta[order(meta$Code),]
+
+            if (exists("meta_tmp")) {
+                rm (meta_tmp)
+                meta = meta[order(meta$Code),]
+            }
             
 
             if (any(grepl("(indicator)|(WIP)", analyse_data))) {
@@ -98,50 +102,57 @@ if (!read_tmp & !delete_tmp) {
                         }
                     }
                 }
-                rm (dataEXind_tmp)
-
-                dataEXind = dataEXind[order(dataEXind$Model),]
-                
-                Vars = colnames(dataEXind)
-                
-                containSO = "([_]obs$)|([_]sim$)"
-                Vars = Vars[grepl(containSO, Vars)]
-                if (length(Vars) > 0) {
-                    VarsREL = gsub(containSO, "", Vars)
-                    VarsREL = VarsREL[!duplicated(VarsREL)]
-                    nVarsREL = length(VarsREL)
+                if (exists("dataEXind_tmp")) {
+                    rm (dataEXind_tmp)
+                    dataEXind = dataEXind[order(dataEXind$Model),]
                     
-                    for (i in 1:nVarsREL) {
-                        varREL = VarsREL[i]
+                    Vars = colnames(dataEXind)
+                    
+                    containSO = "([_]obs$)|([_]sim$)"
+                    Vars = Vars[grepl(containSO, Vars)]
+                    if (length(Vars) > 0) {
+                        VarsREL = gsub(containSO, "", Vars)
+                        VarsREL = VarsREL[!duplicated(VarsREL)]
+                        nVarsREL = length(VarsREL)
                         
-                        if (grepl("^HYP.*", varREL)) {
-                            dataEXind[[varREL]] =
-                                dataEXind[[paste0(varREL, "_sim")]] &
-                                dataEXind[[paste0(varREL, "_obs")]]
-
-                        } else if (grepl("(^t)|([{]t)", varREL)) {
-                            dataEXind[[varREL]] =
-                                circular_minus(
-                                    dataEXind[[paste0(varREL, "_sim")]],
-                                    dataEXind[[paste0(varREL, "_obs")]],
-                                    period=365.25)/30.4375
-
-                        } else if (grepl("(Rc)|(^epsilon)|(^alpha)",
-                                         varREL)) {
-                            dataEXind[[varREL]] =
-                                dataEXind[[paste0(varREL, "_sim")]] /
-                                dataEXind[[paste0(varREL, "_obs")]]
+                        for (i in 1:nVarsREL) {
+                            varREL = VarsREL[i]
                             
-                        } else {
-                            dataEXind[[varREL]] =
-                                (dataEXind[[paste0(varREL, "_sim")]] -
-                                 dataEXind[[paste0(varREL, "_obs")]]) /
-                                dataEXind[[paste0(varREL, "_obs")]]
+                            if (grepl("^HYP.*", varREL)) {
+                                dataEXind[[varREL]] =
+                                    dataEXind[[paste0(varREL, "_sim")]] &
+                                    dataEXind[[paste0(varREL, "_obs")]]
+
+                            } else if (grepl("(^t)|([{]t)", varREL)) {
+                                dataEXind[[varREL]] =
+                                    circular_minus(
+                                        dataEXind[[paste0(varREL,
+                                                          "_sim")]],
+                                        dataEXind[[paste0(varREL,
+                                                          "_obs")]],
+                                        period=365.25)/30.4375
+
+                            } else if (grepl("(Rc)|(^epsilon)|(^alpha)",
+                                             varREL)) {
+                                dataEXind[[varREL]] =
+                                    dataEXind[[paste0(varREL, "_sim")]] /
+                                    dataEXind[[paste0(varREL, "_obs")]]
+                                
+                            } else {
+                                dataEXind[[varREL]] =
+                                    (dataEXind[[paste0(varREL,
+                                                       "_sim")]] -
+                                     dataEXind[[paste0(varREL,
+                                                       "_obs")]]) /
+                                    dataEXind[[paste0(varREL,
+                                                      "_obs")]]
+                            }
+                            dataEXind =
+                                dplyr::relocate(dataEXind,
+                                                !!varREL,
+                                                .after=!!paste0(varREL,
+                                                                "_sim"))
                         }
-                        dataEXind =
-                            dplyr::relocate(dataEXind,
-                                            !!varREL,
-                                            .after=!!paste0(varREL, "_sim"))
                     }
                 }
             }
@@ -181,13 +192,15 @@ if (!read_tmp & !delete_tmp) {
                         }
                     }
                 }
-                rm (dataEXserie_tmp)
-                
-                for (i in 1:length(dataEXserie)) {
-                    dataEXserie[[i]] =
-                        dataEXserie[[i]][order(dataEXserie[[i]]$Model),]
+                if (exists("dataEXserie_tmp")) {
+                    rm (dataEXserie_tmp)
+                    
+                    for (i in 1:length(dataEXserie)) {
+                        dataEXserie[[i]] =
+                            dataEXserie[[i]][order(dataEXserie[[i]]$Model),]
+                    }
                 }
-            }    
+            }
         }
 
         if ('save_analyse' %in% to_do) {
