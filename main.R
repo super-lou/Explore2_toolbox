@@ -746,6 +746,8 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             if ('create_data' %in% to_do) {
                 source(file.path(lib_path, 'script_create.R'),
                        encoding='UTF-8')
+            } else {
+                create_ok = TRUE
             }
             Create_ok = c(Create_ok, create_ok)
             
