@@ -54,8 +54,6 @@ if (!read_tmp & !delete_tmp) {
                                          "_", subset_name)
                 }
                 filename = paste0("meta_", subset_name, ".fst")
-                post(filename)
-                post(file.exists(file.path(tmppath, filename)))
                 if (file.exists(file.path(tmppath, filename))) {
                     meta_tmp = read_tibble(filedir=tmppath,
                                            filename=filename)
@@ -175,12 +173,14 @@ if (!read_tmp & !delete_tmp) {
                         subset_name = paste0(files_name_opt,
                                              "_", subset_name)
                     }
-                    filename = paste0("dataEXserie_",
-                                      subset_name, ".fst")
-                    if (file.exists(file.path(tmppath, filename))) {
+                    dirname = paste0("dataEXserie_",
+                                     subset_name)
+                    post(dirname)
+                    post(file.exists(file.path(tmppath, dirname)))
+                    if (file.exists(file.path(tmppath, dirname))) {
                         dataEXserie_tmp = read_tibble(
                             filedir=tmppath,
-                            filename=filename)
+                            filename=paste0(dirname, ".fst"))
                         if (!exists("dataEXserie")) {
                             dataEXserie = dataEXserie_tmp
                         } else {
