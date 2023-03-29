@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,12 +149,12 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'delete_tmp'
+        # 'create_data'
+        # 'analyse_data'
+        # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving'
+        'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -220,13 +220,13 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -242,9 +242,10 @@ nCode4RAM = 25
 
 projs_to_use =
     c(
-        'all'
+        # 'all'
         # "ALADIN.*ADAMONT"
         # "rcp45"
+        "CNRM.*rcp85.*ALADIN63.*ADAMONT"
     )
 
 models_to_use =
@@ -264,8 +265,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "^A"
         # 'K1363010',
         # 'V0144010',
@@ -289,13 +290,14 @@ codes_to_use =
 #   also be named 'Resume' in order to not include variables in an
 #   topic group.
 
-analyse_data = c(
-    # 'WIP'
-    # 'Explore2_diag/001_indicator/001_all',
-    # 'Explore2_diag/001_indicator/002_selection'
-    # 'Explore2_diag/002_serie'
-    'Explore2_proj/001_serie'
-)
+analyse_data =
+    list(
+        # c('WIP', simplify=FALSE)
+        # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
+        # c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
+        # c('Explore2_diag/002_serie', simplify=FALSE),
+        c('Explore2_proj/001_serie', simplify=FALSE)
+    )
 
 no_lim = TRUE
 
@@ -303,8 +305,8 @@ no_lim = TRUE
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 # Saving format to use to save analyse data
 saving_format =
@@ -313,15 +315,13 @@ saving_format =
 
 
 ## 4. READ_SAVING ____________________________________________________
-read_saving = "2023_03_25/"
+read_saving = "2023_03_30/"
 
 var2search = c(
     # 'meta',
-    # 'data',
-    # 'dataEXind',
-    # 'metaEXind',
-    'dataEXserie'
-    # 'metaEXserie',
+    'data',
+    'dataEX'
+    # 'metaEX',
     # 'Warnings'
 )
 
@@ -504,6 +504,10 @@ convert2bool = function (X, true) {
     X[ok] = TRUE
     X[!ok] = FALSE
     return (X)
+}
+
+check_simplify = function (X) {
+    return (as.logical(X["simplify"]))  
 }
 
 if (mode == "diag") {
@@ -700,12 +704,12 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     
     for (k in 1:nFiles) {
         files = Files[[k]]
-        files_name = names(Files)[k]
+        # files_name = names(Files)[k]
+        files_name = names(files)
         files_name_opt = gsub("[|]", "_", files_name)
 
         Create_ok = c()
         
-        # post(paste0("All subsets: ", paste0(Subsets, collapse=" ")))
         for (i in 1:nSubsets) {
             subset = Subsets[[i]]
             subset_name = names(Subsets)[i]
@@ -722,11 +726,11 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 file_test = c(file_test,
                               paste0("data_", subset_name, ".fst"))
             }
-            if (any(grepl("(indicator)|(WIP)", analyse_data))) {
+            if (any(sapply(analyse_data, check_simplify))) {
                 file_test = c(file_test,
                               paste0("dataEXind_", subset_name, ".fst"))
             }
-            if (any(grepl("serie", analyse_data))) {
+            if (any(!sapply(analyse_data, check_simplify))) {
                 file_test = c(file_test,
                               paste0("dataEXserie_", subset_name))
             }

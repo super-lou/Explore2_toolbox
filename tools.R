@@ -165,6 +165,11 @@ NetCDF_to_tibble = function (NetCDF_path,
         
     } else if (mode == "proj") {        
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
+        if (any(nchar(CodeRaw) == 8)) {
+            CodeRaw =
+                codes10_selection[match(CodeRaw,
+                                        codes8_selection)]
+        }
         CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
         CodeOrder = order(CodeRawSUB10)
         Code = CodeRawSUB10[CodeOrder]
@@ -224,7 +229,7 @@ convert_diag_data = function (model, data) {
 
 
 
-get_select = function (dataEXind, metaEXind, select="") {
+get_select = function (dataEX, metaEXind, simplify, select="") {
     if (!any(select == "all")) {
         select = paste0("(",
                         paste0(c("Model", "Code", select),
@@ -234,16 +239,27 @@ get_select = function (dataEXind, metaEXind, select="") {
         select = gsub("[}]", "[}]", select)
         select = gsub("[_]", "[_]", select)
         select = gsub("[,]", "[,]", select)
+                    
+        if (simplify) {
+            select = names(dataEX)[grepl(select,
+                                         names(dataEX))]
+            dataEX = dplyr::select(dataEX, select)
 
-        select = names(dataEXind)[grepl(select,
-                                        names(dataEXind))]
+        } else {
+            for (i in 1:length(dataEX)) {
+                select = names(dataEX[[i]])[grepl(select,
+                                                  names(dataEX[[i]]))]
+                dataEX[[i]] = dplyr::select(dataEX[[i]], select)
+            }
+        }
         
-        dataEXind = dplyr::select(dataEXind, select)
-        metaEXind = metaEXind[metaEXind$var %in% select,]
+        metaEX = metaEX[metaEX$var %in% select,]
     }
-    res = list(metaEXind=metaEXind, dataEXind=dataEXind)
+    res = list(metaEX=metaEX, dataEX=dataEX)
     return (res)
 }
+
+
 
 
 find_Warnings = function (dataEXind, metaEXind,

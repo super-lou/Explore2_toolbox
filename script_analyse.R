@@ -20,7 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-analyse_data_indicator = function () {
+CARD_analyse_data = function () {
     data = read_tibble(filedir=tmppath,
                        filename=paste0("data_",
                                        subset_name,
@@ -45,92 +45,117 @@ analyse_data_indicator = function () {
     } else {
         variable_names = NULL
     }
-    
-    res = CARD_extraction(data,
-                          CARD_path=CARD_path,
-                          CARD_dir=
-                              analyse_data[grepl("(indicator)|(WIP)",
-                                                 analyse_data)][1],
-                          period=period_analyse,
-                          simplify_by="ID",
-                          no_lim=no_lim,
-                          variable_names=variable_names,
-                          verbose=subverbose)
 
-    dataEXind = res$dataEX
-    metaEXind = res$metaEX
-
-    dataEXind = tidyr::separate(dataEXind, col="ID",
-                                into=ID_colnames, sep="_")
+    for (i in 1:length(analyse_data)) {
         
-    dataEXind$Model = gsub("[_].*$", "", dataEXind$ID)
-    dataEXind$Code = gsub("^.*[_]", "", dataEXind$ID)
-    dataEXind = dplyr::select(dataEXind, -ID)
-    dataEXind = dplyr::select(dataEXind, Model, Code, dplyr::everything())
-    
-    write_tibble(dataEXind,
-                 filedir=tmppath,
-                 filename=paste0("dataEXind_", subset_name, ".fst"))
-    write_tibble(metaEXind,
-                 filedir=tmppath,
-                 filename="metaEXind.fst")
+        CARD_dir = analyse_data[[i]][1]
+        simplify = as.logical(analyse_data[[i]]["simplify"])
+        CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+
+        if (simplify) {
+            simplify_by = "ID"
+        } else {
+            simplify_by = NULL
+        }
+        
+        res = CARD_extraction(data,
+                              CARD_path=CARD_path,
+                              CARD_dir=CARD_dir,
+                              period=period_analyse,
+                              simplify_by=simplify_by,
+                              no_lim=no_lim,
+                              variable_names=variable_names,
+                              verbose=subverbose)
+        
+        dataEX = res$dataEX
+        metaEX = res$metaEX
+        
+        if (simplify) {
+            dataEX = tidyr::separate(dataEX, col="ID",
+                                     into=ID_colnames, sep="_")
+            
+            dataEX$Model = gsub("[_].*$", "", dataEX$ID)
+            dataEX$Code = gsub("^.*[_]", "", dataEX$ID)
+            dataEX = dplyr::select(dataEX, -ID)
+            dataEX = dplyr::select(dataEX, Model, Code,
+                                   dplyr::everything())
+            
+        } else {
+            for (j in 1:length(dataEX)) {
+                dataEX[[j]] = tidyr::separate(dataEX[[j]],
+                                              col="ID",
+                                              into=ID_colnames,
+                                              sep="_")
+            }
+        }
+
+        write_tibble(dataEX,
+                     filedir=tmppath,
+                     filename=paste0("dataEX_", CARD_var,
+                                     "_", subset_name, ".fst"))
+        write_tibble(metaEX,
+                     filedir=tmppath,
+                     filename=paste0("metaEX_", CARD_var, ".fst"))
+    }
 }
 
 
-analyse_data_serie = function () {
-    data = read_tibble(filedir=tmppath,
-                       filename=paste0("data_",
-                                       subset_name,
-                                       ".fst"))
-    meta = read_tibble(filedir=tmppath,
-                       filename=paste0("meta_",
-                                       subset_name,
-                                       ".fst"))
 
-    Model = levels(factor(data$Model))
-    nModel = length(Model)
+
+# analyse_data_serie = function () {
+#     data = read_tibble(filedir=tmppath,
+#                        filename=paste0("data_",
+#                                        subset_name,
+#                                        ".fst"))
+#     meta = read_tibble(filedir=tmppath,
+#                        filename=paste0("meta_",
+#                                        subset_name,
+#                                        ".fst"))
+
+#     Model = levels(factor(data$Model))
+#     nModel = length(Model)
     
-    Code_available = levels(factor(data$Code))
-    Code = Code_available[Code_available %in% CodeSUB10]
-    nCode = length(Code)
+#     Code_available = levels(factor(data$Code))
+#     Code = Code_available[Code_available %in% CodeSUB10]
+#     nCode = length(Code)
 
-    ID_colnames = names(dplyr::select(data, where(is.character)))    
-    data = tidyr::unite(data, "ID", where(is.character), sep="_")
+#     ID_colnames = names(dplyr::select(data, where(is.character)))    
+#     data = tidyr::unite(data, "ID", where(is.character), sep="_")
 
-    if (mode == "proj") {
-        variable_names = c(Q="Q_sim")
-    } else {
-        variable_names = NULL
-    }
+#     if (mode == "proj") {
+#         variable_names = c(Q="Q_sim")
+#     } else {
+#         variable_names = NULL
+#     }
+
+#     CARD_dir = analyse_data[!sapply(analyse_data, check_simplify)][1] ###
     
-    res = CARD_extraction(data,
-                          CARD_path=CARD_path,
-                          CARD_dir=
-                              analyse_data[grepl("serie",
-                                                 analyse_data)][1],
-                          period=period_analyse,
-                          simplify_by=NULL,
-                          no_lim=no_lim,
-                          variable_names=variable_names,
-                          verbose=subverbose)
+#     res = CARD_extraction(data,
+#                           CARD_path=CARD_path,
+#                           CARD_dir=CARD_dir,
+#                           period=period_analyse,
+#                           simplify_by=NULL,
+#                           no_lim=no_lim,
+#                           variable_names=variable_names,
+#                           verbose=subverbose)
 
-    dataEXserie = res$dataEX
-    metaEXserie = res$metaEX
+#     dataEXserie = res$dataEX
+#     metaEXserie = res$metaEX
 
-    for (i in 1:length(dataEXserie)) {
-        dataEXserie[[i]] = tidyr::separate(dataEXserie[[i]],
-                                           col="ID",
-                                           into=ID_colnames,
-                                           sep="_")
-    }
+#     for (i in 1:length(dataEXserie)) {
+#         dataEXserie[[i]] = tidyr::separate(dataEXserie[[i]],
+#                                            col="ID",
+#                                            into=ID_colnames,
+#                                            sep="_")
+#     }
     
-    write_tibble(dataEXserie,
-                 filedir=tmppath,
-                 filename=paste0("dataEXserie_", subset_name, ".fst"))
-    write_tibble(metaEXserie,
-                 filedir=tmppath,
-                 filename="metaEXserie.fst")
-}
+#     write_tibble(dataEXserie,
+#                  filedir=tmppath,
+#                  filename=paste0("dataEXserie_", subset_name, ".fst"))
+#     write_tibble(metaEXserie,
+#                  filedir=tmppath,
+#                  filename="metaEXserie.fst")
+# }
 
 
 ## 1. ANALYSING OF DATA ______________________________________________
@@ -140,14 +165,14 @@ if ('analyse_data' %in% to_do) {
                           paste0("data_", subset_name, ".fst"))
 
     if (file.exists(test_path)) {
-        if (any(grepl("(indicator)|(WIP)", analyse_data))) {
-            post("### Analysing data for criteria extraction")
-            analyse_data_indicator()
-        }
+        # if (any(sapply(analyse_data, check_simplify))) {
+        post("### Analysing data")
+        CARD_analyse_data()
+        # }
 
-        if (any(grepl("serie", analyse_data))) {
-            post("### Analysing data for time series extraction")
-            analyse_data_serie()
-        }
+        # if (any(!sapply(analyse_data, check_simplify))) {
+        # post("### Analysing data for time series extraction")
+        # analyse_data_serie()
+        # }
     }
 }

@@ -76,7 +76,6 @@ create_data = function () {
         }
     }
 
-
     if (nrow(data_sim) > 0) {
         id = match(CodeSUB10, codes10_selection)
         meta =
