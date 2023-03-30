@@ -15,7 +15,7 @@ Model = "J2000"
 
 ## 3. EXECUTION (do not modify if you are not aware) _________________
 # import of install useful package
-if (!require(ASHE)) remotes::install_gitub("super-lou/ASHE")
+if (!require(ASHE)) remotes::install_github("super-lou/ASHE")
 # link to data
 if (!file.exists(data_dir)) {
     download.file(url, paste0(data_dir, ".zip"))
@@ -30,8 +30,8 @@ metaEX_path = file.path(data_dir,
                         chain_dir,
                         "metaEXserie.fst")
 
-dataEX = read_tibble(filepath=dataEX_path)
-metaEX = read_tibble(filepath=metaEX_path)
+dataEX = ASHE::read_tibble(filepath=dataEX_path)
+metaEX = ASHE::read_tibble(filepath=metaEX_path)
 
 print(dataEX)
 print(metaEX)
