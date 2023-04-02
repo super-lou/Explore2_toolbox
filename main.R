@@ -505,8 +505,15 @@ if (MPI != "") {
     size = 1
 }
 
-apply_grepl = function (x, table) {
-    return (table[grepl(x, table)])
+apply_grepl = function (x, table, target=NULL) {
+    if (is.null(target)) {
+        target = table
+    }
+    return (target[grepl(x, table)])
+}
+
+apply_bra = function (id, target) {
+    return (target[id])
 }
 
 convert2bool = function (X, true) {
@@ -577,22 +584,42 @@ if (mode == "proj") {
         files_to_use =
             unlist(lapply(projs_selection_data$regexp, apply_grepl,
                           table=projs_path))
-        ok =  sapply(lapply(projs_selection_data$regexp,
-                            grepl, x=files_to_use), any)
-        names(files_to_use) = projs_selection_data$ID[ok]    
+        files_to_use_name = c() 
+        for (file in files_to_use) {
+            name = projs_selection_data$ID[sapply(
+                                            projs_selection_data$regexp,
+                                            grepl, file)]
+            files_to_use_name = c(files_to_use_name, name)
+        }
+        names(files_to_use) = files_to_use_name  
 
     } else {
         projs_to_use = unlist(lapply(projs_to_use, apply_grepl,
                                      table=projs_selection_data$regexp))
         projs_to_use_name =
             projs_selection_data$ID[projs_selection_data$regexp %in%
-                                projs_to_use]
+                                    projs_to_use]
         files_to_use = lapply(projs_to_use, apply_grepl,
                               table=projs_path)
         names(files_to_use) = projs_to_use_name
-        files_to_use = unlist(files_to_use)
-        files_to_use = as.list(files_to_use)
+        # files_to_use = unlist(files_to_use)
+        files_to_use = setNames(unlist(files_to_use, use.names=F),
+                                rep(names(files_to_use),
+                                    lengths(files_to_use)))
+        # files_to_use = as.list(files_to_use)
     }
+
+    files_to_use_tmp = list()
+    for (i in 1:length(files_to_use)) {
+        file_name = names(files_to_use)[i]
+        file = files_to_use[names(files_to_use) == file_name]
+        names(file) = NULL
+        files_to_use_tmp = append(files_to_use_tmp, list(file))
+        names(files_to_use_tmp)[length(files_to_use_tmp)] = file_name
+    }
+    files_to_use_tmp =
+        files_to_use_tmp[!duplicated(names(files_to_use_tmp))]
+    files_to_use = files_to_use_tmp
     
 } else if (mode == "diag") {
     models_to_use_name = models_to_use
@@ -687,7 +714,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     if (by_files | MPI == "file") {
         if (MPI == "file") {
             Files = files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
-                                 as.integer((rank+1)*(nFiles_to_use/size+.5))]
+            as.integer((rank+1)*(nFiles_to_use/size+.5))]
             Files = Files[!is.na(names(Files))]
             Files = as.list(Files)
             Files_name = names(Files)
@@ -714,80 +741,86 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
     post(paste0("All ", nFiles, " files: ",
                 paste0(names(Files), collapse=" ")))
-    
-    for (k in 1:nFiles) {
-        files = Files[[k]]
-        # files_name = names(Files)[k]
-        # files_name = names(files)
-        files_name = Files_name[k]
-        files_name_opt = gsub("[|]", "_", files_name)
 
-        Create_ok = c()
-        
-        for (i in 1:nSubsets) {
-            subset = Subsets[[i]]
-            subset_name = names(Subsets)[i]
-            if (by_files | MPI == "file") {
-                subset_name = paste0(files_name_opt,
-                                     "_", subset_name)
+    if (nFiles != 0) {
+        for (k in 1:nFiles) {
+            files = Files[[k]]
+            # files_name = names(Files)[k]
+            # files_name = names(files)
+            files_name = Files_name[k]
+            files_name_opt = gsub("[|]", "_", files_name)
+
+            Create_ok = c()
+            
+            for (i in 1:nSubsets) {
+                subset = Subsets[[i]]
+                subset_name = names(Subsets)[i]
+                if (by_files | MPI == "file") {
+                    subset_name = paste0(files_name_opt,
+                                         "_", subset_name)
+                }
+
+                post(paste0("For subset ", subset_name, ": ",
+                            paste0(subset, collapse=" -> ")))
+                
+                file_test = c()
+                if ('create_data' %in% to_do) {
+                    file_test = c(file_test,
+                                  paste0("data_", subset_name, ".fst"))
+                }
+                if (any(sapply(analyse_data, check_simplify))) {
+                    file_test = c(file_test,
+                                  paste0("dataEXind_",
+                                         subset_name, ".fst"))
+                }
+                if (any(!sapply(analyse_data, check_simplify))) {
+                    file_test = c(file_test,
+                                  paste0("dataEXserie_", subset_name))
+                }
+                post(paste0(i, "/", nSubsets,
+                            " chunks of stations in analyse so ",
+                            round(i/nSubsets*100, 1), "% done"))
+                
+                if (all(file_test %in% list.files(tmppath,
+                                                  include.dirs=TRUE))) {
+                    next
+                }
+                
+                CodeSUB8 = CodeALL8[subset[1]:subset[2]]
+                CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
+                CodeSUB10 = CodeALL10[subset[1]:subset[2]]
+                CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
+                nCodeSUB = length(CodeSUB10)
+
+                if ('create_data' %in% to_do) {
+                    source(file.path(lib_path, 'script_create.R'),
+                           encoding='UTF-8')
+                } else {
+                    create_ok = TRUE
+                }
+                Create_ok = c(Create_ok, create_ok)
+                
+                if (create_ok) {
+                    if ('analyse_data' %in% to_do) {
+                        source(file.path(lib_path, 'script_analyse.R'),
+                               encoding='UTF-8')
+                    }
+                }
+                print("")
             }
 
-            post(paste0("For subset ", subset_name, ": ",
-                        paste0(subset, collapse=" -> ")))
-            
-            file_test = c()
-            if ('create_data' %in% to_do) {
-                file_test = c(file_test,
-                              paste0("data_", subset_name, ".fst"))
-            }
-            if (any(sapply(analyse_data, check_simplify))) {
-                file_test = c(file_test,
-                              paste0("dataEXind_", subset_name, ".fst"))
-            }
-            if (any(!sapply(analyse_data, check_simplify))) {
-                file_test = c(file_test,
-                              paste0("dataEXserie_", subset_name))
-            }
-            post(paste0(i, "/", nSubsets,
-                        " chunks of stations in analyse so ",
-                        round(i/nSubsets*100, 1), "% done"))
-            
-            if (all(file_test %in% list.files(tmppath,
-                                              include.dirs=TRUE))) {
-                next
-            }
-            
-            CodeSUB8 = CodeALL8[subset[1]:subset[2]]
-            CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
-            CodeSUB10 = CodeALL10[subset[1]:subset[2]]
-            CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
-            nCodeSUB = length(CodeSUB10)
-
-            if ('create_data' %in% to_do) {
-                source(file.path(lib_path, 'script_create.R'),
-                       encoding='UTF-8')
-            } else {
-                create_ok = TRUE
-            }
-            Create_ok = c(Create_ok, create_ok)
-            
-            if (create_ok) {
-                if ('analyse_data' %in% to_do) {
-                    source(file.path(lib_path, 'script_analyse.R'),
+            if (any(Create_ok)) {
+                if (any(c('analyse_data', 'save_analyse') %in% to_do)) {
+                    post("## MANAGING DATA")
+                    source(file.path(lib_path, 'script_management.R'),
                            encoding='UTF-8')
                 }
             }
             print("")
         }
-
-        if (any(Create_ok)) {
-            if (any(c('analyse_data', 'save_analyse') %in% to_do)) {
-                post("## MANAGING DATA")
-                source(file.path(lib_path, 'script_management.R'),
-                       encoding='UTF-8')
-            }
-        }
-        print("")
+        
+    } else {
+        warning ("No files")
     }
 }
 
