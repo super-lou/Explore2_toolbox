@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,12 +149,12 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp'
-        # 'create_data'
-        # 'analyse_data'
-        # 'save_analyse'
+        # 'delete_tmp',
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
-        'read_saving'
+        # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -220,13 +220,13 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -242,22 +242,22 @@ nCode4RAM = 25
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "ALADIN.*ADAMONT"
         # "rcp45"
-        "CNRM.*rcp85.*ALADIN63.*ADAMONT"
+        # "CNRM.*rcp85.*ALADIN63"
     )
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD"
-        "J2000"
+        "CTRIP", #ok
+        "EROS", #ok
+        "GRSD", #ok
+        # "J2000"
         # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "MORDOR-SD", #ok
+        "MORDOR-TS" #ok
+        # "ORCHIDEE"
         # "SMASH"
     )
 complete_by = "SMASH"
@@ -265,10 +265,10 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
-        # "^A"
-        # 'K1363010',
+        'all'
+        # 'K2981910' #ref
+        # "^V"
+        # 'K1363010'
         # 'V0144010',
         # 'K1341810'
         # "M0014110",
@@ -296,7 +296,8 @@ analyse_data =
         # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
         # c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
         # c('Explore2_diag/002_serie', simplify=FALSE),
-        c('Explore2_proj/001_serie', simplify=FALSE)
+        c('Explore2_proj/001_serie', simplify=FALSE),
+        c('Explore2_proj/002_check', simplify=FALSE)
     )
 
 no_lim = TRUE
@@ -305,8 +306,16 @@ no_lim = TRUE
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
+
+var2save =
+    c(
+        'meta',
+        # 'data',
+        'dataEX',
+        'metaEX' 
+    )
 
 # Saving format to use to save analyse data
 saving_format =
@@ -317,13 +326,14 @@ saving_format =
 ## 4. READ_SAVING ____________________________________________________
 read_saving = "2023_03_30/"
 
-var2search = c(
-    # 'meta',
-    'data',
-    'dataEX'
-    # 'metaEX',
-    # 'Warnings'
-)
+var2search =
+    c(
+        # 'meta',
+        # 'data',
+        'dataEX'
+        # 'metaEX',
+        # 'Warnings'
+    )
 
 
 ## 5. CRITERIA_SELECTION _____________________________________________
@@ -680,12 +690,15 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                                  as.integer((rank+1)*(nFiles_to_use/size+.5))]
             Files = Files[!is.na(names(Files))]
             Files = as.list(Files)
+            Files_name = names(Files)
         } else {
             Files = as.list(files_to_use)
+            Files_name = names(Files)
         }
         
     } else {
         Files = list(files_to_use)
+        Files_name = lapply(Files, names)[[1]]
     }
     nFiles = length(Files)
 
@@ -705,7 +718,8 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     for (k in 1:nFiles) {
         files = Files[[k]]
         # files_name = names(Files)[k]
-        files_name = names(files)
+        # files_name = names(files)
+        files_name = Files_name[k]
         files_name_opt = gsub("[|]", "_", files_name)
 
         Create_ok = c()

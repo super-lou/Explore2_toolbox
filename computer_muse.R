@@ -53,7 +53,7 @@ dev_lib_path = '/home/herautl/library'
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
-computer_data_path = '/home/herautl/data'
+computer_data_path = '/home/herautl/scratch/data'
 obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
 obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Explore2/diagnostic"

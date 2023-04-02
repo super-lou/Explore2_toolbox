@@ -223,21 +223,25 @@ if (!read_tmp & !delete_tmp) {
                               gsub(files_name_regexp, "",
                                    basename(data_paths)))
 
-            file.copy(data_paths,
-                      file.path(today_resdir_tmp, data_files))
-            
-            write_tibble(meta,
-                         filedir=today_resdir_tmp,
-                         filename=paste0("meta.fst"))
-            if ("Rdata" %in% saving_format) {
-                write_tibble(meta,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("meta.Rdata"))
+            if ("data" %in% var2save) {
+                file.copy(data_paths,
+                          file.path(today_resdir_tmp, data_files))
             }
-            if ("txt" %in% saving_format) {
+            
+            if ("meta" %in% var2save) {
                 write_tibble(meta,
                              filedir=today_resdir_tmp,
-                             filename=paste0("meta.txt"))
+                             filename=paste0("meta.fst"))
+                if ("Rdata" %in% saving_format) {
+                    write_tibble(meta,
+                                 filedir=today_resdir_tmp,
+                                 filename=paste0("meta.Rdata"))
+                }
+                if ("txt" %in% saving_format) {
+                    write_tibble(meta,
+                                 filedir=today_resdir_tmp,
+                                 filename=paste0("meta.txt"))
+                }
             }
 
             for (i in 1:length(analyse_data)) {
@@ -251,47 +255,59 @@ if (!read_tmp & !delete_tmp) {
 
                 if (file.exists(file.path(tmppath, dirname)) |
                     file.exists(file.path(tmppath, filename))) {
-                    
-                    metaEX = read_tibble(filedir=tmppath,
-                                         filename=paste0("metaEX_",
-                                                         CARD_var,
-                                                         ".fst"))
-                    dataEX = read_tibble(filedir=tmppath,
-                                         filename=paste0("dataEX_",
-                                                         CARD_var,
-                                                         ".fst"))
+
+                    if ("metaEX" %in% var2save) {
+                        metaEX = read_tibble(filedir=tmppath,
+                                             filename=paste0("metaEX_",
+                                                             CARD_var,
+                                                             ".fst"))
+                    }
+                    if ("dataEX" %in% var2save) {
+                        dataEX = read_tibble(filedir=tmppath,
+                                             filename=paste0("dataEX_",
+                                                             CARD_var,
+                                                             ".fst"))
+                    }
                 } else {
                     next
                 }
-                
-                write_tibble(metaEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("metaEX_", CARD_var,
-                                             ".fst"))
-                write_tibble(dataEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("dataEX_", CARD_var,
-                                             ".fst"))
 
-                if ("Rdata" %in% saving_format) {
-                    write_tibble(metaEX,
-                                 filedir=today_resdir_tmp,
-                                 filename=paste0("metaEX_", CARD_var,
-                                                 ".Rdata"))
+                if ("dataEX" %in% var2save) {
                     write_tibble(dataEX,
                                  filedir=today_resdir_tmp,
                                  filename=paste0("dataEX_", CARD_var,
-                                                 ".Rdata"))
-                }    
-                if ("txt" %in% saving_format) {
+                                                 ".fst"))
+                    if ("Rdata" %in% saving_format) {
+                        write_tibble(dataEX,
+                                     filedir=today_resdir_tmp,
+                                     filename=paste0("dataEX_", CARD_var,
+                                                     ".Rdata"))
+                    }
+                    if ("txt" %in% saving_format) {
+                        write_tibble(dataEX,
+                                     filedir=today_resdir_tmp,
+                                     filename=paste0("dataEX_", CARD_var,
+                                                     ".txt"))
+                    }
+                }
+                
+                if ("metaEX" %in% var2save) {
                     write_tibble(metaEX,
                                  filedir=today_resdir_tmp,
                                  filename=paste0("metaEX_", CARD_var,
-                                                 ".txt"))
-                    write_tibble(dataEX,
-                                 filedir=today_resdir_tmp,
-                                 filename=paste0("dataEX_", CARD_var,
-                                                 ".txt"))
+                                                 ".fst"))
+                    if ("Rdata" %in% saving_format) {
+                        write_tibble(metaEX,
+                                     filedir=today_resdir_tmp,
+                                     filename=paste0("metaEX_", CARD_var,
+                                                     ".Rdata"))
+                    }
+                    if ("txt" %in% saving_format) {
+                        write_tibble(metaEX,
+                                     filedir=today_resdir_tmp,
+                                     filename=paste0("metaEX_", CARD_var,
+                                                     ".txt"))
+                    }
                 }
             }
         }
