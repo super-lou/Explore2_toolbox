@@ -243,7 +243,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
-        # "rcp26"
+        # "MPI-ESM-LR.*historical.*REMO.*ADAMONT"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "CNRM.*rcp85.*ALADIN63"
