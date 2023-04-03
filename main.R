@@ -711,8 +711,16 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
     if (by_files | MPI == "file") {
         if (MPI == "file") {
-            Files = files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
-            as.integer((rank+1)*(nFiles_to_use/size+.5))]
+            # Files = files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
+            # as.integer((rank+1)*(nFiles_to_use/size+.5))]
+            if (nFiles_to_use/size == round(nFiles_to_use/size)) {
+                start = seq(1, nFiles_to_use, by=(nFiles_to_use/size))
+                end = seq((nFiles_to_use/size), nFiles_to_use,
+                          by=(nFiles_to_use/size))
+                Files = files_to_use[start[rank+1]:end[rank+1]]
+            } else {
+                stop ("Number of files by number of tasks is not an integer")
+            }
             Files = Files[!is.na(names(Files))]
         } else {
             Files = files_to_use
