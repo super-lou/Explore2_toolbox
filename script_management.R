@@ -228,7 +228,7 @@ if (!read_tmp & !delete_tmp) {
                           file.path(today_resdir_tmp, data_files))
             }
             
-            if ("meta" %in% var2save) {
+            if ("meta" %in% var2save & exists("meta")) {
                 write_tibble(meta,
                              filedir=today_resdir_tmp,
                              filename=paste0("meta.fst"))
