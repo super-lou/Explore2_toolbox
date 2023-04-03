@@ -27,8 +27,8 @@ create_data = function () {
     data_sim = tibble()
     
     for (i in 1:length(files)) {    
-        file = files[i]
-        chain = files_name[i]
+        file = files[[i]]
+        chain = files_name[[i]][1]
 
         if (mode == "proj") {
             dir = proj_dir

@@ -164,9 +164,6 @@ NetCDF_to_tibble = function (NetCDF_path,
 
         
     } else if (mode == "proj") {
-
-        post(chain)
-        post("code")
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
         if (any(nchar(CodeRaw) == 8)) {
             CodeRaw =
@@ -186,7 +183,6 @@ NetCDF_to_tibble = function (NetCDF_path,
         count = max(station) - start + 1
         station = station - start + 1
 
-        post("debit")
         Q_sim = ncdf4::ncvar_get(NCdata, "debit",
                                  start=c(start, 1),
                                  count=c(count, -1))
@@ -195,15 +191,12 @@ NetCDF_to_tibble = function (NetCDF_path,
         Q_sim = Q_sim[CodeOrder,,drop=FALSE]
         Q_sim = c(t(Q_sim))
 
-        post("Surf")
-        S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
-                             start=start,
-                             count=count)
-        S = S[station]
-        S = S[CodeOrder]
+        # S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
+        #                      start=start,
+        #                      count=count)
+        # S = S[station]
+        # S = S[CodeOrder]
 
-        post("ok")
-        
         ncdf4::nc_close(NCdata)
 
         data = dplyr::tibble(Code=rep(Code, each=nDate),

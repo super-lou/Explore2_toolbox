@@ -324,7 +324,7 @@ saving_format =
 
 
 ## 4. READ_SAVING ____________________________________________________
-read_saving = "2023_03_30/"
+read_saving = "2023_04_03/"
 
 var2search =
     c(
@@ -602,11 +602,9 @@ if (mode == "proj") {
         files_to_use = lapply(projs_to_use, apply_grepl,
                               table=projs_path)
         names(files_to_use) = projs_to_use_name
-        # files_to_use = unlist(files_to_use)
         files_to_use = setNames(unlist(files_to_use, use.names=F),
                                 rep(names(files_to_use),
                                     lengths(files_to_use)))
-        # files_to_use = as.list(files_to_use)
     }
 
     files_to_use_tmp = list()
@@ -716,16 +714,28 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             Files = files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
             as.integer((rank+1)*(nFiles_to_use/size+.5))]
             Files = Files[!is.na(names(Files))]
-            Files = as.list(Files)
-            Files_name = names(Files)
         } else {
-            Files = as.list(files_to_use)
-            Files_name = names(Files)
+            Files = files_to_use
         }
+        Files_name = names(Files)
+        Files_len = sapply(Files, length)
+        names(Files_len) = NULL
+        Files_name = Map(rep, x=Files_name, each=Files_len)
+        names(Files) = NULL
+        names(Files_name) = NULL
+        Files = as.list(Files)
+        Files_name = as.list(Files_name)
         
     } else {
-        Files = list(files_to_use)
-        Files_name = lapply(Files, names)[[1]]
+        Files = files_to_use
+        Files_name = names(Files)
+        Files_len = sapply(Files, length)
+        names(Files_len) = NULL
+        Files_name = Map(rep, x=Files_name, each=Files_len)
+        names(Files) = NULL
+        names(Files_name) = NULL
+        Files = list(Files)
+        Files_name = list(Files_name)
     }
     nFiles = length(Files)
 
@@ -745,11 +755,11 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     if (nFiles != 0) {
         for (k in 1:nFiles) {
             files = Files[[k]]
-            # files_name = names(Files)[k]
-            # files_name = names(files)
-            files_name = Files_name[k]
-            files_name_opt = gsub("[|]", "_", files_name)
-
+            files_name = Files_name[[k]]
+            if (by_files | MPI == "file") {
+                files_name_opt = gsub("[|]", "_", files_name[1]) #####
+            }
+            
             Create_ok = c()
             
             for (i in 1:nSubsets) {

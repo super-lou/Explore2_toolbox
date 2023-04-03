@@ -327,6 +327,7 @@ if (!read_tmp & !delete_tmp) {
                                                  collapse=")|("),
                                           ")"),
                            include.dirs=TRUE,
+                           recursive=TRUE,
                            full.names=TRUE)
         Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
         Paths[!grepl("[.]", Paths)] = paste0(Paths[!grepl("[.]", Paths)], ".fst")
