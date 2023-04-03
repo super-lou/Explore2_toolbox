@@ -243,6 +243,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
+        # "rcp26"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "CNRM.*rcp85.*ALADIN63"
@@ -255,7 +256,7 @@ models_to_use =
         "GRSD", #ok
         # "J2000"
         # "SIM2",
-        "MORDOR-SD", #ok
+        # "MORDOR-SD"
         "MORDOR-TS" #ok
         # "ORCHIDEE"
         # "SMASH"
@@ -329,8 +330,8 @@ read_saving = "2023_04_03/"
 var2search =
     c(
         # 'meta',
-        # 'data',
-        'dataEX'
+        'data'
+        # 'dataEX'
         # 'metaEX',
         # 'Warnings'
     )
