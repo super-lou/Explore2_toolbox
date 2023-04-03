@@ -114,4 +114,4 @@ today_figdir = file.path(computer_work_path, 'figures', today)
 now_figdir = file.path(computer_work_path, 'figures', today, now)
 
 ### 3.3. Tmp  ________________________________________________________
-tmpdir = "tmp2"
+tmpdir = "tmp"
