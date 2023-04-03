@@ -151,7 +151,7 @@ to_do =
     c(
         # 'delete_tmp',
         # 'create_data',
-        # 'analyse_data',
+        # 'analyse_data'
         'save_analyse'
         # 'read_tmp'
         # 'read_saving'
@@ -243,7 +243,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
-        # "MPI-ESM-LR.*historical.*REMO.*ADAMONT"
+        # "MPI-ESM-LR.*historical.*REMO"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "CNRM.*rcp85.*ALADIN63"
@@ -267,8 +267,9 @@ codes_to_use =
     # ''
     c(
         'all'
-        # 'K2981910' #ref
-        # "^V"
+        # 'K2981910', #ref
+        # "^V",
+        # "^K"
         # 'K1363010'
         # 'V0144010',
         # 'K1341810'
@@ -330,8 +331,8 @@ read_saving = "2023_04_03/"
 var2search =
     c(
         # 'meta',
-        'data'
-        # 'dataEX'
+        # 'data'
+        'dataEX'
         # 'metaEX',
         # 'Warnings'
     )

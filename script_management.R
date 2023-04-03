@@ -70,10 +70,10 @@ if (!read_tmp & !delete_tmp) {
                 meta = meta[order(meta$Code),]
             }
 
-            for (i in 1:length(analyse_data)) {
+            for (ii in 1:length(analyse_data)) {
                 
-                CARD_dir = analyse_data[[i]][1]
-                simplify = as.logical(analyse_data[[i]]["simplify"])
+                CARD_dir = analyse_data[[ii]][1]
+                simplify = as.logical(analyse_data[[ii]]["simplify"])
                 CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
                
                 filename = paste0("metaEX_", CARD_var, ".fst")
@@ -85,8 +85,8 @@ if (!read_tmp & !delete_tmp) {
                 if (exists("dataEX")) {
                     rm ("dataEX")
                 }
-                for (j in 1:nSubsets) {
-                    subset_name = names(Subsets)[j]
+                for (jj in 1:nSubsets) {
+                    subset_name = names(Subsets)[jj]
                     if (by_files | MPI == "file") {
                         subset_name = paste0(files_name_opt,
                                              "_", subset_name)
@@ -106,11 +106,11 @@ if (!read_tmp & !delete_tmp) {
                                 dataEX = dplyr::bind_rows(dataEX,
                                                           dataEX_tmp)
                             } else {
-                                for (k in 1:length(dataEX)) {
-                                    dataEX[[k]] =
-                                        dplyr::bind_rows(dataEX[[k]],
-                                                         dataEX_tmp[[k]])
-                                }   
+                                for (kk in 1:length(dataEX)) {
+                                    dataEX[[kk]] =
+                                        dplyr::bind_rows(dataEX[[kk]],
+                                                         dataEX_tmp[[kk]])
+                                }  
                             }
                         }
                     }
@@ -131,8 +131,8 @@ if (!read_tmp & !delete_tmp) {
                             VarsREL = VarsREL[!duplicated(VarsREL)]
                             nVarsREL = length(VarsREL)
                             
-                            for (j in 1:nVarsREL) {
-                                varREL = VarsREL[j]
+                            for (jj in 1:nVarsREL) {
+                                varREL = VarsREL[jj]
                                 
                                 if (grepl("^HYP.*", varREL)) {
                                     dataEX[[varREL]] =
@@ -175,9 +175,9 @@ if (!read_tmp & !delete_tmp) {
                         }
                         
                     } else {
-                        for (j in 1:length(dataEX)) {
-                            dataEX[[j]] =
-                                dataEX[[j]][order(dataEX[[j]]$Model),]
+                        for (jj in 1:length(dataEX)) {
+                            dataEX[[jj]] =
+                                dataEX[[jj]][order(dataEX[[jj]]$Model),]
                         }
                     }
                 }
@@ -223,6 +223,9 @@ if (!read_tmp & !delete_tmp) {
                               gsub(files_name_regexp, "",
                                    basename(data_paths)))
 
+            post(paste0("fnr ", files_name_regexp))
+            post(paste0("trt", today_resdir_tmp))
+            
             if ("data" %in% var2save) {
                 file.copy(data_paths,
                           file.path(today_resdir_tmp, data_files))
@@ -244,14 +247,16 @@ if (!read_tmp & !delete_tmp) {
                 }
             }
 
-            for (i in 1:length(analyse_data)) {
+            for (ii in 1:length(analyse_data)) {
                 
-                CARD_dir = analyse_data[[i]][1]
-                simplify = as.logical(analyse_data[[i]]["simplify"])
+                CARD_dir = analyse_data[[ii]][1]
+                simplify = as.logical(analyse_data[[ii]]["simplify"])
                 CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
 
                 dirname = paste0("dataEX_", CARD_var)
                 filename = paste0(dirname, ".fst")
+
+                post(paste0("f ", filename))
 
                 if (file.exists(file.path(tmppath, dirname)) |
                     file.exists(file.path(tmppath, filename))) {
