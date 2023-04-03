@@ -251,13 +251,13 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP", #ok
-        # "EROS", #ok
-        # "GRSD", #ok
-        "J2000"
+        "CTRIP", #ok
+        "EROS", #ok
+        "GRSD", #ok
+        "J2000",
         # "SIM2",
         # "MORDOR-SD"
-        # "MORDOR-TS" #ok
+        "MORDOR-TS" #ok
         # "ORCHIDEE"
         # "SMASH"
     )
@@ -267,9 +267,9 @@ codes_to_use =
     # ''
     c(
         # 'all'
-        # 'K2981910', #ref
-        "^V",
-        "^K"
+        'K2981910' #ref
+        # "^V",
+        # "^K"
         # 'K1363010'
         # 'V0144010',
         # 'K1341810'
