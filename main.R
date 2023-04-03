@@ -790,13 +790,13 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 }
                 if (any(sapply(analyse_data, check_simplify))) {
                     file_test = c(file_test,
-                                  paste0("dataEXind_",
+                                  paste0("dataEX_",
                                          subset_name, ".fst"))
                 }
-                if (any(!sapply(analyse_data, check_simplify))) {
-                    file_test = c(file_test,
-                                  paste0("dataEXserie_", subset_name))
-                }
+                # if (any(!sapply(analyse_data, check_simplify))) {
+                #     file_test = c(file_test,
+                #                   paste0("dataEXserie_", subset_name))
+                # }
                 post(paste0(i, "/", nSubsets,
                             " chunks of stations in analyse so ",
                             round(i/nSubsets*100, 1), "% done"))
