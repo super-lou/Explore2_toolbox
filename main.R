@@ -242,8 +242,8 @@ nCode4RAM = 25
 
 projs_to_use =
     c(
-        'all'
-        # "MPI-ESM-LR.*historical.*REMO"
+        # 'all'
+        "MPI-ESM-LR.*historical.*REMO"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "CNRM.*rcp85.*ALADIN63"
@@ -251,13 +251,13 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP", #ok
-        "EROS", #ok
-        "GRSD", #ok
-        # "J2000"
+        # "CTRIP", #ok
+        # "EROS", #ok
+        # "GRSD", #ok
+        "J2000"
         # "SIM2",
         # "MORDOR-SD"
-        "MORDOR-TS" #ok
+        # "MORDOR-TS" #ok
         # "ORCHIDEE"
         # "SMASH"
     )
@@ -266,10 +266,10 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
+        # 'all'
         # 'K2981910', #ref
-        # "^V",
-        # "^K"
+        "^V",
+        "^K"
         # 'K1363010'
         # 'V0144010',
         # 'K1341810'
