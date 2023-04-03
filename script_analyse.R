@@ -81,8 +81,6 @@ CARD_analyse_data = function () {
                                    dplyr::everything())
             
         } else {
-            post(dataEX)
-            post(length(dataEX))
             for (j in 1:length(dataEX)) {
                 dataEX[[j]] = tidyr::separate(dataEX[[j]],
                                               col="ID",
