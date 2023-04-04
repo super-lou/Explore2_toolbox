@@ -803,6 +803,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
+                    Create_ok = c(Create_ok, TRUE)
                     next
                 }
                 
@@ -815,17 +816,14 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 if ('create_data' %in% to_do) {
                     source(file.path(lib_path, 'script_create.R'),
                            encoding='UTF-8')
-                } else {
-                    create_ok = TRUE
-                }
-                Create_ok = c(Create_ok, create_ok)
-                
+                }                
                 if (create_ok) {
                     if ('analyse_data' %in% to_do) {
                         source(file.path(lib_path, 'script_analyse.R'),
                                encoding='UTF-8')
                     }
                 }
+                Create_ok = c(Create_ok, create_ok)
                 print("")
             }
 
