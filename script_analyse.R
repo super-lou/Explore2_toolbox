@@ -21,6 +21,19 @@
 
 
 CARD_analyse_data = function () {
+
+    file_test = file.path(tmppath, paste0("data_", subset_name, ".fst"))
+    if (!file.exists(file_test)) {
+        post(paste0("Waiting for ", file_test))
+        start_time = Sys.time()
+        while (!file.exists(file_test) | Sys.time()-start_time < 60) {
+            Sys.sleep(1)
+        }
+        if (Sys.time()-start_time > 60) {
+            post(paste0("Problem with file reading for ", file_test))
+        }
+    }
+    
     data = read_tibble(filedir=tmppath,
                        filename=paste0("data_",
                                        subset_name,
@@ -98,64 +111,6 @@ CARD_analyse_data = function () {
                      filename=paste0("metaEX_", CARD_var, ".fst"))
     }
 }
-
-
-
-
-# analyse_data_serie = function () {
-#     data = read_tibble(filedir=tmppath,
-#                        filename=paste0("data_",
-#                                        subset_name,
-#                                        ".fst"))
-#     meta = read_tibble(filedir=tmppath,
-#                        filename=paste0("meta_",
-#                                        subset_name,
-#                                        ".fst"))
-
-#     Model = levels(factor(data$Model))
-#     nModel = length(Model)
-    
-#     Code_available = levels(factor(data$Code))
-#     Code = Code_available[Code_available %in% CodeSUB10]
-#     nCode = length(Code)
-
-#     ID_colnames = names(dplyr::select(data, where(is.character)))    
-#     data = tidyr::unite(data, "ID", where(is.character), sep="_")
-
-#     if (mode == "proj") {
-#         variable_names = c(Q="Q_sim")
-#     } else {
-#         variable_names = NULL
-#     }
-
-#     CARD_dir = analyse_data[!sapply(analyse_data, check_simplify)][1] ###
-    
-#     res = CARD_extraction(data,
-#                           CARD_path=CARD_path,
-#                           CARD_dir=CARD_dir,
-#                           period=period_analyse,
-#                           simplify_by=NULL,
-#                           no_lim=no_lim,
-#                           variable_names=variable_names,
-#                           verbose=subverbose)
-
-#     dataEXserie = res$dataEX
-#     metaEXserie = res$metaEX
-
-#     for (i in 1:length(dataEXserie)) {
-#         dataEXserie[[i]] = tidyr::separate(dataEXserie[[i]],
-#                                            col="ID",
-#                                            into=ID_colnames,
-#                                            sep="_")
-#     }
-    
-#     write_tibble(dataEXserie,
-#                  filedir=tmppath,
-#                  filename=paste0("dataEXserie_", subset_name, ".fst"))
-#     write_tibble(metaEXserie,
-#                  filedir=tmppath,
-#                  filename="metaEXserie.fst")
-# }
 
 
 ## 1. ANALYSING OF DATA ______________________________________________

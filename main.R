@@ -819,6 +819,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 }                
                 if (create_ok) {
                     if ('analyse_data' %in% to_do) {
+                        Sys.sleep(5)
                         source(file.path(lib_path, 'script_analyse.R'),
                                encoding='UTF-8')
                     }
