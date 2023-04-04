@@ -150,8 +150,8 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        # 'create_data',
-        # 'analyse_data'
+        'create_data',
+        'analyse_data',
         'save_analyse'
         # 'read_tmp'
         # 'read_saving'
@@ -266,8 +266,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "^V",
         # "^K"
         # 'K1363010'
