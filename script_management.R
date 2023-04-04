@@ -88,10 +88,9 @@ if (!read_tmp & !delete_tmp) {
                 CARD_dir = analyse_data[[ii]][1]
                 simplify = as.logical(analyse_data[[ii]]["simplify"])
                 CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
-
-                post(CARD_var)
                 
                 filename = paste0("metaEX_", CARD_var, ".fst")
+                post(filename)
                 # file_test = file.path(tmppath, filename)
                 # if (!file.exists(file_test)) {
                 #     post(paste0("Waiting for ", file_test))
@@ -122,7 +121,7 @@ if (!read_tmp & !delete_tmp) {
                     dirname = paste0("dataEX_", CARD_var, "_",
                                      subset_name)
                     filename = paste0(dirname, ".fst")
-                    
+                    post(filename)
                     # file_test = c(file.path(tmppath, dirname),
                     #               file.path(tmppath, filename))
                     # if (!any(file.exists(file_test))) {
