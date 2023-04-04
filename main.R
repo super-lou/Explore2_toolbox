@@ -246,7 +246,7 @@ projs_to_use =
         # "MPI-ESM-LR.*historical.*REMO"
         # "ALADIN.*ADAMONT"
         # "rcp45"
-        # "CNRM.*rcp85.*ALADIN63"
+        # "EC-EARTH.*rcp85.*RCA4.*CDFt"
     )
 
 models_to_use =
@@ -324,7 +324,9 @@ saving_format =
     ""
     # c('Rdata', 'txt')
 
-wait = 5
+wait =
+    NULL
+    # 1
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving = "2023_04_03/"
@@ -769,6 +771,14 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             files_name = Files_name[[k]]
             if (by_files | MPI == "file") {
                 files_name_opt = gsub("[|]", "_", files_name[1]) #####
+                files_name_opt. = paste0(files_name_opt, "_")
+                .files_name_opt. = paste0("_", files_name_opt, "_")
+                .files_name_opt = paste0("_", files_name_opt)
+            } else {
+                files_name_opt = ""
+                files_name_opt. = ""
+                .files_name_opt. = ""
+                .files_name_opt = ""
             }
             
             Create_ok = c()
@@ -776,28 +786,24 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             for (i in 1:nSubsets) {
                 subset = Subsets[[i]]
                 subset_name = names(Subsets)[i]
-                if (by_files | MPI == "file") {
-                    subset_name = paste0(files_name_opt,
-                                         "_", subset_name)
-                }
 
-                post(paste0("For subset ", subset_name, ": ",
+                post(paste0("For subset ", files_name_opt.,
+                            subset_name, ": ",
                             paste0(subset, collapse=" -> ")))
                 
                 file_test = c()
                 if ('create_data' %in% to_do) {
                     file_test = c(file_test,
-                                  paste0("data_", subset_name, ".fst"))
+                                  paste0("data_",
+                                         files_name_opt.,
+                                         subset_name, ".fst"))
                 }
                 if (any(sapply(analyse_data, check_simplify))) {
                     file_test = c(file_test,
                                   paste0("dataEX_",
+                                         files_name_opt.,
                                          subset_name, ".fst"))
                 }
-                # if (any(!sapply(analyse_data, check_simplify))) {
-                #     file_test = c(file_test,
-                #                   paste0("dataEXserie_", subset_name))
-                # }
                 post(paste0(i, "/", nSubsets,
                             " chunks of stations in analyse so ",
                             round(i/nSubsets*100, 1), "% done"))

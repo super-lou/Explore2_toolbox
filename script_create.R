@@ -223,10 +223,14 @@ create_data = function () {
         
         write_tibble(data,
                      filedir=tmppath,
-                     filename=paste0("data_", subset_name, ".fst"))
+                     filename=paste0("data_",
+                                     files_name_opt.,
+                                     subset_name, ".fst"))
         write_tibble(meta,
                      filedir=tmppath,
-                     filename=paste0("meta_", subset_name, ".fst"))
+                     filename=paste0("meta_",
+                                     files_name_opt.,
+                                     subset_name, ".fst"))
         if (!is.null(wait)) {
             Sys.sleep(wait)
         }

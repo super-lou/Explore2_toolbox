@@ -89,36 +89,25 @@ if (!read_tmp & !delete_tmp) {
                 simplify = as.logical(analyse_data[[ii]]["simplify"])
                 CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
                 
-                filename = paste0("metaEX_", CARD_var, ".fst")
-                post(filename)
-                # file_test = file.path(tmppath, filename)
-                # if (!file.exists(file_test)) {
-                #     post(paste0("Waiting for ", file_test))
-                #     start_time = Sys.time()
-                #     while (!file.exists(file_test) |
-                #            Sys.time()-start_time < 60) {
-                #         Sys.sleep(1)
-                #     }
-                #     if (Sys.time()-start_time > 60) {
-                #         post(paste0("Problem with file reading for ",
-                #                     file_test))
-                #     }
-                # }                
-                if (file.exists(file.path(tmppath, filename))) {
-                    metaEX = read_tibble(filedir=tmppath,
-                                         filename=filename)
-                }
-                
                 if (exists("dataEX")) {
                     rm ("dataEX")
                 }
                 for (jj in 1:nSubsets) {
                     subset_name = names(Subsets)[jj]
-                    if (by_files | MPI == "file") {
-                        subset_name = paste0(files_name_opt,
-                                             "_", subset_name)
+
+                    if (jj == 1) {
+                        filename = paste0("metaEX_", CARD_var, "_",
+                                          files_name_opt.,
+                                          subset_name, ".fst")
+                        post(filename)
+                        if (file.exists(file.path(tmppath, filename))) {
+                            metaEX = read_tibble(filedir=tmppath,
+                                                 filename=filename)
+                        }
                     }
+                    
                     dirname = paste0("dataEX_", CARD_var, "_",
+                                     files_name_opt.,
                                      subset_name)
                     filename = paste0(dirname, ".fst")
                     post(filename)
@@ -222,14 +211,16 @@ if (!read_tmp & !delete_tmp) {
                         }
                     }
                 }
-                
+
                 write_tibble(dataEX,
                              filedir=tmppath,
                              filename=paste0("dataEX_", CARD_var,
+                                             .files_name_opt,
                                              ".fst"))
                 write_tibble(metaEX,
                              filedir=tmppath,
                              filename=paste0("metaEX_", CARD_var,
+                                             .files_name_opt,
                                              ".fst"))
                 if (!is.null(wait)) {
                     post("Waiting for writting of extracted data")
@@ -298,8 +289,9 @@ if (!read_tmp & !delete_tmp) {
                 CARD_dir = analyse_data[[ii]][1]
                 simplify = as.logical(analyse_data[[ii]]["simplify"])
                 CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
-
-                dirname = paste0("dataEX_", CARD_var)
+                
+                dirname = paste0("dataEX_", CARD_var,
+                                 .files_name_opt)
                 filename = paste0(dirname, ".fst")
                 # file_test = c(file.path(tmppath, dirname),
                 #               file.path(tmppath, filename))
@@ -320,15 +312,19 @@ if (!read_tmp & !delete_tmp) {
 
                     if ("metaEX" %in% var2save) {
                         metaEX = read_tibble(filedir=tmppath,
-                                             filename=paste0("metaEX_",
-                                                             CARD_var,
-                                                             ".fst"))
+                                             filename=paste0(
+                                                 "metaEX_",
+                                                 CARD_var,
+                                                 .files_name_opt,
+                                                 ".fst"))
                     }
                     if ("dataEX" %in% var2save) {
                         dataEX = read_tibble(filedir=tmppath,
-                                             filename=paste0("dataEX_",
-                                                             CARD_var,
-                                                             ".fst"))
+                                             filename=paste0(
+                                                 "dataEX_",
+                                                 CARD_var,
+                                                 .files_name_opt,
+                                                 ".fst"))
                     }
                 } else {
                     next
@@ -337,18 +333,21 @@ if (!read_tmp & !delete_tmp) {
                 if ("dataEX" %in% var2save) {
                     write_tibble(dataEX,
                                  filedir=today_resdir_tmp,
-                                 filename=paste0("dataEX_", CARD_var,
+                                 filename=paste0("dataEX_",
+                                                 CARD_var,
                                                  ".fst"))
                     if ("Rdata" %in% saving_format) {
                         write_tibble(dataEX,
                                      filedir=today_resdir_tmp,
-                                     filename=paste0("dataEX_", CARD_var,
+                                     filename=paste0("dataEX_",
+                                                     CARD_var,
                                                      ".Rdata"))
                     }
                     if ("txt" %in% saving_format) {
                         write_tibble(dataEX,
                                      filedir=today_resdir_tmp,
-                                     filename=paste0("dataEX_", CARD_var,
+                                     filename=paste0("dataEX_",
+                                                     CARD_var,
                                                      ".txt"))
                     }
                     if (!is.null(wait)) {
@@ -360,18 +359,21 @@ if (!read_tmp & !delete_tmp) {
                 if ("metaEX" %in% var2save) {
                     write_tibble(metaEX,
                                  filedir=today_resdir_tmp,
-                                 filename=paste0("metaEX_", CARD_var,
+                                 filename=paste0("metaEX_",
+                                                 CARD_var,
                                                  ".fst"))
                     if ("Rdata" %in% saving_format) {
                         write_tibble(metaEX,
                                      filedir=today_resdir_tmp,
-                                     filename=paste0("metaEX_", CARD_var,
+                                     filename=paste0("metaEX_",
+                                                     CARD_var,
                                                      ".Rdata"))
                     }
                     if ("txt" %in% saving_format) {
                         write_tibble(metaEX,
                                      filedir=today_resdir_tmp,
-                                     filename=paste0("metaEX_", CARD_var,
+                                     filename=paste0("metaEX_",
+                                                     CARD_var,
                                                      ".txt"))
                     }
                     if (!is.null(wait)) {

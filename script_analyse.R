@@ -36,12 +36,12 @@ CARD_analyse_data = function () {
     
     data = read_tibble(filedir=tmppath,
                        filename=paste0("data_",
-                                       subset_name,
-                                       ".fst"))
+                                       files_name_opt.,
+                                       subset_name, ".fst"))
     meta = read_tibble(filedir=tmppath,
                        filename=paste0("meta_",
-                                       subset_name,
-                                       ".fst"))
+                                       files_name_opt.,
+                                       subset_name, ".fst"))
 
     Model = levels(factor(data$Model))
     nModel = length(Model)
@@ -104,11 +104,14 @@ CARD_analyse_data = function () {
 
         write_tibble(dataEX,
                      filedir=tmppath,
-                     filename=paste0("dataEX_", CARD_var,
-                                     "_", subset_name, ".fst"))
+                     filename=paste0("dataEX_", CARD_var, "_",
+                                     files_name_opt.,
+                                     subset_name, ".fst"))
         write_tibble(metaEX,
                      filedir=tmppath,
-                     filename=paste0("metaEX_", CARD_var, ".fst"))
+                     filename=paste0("metaEX_", CARD_var, "_",
+                                     files_name_opt.,
+                                     subset_name, ".fst"))
         if (!is.null(wait)) {
             Sys.sleep(wait)
         }
@@ -119,10 +122,10 @@ CARD_analyse_data = function () {
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
 
-    test_path = file.path(tmppath,
-                          paste0("data_", subset_name, ".fst"))
+    # test_path = file.path(tmppath,
+                          # paste0("data_", subset_name, ".fst"))
 
-    if (file.exists(test_path)) {
+    # if (file.exists(test_path)) {
         # if (any(sapply(analyse_data, check_simplify))) {
         post("### Analysing data")
         CARD_analyse_data()
@@ -132,5 +135,5 @@ if ('analyse_data' %in% to_do) {
         # post("### Analysing data for time series extraction")
         # analyse_data_serie()
         # }
-    }
+    # }
 }
