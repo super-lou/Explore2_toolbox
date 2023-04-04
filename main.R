@@ -324,6 +324,7 @@ saving_format =
     ""
     # c('Rdata', 'txt')
 
+wait = 1
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving = "2023_04_03/"

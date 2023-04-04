@@ -227,6 +227,10 @@ create_data = function () {
         write_tibble(meta,
                      filedir=tmppath,
                      filename=paste0("meta_", subset_name, ".fst"))
+        if (!is.null(wait)) {
+            Sys.sleep(wait)
+        }
+        
         res = TRUE
         
     } else {

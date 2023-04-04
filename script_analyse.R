@@ -22,17 +22,17 @@
 
 CARD_analyse_data = function () {
 
-    file_test = file.path(tmppath, paste0("data_", subset_name, ".fst"))
-    if (!file.exists(file_test)) {
-        post(paste0("Waiting for ", file_test))
-        start_time = Sys.time()
-        while (!file.exists(file_test) | Sys.time()-start_time < 60) {
-            Sys.sleep(1)
-        }
-        if (Sys.time()-start_time > 60) {
-            post(paste0("Problem with file reading for ", file_test))
-        }
-    }
+    # file_test = file.path(tmppath, paste0("data_", subset_name, ".fst"))
+    # if (!file.exists(file_test)) {
+    #     post(paste0("Waiting for ", file_test))
+    #     start_time = Sys.time()
+    #     while (!file.exists(file_test) | Sys.time()-start_time < 60) {
+    #         Sys.sleep(1)
+    #     }
+    #     if (Sys.time()-start_time > 60) {
+    #         post(paste0("Problem with file reading for ", file_test))
+    #     }
+    # }
     
     data = read_tibble(filedir=tmppath,
                        filename=paste0("data_",
@@ -109,6 +109,9 @@ CARD_analyse_data = function () {
         write_tibble(metaEX,
                      filedir=tmppath,
                      filename=paste0("metaEX_", CARD_var, ".fst"))
+        if (!is.null(wait)) {
+            Sys.sleep(wait)
+        }
     }
 }
 

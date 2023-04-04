@@ -54,21 +54,20 @@ if (!read_tmp & !delete_tmp) {
                 }
                 filename = paste0("meta_", subset_name, ".fst")
 
-                file_test = file.path(tmppath, filename)
-                if (!file.exists(file_test)) {
-                    post(paste0("Waiting for ", file_test))
-                    start_time = Sys.time()
-                    while (!file.exists(file_test) |
-                           Sys.time()-start_time < 60) {
-                        Sys.sleep(1)
-                    }
-                    if (Sys.time()-start_time > 60) {
-                        post(paste0("Problem with file reading for ",
-                                    file_test))
-                    }
-                }
-                
-                if (file.exists(file_test)) {
+                # file_test = file.path(tmppath, filename)
+                # if (!file.exists(file_test)) {
+                #     post(paste0("Waiting for ", file_test))
+                #     start_time = Sys.time()
+                #     while (!file.exists(file_test) |
+                #            Sys.time()-start_time < 60) {
+                #         Sys.sleep(1)
+                #     }
+                #     if (Sys.time()-start_time > 60) {
+                #         post(paste0("Problem with file reading for ",
+                #                     file_test))
+                #     }
+                # }
+                if (file.exists(file.path(tmppath, filename))) {
                     meta_tmp = read_tibble(filedir=tmppath,
                                            filename=filename)
                     if (!exists("meta")) {
@@ -93,21 +92,19 @@ if (!read_tmp & !delete_tmp) {
                 post(CARD_var)
                 
                 filename = paste0("metaEX_", CARD_var, ".fst")
-
-                file_test = file.path(tmppath, filename)
-                if (!file.exists(file_test)) {
-                    post(paste0("Waiting for ", file_test))
-                    start_time = Sys.time()
-                    while (!file.exists(file_test) |
-                           Sys.time()-start_time < 60) {
-                        Sys.sleep(1)
-                    }
-                    if (Sys.time()-start_time > 60) {
-                        post(paste0("Problem with file reading for ",
-                                    file_test))
-                    }
-                }
-                
+                # file_test = file.path(tmppath, filename)
+                # if (!file.exists(file_test)) {
+                #     post(paste0("Waiting for ", file_test))
+                #     start_time = Sys.time()
+                #     while (!file.exists(file_test) |
+                #            Sys.time()-start_time < 60) {
+                #         Sys.sleep(1)
+                #     }
+                #     if (Sys.time()-start_time > 60) {
+                #         post(paste0("Problem with file reading for ",
+                #                     file_test))
+                #     }
+                # }                
                 if (file.exists(file.path(tmppath, filename))) {
                     metaEX = read_tibble(filedir=tmppath,
                                          filename=filename)
@@ -126,21 +123,20 @@ if (!read_tmp & !delete_tmp) {
                                      subset_name)
                     filename = paste0(dirname, ".fst")
                     
-                    file_test = c(file.path(tmppath, dirname),
-                                  file.path(tmppath, filename))
-                    if (!any(file.exists(file_test))) {
-                        post(paste0("Waiting for ", file_test))
-                        start_time = Sys.time()
-                        while (!any(file.exists(file_test)) |
-                               Sys.time()-start_time < 60) {
-                                   Sys.sleep(1)
-                               }
-                        if (Sys.time()-start_time > 60) {
-                            post(paste0("Problem with file reading for ",
-                                        file_test))
-                        }
-                    }
-                    
+                    # file_test = c(file.path(tmppath, dirname),
+                    #               file.path(tmppath, filename))
+                    # if (!any(file.exists(file_test))) {
+                    #     post(paste0("Waiting for ", file_test))
+                    #     start_time = Sys.time()
+                    #     while (!any(file.exists(file_test)) |
+                    #            Sys.time()-start_time < 60) {
+                    #                Sys.sleep(1)
+                    #            }
+                    #     if (Sys.time()-start_time > 60) {
+                    #         post(paste0("Problem with file reading for ",
+                    #                     file_test))
+                    #     }
+                    # }
                     if (file.exists(file.path(tmppath, dirname)) |
                         file.exists(file.path(tmppath, filename))) {
                         dataEX_tmp = read_tibble(filedir=tmppath,
@@ -236,6 +232,9 @@ if (!read_tmp & !delete_tmp) {
                              filedir=tmppath,
                              filename=paste0("metaEX_", CARD_var,
                                              ".fst"))
+                if (!is.null(wait)) {
+                    Sys.sleep(wait)
+                }
             }
         }
 
@@ -288,6 +287,9 @@ if (!read_tmp & !delete_tmp) {
                                  filedir=today_resdir_tmp,
                                  filename=paste0("meta.txt"))
                 }
+                if (!is.null(wait)) {
+                    Sys.sleep(wait)
+                }
             }
 
             for (ii in 1:length(analyse_data)) {
@@ -298,22 +300,20 @@ if (!read_tmp & !delete_tmp) {
 
                 dirname = paste0("dataEX_", CARD_var)
                 filename = paste0(dirname, ".fst")
-
-                file_test = c(file.path(tmppath, dirname),
-                              file.path(tmppath, filename))
-                if (!any(file.exists(file_test))) {
-                    post(paste0("Waiting for ", file_test))
-                    start_time = Sys.time()
-                    while (!any(file.exists(file_test)) |
-                           Sys.time()-start_time < 60) {
-                               Sys.sleep(1)
-                           }
-                    if (Sys.time()-start_time > 60) {
-                        post(paste0("Problem with file reading for ",
-                                    file_test))
-                    }
-                }
-                
+                # file_test = c(file.path(tmppath, dirname),
+                #               file.path(tmppath, filename))
+                # if (!any(file.exists(file_test))) {
+                #     post(paste0("Waiting for ", file_test))
+                #     start_time = Sys.time()
+                #     while (!any(file.exists(file_test)) |
+                #            Sys.time()-start_time < 60) {
+                #                Sys.sleep(1)
+                #            }
+                #     if (Sys.time()-start_time > 60) {
+                #         post(paste0("Problem with file reading for ",
+                #                     file_test))
+                #     }
+                # }
                 if (file.exists(file.path(tmppath, dirname)) |
                     file.exists(file.path(tmppath, filename))) {
 
@@ -350,6 +350,9 @@ if (!read_tmp & !delete_tmp) {
                                      filename=paste0("dataEX_", CARD_var,
                                                      ".txt"))
                     }
+                    if (!is.null(wait)) {
+                        Sys.sleep(wait)
+                    }
                 }
                 
                 if ("metaEX" %in% var2save) {
@@ -368,6 +371,9 @@ if (!read_tmp & !delete_tmp) {
                                      filedir=today_resdir_tmp,
                                      filename=paste0("metaEX_", CARD_var,
                                                      ".txt"))
+                    }
+                    if (!is.null(wait)) {
+                        Sys.sleep(wait)
                     }
                 }
             }
