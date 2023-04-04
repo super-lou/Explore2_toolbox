@@ -150,9 +150,9 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        # 'create_data',
-        # 'analyse_data'
-        'save_analyse'
+        'create_data',
+        'analyse_data'
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -251,13 +251,13 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP" #ok
-        # "EROS", #ok
-        # "GRSD", #ok
-        # "J2000"
+        # "CTRIP" #ok
+        "EROS", #~ok
+        "GRSD" #~ok
+        # "J2000" #~ok
         # "SIM2",
         # "MORDOR-SD"
-        # "MORDOR-TS" #ok
+        # "MORDOR-TS" #~ok
         # "ORCHIDEE"
         # "SMASH"
     )
