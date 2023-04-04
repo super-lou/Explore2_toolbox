@@ -233,6 +233,7 @@ if (!read_tmp & !delete_tmp) {
                              filename=paste0("metaEX_", CARD_var,
                                              ".fst"))
                 if (!is.null(wait)) {
+                    post("Waiting for writting of extracted data")
                     Sys.sleep(wait)
                 }
             }
@@ -288,6 +289,7 @@ if (!read_tmp & !delete_tmp) {
                                  filename=paste0("meta.txt"))
                 }
                 if (!is.null(wait)) {
+                    post("Waiting for saving of meta data")
                     Sys.sleep(wait)
                 }
             }
@@ -351,6 +353,7 @@ if (!read_tmp & !delete_tmp) {
                                                      ".txt"))
                     }
                     if (!is.null(wait)) {
+                        post("Waiting for saving of extracted data")
                         Sys.sleep(wait)
                     }
                 }
@@ -373,6 +376,7 @@ if (!read_tmp & !delete_tmp) {
                                                      ".txt"))
                     }
                     if (!is.null(wait)) {
+                        post("Waiting for saving of extracted meta data")
                         Sys.sleep(wait)
                     }
                 }
