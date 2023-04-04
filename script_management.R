@@ -89,13 +89,16 @@ if (!read_tmp & !delete_tmp) {
                 simplify = as.logical(analyse_data[[ii]]["simplify"])
                 CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
                 
+                if (exists("metaEX")) {
+                    rm ("metaEX")
+                }
                 if (exists("dataEX")) {
                     rm ("dataEX")
                 }
                 for (jj in 1:nSubsets) {
                     subset_name = names(Subsets)[jj]
 
-                    if (jj == 1) {
+                    if (!exists("metaEX")) {
                         filename = paste0("metaEX_", CARD_var, "_",
                                           files_name_opt.,
                                           subset_name, ".fst")
@@ -111,20 +114,6 @@ if (!read_tmp & !delete_tmp) {
                                      subset_name)
                     filename = paste0(dirname, ".fst")
                     post(filename)
-                    # file_test = c(file.path(tmppath, dirname),
-                    #               file.path(tmppath, filename))
-                    # if (!any(file.exists(file_test))) {
-                    #     post(paste0("Waiting for ", file_test))
-                    #     start_time = Sys.time()
-                    #     while (!any(file.exists(file_test)) |
-                    #            Sys.time()-start_time < 60) {
-                    #                Sys.sleep(1)
-                    #            }
-                    #     if (Sys.time()-start_time > 60) {
-                    #         post(paste0("Problem with file reading for ",
-                    #                     file_test))
-                    #     }
-                    # }
                     if (file.exists(file.path(tmppath, dirname)) |
                         file.exists(file.path(tmppath, filename))) {
                         dataEX_tmp = read_tibble(filedir=tmppath,
