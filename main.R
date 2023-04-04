@@ -251,8 +251,8 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP" #ok
-        "EROS" #~ok
+        "CTRIP" #ok
+        # "EROS" #~ok
         # "GRSD" #~ok
         # "J2000" #~ok
         # "SIM2",
@@ -266,8 +266,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "^V",
         # "^K"
         # 'K1363010'
