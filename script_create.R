@@ -55,10 +55,6 @@ create_data = function () {
                                                 mode=mode)
                 }
 
-                if (mode == "diag") { ###
-                    data_tmp = convert_diag_data(chain, data_tmp)
-                }
-
                 if (is.null(data_tmp)) {
                     next
                 }

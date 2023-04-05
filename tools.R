@@ -165,11 +165,23 @@ NetCDF_to_tibble = function (NetCDF_path,
         
     } else if (mode == "proj") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
-        if (any(nchar(CodeRaw) == 8)) {
-            CodeRaw =
-                codes10_selection[match(CodeRaw,
-                                        codes8_selection)]
-        }
+
+        ###
+        CodeRaw[nchar(CodeRaw) > 10] =
+            substr(CodeRaw[nchar(CodeRaw) > 10], 1, 10)
+        CodeRaw[nchar(CodeRaw) < 10] =
+            gsub(" ", "0",
+                 formatC(CodeRaw[nchar(CodeRaw) < 10],
+                         width=10, flag="-"))
+        ###
+
+        # if (any(nchar(CodeRaw) == 8)) {
+        #     CodeRaw[nchar(CodeRaw) == 8] =
+        #         codes10_selection[match(CodeRaw[nchar(CodeRaw) == 8],
+        #                                 codes8_selection)]
+        # }
+
+        
         CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
         CodeOrder = order(CodeRawSUB10)
         Code = CodeRawSUB10[CodeOrder]
@@ -212,20 +224,6 @@ NetCDF_to_tibble = function (NetCDF_path,
     
     return (data)
 }
-
-
-convert_diag_data = function (model, data) {
-
-    if (model == "MORDOR-SD") {
-        data$Date = as.Date(data$Date)
-        names(data) = c("Code", "Date", "Q_sim",
-                        "Pl", "Ps", "T", "ET0")
-        data$P = data$Pl + data$Ps
-    }
-    return (data)
-}
-
-
 
 
 
