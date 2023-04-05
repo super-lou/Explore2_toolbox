@@ -247,6 +247,7 @@ projs_to_use =
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"
+        # "NorESM1-M.*historical.*REMO.*ADAMONT.*MORDOR-TS"
     )
 
 models_to_use =
@@ -268,6 +269,7 @@ codes_to_use =
     c(
         'all'
         # 'K2981910' #ref
+        # "K221083001"
         # "^V",
         # "^K"
         # 'K1363010'
@@ -653,9 +655,14 @@ if (all(codes_to_use == "all")) {
     CodeALL8 = codes8_selection
     CodeALL10 = codes10_selection
 } else {
+    codes_to_use[nchar(codes_to_use) == 10] =
+        codes8_selection[codes10_selection %in%
+                         codes_to_use[nchar(codes_to_use) == 10]]
+    
     codes_to_use = convert_regexp(computer_data_path,
                                   obs_dir,
                                   codes_to_use)
+    
     okCode = codes_to_use %in% codes8_selection
     CodeALL8 = codes_to_use[okCode]
     CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
@@ -798,7 +805,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                                          files_name_opt.,
                                          subset_name, ".fst"))
                 }
-                if (any(sapply(analyse_data, check_simplify))) {
+                if ('analyse_data' %in% to_do) {
                     file_test = c(file_test,
                                   paste0("dataEX_",
                                          files_name_opt.,
