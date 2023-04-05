@@ -3,20 +3,20 @@
 #
 # *1   INRAE, France
 #
-# This file is part of Ex2D_toolbox R toolbox.
+# This file is part of Explore2 R toolbox.
 #
-# Ex2D_toolbox R toolbox is free software: you can redistribute it and/or
+# Explore2 R toolbox is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
 #
-# Ex2D_toolbox R toolbox is distributed in the hope that it will be useful, but
+# Explore2 R toolbox is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Ex2D_toolbox R toolbox.OCOC
+# along with Explore2 R toolbox.
 # If not, see <https://www.gnu.org/licenses/>.
 
 
@@ -254,12 +254,12 @@ models_to_use =
         # "CTRIP" #ok
         # "EROS" #ok
         # "GRSD" #ok
-        "J2000" #ok
+        # "J2000" #ok
         # "SIM2"
         # "MORDOR-SD" #~ok problème format
         # "MORDOR-TS" #~ok problème format
         # "ORCHIDEE"  
-        # "SMASH" #~ok à faire
+        "SMASH" #~ok à faire
     )
 complete_by = "SMASH"
 
