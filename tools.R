@@ -26,8 +26,12 @@ NetCDF_to_tibble = function (NetCDF_path,
     NCdata = ncdf4::nc_open(NetCDF_path)
 
     # print(NCdata)
+    Date = ncdf4::ncvar_get(NCdata, "time")
+    if (Date[2] - Date[1] == 86400) {
+        Date = Date/86400
+    }
     
-    Date = as.Date(ncdf4::ncvar_get(NCdata, "time"),
+    Date = as.Date(Date,
                    origin=
                        as.Date(str_extract(
                            ncdf4::ncatt_get(NCdata,
@@ -181,7 +185,6 @@ NetCDF_to_tibble = function (NetCDF_path,
         #                                 codes8_selection)]
         # }
 
-        
         CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
         CodeOrder = order(CodeRawSUB10)
         Code = CodeRawSUB10[CodeOrder]
@@ -202,6 +205,7 @@ NetCDF_to_tibble = function (NetCDF_path,
         Q_sim = Q_sim[station,,drop=FALSE]
         Q_sim = Q_sim[CodeOrder,,drop=FALSE]
         Q_sim = c(t(Q_sim))
+
 
         # S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
         #                      start=start,

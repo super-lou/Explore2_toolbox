@@ -243,7 +243,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
-        # "MPI-ESM-LR.*historical.*REMO"
+        # "MPI-ESM-LR.*historical.*REMO.*ADAMONT"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"
@@ -276,7 +276,7 @@ codes_to_use =
         # 'V0144010',
         # 'K1341810'
         # "M0014110",
-        # "M0050620"
+        # "^A"
     )
 
 
@@ -661,7 +661,8 @@ if (all(codes_to_use == "all")) {
     
     codes_to_use = convert_regexp(computer_data_path,
                                   obs_dir,
-                                  codes_to_use)
+                                  codes_to_use,
+                                  obs_format)
     
     okCode = codes_to_use %in% codes8_selection
     CodeALL8 = codes_to_use[okCode]
