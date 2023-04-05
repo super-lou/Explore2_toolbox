@@ -254,12 +254,12 @@ models_to_use =
         # "CTRIP" #ok
         # "EROS" #ok
         # "GRSD" #ok
-        "J2000", #ok
-        # "SIM2",
+        "J2000" #ok
+        # "SIM2"
         # "MORDOR-SD" #~ok problème format
         # "MORDOR-TS" #~ok problème format
-        # "ORCHIDEE"
-        # "SMASH"
+        # "ORCHIDEE"  
+        # "SMASH" #~ok à faire
     )
 complete_by = "SMASH"
 
