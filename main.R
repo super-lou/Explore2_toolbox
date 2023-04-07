@@ -244,7 +244,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
-        # "MPI-ESM-LR.*historical.*REMO.*ADAMONT"
+        # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"

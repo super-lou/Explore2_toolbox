@@ -215,18 +215,15 @@ NetCDF_to_tibble = function (NetCDF_path,
 
         ncdf4::nc_close(NCdata)
 
-        if (all(is.nan(Q_sim)) | all(is.na(Q_sim))) {
-            data = NULL
-        } else {
-            data = dplyr::tibble(Code=rep(Code, each=nDate),
-                                 Date=rep(Date, times=nCode),
-                                 Q_sim=Q_sim)
-            IDvalue = unlist(strsplit(chain, "[|]"))
-            IDname = c("GCM", "EXP", "RCM", "BC", "Model")
-            ID = dplyr::tibble(!!!IDvalue)
-            names(ID) = IDname
-            data = dplyr::bind_cols(ID, data)
-        }
+        data = dplyr::tibble(Code=rep(Code, each=nDate),
+                             Date=rep(Date, times=nCode),
+                             Q_sim=Q_sim)
+        data = dplyr::filter(data, !is.nan(Q_sim))
+        IDvalue = unlist(strsplit(chain, "[|]"))
+        IDname = c("GCM", "EXP", "RCM", "BC", "Model")
+        ID = dplyr::tibble(!!!IDvalue)
+        names(ID) = IDname
+        data = dplyr::bind_cols(ID, data)
     }
     
     return (data)
