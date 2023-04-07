@@ -259,10 +259,10 @@ models_to_use =
         # "GRSD" #ok
         # "J2000" #ok
         # "SIM2"
-        # "MORDOR-SD" #~ok problème format
+        "MORDOR-SD" #~ok problème format
         # "MORDOR-TS" #~ok problème format
         # "ORCHIDEE"  
-        "SMASH" #~ok à faire
+        # "SMASH" #~ok à faire
     )
 complete_by = "SMASH"
 
