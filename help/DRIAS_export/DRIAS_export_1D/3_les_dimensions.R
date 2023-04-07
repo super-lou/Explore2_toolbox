@@ -98,7 +98,7 @@ pas_de_temps =
     # "hours"
     "days"
     # "3 weeks"
-    # "months"
+# "months"
 
 from = as.POSIXct(date_de_debut, tz=fuseau_horaire)
 to = as.POSIXct(date_de_fin, tz=fuseau_horaire)

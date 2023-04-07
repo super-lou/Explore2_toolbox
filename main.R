@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,11 +150,12 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        'create_data'
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving'
+        # 'bind_analyse'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -220,8 +221,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -247,7 +248,8 @@ projs_to_use =
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"
-        # "NorESM1-M.*historical.*REMO.*ADAMONT.*MORDOR-TS"
+        # "NorESM1-M.*historical.*REMO.*ADAMONT"
+        # "HadGEM2.*histo.*RegCM4.*CDFt"
     )
 
 models_to_use =
@@ -257,10 +259,10 @@ models_to_use =
         # "GRSD" #ok
         # "J2000" #ok
         # "SIM2"
-        # "MORDOR-SD" #~ok problème format
+        "MORDOR-SD" #~ok problème format
         # "MORDOR-TS" #~ok problème format
         # "ORCHIDEE"  
-        "SMASH" #~ok à faire
+        # "SMASH" #~ok à faire
     )
 complete_by = "SMASH"
 
@@ -302,6 +304,7 @@ analyse_data =
         # c('Explore2_diag/002_serie', simplify=FALSE),
         c('Explore2_proj/001_serie', simplify=FALSE),
         c('Explore2_proj/002_check', simplify=FALSE)
+        # c('Explore2_proj/003_delta', simplify=TRUE)    
     )
 
 no_lim = TRUE
@@ -331,15 +334,16 @@ wait =
     # 1
 
 ## 4. READ_SAVING ____________________________________________________
-read_saving = "2023_04_03/"
+read_saving = "ALL_proj/GRSD/"
 
 var2search =
     c(
         # 'meta',
         # 'data'
-        'dataEX'
+        # 'dataEX',
         # 'metaEX',
         # 'Warnings'
+        # paste0(projs_to_use, ".*QA[.]")
     )
 
 
@@ -792,6 +796,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             Create_ok = c()
             
             for (i in 1:nSubsets) {
+                # i = 4
                 subset = Subsets[[i]]
                 subset_name = names(Subsets)[i]
 

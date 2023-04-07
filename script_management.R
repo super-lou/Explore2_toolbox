@@ -383,13 +383,13 @@ if (!read_tmp & !delete_tmp) {
         post(paste0("Reading extracted data and metadata in ",
                      read_saving))
         Paths = list.files(file.path(resdir, read_saving),
-                           pattern=paste0("(",
-                                          paste0(var2search,
-                                                 collapse=")|("),
-                                          ")"),
                            include.dirs=TRUE,
                            recursive=TRUE,
                            full.names=TRUE)
+
+        pattern = paste0("(", paste0(var2search, collapse=")|("), ")")
+        Paths = Paths[grepl(pattern, Paths)]
+        
         Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
         Paths[!grepl("[.]", Paths)] = paste0(Paths[!grepl("[.]", Paths)], ".fst")
         Filenames = gsub("^.*[/]+", "", Paths)
