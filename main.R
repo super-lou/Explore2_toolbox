@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,9 +150,9 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'create_data'
-        # 'analyse_data',
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'bind_analyse'
@@ -259,10 +259,10 @@ models_to_use =
         # "GRSD" #ok
         # "J2000" #ok
         # "SIM2"
-        "MORDOR-SD" #~ok problème format
+        # "MORDOR-SD" #~ok problème format
         # "MORDOR-TS" #~ok problème format
         # "ORCHIDEE"  
-        # "SMASH" #~ok à faire
+        "SMASH" #~ok à faire
     )
 complete_by = "SMASH"
 

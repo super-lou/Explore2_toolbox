@@ -58,7 +58,7 @@ obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
 obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Explore2/diagnostic"
 proj_dir = "Explore2/projection"
-codes_selection_file = "Explore2/Selection points simulation V20230221.txt"
+codes_selection_file = "Explore2/Selection_points_simulation_V20230324.txt"
 projs_selection_file = "Explore2/ensembleProjectionClimatExplore2.txt"
 
 ### 2.2. Variables ___________________________________________________
