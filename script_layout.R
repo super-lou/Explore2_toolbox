@@ -65,7 +65,7 @@ icon_path = file.path(resources_path, icon_dir)
 if (!exists("Shapefiles")) {
     post("### Loading shapefiles")
     Shapefiles = load_shapefile(
-        computer_data_path, CodeALL,
+        computer_data_path, CodeALL8,
         france_dir, france_file,
         bassinHydro_dir, bassinHydro_file,
         regionHydro_dir, regionHydro_file,
@@ -90,14 +90,14 @@ if ('plot_doc' %in% to_do) {
 
 
 if (is.null(doc_chunk)) {
-    chunkCode = list(CodeALL)
+    chunkCode = list(CodeALL8)
 
 } else if (doc_chunk == "all") {
-    chunkCode = list(CodeALL)
+    chunkCode = list(CodeALL8)
     
 } else if (doc_chunk == "region") {
-    letter = factor(substr(CodeALL, 1, 1))
-    chunkCode = split(CodeALL, letter)
+    letter = factor(substr(CodeALL8, 1, 1))
+    chunkCode = split(CodeALL8, letter)
     names(chunkCode) = paste0(iRegHydro()[names(chunkCode)],
                               " - ", levels(letter))
 }
@@ -125,18 +125,21 @@ for (i in 1:nChunk) {
         today_figdir_leaf = today_figdir
     }
 
-    dataEXind_to_plot = dataEXind[dataEXind$Code %in% Code_to_plot,]
-    if (nrow(dataEXind_to_plot) == 0) {
-        next
-    }
-    dataEXserie_to_plot = list()
-    for (j in 1:length(dataEXserie)) {
-        dataEXserie_to_plot = append(
-            dataEXserie_to_plot,
-            list(dataEXserie[[j]][dataEXserie[[j]]$Code %in%
-                                  Code_to_plot,]))
-    }
-    names(dataEXserie_to_plot) = names(dataEXserie)
+    # dataEXind_to_plot = dataEXind[dataEXind$Code %in% Code_to_plot,]
+    # if (nrow(dataEXind_to_plot) == 0) {
+    #     next
+    # }
+    # dataEXserie_to_plot = list()
+    # for (j in 1:length(dataEXserie)) {
+    #     dataEXserie_to_plot = append(
+    #         dataEXserie_to_plot,
+    #         list(dataEXserie[[j]][dataEXserie[[j]]$Code %in%
+    #                               Code_to_plot,]))
+    # }
+    # names(dataEXserie_to_plot) = names(dataEXserie)
+    dataEXind_to_plot = dataEXind
+    dataEXserie_to_plot = dataEXserie
+    
     
     for (sheet in plot_list) {
 
@@ -258,116 +261,3 @@ for (i in 1:nChunk) {
         }
     }
 }
-
-
-# if ('plot_doc' %in% to_do) {
-
-# }
-
-
-
-
-
-# if ('diagnostic_station' %in% plot_sheet |
-#     'diagnostic_region' %in% plot_sheet |
-#     'diagnostic_regime' %in% plot_sheet) {
-#     if (!exists("Shapefiles")) {
-#         print("### Loading shapefiles")
-#         Shapefiles = load_shapefile(
-#             computer_data_path, CodeALL,
-#             france_dir, france_file,
-#             bassinHydro_dir, bassinHydro_file,
-#             regionHydro_dir, regionHydro_file,
-#             entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
-#             river_dir, river_file, river_selection=river_selection,
-#             toleranceRel=toleranceRel)
-#     }
-# }
-
-
-# if ('summary' %in% plot_sheet) {
-#     print("### Plotting summary")
-#     df_page = tibble(section='Sommaire', subsection=NA, n=1)
-# } else {
-#     df_page = tibble()
-# }
-
-# if ('diagnostic_matrix' %in% plot_sheet) {
-#     print("### Plotting correlation matrix")
-#     df_page = sheet_diagnostic_matrix(
-#         dataEXind,
-#         metaEXind,
-#         ModelGroup=group_of_models_to_use,
-#         icon_path=icon_path,
-#         logo_path=logo_path,
-#         figdir=file.path(today_figdir_leaf,
-#                          "diagnostic_diagnostic_matrix"),
-#         df_page=df_page)
-# }
-
-# if ('diagnostic_regime' %in% plot_sheet) {
-#     print("### Plotting sheet diagnostic regime")
-#     df_page = sheet_diagnostic_regime(
-#         meta,
-#         dataEXind,
-#         metaEXind,
-#         dataEXserie,
-#         Colors=Colors_of_models,
-#         ModelGroup=group_of_models_to_use,
-#         icon_path=icon_path,
-#         Warnings=Warnings,
-#         logo_path=logo_path,
-#         Shapefiles=Shapefiles,
-#         figdir=file.path(today_figdir_leaf,
-#                          "diagnostic_regime"),
-#         df_page=df_page)
-# }
-
-# if ('diagnostic_region' %in% plot_sheet) {
-#     print("### Plotting sheet diagnostic region")
-#     df_page = sheet_diagnostic_region(
-#         meta,
-#         dataEXind,
-#         metaEXind,
-#         dataEXserie,
-#         Colors=Colors_of_models,
-#         ModelGroup=group_of_models_to_use,
-#         icon_path=icon_path,
-#         Warnings=Warnings,
-#         logo_path=logo_path,
-#         Shapefiles=Shapefiles,
-#         figdir=file.path(today_figdir_leaf,
-#                          "diagnostic_region"),
-#         df_page=df_page)
-# }
-
-# if ('diagnostic_station' %in% plot_sheet) {
-#     print("### Plotting sheet diagnostic station")
-#     df_page = plot_sheet_diagnostic_station(df_page=df_page)
-# }
-
-# if ('summary' %in% plot_sheet) {
-#     summary(df_page,
-#                   title="title", subtitle="subtitle",
-#                   logo_path=logo_path,
-#                   figdir=today_figdir_leaf)
-# }
-
-# # Combine independant pages into one PDF
-# details = file.info(list.files(today_figdir_leaf,
-#                                recursive=TRUE,
-#                                full.names=TRUE))
-# details = details[with(details, order(as.POSIXct(mtime))),]
-# listfile_path = rownames(details)
-
-# if ('summary' %in% plot_sheet) {
-#     summary_path = listfile_path[length(listfile_path)]
-#     listfile_path = listfile_path[-length(listfile_path)]
-#     listfile_path = c(summary_path, listfile_path)
-# }
-
-# if (pdf_chunk == 'all') {
-#     print("### Merging pdf")
-#     pdf_combine(input=listfile_path,
-#                 output=doc_path)
-# }

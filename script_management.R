@@ -282,20 +282,6 @@ if (!read_tmp & !delete_tmp) {
                 dirname = paste0("dataEX_", CARD_var,
                                  .files_name_opt)
                 filename = paste0(dirname, ".fst")
-                # file_test = c(file.path(tmppath, dirname),
-                #               file.path(tmppath, filename))
-                # if (!any(file.exists(file_test))) {
-                #     post(paste0("Waiting for ", file_test))
-                #     start_time = Sys.time()
-                #     while (!any(file.exists(file_test)) |
-                #            Sys.time()-start_time < 60) {
-                #                Sys.sleep(1)
-                #            }
-                #     if (Sys.time()-start_time > 60) {
-                #         post(paste0("Problem with file reading for ",
-                #                     file_test))
-                #     }
-                # }
                 if (file.exists(file.path(tmppath, dirname)) |
                     file.exists(file.path(tmppath, filename))) {
 
@@ -381,54 +367,73 @@ if (!read_tmp & !delete_tmp) {
     if ('read_saving' %in% to_do) {
         post("### Reading saving")
         post(paste0("Reading extracted data and metadata in ",
-                     read_saving))
-        Paths = list.files(file.path(resdir, read_saving),
-                           include.dirs=TRUE,
-                           recursive=TRUE,
-                           full.names=TRUE)
+                    read_saving))
 
-        pattern = paste0("(", paste0(var2search, collapse=")|("), ")")
-        Paths = Paths[grepl(pattern, Paths)]
-        
-        Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
-        Paths[!grepl("[.]", Paths)] = paste0(Paths[!grepl("[.]", Paths)], ".fst")
-        Filenames = gsub("^.*[/]+", "", Paths)
-        Filenames = gsub("[.].*$", "", Filenames)
-        nFile = length(Filenames)
-        for (i in 1:nFile) {
-            post(paste0(Filenames[i], " reads in ", Paths[i]))
-            assign(Filenames[i], read_tibble(filepath=Paths[i]))
-        }
-    }
-
-    if ('criteria_selection' %in% to_do) {
-        post("### Selecting variables")
         for (i in 1:length(analyse_data)) {
-            
             CARD_dir = analyse_data[[i]][1]
             simplify = as.logical(analyse_data[[i]]["simplify"])
             CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
-
-            dataEX_name = paste0("dataEX_", CARD_var)
-            metaEX_name = paste0("metaEX_", CARD_var)
             
-            if (any(grepl(dataEX_name, ls())) &
-                any(grepl(metaEX_name, ls()))) {
+            Paths = list.files(file.path(resdir, read_saving),
+                               include.dirs=TRUE,
+                               full.names=TRUE)
 
-                dataEX = get(dataEX_name)
-                metaEX = get(metaEX_name)
+            pattern = paste0("(", paste0(var2search, "[.]",
+                                         collapse=")|("), ")")
+            pattern = gsub("EX", paste0("EX_", CARD_var), pattern)
+            pattern = gsub("[_]", "[_]", pattern)
+            Paths = Paths[grepl(pattern, Paths)]
             
-                res = get_select(dataEX, metaEX,
-                                 simplify=simplify,
-                                 select=criteria_selection)
-                dataEX = res$dataEX
-                metaEX = res$metaEX
-                
-                assign(dataEX_name, dataEX)
-                assign(metaEX_name, metaEX)
+            Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
+            Paths[!grepl("[.]", Paths)] =
+                paste0(Paths[!grepl("[.]", Paths)], ".fst")
+            Filenames = gsub("^.*[/]+", "", Paths)
+            Filenames = gsub("[.].*$", "", Filenames)
+            nFile = length(Filenames)
+            for (i in 1:nFile) {
+                post(paste0(Filenames[i], " reads in ", Paths[i]))
+                assign(Filenames[i], read_tibble(filepath=Paths[i]))
             }
         }
+
     }
+
+    # if ('criteria_selection' %in% to_do) {
+    #     post("### Selecting variables")
+    #     # for (i in 1:length(analyse_data)) {
+        
+    #     # CARD_dir = analyse_data[[i]][1]
+    #     # simplify = as.logical(analyse_data[[i]]["simplify"])
+    #     # CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+
+    #     ###
+    #     rm("dataEXname")
+    #     rm("metaEXname")
+    #     rm("dataEXtmp")
+    #     rm("metaEXtmp")
+    #     ###
+        
+    #     dataEXname = ls()[grepl("^dataEX.*", ls())]
+    #     metaEXname = ls()[grepl("^metaEX.*", ls())]
+        
+    #     if (length(dataEXname) > 0 &
+    #         length(metaEXname) > 0) {
+
+    #         for (i in 1:length(dataEXname)) {
+
+    #             dataEXtmp = get(dataEXname[i])
+    #             metaEXtmp = get(metaEXname[i])
+                
+    #             res = get_select(dataEXtmp, metaEXtmp,
+    #                              select=criteria_selection)
+    #             dataEXtmp = res$dataEX
+    #             metaEXtmp = res$metaEX
+                
+    #             assign(dataEXname[i], dataEXtmp)
+    #             assign(metaEXname[i], metaEXtmp)
+    #         }
+    #     }
+    # }
 
     if ('write_warnings' %in% to_do) {
         post("### Writing warnings")

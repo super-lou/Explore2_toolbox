@@ -231,7 +231,8 @@ NetCDF_to_tibble = function (NetCDF_path,
 
 
 
-get_select = function (dataEX, metaEXind, simplify, select="") {
+get_select = function (dataEX, metaEX,
+                       select="") {
     if (!any(select == "all")) {
         select = paste0("(",
                         paste0(c("Model", "Code", select),
@@ -242,16 +243,16 @@ get_select = function (dataEX, metaEXind, simplify, select="") {
         select = gsub("[_]", "[_]", select)
         select = gsub("[,]", "[,]", select)
                     
-        if (simplify) {
-            select = names(dataEX)[grepl(select,
-                                         names(dataEX))]
-            dataEX = dplyr::select(dataEX, select)
+        if (is.tbl(dataEX)) {
+            select_in = c(sapply(select, apply_grepl,
+                              table=names(dataEX)))
+            dataEX = dplyr::select(dataEX, select_in)
 
         } else {
             for (i in 1:length(dataEX)) {
-                select = names(dataEX[[i]])[grepl(select,
-                                                  names(dataEX[[i]]))]
-                dataEX[[i]] = dplyr::select(dataEX[[i]], select)
+                select_in = c(sapply(select, apply_grepl,
+                                  table=names(dataEX[[i]])))
+                dataEX[[i]] = dplyr::select(dataEX[[i]], select_in)
             }
         }
         
