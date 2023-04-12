@@ -170,24 +170,33 @@ NetCDF_to_tibble = function (NetCDF_path,
     } else if (mode == "proj") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
 
+        ### /!\ ###
+        # CodeRaw1 = CodeRaw
+        # print(CodeRaw)
+
         CodeRaw[nchar(CodeRaw) == 8] =
             codes10_selection[match(CodeRaw[nchar(CodeRaw) == 8],
                                     codes8_selection)] 
+        # CodeRaw2 = CodeRaw
+        # CodeRaw1[is.na(CodeRaw2)]
+        # print(CodeRaw)
+
+        CodeRaw[is.na(CodeRaw)] = ""
         
-        ###
         CodeRaw[nchar(CodeRaw) > 10] =
             substr(CodeRaw[nchar(CodeRaw) > 10], 1, 10)
         CodeRaw[nchar(CodeRaw) < 10] =
             gsub(" ", "0",
                  formatC(CodeRaw[nchar(CodeRaw) < 10],
                          width=10, flag="-"))
-        ###
+        
 
         # if (any(nchar(CodeRaw) == 8)) {
         #     CodeRaw[nchar(CodeRaw) == 8] =
         #         codes10_selection[match(CodeRaw[nchar(CodeRaw) == 8],
         #                                 codes8_selection)]
         # }
+        ### /!\ ###
 
         CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
         CodeOrder = order(CodeRawSUB10)
