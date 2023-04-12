@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -144,17 +144,17 @@ lib_path =
 #       directory.
 
 mode =
-    "diag"
-    # "proj"
+    # "diag"
+    "proj"
 
 to_do =
     c(
         # 'delete_tmp',
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
-        'read_saving'
+        # 'read_saving'
         # 'bind_analyse' ##
         # 'criteria_selection'
         # 'write_warnings'
@@ -221,13 +221,13 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -254,23 +254,23 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS", 
-        "GRSD", 
-        "J2000",
-        "SIM2",
-        "MORDOR-SD", 
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SMASH" 
+        # "CTRIP",
+        # "EROS", 
+        # "GRSD", 
+        # "J2000",
+        # "SIM2",
+        "MORDOR-SD" 
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SMASH" 
     )
 complete_by = "SMASH"
 
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "K221083001"
         # "^V",
         # "^K"
@@ -300,10 +300,10 @@ analyse_data =
     list(
         # c('WIP', simplify=FALSE)
         # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-        c('Explore2_diag/001_criteria/002_select', simplify=TRUE)
+        # c('Explore2_diag/001_criteria/002_select', simplify=TRUE)
         # c('Explore2_diag/002_serie', simplify=FALSE),
-        # c('Explore2_proj/001_serie', simplify=FALSE),
-        # c('Explore2_proj/002_check', simplify=FALSE)
+        c('Explore2_proj/001_serie', simplify=FALSE),
+        c('Explore2_proj/002_check', simplify=FALSE)
         # c('Explore2_proj/003_delta', simplify=TRUE)    
     )
 
@@ -313,8 +313,8 @@ no_lim = TRUE
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 var2save =
     c(
@@ -673,8 +673,9 @@ if (all(codes_to_use == "all")) {
     CodeALL8 = codes_to_use[okCode]
     CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
 }
+CodeALL8 = CodeALL8[nchar(CodeALL10) > 0]
+CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
 nCodeALL = length(CodeALL10)
-
 
 tmppath = file.path(computer_work_path, tmpdir)
 if ("delete_tmp" %in% to_do) {

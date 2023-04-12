@@ -170,6 +170,10 @@ NetCDF_to_tibble = function (NetCDF_path,
     } else if (mode == "proj") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
 
+        CodeRaw[nchar(CodeRaw) == 8] =
+            codes10_selection[match(CodeRaw[nchar(CodeRaw) == 8],
+                                    codes8_selection)] 
+        
         ###
         CodeRaw[nchar(CodeRaw) > 10] =
             substr(CodeRaw[nchar(CodeRaw) > 10], 1, 10)
