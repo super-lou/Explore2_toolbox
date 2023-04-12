@@ -169,19 +169,30 @@ NetCDF_to_tibble = function (NetCDF_path,
         
     } else if (mode == "proj") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
-
+        
         ### /!\ ###
+        CodeRaw_save = CodeRaw
         # CodeRaw1 = CodeRaw
         # print(CodeRaw)
 
-        CodeRaw[nchar(CodeRaw) == 8] =
-            codes10_selection[match(CodeRaw[nchar(CodeRaw) == 8],
-                                    codes8_selection)] 
+        if (any(nchar(CodeRaw) == 8)) {
+            CodeRaw[nchar(CodeRaw) == 8] =
+                codes10_selection[match(CodeRaw[nchar(CodeRaw) == 8],
+                                        codes8_selection)]
+            CodeRaw_try = lapply(paste0(CodeRaw_save[is.na(CodeRaw)],
+                                        ".*"), apply_grepl,
+                                 table=codes10_selection)
+            CodeRaw_NOk = sapply(CodeRaw_try, length) > 1
+            CodeRaw_try[CodeRaw_NOk] = ""
+            CodeRaw_try = unlist(CodeRaw_try)
+            CodeRaw[is.na(CodeRaw)] = CodeRaw_try
+        }
+        
         # CodeRaw2 = CodeRaw
         # CodeRaw1[is.na(CodeRaw2)]
         # print(CodeRaw)
 
-        CodeRaw[is.na(CodeRaw)] = ""
+        # CodeRaw[is.na(CodeRaw)] = ""
         
         CodeRaw[nchar(CodeRaw) > 10] =
             substr(CodeRaw[nchar(CodeRaw) > 10], 1, 10)
