@@ -23,7 +23,7 @@
 
 CARD_analyse_data_hide = function (data, CARD_path,
                                    CARD_dir, period_analyse,
-                                   simplify_by, no_lim,
+                                   simplify, simplify_by, no_lim,
                                    variable_names, subverbose,
                                    ID_colnames, tmppath, CARD_var,
                                    files_name_opt., subset_name) {
@@ -35,28 +35,27 @@ CARD_analyse_data_hide = function (data, CARD_path,
                           no_lim=no_lim,
                           variable_names=variable_names,
                           verbose=subverbose)
+    dataEX = res$dataEX
+    metaEX = res$metaEX
     gc()
 
-    post("dataEX")
-    post(res$dataEX)
-    
     if (simplify) {
-        res$dataEX = tidyr::separate(res$dataEX, col="ID",
-                                     into=ID_colnames, sep="_")
+        dataEX = tidyr::separate(dataEX, col="ID",
+                                 into=ID_colnames, sep="_")
     } else {
-        for (j in 1:length(res$dataEX)) {
-            res$dataEX[[j]] = tidyr::separate(res$dataEX[[j]],
-                                              col="ID",
-                                              into=ID_colnames,
-                                              sep="_")
+        for (j in 1:length(dataEX)) {
+            dataEX[[j]] = tidyr::separate(dataEX[[j]],
+                                          col="ID",
+                                          into=ID_colnames,
+                                          sep="_")
         }
     }
-    write_tibble(res$dataEX,
+    write_tibble(dataEX,
                  filedir=tmppath,
                  filename=paste0("dataEX_", CARD_var, "_",
                                  files_name_opt.,
                                  subset_name, ".fst"))
-    write_tibble(res$metaEX,
+    write_tibble(metaEX,
                  filedir=tmppath,
                  filename=paste0("metaEX_", CARD_var, "_",
                                  files_name_opt.,
@@ -84,7 +83,7 @@ CARD_analyse_data = function () {
 
     ID_colnames = names(dplyr::select(data, where(is.character)))    
     data = tidyr::unite(data, "ID", where(is.character), sep="_")
-
+    
     if (mode == "proj") {
         variable_names = c(Q="Q_sim")
     } else {
@@ -105,10 +104,11 @@ CARD_analyse_data = function () {
 
         CARD_analyse_data_hide(data, CARD_path,
                                CARD_dir, period_analyse,
-                               simplify_by, no_lim,
-                               variable_names, subverbose,
-                               ID_colnames, tmppath, CARD_var,
-                               files_name_opt., subset_name)
+                               simplify, simplify_by,
+                               no_lim, variable_names,
+                               subverbose, ID_colnames,
+                               tmppath, CARD_var, files_name_opt.,
+                               subset_name)
         gc()
         if (!is.null(wait)) {
             Sys.sleep(wait)

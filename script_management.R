@@ -23,9 +23,9 @@
 
 manage_data = function () {
 
-    # if (exists("meta")) {
-        # rm (meta)
-    # }
+    if (exists("meta")) {
+        rm (meta)
+    }
     for (i in 1:nSubsets) {
         subset_name = names(Subsets)[i]
         if (by_files | MPI == "file") {
@@ -45,10 +45,11 @@ manage_data = function () {
         gc()
     }
     
-    # if (exists("meta_tmp")) {
-        # rm (meta_tmp)
+    if (exists("meta_tmp")) {
+        rm (meta_tmp)
+    }
     meta = meta[order(meta$Code),]
-    # }
+    
     write_tibble(meta,
                  filedir=tmppath,
                  filename="meta.fst")
@@ -59,12 +60,12 @@ manage_data = function () {
         simplify = as.logical(analyse_data[[i]]["simplify"])
         CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
         
-        # if (exists("metaEX")) {
-            # rm ("metaEX")
-        # }
-        # if (exists("dataEX")) {
-            # rm ("dataEX")
-        # }
+        if (exists("metaEX")) {
+            rm ("metaEX")
+        }
+        if (exists("dataEX")) {
+            rm ("dataEX")
+        }
         for (j in 1:nSubsets) {
             subset_name = names(Subsets)[j]
 
@@ -88,6 +89,7 @@ manage_data = function () {
                 dataEX_tmp = read_tibble(filedir=tmppath,
                                          filename=filename)
                 gc()
+
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
                 } else {
@@ -107,7 +109,7 @@ manage_data = function () {
         }
         
         if (exists("dataEX_tmp")) {
-            # rm ("dataEX_tmp")
+            rm ("dataEX_tmp")
 
             if (simplify) {
                 dataEX = dataEX[order(dataEX$Model),]
