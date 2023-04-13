@@ -20,6 +20,321 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
+
+manage_data = function () {
+
+    # if (exists("meta")) {
+        # rm (meta)
+    # }
+    for (i in 1:nSubsets) {
+        subset_name = names(Subsets)[i]
+        if (by_files | MPI == "file") {
+            subset_name = paste0(files_name_opt,
+                                 "_", subset_name)
+        }
+        filename = paste0("meta_", subset_name, ".fst")
+        if (file.exists(file.path(tmppath, filename))) {
+            meta_tmp = read_tibble(filedir=tmppath,
+                                   filename=filename)
+            if (!exists("meta")) {
+                meta = meta_tmp
+            } else {
+                meta = dplyr::bind_rows(meta, meta_tmp)
+            }
+        }
+        gc()
+    }
+    
+    # if (exists("meta_tmp")) {
+        # rm (meta_tmp)
+    meta = meta[order(meta$Code),]
+    # }
+    write_tibble(meta,
+                 filedir=tmppath,
+                 filename="meta.fst")
+
+    for (i in 1:length(analyse_data)) {
+        
+        CARD_dir = analyse_data[[i]][1]
+        simplify = as.logical(analyse_data[[i]]["simplify"])
+        CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+        
+        # if (exists("metaEX")) {
+            # rm ("metaEX")
+        # }
+        # if (exists("dataEX")) {
+            # rm ("dataEX")
+        # }
+        for (j in 1:nSubsets) {
+            subset_name = names(Subsets)[j]
+
+            if (!exists("metaEX")) {
+                filename = paste0("metaEX_", CARD_var, "_",
+                                  files_name_opt.,
+                                  subset_name, ".fst")
+                if (file.exists(file.path(tmppath, filename))) {
+                    metaEX = read_tibble(filedir=tmppath,
+                                         filename=filename)
+                    gc()
+                }
+            }
+            
+            dirname = paste0("dataEX_", CARD_var, "_",
+                             files_name_opt.,
+                             subset_name)
+            filename = paste0(dirname, ".fst")
+            if (file.exists(file.path(tmppath, dirname)) |
+                file.exists(file.path(tmppath, filename))) {
+                dataEX_tmp = read_tibble(filedir=tmppath,
+                                         filename=filename)
+                gc()
+                if (!exists("dataEX")) {
+                    dataEX = dataEX_tmp
+                } else {
+                    if (simplify) {
+                        dataEX = dplyr::bind_rows(dataEX,
+                                                  dataEX_tmp)
+                    } else {
+                        for (k in 1:length(dataEX)) {
+                            dataEX[[k]] =
+                                dplyr::bind_rows(dataEX[[k]],
+                                                 dataEX_tmp[[k]])
+                            gc()
+                        }  
+                    }
+                }
+            }
+        }
+        
+        if (exists("dataEX_tmp")) {
+            # rm ("dataEX_tmp")
+
+            if (simplify) {
+                dataEX = dataEX[order(dataEX$Model),]
+                
+                Vars = colnames(dataEX)
+                
+                containSO = "([_]obs$)|([_]sim$)"
+                Vars = Vars[grepl(containSO, Vars)]
+                if (length(Vars) > 0) {
+                    VarsREL = gsub(containSO, "", Vars)
+                    VarsREL = VarsREL[!duplicated(VarsREL)]
+                    nVarsREL = length(VarsREL)
+                    
+                    for (j in 1:nVarsREL) {
+                        varREL = VarsREL[j]
+                        
+                        if (grepl("^HYP.*", varREL)) {
+                            dataEX[[varREL]] =
+                                dataEX[[paste0(varREL,
+                                               "_sim")]] &
+                                dataEX[[paste0(varREL,
+                                               "_obs")]]
+
+                        } else if (grepl("(^t)|([{]t)",
+                                         varREL)) {
+                            dataEX[[varREL]] =
+                                circular_minus(
+                                    dataEX[[paste0(varREL,
+                                                   "_sim")]],
+                                    dataEX[[paste0(varREL,
+                                                   "_obs")]],
+                                    period=365.25)/30.4375
+
+                        } else if (grepl("(Rc)|(^epsilon)|(^alpha)",
+                                         varREL)) {
+                            dataEX[[varREL]] =
+                                dataEX[[paste0(varREL, "_sim")]] /
+                                dataEX[[paste0(varREL, "_obs")]]
+                            
+                        } else {
+                            dataEX[[varREL]] =
+                                (dataEX[[paste0(varREL,
+                                                "_sim")]] -
+                                 dataEX[[paste0(varREL,
+                                                "_obs")]]) /
+                                dataEX[[paste0(varREL,
+                                               "_obs")]]
+                        }
+                        dataEX =
+                            dplyr::relocate(dataEX,
+                                            !!varREL,
+                                            .after=!!paste0(varREL,
+                                                            "_sim"))
+                    }
+                }
+                
+            } else {
+                for (j in 1:length(dataEX)) {
+                    dataEX[[j]] =
+                        dataEX[[j]][order(dataEX[[j]]$Model),]
+                    gc()
+                }
+            }
+        }
+
+        write_tibble(dataEX,
+                     filedir=tmppath,
+                     filename=paste0("dataEX_", CARD_var,
+                                     .files_name_opt,
+                                     ".fst"))
+        write_tibble(metaEX,
+                     filedir=tmppath,
+                     filename=paste0("metaEX_", CARD_var,
+                                     .files_name_opt,
+                                     ".fst"))
+        if (!is.null(wait)) {
+            post("Waiting for writting of extracted data")
+            Sys.sleep(wait)
+        }
+    }
+}
+
+
+save_data = function () {
+    files_name_regexp = gsub("[_]", "[_]",
+                             gsub("[-]", "[-]",
+                                  files_name_opt))
+    
+    if (by_files | MPI == "file") {
+        today_resdir_tmp = file.path(today_resdir,
+                                     files_name_opt)
+        pattern = paste0("data[_]", files_name_regexp,
+                         ".*", "[.]fst")
+    } else {
+        today_resdir_tmp = today_resdir
+        pattern = "data[_].*[.]fst"
+    }
+
+    if (!(file.exists(today_resdir_tmp))) {
+        dir.create(today_resdir_tmp, recursive=TRUE)
+    }
+
+    data_paths = list.files(tmppath,
+                            pattern=pattern,
+                            full.names=TRUE)
+    data_files = gsub("[_][_]", "_",
+                      gsub(files_name_regexp, "",
+                           basename(data_paths)))
+
+    if ("data" %in% var2save) {
+        file.copy(data_paths,
+                  file.path(today_resdir_tmp, data_files))
+    }
+    
+    if ("meta" %in% var2save) {
+        meta = read_tibble(filedir=tmppath,
+                           filename="meta.fst")
+        
+        write_tibble(meta,
+                     filedir=today_resdir_tmp,
+                     filename=paste0("meta.fst"))
+        if ("Rdata" %in% saving_format) {
+            write_tibble(meta,
+                         filedir=today_resdir_tmp,
+                         filename=paste0("meta.Rdata"))
+        }
+        if ("txt" %in% saving_format) {
+            write_tibble(meta,
+                         filedir=today_resdir_tmp,
+                         filename=paste0("meta.txt"))
+        }
+        if (!is.null(wait)) {
+            post("Waiting for saving of meta data")
+            Sys.sleep(wait)
+        }
+    }
+
+    for (i in 1:length(analyse_data)) {
+        
+        CARD_dir = analyse_data[[i]][1]
+        simplify = as.logical(analyse_data[[i]]["simplify"])
+        CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+        
+        dirname = paste0("dataEX_", CARD_var,
+                         .files_name_opt)
+        filename = paste0(dirname, ".fst")
+        if (file.exists(file.path(tmppath, dirname)) |
+            file.exists(file.path(tmppath, filename))) {
+
+            if ("metaEX" %in% var2save) {
+                metaEX = read_tibble(filedir=tmppath,
+                                     filename=paste0(
+                                         "metaEX_",
+                                         CARD_var,
+                                         .files_name_opt,
+                                         ".fst"))
+                gc()
+            }
+            if ("dataEX" %in% var2save) {
+                dataEX = read_tibble(filedir=tmppath,
+                                     filename=paste0(
+                                         "dataEX_",
+                                         CARD_var,
+                                         .files_name_opt,
+                                         ".fst"))
+                gc()
+            }
+        } else {
+            next
+        }
+
+        if ("dataEX" %in% var2save) {
+            write_tibble(dataEX,
+                         filedir=today_resdir_tmp,
+                         filename=paste0("dataEX_",
+                                         CARD_var,
+                                         ".fst"))
+            if ("Rdata" %in% saving_format) {
+                write_tibble(dataEX,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("dataEX_",
+                                             CARD_var,
+                                             ".Rdata"))
+            }
+            if ("txt" %in% saving_format) {
+                write_tibble(dataEX,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("dataEX_",
+                                             CARD_var,
+                                             ".txt"))
+            }
+            if (!is.null(wait)) {
+                post("Waiting for saving of extracted data")
+                Sys.sleep(wait)
+            }
+        }
+        
+        if ("metaEX" %in% var2save) {
+            write_tibble(metaEX,
+                         filedir=today_resdir_tmp,
+                         filename=paste0("metaEX_",
+                                         CARD_var,
+                                         ".fst"))
+            if ("Rdata" %in% saving_format) {
+                write_tibble(metaEX,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("metaEX_",
+                                             CARD_var,
+                                             ".Rdata"))
+            }
+            if ("txt" %in% saving_format) {
+                write_tibble(metaEX,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("metaEX_",
+                                             CARD_var,
+                                             ".txt"))
+            }
+            if (!is.null(wait)) {
+                post("Waiting for saving of extracted meta data")
+                Sys.sleep(wait)
+            }
+        }
+    }
+}
+
+
+
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if (!read_tmp & !delete_tmp) {
 
@@ -43,320 +358,14 @@ if (!read_tmp & !delete_tmp) {
         }
         
         if ('analyse_data' %in% to_do) {
-            if (exists("meta")) {
-                rm (meta)
-            }
-            for (i in 1:nSubsets) {
-                subset_name = names(Subsets)[i]
-                if (by_files | MPI == "file") {
-                    subset_name = paste0(files_name_opt,
-                                         "_", subset_name)
-                }
-                filename = paste0("meta_", subset_name, ".fst")
-
-                # file_test = file.path(tmppath, filename)
-                # if (!file.exists(file_test)) {
-                #     post(paste0("Waiting for ", file_test))
-                #     start_time = Sys.time()
-                #     while (!file.exists(file_test) |
-                #            Sys.time()-start_time < 60) {
-                #         Sys.sleep(1)
-                #     }
-                #     if (Sys.time()-start_time > 60) {
-                #         post(paste0("Problem with file reading for ",
-                #                     file_test))
-                #     }
-                # }
-                if (file.exists(file.path(tmppath, filename))) {
-                    meta_tmp = read_tibble(filedir=tmppath,
-                                           filename=filename)
-                    if (!exists("meta")) {
-                        meta = meta_tmp
-                    } else {
-                        meta = dplyr::bind_rows(meta, meta_tmp)
-                    }
-                }
-            }
-            
-            if (exists("meta_tmp")) {
-                rm (meta_tmp)
-                meta = meta[order(meta$Code),]
-            }
-
-            for (ii in 1:length(analyse_data)) {
-                
-                CARD_dir = analyse_data[[ii]][1]
-                simplify = as.logical(analyse_data[[ii]]["simplify"])
-                CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
-                
-                if (exists("metaEX")) {
-                    rm ("metaEX")
-                }
-                if (exists("dataEX")) {
-                    rm ("dataEX")
-                }
-                for (jj in 1:nSubsets) {
-                    subset_name = names(Subsets)[jj]
-
-                    if (!exists("metaEX")) {
-                        filename = paste0("metaEX_", CARD_var, "_",
-                                          files_name_opt.,
-                                          subset_name, ".fst")
-                        post(filename)
-                        if (file.exists(file.path(tmppath, filename))) {
-                            metaEX = read_tibble(filedir=tmppath,
-                                                 filename=filename)
-                        }
-                    }
-                    
-                    dirname = paste0("dataEX_", CARD_var, "_",
-                                     files_name_opt.,
-                                     subset_name)
-                    filename = paste0(dirname, ".fst")
-                    post(filename)
-                    if (file.exists(file.path(tmppath, dirname)) |
-                        file.exists(file.path(tmppath, filename))) {
-                        dataEX_tmp = read_tibble(filedir=tmppath,
-                                                 filename=filename)
-                        if (!exists("dataEX")) {
-                            dataEX = dataEX_tmp
-                        } else {
-                            if (simplify) {
-                                dataEX = dplyr::bind_rows(dataEX,
-                                                          dataEX_tmp)
-                            } else {
-                                for (kk in 1:length(dataEX)) {
-                                    dataEX[[kk]] =
-                                        dplyr::bind_rows(dataEX[[kk]],
-                                                         dataEX_tmp[[kk]])
-                                }  
-                            }
-                        }
-                    }
-                }
-                
-                if (exists("dataEX_tmp")) {
-                    rm ("dataEX_tmp")
-
-                    if (simplify) {
-                        dataEX = dataEX[order(dataEX$Model),]
-                        
-                        Vars = colnames(dataEX)
-                        
-                        containSO = "([_]obs$)|([_]sim$)"
-                        Vars = Vars[grepl(containSO, Vars)]
-                        if (length(Vars) > 0) {
-                            VarsREL = gsub(containSO, "", Vars)
-                            VarsREL = VarsREL[!duplicated(VarsREL)]
-                            nVarsREL = length(VarsREL)
-                            
-                            for (jj in 1:nVarsREL) {
-                                varREL = VarsREL[jj]
-                                
-                                if (grepl("^HYP.*", varREL)) {
-                                    dataEX[[varREL]] =
-                                        dataEX[[paste0(varREL,
-                                                       "_sim")]] &
-                                        dataEX[[paste0(varREL,
-                                                       "_obs")]]
-
-                                } else if (grepl("(^t)|([{]t)",
-                                                 varREL)) {
-                                    dataEX[[varREL]] =
-                                        circular_minus(
-                                            dataEX[[paste0(varREL,
-                                                           "_sim")]],
-                                            dataEX[[paste0(varREL,
-                                                           "_obs")]],
-                                            period=365.25)/30.4375
-
-                                } else if (grepl("(Rc)|(^epsilon)|(^alpha)",
-                                                 varREL)) {
-                                    dataEX[[varREL]] =
-                                        dataEX[[paste0(varREL, "_sim")]] /
-                                        dataEX[[paste0(varREL, "_obs")]]
-                                    
-                                } else {
-                                    dataEX[[varREL]] =
-                                        (dataEX[[paste0(varREL,
-                                                        "_sim")]] -
-                                         dataEX[[paste0(varREL,
-                                                        "_obs")]]) /
-                                        dataEX[[paste0(varREL,
-                                                       "_obs")]]
-                                }
-                                dataEX =
-                                    dplyr::relocate(dataEX,
-                                                    !!varREL,
-                                                    .after=!!paste0(varREL,
-                                                                    "_sim"))
-                            }
-                        }
-                        
-                    } else {
-                        for (jj in 1:length(dataEX)) {
-                            dataEX[[jj]] =
-                                dataEX[[jj]][order(dataEX[[jj]]$Model),]
-                        }
-                    }
-                }
-
-                write_tibble(dataEX,
-                             filedir=tmppath,
-                             filename=paste0("dataEX_", CARD_var,
-                                             .files_name_opt,
-                                             ".fst"))
-                write_tibble(metaEX,
-                             filedir=tmppath,
-                             filename=paste0("metaEX_", CARD_var,
-                                             .files_name_opt,
-                                             ".fst"))
-                if (!is.null(wait)) {
-                    post("Waiting for writting of extracted data")
-                    Sys.sleep(wait)
-                }
-            }
+            manage_data()
         }
-
+        
         if ('save_analyse' %in% to_do) {
             post("### Saving analyses")
             post(paste0("Save extracted data and metadata in ",
                          paste0(saving_format, collapse=", ")))
-
-            files_name_regexp = gsub("[_]", "[_]",
-                                     gsub("[-]", "[-]",
-                                          files_name_opt))
-            
-            if (by_files | MPI == "file") {
-                today_resdir_tmp = file.path(today_resdir,
-                                             files_name_opt)
-                pattern = paste0("data[_]", files_name_regexp,
-                                 ".*", "[.]fst")
-            } else {
-                today_resdir_tmp = today_resdir
-                pattern = "data[_].*[.]fst"
-            }
-
-            if (!(file.exists(today_resdir_tmp))) {
-                dir.create(today_resdir_tmp, recursive=TRUE)
-            }
-
-            data_paths = list.files(tmppath,
-                                    pattern=pattern,
-                                    full.names=TRUE)
-            data_files = gsub("[_][_]", "_",
-                              gsub(files_name_regexp, "",
-                                   basename(data_paths)))
-
-            if ("data" %in% var2save) {
-                file.copy(data_paths,
-                          file.path(today_resdir_tmp, data_files))
-            }
-            
-            if ("meta" %in% var2save & exists("meta")) {
-                write_tibble(meta,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("meta.fst"))
-                if ("Rdata" %in% saving_format) {
-                    write_tibble(meta,
-                                 filedir=today_resdir_tmp,
-                                 filename=paste0("meta.Rdata"))
-                }
-                if ("txt" %in% saving_format) {
-                    write_tibble(meta,
-                                 filedir=today_resdir_tmp,
-                                 filename=paste0("meta.txt"))
-                }
-                if (!is.null(wait)) {
-                    post("Waiting for saving of meta data")
-                    Sys.sleep(wait)
-                }
-            }
-
-            for (ii in 1:length(analyse_data)) {
-                
-                CARD_dir = analyse_data[[ii]][1]
-                simplify = as.logical(analyse_data[[ii]]["simplify"])
-                CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
-                
-                dirname = paste0("dataEX_", CARD_var,
-                                 .files_name_opt)
-                filename = paste0(dirname, ".fst")
-                if (file.exists(file.path(tmppath, dirname)) |
-                    file.exists(file.path(tmppath, filename))) {
-
-                    if ("metaEX" %in% var2save) {
-                        metaEX = read_tibble(filedir=tmppath,
-                                             filename=paste0(
-                                                 "metaEX_",
-                                                 CARD_var,
-                                                 .files_name_opt,
-                                                 ".fst"))
-                    }
-                    if ("dataEX" %in% var2save) {
-                        dataEX = read_tibble(filedir=tmppath,
-                                             filename=paste0(
-                                                 "dataEX_",
-                                                 CARD_var,
-                                                 .files_name_opt,
-                                                 ".fst"))
-                    }
-                } else {
-                    next
-                }
-
-                if ("dataEX" %in% var2save) {
-                    write_tibble(dataEX,
-                                 filedir=today_resdir_tmp,
-                                 filename=paste0("dataEX_",
-                                                 CARD_var,
-                                                 ".fst"))
-                    if ("Rdata" %in% saving_format) {
-                        write_tibble(dataEX,
-                                     filedir=today_resdir_tmp,
-                                     filename=paste0("dataEX_",
-                                                     CARD_var,
-                                                     ".Rdata"))
-                    }
-                    if ("txt" %in% saving_format) {
-                        write_tibble(dataEX,
-                                     filedir=today_resdir_tmp,
-                                     filename=paste0("dataEX_",
-                                                     CARD_var,
-                                                     ".txt"))
-                    }
-                    if (!is.null(wait)) {
-                        post("Waiting for saving of extracted data")
-                        Sys.sleep(wait)
-                    }
-                }
-                
-                if ("metaEX" %in% var2save) {
-                    write_tibble(metaEX,
-                                 filedir=today_resdir_tmp,
-                                 filename=paste0("metaEX_",
-                                                 CARD_var,
-                                                 ".fst"))
-                    if ("Rdata" %in% saving_format) {
-                        write_tibble(metaEX,
-                                     filedir=today_resdir_tmp,
-                                     filename=paste0("metaEX_",
-                                                     CARD_var,
-                                                     ".Rdata"))
-                    }
-                    if ("txt" %in% saving_format) {
-                        write_tibble(metaEX,
-                                     filedir=today_resdir_tmp,
-                                     filename=paste0("metaEX_",
-                                                     CARD_var,
-                                                     ".txt"))
-                    }
-                    if (!is.null(wait)) {
-                        post("Waiting for saving of extracted meta data")
-                        Sys.sleep(wait)
-                    }
-                }
-            }
+            save_data()
         }
 
     } else if (MPI == "code") {

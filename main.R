@@ -144,8 +144,8 @@ lib_path =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
@@ -227,8 +227,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "file"
-    # "code"
+    # "file"
+    "code"
 
 
 #  ___  _                  
@@ -239,7 +239,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = NULL
 propagate_NA = TRUE
-nCode4RAM = 25
+nCode4RAM = 700
 
 projs_to_use =
     c(
@@ -254,15 +254,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        "MORDOR-SD"
-        # "MORDOR-TS",
-        # "ORCHIDEE",
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SMASH"
     )
 complete_by = "SMASH"
 
@@ -299,27 +299,29 @@ codes_to_use =
 analyse_data =
     list(
         # c('WIP', simplify=FALSE)
+        
         # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-        # c('Explore2_diag/001_criteria/002_select', simplify=TRUE)
-        # c('Explore2_diag/002_serie', simplify=FALSE),
-        c('Explore2_proj/001_serie', simplify=FALSE),
-        c('Explore2_proj/002_check', simplify=FALSE)
+        c('Explore2_diag/001_criteria/002_select', simplify=TRUE)
+        c('Explore2_diag/002_serie', simplify=FALSE)
+        
+        # c('Explore2_proj/001_serie', simplify=FALSE),
+        # c('Explore2_proj/002_check', simplify=FALSE)
         # c('Explore2_proj/003_delta', simplify=TRUE)    
     )
 
 no_lim = TRUE
-
+# object.size()
 
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX'
     )
@@ -780,9 +782,9 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 paste0(names(Files), collapse=" ")))
 
     if (nFiles != 0) {
-        for (k in 1:nFiles) {
-            files = Files[[k]]
-            files_name = Files_name[[k]]
+        for (ff in 1:nFiles) {
+            files = Files[[ff]]
+            files_name = Files_name[[ff]]
             if (by_files | MPI == "file") {
                 files_name_opt = gsub("[|]", "_", files_name[1]) #####
                 files_name_opt. = paste0(files_name_opt, "_")
@@ -797,10 +799,9 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             
             Create_ok = c()
             
-            for (i in 1:nSubsets) {
-                # i = 4
-                subset = Subsets[[i]]
-                subset_name = names(Subsets)[i]
+            for (ss in 1:nSubsets) {
+                subset = Subsets[[ss]]
+                subset_name = names(Subsets)[ss]
 
                 post(paste0("For subset ", files_name_opt.,
                             subset_name, ": ",
@@ -814,18 +815,35 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                                          subset_name, ".fst"))
                 }
                 if ('analyse_data' %in% to_do) {
-                    file_test = c(file_test,
-                                  paste0("dataEX_",
-                                         files_name_opt.,
-                                         subset_name, ".fst"))
+                    for (aa in 1:length(analyse_data)) {
+                        
+                        CARD_dir = analyse_data[[aa]][1]
+                        simplify =
+                            as.logical(analyse_data[[aa]]["simplify"])
+
+                        CARD_var = gsub("[/][[:digit:]]+[_]", "_",
+                                        CARD_dir)
+                        if (simplify) {
+                            file_test = c(file_test,
+                                          paste0("dataEX_", CARD_var,
+                                                 "_", files_name_opt.,
+                                                 subset_name, ".fst"))
+                        } else {
+                            file_test = c(file_test,
+                                          paste0("dataEX_", CARD_var,
+                                                 "_", files_name_opt.,
+                                                 subset_name))
+                        }
+                    }
                 }
-                post(paste0(i, "/", nSubsets,
+                post(paste0(ss, "/", nSubsets,
                             " chunks of stations in analyse so ",
-                            round(i/nSubsets*100, 1), "% done"))
+                            round(ss/nSubsets*100, 1), "% done"))
                 
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
                     Create_ok = c(Create_ok, TRUE)
+                    gc()
                     next
                 }
                 
@@ -838,15 +856,15 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 if ('create_data' %in% to_do) {
                     source(file.path(lib_path, 'script_create.R'),
                            encoding='UTF-8')
-                }                
+                }        
                 if (create_ok) {
                     if ('analyse_data' %in% to_do) {
-                        Sys.sleep(5)
                         source(file.path(lib_path, 'script_analyse.R'),
                                encoding='UTF-8')
                     }
                 }
                 Create_ok = c(Create_ok, create_ok)
+                gc()
                 print("")
             }
 
@@ -885,3 +903,6 @@ if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
     source(file.path(lib_path, 'script_layout.R'),
            encoding='UTF-8')
 }
+
+# print(sort(sapply(ls(), function(x) {    
+    # object.size(get(x))})))

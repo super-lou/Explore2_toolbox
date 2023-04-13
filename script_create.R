@@ -19,6 +19,22 @@
 # along with Explore2 R toolbox.
 # If not, see <https://www.gnu.org/licenses/>.
 
+create_data_sim = function (p, chain) {
+    if (grepl(".*[.]nc", p)) {
+        data_sim = NetCDF_to_tibble(p,
+                                    chain=chain,
+                                    mode=mode)
+        gc()
+    }
+    if (is.null(data_sim)) {
+        data_sim = dplyr::tibble()
+    } else {
+        data_sim$Code = convert_code8to10(data_sim$Code)
+        data_sim = data_sim[data_sim$Code %in% CodeSUB10,]
+        data_sim = data_sim[order(data_sim$Code),]
+    }
+    return (data_sim)
+}
 
 create_data = function () {
 
@@ -42,32 +58,10 @@ create_data = function () {
             
             if (file.exists(path)) {
                 Chain = c(Chain, chain)
-
                 post(paste0("Get simulated data from ", chain,
                             " in ", p))
-                
-                if (grepl(".*[.]Rdata", p)) {
-                    data_tmp = read_tibble(filepath=p)
-                    
-                } else if (grepl(".*[.]nc", p)) {
-                    data_tmp = NetCDF_to_tibble(p,
-                                                chain=chain,
-                                                mode=mode)
-                }
-
-                if (is.null(data_tmp)) {
-                    next
-                }
-                
-                if (nchar(data_tmp$Code[1]) == 8) {
-                    data_tmp$Code =
-                        codes10_selection[match(data_tmp$Code,
-                                                codes8_selection)]
-                }
-                data_tmp = data_tmp[data_tmp$Code %in% CodeSUB10,]
-                data_tmp = data_tmp[order(data_tmp$Code),]
-
-                data_sim = dplyr::bind_rows(data_sim, data_tmp)
+                data_sim = dplyr::bind_rows(data_sim,
+                                            create_data_sim(p, chain))
             }
         }
     }
@@ -113,9 +107,7 @@ create_data = function () {
         }
 
         if (nrow(meta_obs) > 0) {
-            meta_obs$Code =
-                codes10_selection[match(meta_obs$Code,
-                                        codes8_selection)]
+            meta_obs$Code = convert_code8to10(meta_obs$Code)
             meta = dplyr::left_join(meta,
                                     dplyr::select(meta_obs,
                                                   Code,
@@ -123,9 +115,7 @@ create_data = function () {
                                                   Altitude_m),
                                     by="Code")
         }
-        
         meta = dplyr::arrange(meta, Code)
-        
         
         if (mode == "diag") {
             post("### Observation data")
@@ -138,7 +128,7 @@ create_data = function () {
                                     Code8_filename,
                                     val2keep=c(val_E2=0),
                                     verbose=subverbose)
-
+            gc()
             data_obs =
                 dplyr::filter(
                            data_obs,
@@ -147,8 +137,9 @@ create_data = function () {
                                       as.Date(period_analyse[1]),
                                       as.Date(period_analyse[2])))
 
-            data_obs$Code = codes10_selection[match(data_obs$Code,
-                                                    codes8_selection)]
+            # data_obs$Code = codes10_selection[match(data_obs$Code,
+            #                                         codes8_selection)]
+            data_obs$Code = convert_code8to10(data_obs$Code)
             
             data_obs = dplyr::arrange(data_obs, Code)
             meta = get_lacune(data_obs, meta)
@@ -158,6 +149,7 @@ create_data = function () {
             data = dplyr::inner_join(data_sim,
                                      data_obs,
                                      by=c("Code", "Date"))
+            gc()
             
             nModel = length(Model)
 
@@ -197,6 +189,7 @@ create_data = function () {
                         data_model = data_model[names(data)]
                         
                         data[data$Model == model,] = data_model
+                        gc()
                     }
                 }
             }

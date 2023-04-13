@@ -20,24 +20,52 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-CARD_analyse_data = function () {
 
-    # file_test = file.path(tmppath, paste0("data_", subset_name, ".fst"))
-    # if (!file.exists(file_test)) {
-    #     post(paste0("Waiting for ", file_test))
-    #     start_time = Sys.time()
-    #     while (!file.exists(file_test) | Sys.time()-start_time < 60) {
-    #         Sys.sleep(1)
-    #     }
-    #     if (Sys.time()-start_time > 60) {
-    #         post(paste0("Problem with file reading for ", file_test))
-    #     }
-    # }
-    
+CARD_analyse_data_hide = function (data, CARD_path,
+                                   CARD_dir, period_analyse,
+                                   simplify_by, no_lim,
+                                   variable_names, subverbose,
+                                   ID_colnames, tmppath, CARD_var,
+                                   files_name_opt., subset_name) {
+    res = CARD_extraction(data,
+                          CARD_path=CARD_path,
+                          CARD_dir=CARD_dir,
+                          period=period_analyse,
+                          simplify_by=simplify_by,
+                          no_lim=no_lim,
+                          variable_names=variable_names,
+                          verbose=subverbose)
+    gc()
+    if (simplify) {
+        res$dataEX = tidyr::separate(res$dataEX, col="ID",
+                                     into=ID_colnames, sep="_")
+    } else {
+        for (j in 1:length(res$dataEX)) {
+            res$dataEX[[j]] = tidyr::separate(res$dataEX[[j]],
+                                              col="ID",
+                                              into=ID_colnames,
+                                              sep="_")
+        }
+    }
+    write_tibble(res$dataEX,
+                 filedir=tmppath,
+                 filename=paste0("dataEX_", CARD_var, "_",
+                                 files_name_opt.,
+                                 subset_name, ".fst"))
+    write_tibble(res$metaEX,
+                 filedir=tmppath,
+                 filename=paste0("metaEX_", CARD_var, "_",
+                                 files_name_opt.,
+                                 subset_name, ".fst"))
+}
+
+
+CARD_analyse_data = function () {
     data = read_tibble(filedir=tmppath,
                        filename=paste0("data_",
                                        files_name_opt.,
                                        subset_name, ".fst"))
+    gc()
     meta = read_tibble(filedir=tmppath,
                        filename=paste0("meta_",
                                        files_name_opt.,
@@ -70,48 +98,14 @@ CARD_analyse_data = function () {
         } else {
             simplify_by = NULL
         }
-        
-        res = CARD_extraction(data,
-                              CARD_path=CARD_path,
-                              CARD_dir=CARD_dir,
-                              period=period_analyse,
-                              simplify_by=simplify_by,
-                              no_lim=no_lim,
-                              variable_names=variable_names,
-                              verbose=subverbose)
-        
-        dataEX = res$dataEX
-        metaEX = res$metaEX
-        
-        if (simplify) {
-            dataEX = tidyr::separate(dataEX, col="ID",
-                                     into=ID_colnames, sep="_")
-            
-            dataEX$Model = gsub("[_].*$", "", dataEX$ID)
-            dataEX$Code = gsub("^.*[_]", "", dataEX$ID)
-            dataEX = dplyr::select(dataEX, -ID)
-            dataEX = dplyr::select(dataEX, Model, Code,
-                                   dplyr::everything())
-            
-        } else {
-            for (j in 1:length(dataEX)) {
-                dataEX[[j]] = tidyr::separate(dataEX[[j]],
-                                              col="ID",
-                                              into=ID_colnames,
-                                              sep="_")
-            }
-        }
 
-        write_tibble(dataEX,
-                     filedir=tmppath,
-                     filename=paste0("dataEX_", CARD_var, "_",
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
-        write_tibble(metaEX,
-                     filedir=tmppath,
-                     filename=paste0("metaEX_", CARD_var, "_",
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
+        CARD_analyse_data_hide(data, CARD_path,
+                               CARD_dir, period_analyse,
+                               simplify_by, no_lim,
+                               variable_names, subverbose,
+                               ID_colnames, tmppath, CARD_var,
+                               files_name_opt., subset_name)
+        gc()
         if (!is.null(wait)) {
             Sys.sleep(wait)
         }
@@ -121,19 +115,6 @@ CARD_analyse_data = function () {
 
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
-
-    # test_path = file.path(tmppath,
-                          # paste0("data_", subset_name, ".fst"))
-
-    # if (file.exists(test_path)) {
-        # if (any(sapply(analyse_data, check_simplify))) {
-        post("### Analysing data")
-        CARD_analyse_data()
-        # }
-
-        # if (any(!sapply(analyse_data, check_simplify))) {
-        # post("### Analysing data for time series extraction")
-        # analyse_data_serie()
-        # }
-    # }
+    post("### Analysing data")
+    CARD_analyse_data()
 }
