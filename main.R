@@ -769,14 +769,14 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     nFiles = length(Files)
 
     if (MPI == "code") {
+        if (size != nSubsets) {
+            stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
+        }
         # Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
         #                   as.integer((rank+1)*(nSubsets/size+.5))]
         Subsets = Subsets[rank+1]
         Subsets = Subsets[!is.na(names(Subsets))]
         nSubsets = length(Subsets)
-        if (size > nSubsets) {
-            stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
-        }
     }
 
     post(paste0("All ", nFiles, " files: ",
