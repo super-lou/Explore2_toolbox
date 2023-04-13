@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -769,8 +769,9 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     nFiles = length(Files)
 
     if (MPI == "code") {
-        Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
-                          as.integer((rank+1)*(nSubsets/size+.5))]
+        # Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
+        #                   as.integer((rank+1)*(nSubsets/size+.5))]
+        Subsets = Subsets[rank+1]
         Subsets = Subsets[!is.na(names(Subsets))]
         nSubsets = length(Subsets)
         if (size > nSubsets) {
