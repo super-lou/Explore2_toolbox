@@ -36,6 +36,10 @@ CARD_analyse_data_hide = function (data, CARD_path,
                           variable_names=variable_names,
                           verbose=subverbose)
     gc()
+
+    post("dataEX")
+    post(res$dataEX)
+    
     if (simplify) {
         res$dataEX = tidyr::separate(res$dataEX, col="ID",
                                      into=ID_colnames, sep="_")
