@@ -352,8 +352,9 @@ if (!read_tmp & !delete_tmp) {
             post(rank)
             
             for (root in 1:(size-1)) {
-                Root[root+1] = mpi.recv(0, type=2, source=root,
-                                        tag=1, comm=0)
+                Root[root+1] = Rmpi::mpi.recv(0, type=1,
+                                              source=root,
+                                              tag=1, comm=0)
                 post(paste0("End signal received from rank ", root))
                 post(paste0("Waiting for rank ", root+1, " : "))
                 post(paste0(gsub("1", "-", 
@@ -374,8 +375,8 @@ if (!read_tmp & !delete_tmp) {
         }
 
     } else if (MPI == "code") {
-        mpi.send(1, type=2, dest=0, tag=1, comm=0)
-        post(paste0("End signal from root ", rank)) 
+        Rmpi::mpi.send(1, type=1, dest=0, tag=1, comm=0)
+        post(paste0("End signal from rank ", rank)) 
     }
 
     if ('read_saving' %in% to_do) {
