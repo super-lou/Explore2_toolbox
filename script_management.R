@@ -344,15 +344,18 @@ if (!read_tmp & !delete_tmp) {
         if (MPI == "code" & rank == 0) {
             Root = rep(0, times=size)
             Root[1] = 1
-            post("Waiting other : ")
+            post("Waiting for rank 1 : ")
             post(paste0(gsub("1", "-", 
                              gsub("0", "_",
                                   Root)), collapse=""))
+            post(size)
+            post(rank)
+            
             for (root in 1:(size-1)) {
                 Root[root+1] = mpi.recv(0, type=2, source=root,
-                                        tag=1, comm=1)
+                                        tag=1, comm=0)
                 post(paste0("End signal received from rank ", root))
-                post("Waiting other : ")
+                post(paste0("Waiting for rank ", root+1, " : "))
                 post(paste0(gsub("1", "-", 
                                  gsub("0", "_",
                                       Root)), collapse=""))
@@ -371,7 +374,7 @@ if (!read_tmp & !delete_tmp) {
         }
 
     } else if (MPI == "code") {
-        mpi.send(1, type=2, dest=0, tag=1, comm=1)
+        mpi.send(1, type=2, dest=0, tag=1, comm=0)
         post(paste0("End signal from root ", rank)) 
     }
 
