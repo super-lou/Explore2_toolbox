@@ -352,7 +352,9 @@ if (!read_tmp & !delete_tmp) {
             post(rank)
             
             for (root in 1:(size-1)) {
-                Root[root+1] = Rmpi::mpi.recv(0, type=1,
+                post(root)
+                Root[root+1] = Rmpi::mpi.recv(as.integer(0),
+                                              type=1,
                                               source=root,
                                               tag=1, comm=0)
                 post(paste0("End signal received from rank ", root))
@@ -375,7 +377,7 @@ if (!read_tmp & !delete_tmp) {
         }
 
     } else if (MPI == "code") {
-        Rmpi::mpi.send(1, type=1, dest=0, tag=1, comm=0)
+        Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
         post(paste0("End signal from rank ", rank)) 
     }
 
