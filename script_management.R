@@ -348,11 +348,7 @@ if (!read_tmp & !delete_tmp) {
             post(paste0(gsub("1", "-", 
                              gsub("0", "_",
                                   Root)), collapse=""))
-            post(size)
-            post(rank)
-            
             for (root in 1:(size-1)) {
-                post(root)
                 Root[root+1] = Rmpi::mpi.recv(as.integer(0),
                                               type=1,
                                               source=root,
@@ -395,7 +391,10 @@ if (!read_tmp & !delete_tmp) {
                                include.dirs=TRUE,
                                full.names=TRUE)
 
-            pattern = paste0("(", paste0(var2search, "[.]",
+            pattern = var2search
+            pattern[!grepl("dataEX", pattern)] =
+                paste0(pattern[!grepl("dataEX", pattern)], "[.]")
+            pattern = paste0("(", paste0(pattern,
                                          collapse=")|("), ")")
             pattern = gsub("EX", paste0("EX_", CARD_var), pattern)
             pattern = gsub("[_]", "[_]", pattern)

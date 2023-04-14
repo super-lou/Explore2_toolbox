@@ -137,8 +137,8 @@ for (i in 1:nChunk) {
     #                               Code_to_plot,]))
     # }
     # names(dataEXserie_to_plot) = names(dataEXserie)
-    dataEXind_to_plot = dataEXind
-    dataEXserie_to_plot = dataEXserie
+    dataEXind_to_plot = dataEX_Explore2_diag_criteria_select
+    dataEXserie_to_plot = dataEX_Explore2_diag_serie
     
     
     for (sheet in plot_list) {
