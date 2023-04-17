@@ -78,11 +78,11 @@ create_data = function () {
                        Référence=
                            codes_selection_data$Référence[id],
                        XL93_m=
-                           codes_selection_data$XL93[id],
+                           as.numeric(codes_selection_data$XL93[id]),
                        YL93_m=
-                           codes_selection_data$YL93[id],
+                           as.numeric(codes_selection_data$YL93[id]),
                        Surface_km2=
-                           codes_selection_data$S_HYDRO[id])
+                           as.numeric(codes_selection_data$S_HYDRO[id]))
 
         meta$Nom = gsub("L[']", "L ", meta$Nom)
         meta$Nom = gsub(" A ", " à ",

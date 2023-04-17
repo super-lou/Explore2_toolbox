@@ -26,8 +26,8 @@ manage_data = function () {
     if (exists("meta")) {
         rm (meta)
     }
-    for (i in 1:nSubsets) {
-        subset_name = names(Subsets)[i]
+    for (i in 1:nSubsets_save) {
+        subset_name = names(Subsets_save)[i]
         if (by_files | MPI == "file") {
             subset_name = paste0(files_name_opt,
                                  "_", subset_name)
@@ -66,8 +66,8 @@ manage_data = function () {
         if (exists("dataEX")) {
             rm ("dataEX")
         }
-        for (j in 1:nSubsets) {
-            subset_name = names(Subsets)[j]
+        for (j in 1:nSubsets_save) {
+            subset_name = names(nSubsets)[j]
 
             if (!exists("metaEX")) {
                 filename = paste0("metaEX_", CARD_var, "_",

@@ -90,14 +90,14 @@ if ('plot_doc' %in% to_do) {
 
 
 if (is.null(doc_chunk)) {
-    chunkCode = list(CodeALL8)
+    chunkCode = list(CodeALL10)
 
 } else if (doc_chunk == "all") {
-    chunkCode = list(CodeALL8)
+    chunkCode = list(CodeALL10)
     
 } else if (doc_chunk == "region") {
-    letter = factor(substr(CodeALL8, 1, 1))
-    chunkCode = split(CodeALL8, letter)
+    letter = factor(substr(CodeALL10, 1, 1))
+    chunkCode = split(CodeALL10, letter)
     names(chunkCode) = paste0(iRegHydro()[names(chunkCode)],
                               " - ", levels(letter))
 }
