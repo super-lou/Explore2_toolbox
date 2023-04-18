@@ -67,7 +67,7 @@ manage_data = function () {
             rm ("dataEX")
         }
         for (j in 1:nSubsets_save) {
-            subset_name = names(nSubsets)[j]
+            subset_name = names(Subsets_save)[j]
 
             if (!exists("metaEX")) {
                 filename = paste0("metaEX_", CARD_var, "_",

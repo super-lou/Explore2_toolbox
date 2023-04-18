@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,15 +150,15 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
+        # 'read_saving'
         # 'bind_analyse' ##
         # 'criteria_selection'
         # 'write_warnings'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -221,14 +221,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -269,8 +269,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "K221083001"
         # "^R"
         # "^K"
