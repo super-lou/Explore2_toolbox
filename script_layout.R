@@ -42,7 +42,7 @@ plot_sheet_diagnostic_station = function (dataEXind_to_plot,
                 data,
                 meta,
                 dataEXind_to_plot,
-                metaEXind,
+                metaEXind_to_plot,
                 dataEXserie_to_plot,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
@@ -138,6 +138,7 @@ for (i in 1:nChunk) {
     # }
     # names(dataEXserie_to_plot) = names(dataEXserie)
     dataEXind_to_plot = dataEX_Explore2_diag_criteria_select
+    metaEXind_to_plot = metaEX_Explore2_diag_criteria_select
     dataEXserie_to_plot = dataEX_Explore2_diag_serie
     
     

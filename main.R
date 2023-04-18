@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,15 +150,15 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
-        # 'read_saving'
+        # 'read_saving',
         # 'bind_analyse' ##
         # 'criteria_selection'
         # 'write_warnings'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -221,8 +221,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
@@ -269,8 +269,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "K221083001"
         # "^R"
         # "^K"
@@ -301,8 +301,8 @@ analyse_data =
         # c('WIP', simplify=FALSE)
         
         # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-        c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
-        c('Explore2_diag/002_serie', simplify=FALSE)
+        c('Explore2_diag/001_criteria/002_select', simplify=TRUE)
+        # c('Explore2_diag/002_serie', simplify=FALSE)
         
         # c('Explore2_proj/001_serie', simplify=FALSE),
         # c('Explore2_proj/002_check', simplify=FALSE)
@@ -320,8 +320,8 @@ by_files =
 
 var2save =
     c(
-        'meta',
-        'data',
+        # 'meta',
+        # 'data',
         'dataEX',
         'metaEX'
     )
