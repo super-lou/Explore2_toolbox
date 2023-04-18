@@ -151,7 +151,7 @@ to_do =
     c(
         # 'delete_tmp',
         'create_data',
-        'analyse_data',
+        'analyse_data'
         'save_analyse'
         # 'read_tmp'
         # 'read_saving',
@@ -221,8 +221,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =

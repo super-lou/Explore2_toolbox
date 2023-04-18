@@ -26,7 +26,7 @@ data_dir = "./"
 
 ### 1.2. Chain _______________________________________________________
 GCM = "CNRM-CM5"
-EXP = "rcp26"
+EXP = "historical"
 RCM = "ALADIN63"
 BC = "ADAMONT"
 Model = "J2000"
