@@ -154,7 +154,7 @@ to_do =
         'analyse_data',
         'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
+        # 'read_saving'
         # 'bind_analyse' ##
         # 'criteria_selection'
         # 'write_warnings'
@@ -221,8 +221,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
