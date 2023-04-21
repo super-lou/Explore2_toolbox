@@ -414,42 +414,30 @@ if (!read_tmp & !delete_tmp) {
 
     }
 
-    # if ('criteria_selection' %in% to_do) {
-    #     post("### Selecting variables")
-    #     # for (i in 1:length(analyse_data)) {
-        
-    #     # CARD_dir = analyse_data[[i]][1]
-    #     # simplify = as.logical(analyse_data[[i]]["simplify"])
-    #     # CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+    if ('criteria_selection' %in% to_do) {
+        post("### Selecting variables")
+        for (i in 1:length(analyse_data)) {
+            
+            CARD_dir = analyse_data[[i]][1]
+            simplify = as.logical(analyse_data[[i]]["simplify"])
+            CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
 
-    #     ###
-    #     rm("dataEXname")
-    #     rm("metaEXname")
-    #     rm("dataEXtmp")
-    #     rm("metaEXtmp")
-    #     ###
-        
-    #     dataEXname = ls()[grepl("^dataEX.*", ls())]
-    #     metaEXname = ls()[grepl("^metaEX.*", ls())]
-        
-    #     if (length(dataEXname) > 0 &
-    #         length(metaEXname) > 0) {
-
-    #         for (i in 1:length(dataEXname)) {
-
-    #             dataEXtmp = get(dataEXname[i])
-    #             metaEXtmp = get(metaEXname[i])
-                
-    #             res = get_select(dataEXtmp, metaEXtmp,
-    #                              select=criteria_selection)
-    #             dataEXtmp = res$dataEX
-    #             metaEXtmp = res$metaEX
-                
-    #             assign(dataEXname[i], dataEXtmp)
-    #             assign(metaEXname[i], metaEXtmp)
-    #         }
-    #     }
-    # }
+            if (simplify) {
+                dataEXname = paste0("dataEX_", CARD_var)
+                metaEXname = paste0("metaEX_", CARD_var)
+                dataEXtmp = get(dataEXname)
+                metaEXtmp = get(metaEXname)
+                dataEXtmp =
+                    dataEXtmp[!grepl("(^HYP)|([_]obs$)|([_]sim$)",
+                                     names(dataEXtmp))]
+                metaEXtmp =
+                    metaEXtmp[!grepl("(^HYP)|([_]obs$)|([_]sim$)",
+                                     metaEXtmp$var),]
+                assign(dataEXname, dataEXtmp)
+                assign(metaEXname, metaEXtmp)
+            }   
+        }
+    }
 
     if ('write_warnings' %in% to_do) {
         post("### Writing warnings")

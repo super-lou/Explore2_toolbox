@@ -486,13 +486,6 @@ find_Warnings = function (dataEXind, metaEXind,
             var = Var[i]
             x = dataEXind_code[[var]]
 
-            # print(var)
-            # print(names(tick_line))
-            # print(sapply(names(tick_line),
-                                     # grepl,
-                                     # var))
-            # print("")
-
             range = unlist(tick_range[sapply(names(tick_range),
                                              grepl, var)],
                            use.names=FALSE)

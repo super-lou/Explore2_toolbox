@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,16 +149,16 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'delete_tmp'
+        # 'create_data'
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving'
-        # 'bind_analyse' ##
+        # 'read_saving',
         # 'criteria_selection'
         # 'write_warnings'
-        # 'plot_sheet'
+        # 'bind_analyse' ##
+        'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -226,9 +226,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -269,8 +269,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "K221083001"
         # "^R"
         # "^K"
@@ -651,10 +651,10 @@ if (mode == "diag") {
 } else if (mode == "proj") {
     ref = c(0, 1)
 }
-codes8_selection =
-    codes_selection_data$CODE[codes_selection_data$Référence %in% ref]
-codes10_selection =
-    codes_selection_data$SuggestionCode[codes_selection_data$Référence %in% ref]
+codes_selection_data =
+    codes_selection_data[codes_selection_data$Référence %in% ref,]
+codes8_selection = codes_selection_data$CODE
+codes10_selection = codes_selection_data$SuggestionCode
 if (all(codes_to_use == "")) {
     stop ("No station selected")
 }
