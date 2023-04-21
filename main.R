@@ -239,7 +239,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = NULL
 propagate_NA = TRUE
-nCode4RAM = 500
+nCode4RAM = 25
 
 projs_to_use =
     c(
@@ -248,7 +248,7 @@ projs_to_use =
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"
-        # "NorESM1-M.*historical.*REMO.*ADAMONT"
+        # "NorESM1-M.*rcp26.*REMO.*ADAMONT"
         # "HadGEM2.*histo.*RegCM4.*CDFt"
     )
 
