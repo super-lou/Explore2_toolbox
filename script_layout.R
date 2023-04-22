@@ -72,6 +72,9 @@ if (!exists("Shapefiles")) {
         entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
         river_dir, river_file, river_selection=river_selection,
         toleranceRel=toleranceRel)
+    Shapefiles$entiteHydro$Code =
+        codes10_selection[match(Shapefiles$entiteHydro$Code,
+                                codes8_selection)]
 }
 
 
