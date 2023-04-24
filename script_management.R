@@ -532,11 +532,30 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                 proj_path, " ", 
                                 proj_merge_path)
                 system(cdoCmd)
+
+                NC_proj = ncdf4::nc_open(proj_path)
+                NC_proj_merge = ncdf4::nc_open(proj_merge_path,
+                                               write=TRUE)
+
+                code_value = ncdf4::ncvar_get(NC_proj, "code")
+
+                station_dim = NC_proj_merge$dim[['station']]
+                nchar_dim = ncdf4::ncdim_def("code_strlen",
+                                             "",
+                                             1:max(nchar(code_value)))
+                code_var = ncdf4::ncvar_def(name="code",
+                                            units="",
+                                            dim=list(nchar_dim,
+                                                     station_dim),
+                                            prec="char")
+                NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
+                                                 code_var)
+                ncdf4::ncvar_put(NC_proj_merge,
+                                 "code", code_value)
+                ncdf4::nc_close(NC_proj)
+                ncdf4::nc_close(NC_proj_merge)
             }
         }
-
-        
-        
         merge_nc = FALSE
     }
 

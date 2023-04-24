@@ -149,12 +149,12 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp'
-        'merge_nc' ##
-        # 'create_data',
+        'delete_tmp',
+        # 'merge_nc' ##
+        'create_data',
         # 'analyse_data',
         # 'save_analyse'
-        # 'read_tmp'
+        'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
@@ -243,8 +243,8 @@ nCode4RAM = 25
 
 projs_to_use =
     c(
-        'all'
-        # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
+        # 'all'
+        "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"
@@ -254,14 +254,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
         "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -269,14 +269,14 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
-        # "K221083001"
+        # 'all'
+        'K2981910', #ref
+        # "K221083001",
         # "^R"
         # "^K"
-        # 'K1363010'
+        'K1363010',
         # 'V0144010',
-        # 'K1341810'
+        'K1341810'
         # "M0014110",
         # "^A"
     )
@@ -343,7 +343,7 @@ read_saving =
 var2search =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX',
         'Warnings'

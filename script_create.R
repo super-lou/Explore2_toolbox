@@ -66,7 +66,7 @@ create_data = function () {
         }
     }
 
-    if (nrow(data_sim) > 0) {
+    if (nrow(data_sim) > 0) {        
         id = match(CodeSUB10, codes10_selection)
         meta =
             dplyr::tibble(
@@ -116,6 +116,17 @@ create_data = function () {
                                     by="Code")
         }
         meta = dplyr::arrange(meta, Code)
+
+        meta_S = dplyr::summarise(dplyr::group_by(data_sim,
+                                                  Model,
+                                                  Code),
+                                  S=S[1])
+        meta_S = tidyr::pivot_wider(meta_S,
+                                    names_from=Model,
+                                    values_from=S,
+                                    names_glue="Surface_{Model}_km2")
+        meta = dplyr::left_join(meta, meta_S, by="Code")
+        data_sim = dplyr::select(data_sim, -"S")
         
         if (mode == "diag") {
             post("### Observation data")
@@ -209,6 +220,19 @@ create_data = function () {
         } else if (mode == "proj") {
             data = data_sim
         }
+
+        # print(meta)
+        # print(data)
+
+        # meta = dplyr::left_join(meta,
+        #                         dplyr::select(data,
+        #                                       c("Code", "S")),
+        #                         by="Code")
+        # data = dplyr::select(data, -"S")
+
+        # print(meta)
+        # print(data)
+        # print("")
         
         write_tibble(data,
                      filedir=tmppath,
