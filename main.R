@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,15 +150,15 @@ mode =
 to_do =
     c(
         # 'delete_tmp'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
         # 'bind_analyse' ##
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -226,9 +226,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -239,7 +239,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = NULL
 propagate_NA = TRUE
-nCode4RAM = 25
+nCode4RAM = 500
 
 projs_to_use =
     c(
@@ -269,8 +269,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "K221083001"
         # "^R"
         # "^K"
@@ -321,7 +321,7 @@ by_files =
 var2save =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX'
     )

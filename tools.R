@@ -280,143 +280,143 @@ find_Warnings = function (dataEXind, metaEXind,
     tick_line = list(
         
         "^KGE"=c(
-            ":reproduit/reproduisent: mal les observations.",
-            ":reproduit/reproduisent: correctement les observations.",
-            ":reproduit/reproduisent: mal les observations."),
+            ":reproduit|reproduisent: mal les observations.",
+            ":reproduit|reproduisent: correctement les observations.",
+            ":reproduit|reproduisent: mal les observations."),
         
         "^Biais$"=c(
-            ":a/ont: un biais négatif important.",
-            ":a/ont: un biais acceptable.",
-            ":a/ont: un biais positif important."),
+            ":a|ont: un biais négatif important.",
+            ":a|ont: un biais acceptable.",
+            ":a|ont: un biais positif important."),
 
         "^epsilon.*T.*DJF"=c(
-            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de température en hiver.",
-            ":a/ont: une sensibilité acceptable aux variations de température en hiver.",
-            ":est/sont: trop :sensible/sensibles: aux variations de température en hiver."),
+            ":n'est|ne sont: pas assez :sensible|sensibles: aux variations de température en hiver.",
+            ":a|ont: une sensibilité acceptable aux variations de température en hiver.",
+            ":est|sont: trop :sensible|sensibles: aux variations de température en hiver."),
 
         "^epsilon.*T.*JJA"=c(
-            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de température en été.",
-            ":a/ont: une sensibilité acceptable aux variations de température en été.",
-            ":est/sont: trop :sensible/sensibles: aux variations de température en été."),
+            ":n'est|ne sont: pas assez :sensible|sensibles: aux variations de température en été.",
+            ":a|ont: une sensibilité acceptable aux variations de température en été.",
+            ":est|sont: trop :sensible|sensibles: aux variations de température en été."),
 
         "^epsilon.*P.*DJF"=c(
-            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de précipitations hivernales.",
-            ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales.",
-            ":est/sont: trop :sensible/sensibles: aux variations de précipitations hivernales."),
+            ":n'est|ne sont: pas assez :sensible|sensibles: aux variations de précipitations hivernales.",
+            ":a|ont: une sensibilité acceptable aux variations de précipitations hivernales.",
+            ":est|sont: trop :sensible|sensibles: aux variations de précipitations hivernales."),
 
         "^epsilon.*P.*JJA"=c(
-            ":n'est/ne sont: pas assez :sensible/sensibles: aux variations de précipitations estivales.",
-            ":a/ont: une sensibilité acceptable aux variations de précipitations estivales.",
-            ":est/sont: trop :sensible/sensibles: aux variations de précipitations estivales."),
+            ":n'est|ne sont: pas assez :sensible|sensibles: aux variations de précipitations estivales.",
+            ":a|ont: une sensibilité acceptable aux variations de précipitations estivales.",
+            ":est|sont: trop :sensible|sensibles: aux variations de précipitations estivales."),
 
         "^Q10$"=c(
-            ":sous-estime/sous-estiment: les débits en hautes eaux.",
-            ":simule/simulent: de manière correcte les débits en hautes eaux.",
-            ":surestime/surestiment: les débits en hautes eaux."),
+            ":sous-estime|sous-estiment: les débits en hautes eaux.",
+            ":simule|simulent: de manière correcte les débits en hautes eaux.",
+            ":surestime|surestiment: les débits en hautes eaux."),
 
         "tQJXA"=c(
-            ":produit/produisent: des crues trop tôt dans l'année.",
-            ":simule/simulent: de manière correcte la temporalité annuelle des crues.",
-            ":produit/produisent: des crues trop tard dans l'année."),
+            ":produit|produisent: des crues trop tôt dans l'année.",
+            ":simule|simulent: de manière correcte la temporalité annuelle des crues.",
+            ":produit|produisent: des crues trop tard dans l'année."),
 
         "^alphaCDC$"=c(
-            ":simule/simulent: un régime des moyennes eaux pas suffisamment contrasté.",
-            ":simule/simulent: de manière correcte le régime des moyennes eaux.",
-            ":simule/simulent: un régime des moyennes eaux trop contrasté."),
+            ":simule|simulent: un régime des moyennes eaux pas suffisamment contrasté.",
+            ":simule|simulent: de manière correcte le régime des moyennes eaux.",
+            ":simule|simulent: un régime des moyennes eaux trop contrasté."),
 
         "^alphaQA$"=c(
-            ":s'écarte/s'écartent: sensiblement de la tendance observée sur les débits moyens annuels.",
-            ":simule/simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel.",
-            ":s'écarte/s'écartent: sensiblement de la tendance observée sur les débits moyens annuels."),
+            ":s'écarte|s'écartent: sensiblement de la tendance observée sur les débits moyens annuels.",
+            ":simule|simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel.",
+            ":s'écarte|s'écartent: sensiblement de la tendance observée sur les débits moyens annuels."),
 
         "^Q90$"=c(
-            ":sous-estime/sous-estiment: les débits en étiage.",
-            ":simule/simulent: de manière correcte les débits d'étiage.",
-            ":surestime/surestiment: les débits en étiage."),
+            ":sous-estime|sous-estiment: les débits en étiage.",
+            ":simule|simulent: de manière correcte les débits d'étiage.",
+            ":surestime|surestiment: les débits en étiage."),
 
         "tVCN10"=c(
-            ":produit/produisent: des étiages trop tôt dans l'année.",
-            ":simule/simulent: de manière correcte temporalité annuelle des étiages.",
-            ":produit/produisent: des étiages trop tard dans l'année."),
+            ":produit|produisent: des étiages trop tôt dans l'année.",
+            ":simule|simulent: de manière correcte temporalité annuelle des étiages.",
+            ":produit|produisent: des étiages trop tard dans l'année."),
 
         "RAT_T"=c(
-            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT<sub>T</sub>).",
-            ":montre/montrent: une faible robustesse temporelle à la température (test RAT<sub>T</sub>)."),
+            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>).",
+            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT<sub>P</sub>).",
-            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT<sub>P</sub>)."))
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).",
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>)."))
 
     
     tick_nline = list(
         
         "^KGE"=c(
-            ":reproduit/reproduisent: correctement les observations.",
-            ":reproduit/reproduisent: mal les observations.",
-            ":reproduit/reproduisent: correctement les observations."),
+            ":reproduit|reproduisent: correctement les observations.",
+            ":reproduit|reproduisent: mal les observations.",
+            ":reproduit|reproduisent: correctement les observations."),
         
         "^Biais$"=c(
-            ":a/ont: un biais acceptable.",
-            ":a/ont: un biais important.",
-            ":a/ont: un biais acceptable."),
+            ":a|ont: un biais acceptable.",
+            ":a|ont: un biais important.",
+            ":a|ont: un biais acceptable."),
 
         "^epsilon.*T.*DJF"=c(
-            ":a/ont: une sensibilité acceptable aux variations de température en hiver.",
-            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de température en hiver.",
-            ":a/ont: une sensibilité acceptable aux variations de température en hiver."),
+            ":a|ont: une sensibilité acceptable aux variations de température en hiver.",
+            ":n'est|ne sont: pas correctement :sensible|sensibles: aux variations de température en hiver.",
+            ":a|ont: une sensibilité acceptable aux variations de température en hiver."),
 
         "^epsilon.*T.*JJA"=c(
-            ":a/ont: une sensibilité acceptable aux variations de température en été.",
-            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de température en été.",
-            ":a/ont: une sensibilité acceptable aux variations de température en été."),
+            ":a|ont: une sensibilité acceptable aux variations de température en été.",
+            ":n'est|ne sont: pas correctement :sensible|sensibles: aux variations de température en été.",
+            ":a|ont: une sensibilité acceptable aux variations de température en été."),
 
         "^epsilon.*P.*DJF"=c(
-            ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales.",
-            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de précipitations hivernales.",
-            ":a/ont: une sensibilité acceptable aux variations de précipitations hivernales."),
+            ":a|ont: une sensibilité acceptable aux variations de précipitations hivernales.",
+            ":n'est|ne sont: pas correctement :sensible|sensibles: aux variations de précipitations hivernales.",
+            ":a|ont: une sensibilité acceptable aux variations de précipitations hivernales."),
 
         "^epsilon.*P.*JJA"=c(
-            ":a/ont: une sensibilité acceptable aux variations de précipitations estivales.",
-            ":n'est/ne sont: pas correctement :sensible/sensibles: aux variations de précipitations estivales.",
-            ":a/ont: une sensibilité acceptable aux variations de précipitations estivales."),
+            ":a|ont: une sensibilité acceptable aux variations de précipitations estivales.",
+            ":n'est|ne sont: pas correctement :sensible|sensibles: aux variations de précipitations estivales.",
+            ":a|ont: une sensibilité acceptable aux variations de précipitations estivales."),
 
         "^Q10$"=c(
-            ":simule/simulent: de manière correcte les débits en hautes eaux.",
-            "ne :simule/simulent: pas de manière correcte les débits en hautes eaux.",
-            ":simule/simulent: de manière correcte les débits en hautes eaux."),
+            ":simule|simulent: de manière correcte les débits en hautes eaux.",
+            "ne :simule|simulent: pas de manière correcte les débits en hautes eaux.",
+            ":simule|simulent: de manière correcte les débits en hautes eaux."),
 
         "tQJXA"=c(
-            ":simule/simulent: de manière correcte la temporalité annuelle des crues.",
-            "ne :simule/simulent: pas de manière correcte la temporalité annuelle des crues.",
-            ":simule/simulent: de manière correcte la temporalité annuelle des crues."),
+            ":simule|simulent: de manière correcte la temporalité annuelle des crues.",
+            "ne :simule|simulent: pas de manière correcte la temporalité annuelle des crues.",
+            ":simule|simulent: de manière correcte la temporalité annuelle des crues."),
 
         "^alphaCDC$"=c(
-            ":simule/simulent: de manière correcte le régime des moyennes eaux.",
-            "ne :simule/simulent: pas de manière correcte le régime des moyennes eaux.",
-            ":simule/simulent: de manière correcte le régime des moyennes eaux."),
+            ":simule|simulent: de manière correcte le régime des moyennes eaux.",
+            "ne :simule|simulent: pas de manière correcte le régime des moyennes eaux.",
+            ":simule|simulent: de manière correcte le régime des moyennes eaux."),
 
         "^alphaQA$"=c(
-            ":simule/simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel.",
-            ":s'écarte/s'écartent: sensiblement de la tendance observée sur les débits moyens annuels.",
-            ":simule/simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel."),
+            ":simule|simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel.",
+            ":s'écarte|s'écartent: sensiblement de la tendance observée sur les débits moyens annuels.",
+            ":simule|simulent: de manière correcte l'évolution au cours du temps du débit moyen annuel."),
 
         "^Q90$"=c(
-            ":simule/simulent: de manière correcte les débits d'étiage.",
-            "ne :simule/simulent: pas de manière correcte les débits d'étiage.",
-            ":simule/simulent: de manière correcte les débits d'étiage."),
+            ":simule|simulent: de manière correcte les débits d'étiage.",
+            "ne :simule|simulent: pas de manière correcte les débits d'étiage.",
+            ":simule|simulent: de manière correcte les débits d'étiage."),
 
         "tVCN10"=c(
-            ":simule/simulent: de manière correcte temporalité annuelle des étiages.",
-           "ne :simule/simulent: pas de manière correcte temporalité annuelle des étiages.",
-            ":simule/simulent: de manière correcte temporalité annuelle des étiages."),
+            ":simule|simulent: de manière correcte temporalité annuelle des étiages.",
+           "ne :simule|simulent: pas de manière correcte temporalité annuelle des étiages.",
+            ":simule|simulent: de manière correcte temporalité annuelle des étiages."),
 
         "RAT_T"=c(
-            ":montre/montrent: une faible robustesse temporelle à la température (test RAT<sub>T</sub>).",
-            ":montre/montrent: une robustesse temporelle satisfaisante à la température (test RAT<sub>T</sub>)."),
+            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>).",
+            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre/montrent: une faible robustesse temporelle aux précipitations (test RAT<sub>P</sub>).",
-            ":montre/montrent: une robustesse temporelle satisfaisante aux précipitations (test RAT<sub>P</sub>)."))
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).",
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>)."))
     
     
     line_allOK = "<b>Tous les modèles</b> semblent simuler de manière acceptable le régime."
@@ -424,7 +424,7 @@ find_Warnings = function (dataEXind, metaEXind,
     line_NOK = "Les modèles ont des difficultés à reproduire le régime sauf "
     line_allNOK = "<b>Aucun modèle</b> ne semble simuler de manière acceptable le régime."
 
-    orderVar = c("Général", "^RAT.*T$", "^KGE",
+    orderVar = c("Général", "^RAT.*T$",  "^RAT.*P$", "^KGE",
                  "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}])",
                  "^alpha", "^epsilon.*")
 
@@ -538,7 +538,7 @@ find_Warnings = function (dataEXind, metaEXind,
                                                            niveau,
                                                            line,
                                                            nline)))
-            
+        
         statLines =
             dplyr::summarise(
                        dplyr::group_by(Lines, var, niveau),
@@ -635,9 +635,8 @@ find_Warnings = function (dataEXind, metaEXind,
                                                   niveau=niveau,
                                                   line=line,
                                                   nline=NA))
-        
-        for (i in 1:nrow(Warnings_code)) {
 
+        for (i in 1:nrow(Warnings_code)) {
             Line = Warnings_code[i,]
             if (is.null(unlist(Line$model))) {
                 next
@@ -646,7 +645,7 @@ find_Warnings = function (dataEXind, metaEXind,
             if (length(unlist(Line$model)) == nModel) {
                 Line$line =
                     paste0(all_model, " ",
-                           gsub("([/].*[:])|([:])",
+                           gsub("([|].*[:])|([:])",
                                 "",
                                 Line$line))
             } else {
@@ -656,7 +655,7 @@ find_Warnings = function (dataEXind, metaEXind,
                 # if (length(unlist(Line$model)) == 1) {
                 #     Line$line =
                 #         paste0(model, " ",
-                #                gsub("([/].*[:])|([:])",
+                #                gsub("([|].*[:])|([:])",
                 #                     "",
                 #                     Line$line))
                 # } else {
@@ -666,7 +665,7 @@ find_Warnings = function (dataEXind, metaEXind,
                 #         " et ", model[length(model)])
                 #     Line$line =
                 #         paste0(model, " ",
-                #                gsub("([:].*[/])|([:])",
+                #                gsub("([:].*[|])|([:])",
                 #                     "",
                 #                     Line$line))
                 # }
@@ -681,7 +680,7 @@ find_Warnings = function (dataEXind, metaEXind,
                     if (models_len == 1) {
                         Line$line =
                             paste0("Seul ", models_str, " ",
-                                   gsub("([/].*[:])|([:])",
+                                   gsub("([|].*[:])|([:])",
                                         "",
                                         Line$nline))
                     } else {
@@ -691,7 +690,7 @@ find_Warnings = function (dataEXind, metaEXind,
                             " et ", models_str[models_len])
                         Line$line =
                             paste0("Seuls ", models_str, " ",
-                                   gsub("([:].*[/])|([:])",
+                                   gsub("([:].*[|])|([:])",
                                         "",
                                         Line$nline))
                     }
@@ -701,7 +700,7 @@ find_Warnings = function (dataEXind, metaEXind,
                     if (models_len == 1) {
                         Line$line =
                             paste0(models_str, " ",
-                                   gsub("([/].*[:])|([:])",
+                                   gsub("([|].*[:])|([:])",
                                         "",
                                         Line$line))
                     } else {
@@ -711,7 +710,7 @@ find_Warnings = function (dataEXind, metaEXind,
                             " et ", models_str[models_len])
                         Line$line =
                             paste0(models_str, " ",
-                                   gsub("([:].*[/])|([:])",
+                                   gsub("([:].*[|])|([:])",
                                         "",
                                         Line$line))
                     }
@@ -767,9 +766,10 @@ find_Warnings = function (dataEXind, metaEXind,
     return (list(Warnings=Warnings, frq=frq))
 }
 
-# W = find_Warnings(dataEXind, metaEXind,
-                  # codeLight="K2981910",
-                  # save=FALSE)
+# W = find_Warnings(dataEX_Explore2_diag_criteria_select,
+#                   metaEX_Explore2_diag_criteria_select,
+#                   codeLight="K298191001",
+#                   save=FALSE)
 # W = find_Warnings(dataEXind, metaEXind)
 # Warnings = W$Warnings
 # frq = W$frq
