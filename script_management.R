@@ -338,7 +338,7 @@ save_data = function () {
 
 
 ## 1. MANAGEMENT OF DATA ______________________________________________
-if (!read_tmp & !delete_tmp) {
+if (!read_tmp & !merge_nc & !delete_tmp) {
 
     if (MPI == "code" & rank == 0 | MPI != "code") {
         if (MPI == "code" & rank == 0) {
@@ -480,6 +480,67 @@ if (!read_tmp & !delete_tmp) {
         read_tmp = FALSE
     }
 
+    
+    if (merge_nc) {
+        post("### Merging NetCDF file by time for projection")
+        proj_merge_dir = paste0(proj_dir, "_merge")
+        proj_merge_dirpath = file.path(computer_data_path,
+                                       proj_merge_dir)
+        if (!dir.exists(proj_merge_dirpath)) {
+            dir.create(proj_merge_dirpath)
+        }
+            
+        Paths = list.files(file.path(computer_data_path, proj_dir),
+                           pattern=".*[.]nc",
+                           include.dirs=FALSE,
+                           full.names=TRUE,
+                           recursive=TRUE)
+        Files = basename(Paths)
+        
+        projs_historical =
+            projs_selection_data[projs_selection_data$EXP ==
+                                 "historical",]
+        nProjs_historical = nrow(projs_historical)
+        nEXP = length(EXP)
+        
+        for (i in 1:nProjs_historical) {
+            proj_historical = projs_historical[i,]
+            proj_historical_path = Paths[grepl(proj_historical$regexp,
+                                               Files)]
+                
+            for (j in 2:nEXP) {
+                exp = EXP[j]
+                proj =
+                    projs_selection_data[projs_selection_data$GCM ==
+                                         proj_historical$GCM &
+                                         projs_selection_data$RCM ==
+                                         proj_historical$RCM &
+                                         projs_selection_data$EXP ==
+                                         exp &
+                                         projs_selection_data$BC ==
+                                         proj_historical$BC &
+                                         projs_selection_data$Model ==
+                                         proj_historical$Model,]
+
+                proj_path = Paths[grepl(proj$regexp, Files)]
+                proj_merge_path =
+                    file.path(proj_merge_dirpath,
+                              gsub("[_]rcp", "_historical-rcp",
+                                   basename(proj_path)))
+                cdoCmd = paste0("cdo --history -O mergetime ",
+                                proj_historical_path, " ",
+                                proj_path, " ", 
+                                proj_merge_path)
+                system(cdoCmd)
+            }
+        }
+
+        
+        
+        merge_nc = FALSE
+    }
+
+    
     if (delete_tmp) {
         post("### Deleting tmp")
         if (file.exists(tmppath) & rank == 0) {
@@ -487,4 +548,30 @@ if (!read_tmp & !delete_tmp) {
         }
         delete_tmp = FALSE
     }
+}
+
+
+
+
+mergeNC <- function(
+                    ##title<< Aggregate data in netCDF files
+                    files ##<< character vector: names of the files to merge
+                  , outfile ##<< character: path to save the results files to. 
+                    )
+    ##description<<
+    ## This function aggregates time periods in netCDF files. Basically it is just a
+    ## wrapper around the respective cdo function.
+{
+    ##test input
+    #if (system("cdo -V")==0)
+    #  stop('cdo not found. Please install it.')
+    
+    ## supply cdo command
+    cdoCmd <- paste('cdo -cat', paste(files, collapse=" "), outfile, sep=' ')
+    
+    system(cdoCmd)
+    cat(paste('Created file ', outfile, '.\n', sep = ''))
+    
+    ## character string: name of the file created. 
+    invisible(outfile)
 }

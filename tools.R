@@ -123,6 +123,7 @@ NetCDF_to_tibble = function (NetCDF_path,
         }
         S = S[station]
         S = S[CodeOrder]
+        data = dplyr::bind_cols(data, S=rep(S, each=nDate))
         
         if (!(chain %in% c("CTRIP", "EROS", "GRSD", "SIM2"))) {
             P = ncdf4::ncvar_get(NCdata, "P",
@@ -209,15 +210,16 @@ NetCDF_to_tibble = function (NetCDF_path,
         Q_sim = c(t(Q_sim))
 
 
-        # S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
-        #                      start=start,
-        #                      count=count)
-        # S = S[station]
-        # S = S[CodeOrder]
+        S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
+                             start=start,
+                             count=count)
+        S = S[station]
+        S = S[CodeOrder]
 
         data = dplyr::tibble(Code=rep(Code, each=nDate),
                              Date=rep(Date, times=nCode),
-                             Q_sim=Q_sim)
+                             Q_sim=Q_sim,
+                             S=rep(S, each=nDate))
         data = dplyr::filter(data, !is.nan(Q_sim))
         IDvalue = unlist(strsplit(chain, "[|]"))
         IDname = c("GCM", "EXP", "RCM", "BC", "Model")

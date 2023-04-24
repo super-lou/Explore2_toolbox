@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,14 +150,14 @@ mode =
 to_do =
     c(
         # 'delete_tmp'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        'merge_nc' ##
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
-        # 'bind_analyse' ##
         # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
@@ -226,8 +226,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -254,15 +254,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        "SIM2"
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SMASH"
     )
 complete_by = "SMASH"
 
@@ -315,8 +315,8 @@ no_lim = TRUE
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
@@ -552,6 +552,7 @@ if (!(file.exists(resources_path)) & rank == 0) {
 }
 
 delete_tmp = FALSE
+merge_nc = FALSE
 read_tmp = FALSE
 
 if ('plot_doc' %in% to_do) {
@@ -562,15 +563,15 @@ if ('plot_doc' %in% to_do) {
 if (mode == "proj") {
     projs_selection_data = read_tibble(file.path(computer_data_path,
                                                  projs_selection_file))  
-    cols = c("historical", 'rcp26', 'rcp45', 'rcp85')
-    names(projs_selection_data)[3:6] = cols
+    EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
+    names(projs_selection_data)[3:6] = EXP
     projs_selection_data =
         dplyr::mutate(projs_selection_data,
-                      dplyr::across(.cols=cols,
+                      dplyr::across(.cols=EXP,
                                     .fns=convert2bool, true="x"))
     projs_selection_data =
         tidyr::pivot_longer(data=projs_selection_data,
-                            cols=cols,
+                            cols=EXP,
                             names_to="EXP")
     projs_selection_data$value = as.logical(projs_selection_data$value)
     projs_selection_data = dplyr::filter(projs_selection_data, value)
@@ -690,6 +691,14 @@ if ("delete_tmp" %in% to_do) {
 
 if (!(file.exists(tmppath)) & rank == 0) {
     dir.create(tmppath, recursive=TRUE)
+}
+
+if ("merge_nc" %in% to_do) {
+    merge_nc = TRUE
+    to_do = to_do[to_do != "merge_nc"]
+    post("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
 }
 
 if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
