@@ -497,30 +497,38 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                            recursive=TRUE)
         Files = basename(Paths)
         
-        projs_historical =
+        Historicals =
             projs_selection_data[projs_selection_data$EXP ==
                                  "historical",]
-        nProjs_historical = nrow(projs_historical)
+        nHistoricals = nrow(Historicals)
         nEXP = length(EXP)
+
+        flag = dplyr::tibble()
         
-        for (i in 1:nProjs_historical) {
-            proj_historical = projs_historical[i,]
-            proj_historical_path = Paths[grepl(proj_historical$regexp,
-                                               Files)]
-                
+        for (i in 1:nHistoricals) {
+            historical = Historicals[i,]
+            historical_path = Paths[grepl(historical$regexp,
+                                          Files)]
+
+            NC_historical = ncdf4::nc_open(historical_path)
+            Date = NetCDF_extrat_time(NC_historical)
+            ncdf4::nc_close(NC_historical)
+            minDate_historical = min(Date)
+            maxDate_historical = max(Date)
+            
             for (j in 2:nEXP) {
                 exp = EXP[j]
                 proj =
                     projs_selection_data[projs_selection_data$GCM ==
-                                         proj_historical$GCM &
+                                         historical$GCM &
                                          projs_selection_data$RCM ==
-                                         proj_historical$RCM &
+                                         historical$RCM &
                                          projs_selection_data$EXP ==
                                          exp &
                                          projs_selection_data$BC ==
-                                         proj_historical$BC &
+                                         historical$BC &
                                          projs_selection_data$Model ==
-                                         proj_historical$Model,]
+                                         historical$Model,]
 
                 proj_path = Paths[grepl(proj$regexp, Files)]
                 proj_merge_path =
@@ -528,12 +536,16 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                               gsub("[_]rcp", "_historical-rcp",
                                    basename(proj_path)))
                 cdoCmd = paste0("cdo --history -O mergetime ",
-                                proj_historical_path, " ",
+                                historical_path, " ",
                                 proj_path, " ", 
                                 proj_merge_path)
                 system(cdoCmd)
 
                 NC_proj = ncdf4::nc_open(proj_path)
+                Date = NetCDF_extrat_time(NC_proj)
+                minDate_proj = min(Date)
+                maxDate_proj = max(Date)
+                
                 NC_proj_merge = ncdf4::nc_open(proj_merge_path,
                                                write=TRUE)
 
@@ -554,8 +566,26 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                  "code", code_value)
                 ncdf4::nc_close(NC_proj)
                 ncdf4::nc_close(NC_proj_merge)
+
+                flag = dplyr::bind_rows(
+                                  flag,
+                                  dplyr::tibble(ID=proj$ID,
+                                                start_historical=
+                                                    minDate_historical,
+                                                end_historical=
+                                                    maxDate_historical,
+                                                start_proj=
+                                                    minDate_proj,
+                                                end_proj=
+                                                    maxDate_proj,
+                                                gap=minDate_proj -
+                                                    maxDate_historical))
             }
         }
+        flag = tidyr::separate(flag, col="ID",
+                               into=c("GCM", "EXP", "RCM",
+                                      "BC", "Model"), sep="[|]")
+        write_tibble(flag, today_resdir, "flag.txt")
         merge_nc = FALSE
     }
 

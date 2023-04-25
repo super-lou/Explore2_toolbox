@@ -44,14 +44,7 @@ convert_code8to10 = function (Code) {
     return (Code)
 }
 
-
-NetCDF_to_tibble = function (NetCDF_path,
-                             chain="", mode="diag") {
-    
-    NCdata = ncdf4::nc_open(NetCDF_path)
-
-    # print(NCdata)
-
+NetCDF_extrat_time = function (NCdata) {
     Date = ncdf4::ncvar_get(NCdata, "time")
     if (Date[2] - Date[1] == 86400) {
         Date = Date/86400
@@ -65,6 +58,17 @@ NetCDF_to_tibble = function (NetCDF_path,
                            "[0-9]+-[0-9]+-[0-9]+")))
 
     Date = as.Date(as.character(Date), origin=as.Date("1970-01-01"))
+    return (Date)
+}
+
+NetCDF_to_tibble = function (NetCDF_path,
+                             chain="", mode="diag") {
+    
+    NCdata = ncdf4::nc_open(NetCDF_path)
+
+    # print(NCdata)
+
+    Date = NetCDF_extrat_time(NCdata)
     nDate = length(Date)
 
     if (mode == "diag") {
@@ -175,7 +179,7 @@ NetCDF_to_tibble = function (NetCDF_path,
             ET0 = c(t(ET0))
             data = dplyr::bind_cols(data, ET0=ET0)
         }
-                
+        
         if (chain == "ORCHIDEE") {
             data$T = data$T - 273.15
         }
@@ -245,16 +249,16 @@ get_select = function (dataEX, metaEX,
         select = gsub("[}]", "[}]", select)
         select = gsub("[_]", "[_]", select)
         select = gsub("[,]", "[,]", select)
-                    
+        
         if (is.tbl(dataEX)) {
             select_in = c(sapply(select, apply_grepl,
-                              table=names(dataEX)))
+                                 table=names(dataEX)))
             dataEX = dplyr::select(dataEX, select_in)
 
         } else {
             for (i in 1:length(dataEX)) {
                 select_in = c(sapply(select, apply_grepl,
-                                  table=names(dataEX[[i]])))
+                                     table=names(dataEX[[i]])))
                 dataEX[[i]] = dplyr::select(dataEX[[i]], select_in)
             }
         }
@@ -409,7 +413,7 @@ find_Warnings = function (dataEXind, metaEXind,
 
         "tVCN10"=c(
             ":simule|simulent: de manière correcte temporalité annuelle des étiages.",
-           "ne :simule|simulent: pas de manière correcte temporalité annuelle des étiages.",
+            "ne :simule|simulent: pas de manière correcte temporalité annuelle des étiages.",
             ":simule|simulent: de manière correcte temporalité annuelle des étiages."),
 
         "RAT_T"=c(
@@ -779,3 +783,22 @@ find_Warnings = function (dataEXind, metaEXind,
 # frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
 # frq_short$npv_pct = round(frq_short$npv_pct)
 # Warnings[grepl("hydrologique", Warnings$warning),]
+
+
+
+start_timer = function (timer, rank, process_type, process_name) {
+    timer = dplyr::bind_rows(timer,
+                             dplyr::tibble(rank=rank,
+                                           process_type=process_type,
+                                           process_name=process_name,
+                                           start=Sys.time(),
+                                           stop=Sys.time()))
+    return (timer)
+}
+
+stop_timer = function (timer, rank, process_type, process_name) {
+    timer$stop[timer$rank == rank &
+               timer$process_type == process_type &
+               timer$process_name == process_name] = Sys.time()
+    return (timer)
+}

@@ -23,10 +23,16 @@
 
 CARD_analyse_data_hide = function (data, CARD_path,
                                    CARD_dir, period_analyse,
-                                   simplify, simplify_by, no_lim,
+                                   simplify, simplify_by, mode,
                                    variable_names, subverbose,
                                    ID_colnames, tmppath, CARD_var,
                                    files_name_opt., subset_name) {
+    if (mode == "diag") {
+        no_lim = TRUE
+    } else if (mode == "proj") {
+        no_lim = FALSE
+    }
+    
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
                           CARD_dir=CARD_dir,
@@ -105,7 +111,7 @@ CARD_analyse_data = function () {
         CARD_analyse_data_hide(data, CARD_path,
                                CARD_dir, period_analyse,
                                simplify, simplify_by,
-                               no_lim, variable_names,
+                               mode, variable_names,
                                subverbose, ID_colnames,
                                tmppath, CARD_var, files_name_opt.,
                                subset_name)

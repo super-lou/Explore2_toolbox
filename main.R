@@ -149,12 +149,12 @@ mode =
 
 to_do =
     c(
-        'delete_tmp',
+        # 'delete_tmp',
         # 'merge_nc' ##
-        'create_data',
+        # 'create_data',
         # 'analyse_data',
         # 'save_analyse'
-        'read_tmp'
+        # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
@@ -237,7 +237,7 @@ MPI =
 # |___/ \__|\___|| .__//__/ __________________________________________
 ## 1. CREATE_DATA|_| _________________________________________________ 
 period_analyse_diag = c('1976-01-01', '2019-12-31')
-period_analyse_proj = NULL
+period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 nCode4RAM = 25
 
@@ -254,14 +254,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
+        "CTRIP",
+        "EROS",
+        "GRSD",
         "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -308,9 +308,6 @@ analyse_data =
         c('Explore2_proj/002_check', simplify=FALSE)
         # c('Explore2_proj/003_delta', simplify=TRUE)    
     )
-
-no_lim = TRUE
-# object.size()
 
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
@@ -713,6 +710,8 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         post("Maybe you can start by creating data")
     }
 
+    timer = dplyr::tibble()
+
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
 
@@ -866,13 +865,25 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 nCodeSUB = length(CodeSUB10)
 
                 if ('create_data' %in% to_do) {
+                    timer = start_timer(timer, rank, "create",
+                                        paste0(files_name_opt.,
+                                               subset_name))
                     source(file.path(lib_path, 'script_create.R'),
                            encoding='UTF-8')
+                    timer = stop_timer(timer, rank, "create",
+                                       paste0(files_name_opt.,
+                                              subset_name))
                 }        
                 if (create_ok) {
                     if ('analyse_data' %in% to_do) {
+                        timer = start_timer(timer, rank, "analyse",
+                                            paste0(files_name_opt.,
+                                                   subset_name))
                         source(file.path(lib_path, 'script_analyse.R'),
                                encoding='UTF-8')
+                        timer = stop_timer(timer, rank, "analyse",
+                                           paste0(files_name_opt.,
+                                                  subset_name))
                     }
                 }
                 Create_ok = c(Create_ok, create_ok)
@@ -883,8 +894,14 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             if (any(Create_ok)) {
                 if (any(c('analyse_data', 'save_analyse') %in% to_do)) {
                     post("## MANAGING DATA")
+                    timer = start_timer(timer, rank, "save",
+                                        paste0(files_name_opt.,
+                                               subset_name))
                     source(file.path(lib_path, 'script_management.R'),
                            encoding='UTF-8')
+                    timer = stop_timer(timer, rank, "save",
+                                       paste0(files_name_opt.,
+                                              subset_name))
                 }
             }
             print("")
@@ -893,6 +910,9 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     } else {
         warning ("No files")
     }
+
+    timer$time = timer$stop - timer$start
+    write_tibble(timer, today_resdir, "timer.txt")
 }
 
 if (any(c('criteria_selection', 'write_warnings',
