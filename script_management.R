@@ -625,6 +625,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                                     maxDate_historical))
             }
         }
+        post(flag)
+        post(nrow(flag))
         flag = tidyr::separate(flag, col="ID",
                                into=c("GCM", "EXP", "RCM",
                                       "BC", "Model"), sep="[|]")
