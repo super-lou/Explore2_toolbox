@@ -490,7 +490,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             if (rank == 0) {
                 dir.create(proj_merge_dirpath)
             } else {
-                Sys.sleep(2)  
+                Sys.sleep(10)  
             }
         }
             
@@ -549,6 +549,10 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                          projs_selection_data$Model ==
                                          historical$Model,]
 
+                if (nrow(proj) == 0) {
+                    next
+                }
+                
                 proj_path = Paths[grepl(proj$regexp, Files)]
 
                 post(proj_path)
