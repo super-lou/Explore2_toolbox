@@ -535,7 +535,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                     file.path(proj_merge_dirpath,
                               gsub("[_]rcp", "_historical-rcp",
                                    basename(proj_path)))
-                cdoCmd = paste0("cdo --history -O mergetime ",
+                cdoCmd = paste0(cdo_cmd_path,
+                                " --history -O mergetime ",
                                 historical_path, " ",
                                 proj_path, " ", 
                                 proj_merge_path)
@@ -597,30 +598,4 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         }
         delete_tmp = FALSE
     }
-}
-
-
-
-
-mergeNC <- function(
-                    ##title<< Aggregate data in netCDF files
-                    files ##<< character vector: names of the files to merge
-                  , outfile ##<< character: path to save the results files to. 
-                    )
-    ##description<<
-    ## This function aggregates time periods in netCDF files. Basically it is just a
-    ## wrapper around the respective cdo function.
-{
-    ##test input
-    #if (system("cdo -V")==0)
-    #  stop('cdo not found. Please install it.')
-    
-    ## supply cdo command
-    cdoCmd <- paste('cdo -cat', paste(files, collapse=" "), outfile, sep=' ')
-    
-    system(cdoCmd)
-    cat(paste('Created file ', outfile, '.\n', sep = ''))
-    
-    ## character string: name of the file created. 
-    invisible(outfile)
 }

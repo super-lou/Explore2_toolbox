@@ -49,7 +49,8 @@
 computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox'
 # Library path for package dev
 dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
-
+# cdo path if install from source
+cdo_cmd_path = "cdo"
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________

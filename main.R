@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -150,12 +150,12 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        # 'merge_nc' ##
+        'merge_nc' ##
         # 'create_data',
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
+        # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -243,8 +243,8 @@ nCode4RAM = 25
 
 projs_to_use =
     c(
-        # 'all'
-        "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
+        'all'
+        # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
         # "rcp45"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"
@@ -269,14 +269,14 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910', #ref
+        'all'
+        # 'K2981910', #ref
         # "K221083001",
         # "^R"
         # "^K"
-        'K1363010',
+        # 'K1363010',
         # 'V0144010',
-        'K1341810'
+        # 'K1341810'
         # "M0014110",
         # "^A"
     )
@@ -335,7 +335,7 @@ wait =
 ## 4. READ_SAVING ____________________________________________________
 read_saving =
     "ALL_diag/"
-    # "ALL_proj/GRSD/"
+    # "ALL_proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
 
 var2search =
     c(
