@@ -486,8 +486,12 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         proj_merge_dir = paste0(proj_dir, "_merge")
         proj_merge_dirpath = file.path(computer_data_path,
                                        proj_merge_dir)
-        if (!dir.exists(proj_merge_dirpath) & rank == 0) {
-            dir.create(proj_merge_dirpath)
+        if (!dir.exists(proj_merge_dirpath)) {
+            if (rank == 0) {
+                dir.create(proj_merge_dirpath)
+            } else {
+                Sys.sleep(2)  
+            }
         }
             
         Paths = list.files(file.path(computer_data_path, proj_dir),
@@ -508,7 +512,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             end = ceiling(seq((nHistoricals/size), nHistoricals,
                               by=(nHistoricals/size)))
             Historicals = Historicals[start[rank+1]:end[rank+1],]
-        }        
+        }      
         
         nHistoricals = nrow(Historicals)
         nEXP = length(EXP)
