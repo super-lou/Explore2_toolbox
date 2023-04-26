@@ -512,7 +512,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             end = ceiling(seq((nHistoricals/size), nHistoricals,
                               by=(nHistoricals/size)))
             Historicals = Historicals[start[rank+1]:end[rank+1],]
-        }      
+        } 
         
         nHistoricals = nrow(Historicals)
         nEXP = length(EXP)
@@ -524,6 +524,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             historical_path = Paths[grepl(historical$regexp,
                                           Files)]
 
+            post(historical$regexp)
+            post(historical_path)
+            
             NC_historical = ncdf4::nc_open(historical_path)
             Date = NetCDF_extrat_time(NC_historical)
             ncdf4::nc_close(NC_historical)
