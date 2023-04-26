@@ -550,10 +550,16 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                          historical$Model,]
 
                 proj_path = Paths[grepl(proj$regexp, Files)]
+
+                post(proj_path)
+                
                 proj_merge_path =
                     file.path(proj_merge_dirpath,
                               gsub("[_]rcp", "_historical-rcp",
                                    basename(proj_path)))
+
+                post(proj_merge_path)
+                
                 cdoCmd = paste0(cdo_cmd_path,
                                 " --history -O mergetime ",
                                 historical_path, " ",
