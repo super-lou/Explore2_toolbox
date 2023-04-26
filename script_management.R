@@ -502,15 +502,12 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                  "historical",]
         nHistoricals = nrow(Historicals)
 
-        if (MPI == "file") { #114 --> 3
-            if (nHistoricals/size == round(nHistoricals/size)) {
-                start = seq(1, nHistoricals, by=(nHistoricals/size))
-                end = seq((nHistoricals/size), nHistoricals,
-                          by=(nHistoricals/size))
-                Historicals = Historicals[start[rank+1]:end[rank+1],]
-            } else {
-                stop ("Number of files by number of tasks is not an integer")
-            }
+        if (MPI == "file") {
+            start = ceiling(seq(1, nHistoricals,
+                                by=(nHistoricals/size)))
+            end = ceiling(seq((nHistoricals/size), nHistoricals,
+                              by=(nHistoricals/size)))
+            Historicals = Historicals[start[rank+1]:end[rank+1],]
         }        
         
         nHistoricals = nrow(Historicals)
