@@ -526,6 +526,12 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 next
             }
             historical_path = Paths[OK]
+
+            if (!file.exists(historical_path)) {
+                post(paste0("file historical : ", historical_path,
+                            " do not exist"))
+                next
+            }
             
             NC_historical = ncdf4::nc_open(historical_path)
             Date = NetCDF_extrat_time(NC_historical)
@@ -554,6 +560,13 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 }
                 
                 proj_path = Paths[grepl(proj$regexp, Files)]
+
+                if (!file.exists(proj_path)) {
+                    post(paste0("file proj : ", proj_path,
+                                " do not exist"))
+                    next
+                }
+                
                 proj_merge_path =
                     file.path(proj_merge_dirpath,
                               gsub("[_]rcp", "_historical-rcp",
@@ -564,6 +577,12 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                 proj_path, " ", 
                                 proj_merge_path)
                 system(cdoCmd)
+
+                if (!file.exists(proj_merge_path)) {
+                    post(paste0("file merge : ", proj_merge_path,
+                                " do not exists"))
+                    next
+                }
 
                 NC_proj = ncdf4::nc_open(proj_path)
                 Date = NetCDF_extrat_time(NC_proj)
