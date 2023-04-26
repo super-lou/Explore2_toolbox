@@ -150,7 +150,7 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'merge_nc' ##
+        'merge_nc'
         # 'create_data',
         # 'analyse_data',
         # 'save_analyse'
@@ -226,8 +226,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 

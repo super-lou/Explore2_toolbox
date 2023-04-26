@@ -486,7 +486,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         proj_merge_dir = paste0(proj_dir, "_merge")
         proj_merge_dirpath = file.path(computer_data_path,
                                        proj_merge_dir)
-        if (!dir.exists(proj_merge_dirpath)) {
+        if (!dir.exists(proj_merge_dirpath) & rank == 0) {
             dir.create(proj_merge_dirpath)
         }
             
@@ -500,6 +500,19 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         Historicals =
             projs_selection_data[projs_selection_data$EXP ==
                                  "historical",]
+        nHistoricals = nrow(Historicals)
+
+        if (MPI == "file") { #114 --> 3
+            if (nHistoricals/size == round(nHistoricals/size)) {
+                start = seq(1, nHistoricals, by=(nHistoricals/size))
+                end = seq((nHistoricals/size), nHistoricals,
+                          by=(nHistoricals/size))
+                Historicals = Historicals[start[rank+1]:end[rank+1],]
+            } else {
+                stop ("Number of files by number of tasks is not an integer")
+            }
+        }        
+        
         nHistoricals = nrow(Historicals)
         nEXP = length(EXP)
 
@@ -518,6 +531,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             
             for (j in 2:nEXP) {
                 exp = EXP[j]
+                post(paste0("#### Merging historical ", historical$ID,
+                            " with ", exp))
                 proj =
                     projs_selection_data[projs_selection_data$GCM ==
                                          historical$GCM &
