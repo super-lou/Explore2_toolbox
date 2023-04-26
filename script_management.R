@@ -526,6 +526,10 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
             post(historical$regexp)
             post(historical_path)
+
+            if (!file.exists(historical_path)) {
+                next
+            }
             
             NC_historical = ncdf4::nc_open(historical_path)
             Date = NetCDF_extrat_time(NC_historical)
@@ -549,6 +553,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                          projs_selection_data$Model ==
                                          historical$Model,]
 
+                print(proj)
+                print(nrow(proj))
+                
                 if (nrow(proj) == 0) {
                     next
                 }
