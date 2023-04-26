@@ -625,12 +625,13 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                                     maxDate_historical))
             }
         }
-        post(flag)
-        post(nrow(flag))
-        flag = tidyr::separate(flag, col="ID",
-                               into=c("GCM", "EXP", "RCM",
-                                      "BC", "Model"), sep="[|]")
-        write_tibble(flag, today_resdir, "flag.txt")
+        if (nrow(flag) > 0) {
+            flag = tidyr::separate(flag, col="ID",
+                                   into=c("GCM", "EXP", "RCM",
+                                          "BC", "Model"), sep="[|]")
+            write_tibble(flag, today_resdir,
+                         paste0("flag_", rank ,".txt"))
+        }
         merge_nc = FALSE
     }
 
