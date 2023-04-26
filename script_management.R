@@ -629,9 +629,46 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             flag = tidyr::separate(flag, col="ID",
                                    into=c("GCM", "EXP", "RCM",
                                           "BC", "Model"), sep="[|]")
-            write_tibble(flag, today_resdir,
-                         paste0("flag_", rank ,".txt"))
+            write_tibble(flag, tmppath,
+                         paste0("flag_", rank , ".fst"))
         }
+
+        if (MPI == "file" & rank == 0) {
+            Root = rep(0, times=size)
+            Root[1] = 1
+            post("Waiting for rank 1 : ")
+            post(paste0(gsub("1", "-", 
+                             gsub("0", "_",
+                                  Root)), collapse=""))
+            for (root in 1:(size-1)) {
+                Root[root+1] = Rmpi::mpi.recv(as.integer(0),
+                                              type=1,
+                                              source=root,
+                                              tag=1, comm=0)
+                post(paste0("End signal received from rank ", root))
+                post(paste0("Waiting for rank ", root+1, " : "))
+                post(paste0(gsub("1", "-", 
+                                 gsub("0", "_",
+                                      Root)), collapse=""))
+            }
+
+            flag = dplyr::tibble()
+            for (root in 0:(size-1)) {
+                flag_tmp = read_tibble(file.path(tmppath,
+                                                 paste0("flag_",
+                                                        rank , ".fst")))
+                flag = dplyr::bind_rows(flag, flag_tmp)
+            }
+            write_tibble(flag, today_resdir, "flag.txt")
+            
+        } else if (MPI == "file") {
+            Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
+            post(paste0("End signal from rank ", rank)) 
+
+        } else {
+            write_tibble(flag, today_resdir, "flag.txt")
+        }
+        
         merge_nc = FALSE
     }
 

@@ -244,6 +244,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
+        # "MPI.*rcp26.*CLM.*ADAMONT.*J2000"
         # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
         # "rcp45"
@@ -588,6 +589,10 @@ if (mode == "proj") {
         paste0(".*", 
                gsub("[|]", ".*", projs_selection_data$ID),
                ".*")
+    projs_selection_data$regexp = gsub("[-]", "[-]",
+                                       projs_selection_data$regexp)
+    projs_selection_data$regexp = gsub("[_]", "[_]",
+                                       projs_selection_data$regexp)
     
     projs_path = list.files(file.path(computer_data_path, proj_dir),
                             recursive=TRUE)
