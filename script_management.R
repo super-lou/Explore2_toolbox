@@ -521,15 +521,11 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         
         for (i in 1:nHistoricals) {
             historical = Historicals[i,]
-            historical_path = Paths[grepl(historical$regexp,
-                                          Files)]
-
-            post(historical$regexp)
-            post(historical_path)
-
-            if (!file.exists(historical_path)) {
+            OK = grepl(historical$regexp, Files)
+            if (all(!OK)) {
                 next
             }
+            historical_path = Paths[OK]
             
             NC_historical = ncdf4::nc_open(historical_path)
             Date = NetCDF_extrat_time(NC_historical)
@@ -553,24 +549,15 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                          projs_selection_data$Model ==
                                          historical$Model,]
 
-                print(proj)
-                print(nrow(proj))
-                
                 if (nrow(proj) == 0) {
                     next
                 }
                 
                 proj_path = Paths[grepl(proj$regexp, Files)]
-
-                post(proj_path)
-                
                 proj_merge_path =
                     file.path(proj_merge_dirpath,
                               gsub("[_]rcp", "_historical-rcp",
                                    basename(proj_path)))
-
-                post(proj_merge_path)
-                
                 cdoCmd = paste0(cdo_cmd_path,
                                 " --history -O mergetime ",
                                 historical_path, " ",
