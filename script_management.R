@@ -504,6 +504,16 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         Historicals =
             projs_selection_data[projs_selection_data$EXP ==
                                  "historical",]
+        
+        any_grepl = function (pattern, x) {
+            any(grepl(pattern, x))
+        }
+        Historicals = Historicals[sapply(Historicals$regexp,
+                                         any_grepl, x=Files),]
+        Historicals$file = sapply(Historicals$regexp,
+                                   apply_grepl, table=Files)
+        Historicals = tidyr::unnest(Historicals, file)
+        Historicals$path = Paths[match(Historicals$file, Files)]
         nHistoricals = nrow(Historicals)
 
         if (MPI == "file") {
@@ -521,68 +531,44 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         
         for (i in 1:nHistoricals) {
             historical = Historicals[i,]
-            OK = grepl(historical$regexp, Files)
-            if (all(!OK)) {
-                next
-            }
-            historical_path = Paths[OK]
-
-            if (!file.exists(historical_path)) {
-                post(paste0("file historical : ", historical_path,
-                            " do not exist"))
-                next
-            }
-            
+            historical_path = historical$path
             NC_historical = ncdf4::nc_open(historical_path)
             Date = NetCDF_extrat_time(NC_historical)
             ncdf4::nc_close(NC_historical)
             minDate_historical = min(Date)
             maxDate_historical = max(Date)
+
+            projs =
+                projs_selection_data[projs_selection_data$GCM ==
+                                     historical$GCM &
+                                     projs_selection_data$RCM ==
+                                     historical$RCM &
+                                     projs_selection_data$BC ==
+                                     historical$BC &
+                                     projs_selection_data$Model ==
+                                     historical$Model,]
             
-            for (j in 2:nEXP) {
-                exp = EXP[j]
-                post(paste0("#### Merging historical ", historical$ID,
-                            " with ", exp))
-                proj =
-                    projs_selection_data[projs_selection_data$GCM ==
-                                         historical$GCM &
-                                         projs_selection_data$RCM ==
-                                         historical$RCM &
-                                         projs_selection_data$EXP ==
-                                         exp &
-                                         projs_selection_data$BC ==
-                                         historical$BC &
-                                         projs_selection_data$Model ==
-                                         historical$Model,]
-
-                if (nrow(proj) == 0) {
-                    next
-                }
-                
-                proj_path = Paths[grepl(proj$regexp, Files)]
-
-                if (!file.exists(proj_path)) {
-                    post(paste0("file proj : ", proj_path,
-                                " do not exist"))
-                    next
-                }
-                
+            for (j in 1:nrow(projs)) {
+                proj = projs[j,]
+                proj_path = proj$path
+                proj_file = proj$file
+                proj_merge_file =
+                    gsub("[_]rcp", "_historical-rcp", proj_file)
                 proj_merge_path =
                     file.path(proj_merge_dirpath,
-                              gsub("[_]rcp", "_historical-rcp",
-                                   basename(proj_path)))
+                              proj_merge_file)
+                
+                post(paste0("#### Merging ",
+                            historical$file, " with ",
+                            proj$file, " in ",
+                            proj_merge_file))
+
                 cdoCmd = paste0(cdo_cmd_path,
                                 " --history -O mergetime ",
                                 historical_path, " ",
                                 proj_path, " ", 
                                 proj_merge_path)
                 system(cdoCmd)
-
-                if (!file.exists(proj_merge_path)) {
-                    post(paste0("file merge : ", proj_merge_path,
-                                " do not exists"))
-                    next
-                }
 
                 NC_proj = ncdf4::nc_open(proj_path)
                 Date = NetCDF_extrat_time(NC_proj)
@@ -591,9 +577,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 
                 NC_proj_merge = ncdf4::nc_open(proj_merge_path,
                                                write=TRUE)
-
                 code_value = ncdf4::ncvar_get(NC_proj, "code")
-
                 station_dim = NC_proj_merge$dim[['station']]
                 nchar_dim = ncdf4::ncdim_def("code_strlen",
                                              "",
