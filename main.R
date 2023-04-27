@@ -244,7 +244,7 @@ nCode4RAM = 25
 projs_to_use =
     c(
         'all'
-        # "MPI.*rcp26.*CLM.*ADAMONT.*J2000"
+        # "HadGEM2.*rcp26.*RegCM4.*CDFt.*J2000"
         # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
         # "rcp45"
@@ -252,6 +252,20 @@ projs_to_use =
         # "NorESM1-M.*rcp26.*REMO.*ADAMONT"
         # "HadGEM2.*histo.*RegCM4.*CDFt"
     )
+
+
+# /home/louis/Documents/bouleau/INRAE/data/Explore2/projection_merge/debit_Rhone-Loire_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_CDFt-L-1V-0L_INRAE-J2000_day_20060101-20991231.nc"
+
+# 99/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_Rhone-Loire_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_CDFt-L-1V-0L_INRAE-J2000_day_20060101-20991231.nc do not exists"
+
+# [1] " 93/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_France_MOHC-HadGEM2-ES_historical-rcp85_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_INRAE-GRSD_day_20060101-20991231_Hg0175.nc do not exists"
+
+# [1] " 93/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_France_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_INRAE-GRSD_day_20060101-20991231_Hg0175.nc do not exists"
+
+ # " 95/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_Loire_MOHC-HadGEM2-ES_historical-rcp85_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_20060101-20991231.nc do not exists"
+
+ # " 95/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_Loire_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_20060101-20991231.nc do not exists"
+
 
 models_to_use =
     c(
