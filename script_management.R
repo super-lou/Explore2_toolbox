@@ -493,27 +493,10 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 Sys.sleep(10)  
             }
         }
-            
-        Paths = list.files(file.path(computer_data_path, proj_dir),
-                           pattern=".*[.]nc",
-                           include.dirs=FALSE,
-                           full.names=TRUE,
-                           recursive=TRUE)
-        Files = basename(Paths)
-        
+
         Historicals =
             projs_selection_data[projs_selection_data$EXP ==
                                  "historical",]
-        
-        any_grepl = function (pattern, x) {
-            any(grepl(pattern, x))
-        }
-        Historicals = Historicals[sapply(Historicals$regexp,
-                                         any_grepl, x=Files),]
-        Historicals$file = sapply(Historicals$regexp,
-                                   apply_grepl, table=Files)
-        Historicals = tidyr::unnest(Historicals, file)
-        Historicals$path = Paths[match(Historicals$file, Files)]
         nHistoricals = nrow(Historicals)
 
         if (MPI == "file") {
@@ -525,8 +508,6 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         } 
         
         nHistoricals = nrow(Historicals)
-        nEXP = length(EXP)
-
         flag = dplyr::tibble()
         
         for (i in 1:nHistoricals) {
@@ -543,10 +524,16 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                      historical$GCM &
                                      projs_selection_data$RCM ==
                                      historical$RCM &
+                                     projs_selection_data$EXP !=
+                                     "historical" &
                                      projs_selection_data$BC ==
                                      historical$BC &
                                      projs_selection_data$Model ==
                                      historical$Model,]
+
+            # jehfezoifjezoifjezoifjezoiji EROS
+            projs = projs[substr(projs$file, "1", "15") ==
+                          substr(historical$file, "1", "15"),]
             
             for (j in 1:nrow(projs)) {
                 proj = projs[j,]

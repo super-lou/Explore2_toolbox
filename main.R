@@ -638,6 +638,27 @@ if (mode == "proj") {
                                     lengths(files_to_use)))
     }
 
+
+    Paths = list.files(file.path(computer_data_path, proj_dir),
+                       pattern=".*[.]nc",
+                       include.dirs=FALSE,
+                       full.names=TRUE,
+                       recursive=TRUE)
+    Files = basename(Paths)
+    
+    any_grepl = function (pattern, x) {
+    any(grepl(pattern, x))
+    }
+    projs_selection_data =
+        projs_selection_data[sapply(projs_selection_data$regexp,
+                                    any_grepl,
+                                    x=Files),]
+    projs_selection_data$file =
+        lapply(projs_selection_data$regexp, apply_grepl, table=Files)
+    projs_selection_data = tidyr::unnest(projs_selection_data, file)
+    projs_selection_data$path = Paths[match(projs_selection_data$file,
+                                            Files)]
+
     files_to_use_tmp = list()
     for (i in 1:length(files_to_use)) {
         file_name = names(files_to_use)[i]
