@@ -50,7 +50,8 @@ computer_work_path = '/home/herautl/scratch'
 # Library path for package dev
 dev_lib_path = '/home/herautl/library'
 # cdo path if install from source
-cdo_cmd_path = "/home/herautl/work_inrae-infra/cdo/bin/cdo"
+# cdo_cmd_path = "/home/herautl/work_inrae-infra/cdo/bin/cdo"
+cdo_cmd_path = "/home/herautl/cdo/bin/cdo"
 
 
 ## 2. INPUT DIRECTORIES ______________________________________________
