@@ -46,14 +46,14 @@ create_data = function () {
         file = files[[i]]
         chain = files_name[[i]][1]
 
-        if (mode == "proj") {
-            dir = proj_dir
-        } else if (mode == "diag") {
-            dir = diag_dir
-        }
-        path = file.path(computer_data_path,
-                         dir, file)
-
+        # if (mode == "proj") {
+            # path = proj_path
+        # } else if (mode == "diag") {
+            # path = diag_path
+        # }
+        # path = file.path(path, file)
+        path = file
+        
         for (p in path) {
             
             if (file.exists(path)) {
@@ -215,7 +215,7 @@ create_data = function () {
                                                    Ref=Q_obs))
                 data = dplyr::relocate(data, Q_obs, .before=Q_sim)
             }
-            data = dplyr::relocate(data, T, .before=ET0)
+            data = dplyr::relocate(data, "T", .before=ET0)
 
         } else if (mode == "proj") {
             data = data_sim

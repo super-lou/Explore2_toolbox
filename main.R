@@ -149,11 +149,11 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
-        'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        # 'delete_tmp'
+        # 'merge_nc'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -239,7 +239,10 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 25
+nCode4RAM = 100
+use_proj_merge =
+    TRUE
+    # FALSE
 
 projs_to_use =
     c(
@@ -247,25 +250,11 @@ projs_to_use =
         # "HadGEM2.*rcp26.*RegCM4.*CDFt.*J2000"
         # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
-        # "rcp45"
+        # "rcp26"
         # "EC-EARTH.*rcp85.*RCA4.*CDFt"
         # "NorESM1-M.*rcp26.*REMO.*ADAMONT"
         # "HadGEM2.*histo.*RegCM4.*CDFt"
     )
-
-
-# /home/louis/Documents/bouleau/INRAE/data/Explore2/projection_merge/debit_Rhone-Loire_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_CDFt-L-1V-0L_INRAE-J2000_day_20060101-20991231.nc"
-
-# 99/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_Rhone-Loire_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_CDFt-L-1V-0L_INRAE-J2000_day_20060101-20991231.nc do not exists"
-
-# [1] " 93/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_France_MOHC-HadGEM2-ES_historical-rcp85_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_INRAE-GRSD_day_20060101-20991231_Hg0175.nc do not exists"
-
-# [1] " 93/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_France_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_INRAE-GRSD_day_20060101-20991231_Hg0175.nc do not exists"
-
- # " 95/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_Loire_MOHC-HadGEM2-ES_historical-rcp85_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_20060101-20991231.nc do not exists"
-
- # " 95/195 > file merge : /home/herautl/scratch/data/Explore2/projection_merge/debit_Loire_MOHC-HadGEM2-ES_historical-rcp26_r1i1p1_ICTP-RegCM4-6_v1_MF-ADAMONT-SAFRAN-1980-2011_EDF-MORDOR-TS_day_20060101-20991231.nc do not exists"
-
 
 models_to_use =
     c(
@@ -327,8 +316,8 @@ analyse_data =
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 var2save =
     c(
@@ -538,6 +527,13 @@ apply_grepl = function (x, table, target=NULL) {
     return (target[grepl(x, table)])
 }
 
+apply_match = function (x, table, target=NULL) {
+    if (is.null(target)) {
+        target = table
+    }
+    return (target[match(x, table)])
+}
+
 apply_bra = function (id, target) {
     return (target[id])
 }
@@ -608,38 +604,30 @@ if (mode == "proj") {
     projs_selection_data$regexp = gsub("[_]", "[_]",
                                        projs_selection_data$regexp)
     
-    projs_path = list.files(file.path(computer_data_path, proj_dir),
-                            recursive=TRUE)
+    # if (use_proj_merge) {
+    #     projs_path = list.files(file.path(computer_data_path,
+    #                                       proj_merge_dir),
+    #                             recursive=TRUE)
+    #     projs_selection_data = projs_selection_data[projs_selection_data$EXP != "historical",]
+    # } else {
+    #     projs_path = list.files(file.path(computer_data_path, proj_dir),
+    #                             recursive=TRUE)
+    # }
+
+
+
     
-    if (all(projs_to_use == "all")) {
-        files_to_use =
-            unlist(lapply(projs_selection_data$regexp, apply_grepl,
-                          table=projs_path))
-        files_to_use_name = c() 
-        for (file in files_to_use) {
-            name = projs_selection_data$ID[sapply(
-                                            projs_selection_data$regexp,
-                                            grepl, file)]
-            files_to_use_name = c(files_to_use_name, name)
-        }
-        names(files_to_use) = files_to_use_name  
-
+    if (use_proj_merge) {
+        proj_path = file.path(computer_data_path,
+                               proj_merge_dir)
+        projs_selection_data =
+            projs_selection_data[projs_selection_data$EXP !=
+                                 "historical",]
     } else {
-        projs_to_use = unlist(lapply(projs_to_use, apply_grepl,
-                                     table=projs_selection_data$regexp))
-        projs_to_use_name =
-            projs_selection_data$ID[projs_selection_data$regexp %in%
-                                    projs_to_use]
-        files_to_use = lapply(projs_to_use, apply_grepl,
-                              table=projs_path)
-        names(files_to_use) = projs_to_use_name
-        files_to_use = setNames(unlist(files_to_use, use.names=F),
-                                rep(names(files_to_use),
-                                    lengths(files_to_use)))
-    }
+        proj_path = file.path(computer_data_path, proj_dir)
+    }    
 
-
-    Paths = list.files(file.path(computer_data_path, proj_dir),
+    Paths = list.files(proj_path,
                        pattern=".*[.]nc",
                        include.dirs=FALSE,
                        full.names=TRUE,
@@ -647,7 +635,7 @@ if (mode == "proj") {
     Files = basename(Paths)
     
     any_grepl = function (pattern, x) {
-    any(grepl(pattern, x))
+        any(grepl(pattern, x))
     }
     projs_selection_data =
         projs_selection_data[sapply(projs_selection_data$regexp,
@@ -655,28 +643,79 @@ if (mode == "proj") {
                                     x=Files),]
     projs_selection_data$file =
         lapply(projs_selection_data$regexp, apply_grepl, table=Files)
-    projs_selection_data = tidyr::unnest(projs_selection_data, file)
-    projs_selection_data$path = Paths[match(projs_selection_data$file,
-                                            Files)]
-
-    files_to_use_tmp = list()
-    for (i in 1:length(files_to_use)) {
-        file_name = names(files_to_use)[i]
-        file = files_to_use[names(files_to_use) == file_name]
-        names(file) = NULL
-        files_to_use_tmp = append(files_to_use_tmp, list(file))
-        names(files_to_use_tmp)[length(files_to_use_tmp)] = file_name
-    }
-    files_to_use_tmp =
-        files_to_use_tmp[!duplicated(names(files_to_use_tmp))]
-    files_to_use = files_to_use_tmp
+    projs_selection_data$path =
+        lapply(projs_selection_data$file,
+               apply_match, table=Files, target=Paths)
     
-} else if (mode == "diag") {
+    projs_selection_data_nest = projs_selection_data
+    projs_selection_data = tidyr::unnest(projs_selection_data, file)
+
+    if (all(projs_to_use != "all")) {
+    # if (all(projs_to_use == "all")) {    
+        # files_to_use =
+        #     unlist(lapply(projs_selection_data$regexp, apply_grepl,
+        #                   table=Files))
+        # files_to_use_name = c() 
+        # for (file in files_to_use) {
+        #     name = projs_selection_data$ID[sapply(
+        #                                     projs_selection_data$regexp,
+        #                                     grepl, file)]
+        #     files_to_use_name = c(files_to_use_name, name)
+        # }
+        # names(files_to_use) = files_to_use_name
+        # files_to_use = projs_selection_data_nest$file
+        # names(files_to_use) = projs_selection_data_nest$ID
+
+    # } else {
+        # projs_to_use = unlist(lapply(projs_to_use, apply_grepl,
+        #                              table=projs_selection_data$regexp))
+        # projs_to_use_name =
+        #     projs_selection_data$ID[projs_selection_data$regexp %in%
+        #                             projs_to_use]
+        # files_to_use = lapply(projs_to_use, apply_grepl,
+        #                       table=Files)
+        # names(files_to_use) = projs_to_use_name
+        # files_to_use = setNames(unlist(files_to_use, use.names=F),
+        #                         rep(names(files_to_use),
+        #                             lengths(files_to_use)))
+        OK = apply(sapply(projs_to_use, grepl,
+                          x=projs_selection_data$regexp),
+                   1, any)
+        projs_selection_data = projs_selection_data[OK,]
+        OK_nest = apply(sapply(projs_to_use, grepl,
+                               x=projs_selection_data_nest$regexp),
+                        1, any)
+        projs_selection_data_nest = projs_selection_data_nest[OK_nest,]
+    }
+
+    files_to_use = projs_selection_data_nest$path
+    names(files_to_use) = projs_selection_data_nest$ID
+
+
+    
+
+    # files_to_use_tmp = list()
+    # for (i in 1:length(files_to_use)) {
+    #     file_name = names(files_to_use)[i]
+    #     file = files_to_use[names(files_to_use) == file_name]
+    #     names(file) = NULL
+    #     files_to_use_tmp = append(files_to_use_tmp, list(file))
+    #     names(files_to_use_tmp)[length(files_to_use_tmp)] = file_name
+    # }
+    # files_to_use_tmp =
+    #     files_to_use_tmp[!duplicated(names(files_to_use_tmp))]
+    # files_to_use = files_to_use_tmp
+    
+} else if (mode == "diag") { #####
+    diag_path = file.path(computer_data_path, diag_dir)
     models_to_use_name = models_to_use
-    models_path = list.files(file.path(computer_data_path, diag_dir))
-    files_to_use = lapply(models_to_use, apply_grepl, table=models_path)
+    models_path = list.files(file.path(computer_data_path, diag_dir),
+                             full.names=TRUE)
+    models_file = basename(models_path)
+    files_to_use = lapply(models_to_use, apply_grepl,
+                          table=models_file, target=models_path)
     names(files_to_use) = models_to_use_name
-    files_to_use = files_to_use[sapply(files_to_use, length) > 0]
+    # files_to_use = files_to_use[sapply(files_to_use, length) > 0]
 }
 
 nFiles_to_use = length(files_to_use)
@@ -780,17 +819,26 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
     if (by_files | MPI == "file") {
         if (MPI == "file") {
-            # Files = files_to_use[as.integer(rank*(nFiles_to_use/size+.5)+1):
-            # as.integer((rank+1)*(nFiles_to_use/size+.5))]
-            if (nFiles_to_use/size == round(nFiles_to_use/size)) {
-                start = seq(1, nFiles_to_use, by=(nFiles_to_use/size))
-                end = seq((nFiles_to_use/size), nFiles_to_use,
-                          by=(nFiles_to_use/size))
-                Files = files_to_use[start[rank+1]:end[rank+1]]
-            } else {
-                stop ("Number of files by number of tasks is not an integer")
+            # if (nFiles_to_use/size == round(nFiles_to_use/size)) {
+            #     start = seq(1, nFiles_to_use, by=(nFiles_to_use/size))
+            #     end = seq((nFiles_to_use/size), nFiles_to_use,
+            #               by=(nFiles_to_use/size))
+            # } else {
+            #     stop ("Number of files by number of tasks is not an integer")
+            # }
+            # Files = Files[!is.na(names(Files))]
+            
+            start = ceiling(seq(1, nFiles_to_use,
+                                by=(nFiles_to_use/size)))
+            end = ceiling(seq((nFiles_to_use/size), nFiles_to_use,
+                              by=(nFiles_to_use/size)))
+            if (rank == 0) {
+                post(paste0(paste0("rank ", rank, " get ",
+                                   end-start+1, " files"),
+                            collapse="\n"))
             }
-            Files = Files[!is.na(names(Files))]
+            Files = files_to_use[start[rank+1]:end[rank+1]]
+            
         } else {
             Files = files_to_use
         }
