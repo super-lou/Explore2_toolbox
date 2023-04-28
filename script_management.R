@@ -550,7 +550,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                             proj_merge_file))
 
                 cdoCmd = paste0(cdo_cmd_path,
-                                " --history -O mergetime ",
+                                " --sortname --history -O mergetime ",
                                 historical_path, " ",
                                 proj_path, " ", 
                                 proj_merge_path)

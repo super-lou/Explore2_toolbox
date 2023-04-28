@@ -150,10 +150,10 @@ mode =
 to_do =
     c(
         # 'delete_tmp'
-        # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        'merge_nc'
+        # 'create_data'
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -241,17 +241,18 @@ period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 nCode4RAM = 25
 use_proj_merge =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 projs_to_use =
     c(
         'all'
+        # "EARTH.*HadREM3.*ADAMONT.*CTRIP"
         # "HadGEM2.*rcp26.*RegCM4.*CDFt.*J2000"
         # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
         # "rcp26"
-        # "EC-EARTH.*rcp85.*RCA4.*CDFt"
+        # "EC-EARTH.*rcp26.*HadREM3.*ADAMONT.*CTRIP"
         # "NorESM1-M.*rcp26.*REMO.*ADAMONT"
         # "HadGEM2.*histo.*RegCM4.*CDFt"
     )
@@ -648,7 +649,8 @@ if (mode == "proj") {
                apply_match, table=Files, target=Paths)
     
     projs_selection_data_nest = projs_selection_data
-    projs_selection_data = tidyr::unnest(projs_selection_data, file)
+    projs_selection_data = tidyr::unnest(projs_selection_data,
+                                         c(file, path))
 
     if (all(projs_to_use != "all")) {
     # if (all(projs_to_use == "all")) {    
