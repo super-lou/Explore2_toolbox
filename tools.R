@@ -66,7 +66,7 @@ NetCDF_to_tibble = function (NetCDF_path,
     
     NCdata = ncdf4::nc_open(NetCDF_path)
 
-    print(NCdata)
+    # print(NCdata)
 
     Date = NetCDF_extrat_time(NCdata)
     nDate = length(Date)
@@ -205,11 +205,9 @@ NetCDF_to_tibble = function (NetCDF_path,
         count = max(station) - start + 1
         station = station - start + 1
 
-        print(start)
-        print(count)
-        print(station)
-
-        
+        # print(start)
+        # print(count)
+        # print(station)
         
         Q_sim = ncdf4::ncvar_get(NCdata, "debit",
                                  start=c(start, 1),
