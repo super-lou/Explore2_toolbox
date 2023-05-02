@@ -248,7 +248,7 @@ projs_to_use =
     c(
         'all'
         # "EARTH.*HadREM3.*ADAMONT.*CTRIP"
-        # "HadGEM2.*rcp26.*RegCM4.*CDFt.*J2000"
+        # "HadGEM2.*rcp45.*CCLM.*ADAMONT.*SIM2"
         # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
         # "ALADIN.*ADAMONT"
         # "rcp26"
