@@ -1002,7 +1002,44 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     }
 
     timer$time = timer$stop - timer$start
-    write_tibble(timer, today_resdir, "timer.txt")
+    write_tibble(timer, tmppath,
+                 paste0("timer_", rank , ".fst"))
+
+    if (MPI == "file" & rank == 0) {
+        Root = rep(0, times=size)
+        Root[1] = 1
+        post("Waiting for rank 1 : ")
+        post(paste0(gsub("1", "-", 
+                         gsub("0", "_",
+                              Root)), collapse=""))
+        for (root in 1:(size-1)) {
+            Root[root+1] = Rmpi::mpi.recv(as.integer(0),
+                                          type=1,
+                                          source=root,
+                                          tag=1, comm=0)
+            post(paste0("End signal received from rank ", root))
+            post(paste0("Waiting for rank ", root+1, " : "))
+            post(paste0(gsub("1", "-", 
+                             gsub("0", "_",
+                                  Root)), collapse=""))
+        }
+
+        timer = dplyr::tibble()
+        for (root in 0:(size-1)) {
+            timer_tmp = read_tibble(file.path(tmppath,
+                                             paste0("timer_",
+                                                    rank , ".fst")))
+            timer = dplyr::bind_rows(timer, timer_tmp)
+        }
+        write_tibble(timer, today_resdir, "timer.txt")
+        
+    } else if (MPI == "file") {
+        Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
+        post(paste0("End signal from rank ", rank)) 
+
+    } else {
+        write_tibble(timer, today_resdir, "timer.txt")
+    }
 }
 
 if (any(c('criteria_selection', 'write_warnings',
