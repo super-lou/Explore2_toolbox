@@ -144,8 +144,8 @@ lib_path =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
@@ -227,8 +227,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "file"
-    # "code"
+    # "file"
+    "code"
 
 
 #  ___  _                  
@@ -239,7 +239,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 25
+nCode4RAM = 500
 use_proj_merge =
     TRUE
     # FALSE
@@ -305,12 +305,12 @@ analyse_data =
     list(
         # c('WIP', simplify=FALSE)
         
-        # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-        # c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
-        # c('Explore2_diag/002_serie', simplify=FALSE)
+        c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
+        c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
+        c('Explore2_diag/002_serie', simplify=FALSE)
         
-        c('Explore2_proj/001_serie', simplify=FALSE),
-        c('Explore2_proj/002_check', simplify=FALSE)
+        # c('Explore2_proj/001_serie', simplify=FALSE),
+        # c('Explore2_proj/002_check', simplify=FALSE)
         # c('Explore2_proj/003_delta', simplify=TRUE)    
     )
 
@@ -323,7 +323,7 @@ by_files =
 var2save =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX'
     )
