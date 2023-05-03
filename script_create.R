@@ -45,13 +45,6 @@ create_data = function () {
     for (i in 1:length(files)) {    
         file = files[[i]]
         chain = files_name[[i]][1]
-
-        # if (mode == "proj") {
-            # path = proj_path
-        # } else if (mode == "diag") {
-            # path = diag_path
-        # }
-        # path = file.path(path, file)
         path = file
         
         for (p in path) {
@@ -148,8 +141,6 @@ create_data = function () {
                                       as.Date(period_analyse[1]),
                                       as.Date(period_analyse[2])))
 
-            # data_obs$Code = codes10_selection[match(data_obs$Code,
-            #                                         codes8_selection)]
             data_obs$Code = convert_code8to10(data_obs$Code)
             
             data_obs = dplyr::arrange(data_obs, Code)
