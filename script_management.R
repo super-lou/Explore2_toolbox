@@ -501,8 +501,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         if (MPI == "file") {
             start = ceiling(seq(1, nHistoricals,
                                 by=(nHistoricals/size)))
-            end = ceiling(seq((nHistoricals/size), nHistoricals,
-                              by=(nHistoricals/size)))
+            end = c(start[-1]-1, nFiles_to_use)
             Historicals = Historicals[start[rank+1]:end[rank+1],]
         } 
         

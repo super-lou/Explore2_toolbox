@@ -144,8 +144,8 @@ lib_path =
 #       directory.
 
 mode =
-    "diag"
-    # "proj"
+    # "diag"
+    "proj"
 
 to_do =
     c(
@@ -227,8 +227,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    # "file"
-    "code"
+    "file"
+    # "code"
 
 
 #  ___  _                  
@@ -239,14 +239,16 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 500
+nCode4RAM = 25
 use_proj_merge =
     TRUE
     # FALSE
 
 projs_to_use =
     c(
-        'all'
+        # 'all'
+        # "(rcp26)|(rcp45)|(rcp85")
+        "MPI.*rcp26.*REMO.*CDFt.*MORDOR.*SD"
         # "EARTH.*HadREM3.*ADAMONT.*CTRIP"
         # "HadGEM2.*rcp45.*CCLM.*ADAMONT.*SIM2"
         # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
@@ -305,25 +307,25 @@ analyse_data =
     list(
         # c('WIP', simplify=FALSE)
         
-        c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-        c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
-        c('Explore2_diag/002_serie', simplify=FALSE)
+        # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
+        # c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
+        # c('Explore2_diag/002_serie', simplify=FALSE)
         
-        # c('Explore2_proj/001_serie', simplify=FALSE),
-        # c('Explore2_proj/002_check', simplify=FALSE)
+        c('Explore2_proj/001_serie', simplify=FALSE),
+        c('Explore2_proj/002_check', simplify=FALSE)
         # c('Explore2_proj/003_delta', simplify=TRUE)    
     )
 
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 var2save =
     c(
         'meta',
-        'data',
+        # 'data',
         'dataEX',
         'metaEX'
     )
@@ -821,23 +823,13 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
     if (by_files | MPI == "file") {
         if (MPI == "file") {
-            # if (nFiles_to_use/size == round(nFiles_to_use/size)) {
-            #     start = seq(1, nFiles_to_use, by=(nFiles_to_use/size))
-            #     end = seq((nFiles_to_use/size), nFiles_to_use,
-            #               by=(nFiles_to_use/size))
-            # } else {
-            #     stop ("Number of files by number of tasks is not an integer")
-            # }
-            # Files = Files[!is.na(names(Files))]
-            
             start = ceiling(seq(1, nFiles_to_use,
                                 by=(nFiles_to_use/size)))
-            end = ceiling(seq((nFiles_to_use/size), nFiles_to_use,
-                              by=(nFiles_to_use/size)))
+            end = c(start[-1]-1, nFiles_to_use)
             if (rank == 0) {
-                post(paste0(paste0("rank ", rank, " get ",
+                post(paste0(paste0("rank ", 0:(size-1), " get ",
                                    end-start+1, " files"),
-                            collapse="\n"))
+                            collapse="    "))
             }
             Files = files_to_use[start[rank+1]:end[rank+1]]
             
@@ -1065,3 +1057,26 @@ if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
 
 # print(sort(sapply(ls(), function(x) {    
     # object.size(get(x))})))
+
+
+
+# FILES = c()
+# for (rank in 0:(size-1)) {
+#     start = ceiling(seq(1, nFiles_to_use,
+#                         by=(nFiles_to_use/size)))
+#     end = c(start[-1]-1, nFiles_to_use)
+#     if (rank == 0) {
+#         post(paste0(paste0("rank ", 0:(size-1), " get ",
+#                            end-start+1, " files"),
+#                     collapse="    "))
+#     }
+#     Files = files_to_use[start[rank+1]:end[rank+1]]
+#     FILES = c(FILES, Files)
+# }
+
+# length(files_to_use)
+# length(FILES)
+# names(files_to_use)[!(names(files_to_use) %in% names(FILES))]
+
+# [1] "IPSL-CM5A-MR|rcp85|RCA4|CDFt|EROS"   
+# [2] "MPI-ESM-LR|rcp26|REMO|CDFt|MORDOR-SD"
