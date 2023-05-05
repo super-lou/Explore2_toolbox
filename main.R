@@ -150,10 +150,10 @@ mode =
 to_do =
     c(
         # 'delete_tmp'
-        # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        'merge_nc'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -241,14 +241,14 @@ period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 nCode4RAM = 25
 use_proj_merge =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
-        "MPI.*rcp26.*REMO.*CDFt.*MORDOR.*SD"
+        # "MPI.*rcp26.*REMO.*CDFt.*MORDOR.*SD"
         # "EARTH.*HadREM3.*ADAMONT.*CTRIP"
         # "HadGEM2.*rcp45.*CCLM.*ADAMONT.*SIM2"
         # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
@@ -261,15 +261,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SMASH"
+        # "CTRIP",
+        "EROS"
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SMASH"
     )
 complete_by = "SMASH"
 
