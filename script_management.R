@@ -625,14 +625,14 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             for (root in 0:(size-1)) {
                 flag_tmp = read_tibble(file.path(tmppath,
                                                  paste0("flag_",
-                                                        rank , ".fst")))
+                                                        root , ".fst")))
                 flag = dplyr::bind_rows(flag, flag_tmp)
             }
             write_tibble(flag, today_resdir, "flag.txt")
             
         } else if (MPI == "file") {
             Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-            post(paste0("End signal from rank ", rank)) 
+            post(paste0("End signal from rank ", rank))
 
         } else {
             write_tibble(flag, today_resdir, "flag.txt")

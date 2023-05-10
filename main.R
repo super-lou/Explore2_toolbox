@@ -144,16 +144,16 @@ lib_path =
 #       directory.
 
 mode =
-    "diag"
-    # "proj"
+    # "diag"
+    "proj"
 
 to_do =
     c(
         # 'delete_tmp'
-        # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        'merge_nc'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -227,8 +227,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    # "file"
-    "code"
+    "file"
+    # "code"
 
 
 #  ___  _                  
@@ -319,8 +319,8 @@ analyse_data =
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 var2save =
     c(
@@ -1022,8 +1022,8 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         timer = dplyr::tibble()
         for (root in 0:(size-1)) {
             timer_tmp = read_tibble(file.path(tmppath,
-                                             paste0("timer_",
-                                                    rank , ".fst")))
+                                              paste0("timer_",
+                                                     root , ".fst")))
             timer = dplyr::bind_rows(timer, timer_tmp)
         }
         write_tibble(timer, today_resdir, "timer.txt")
