@@ -144,8 +144,8 @@ lib_path =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
@@ -227,8 +227,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "file"
-    # "code"
+    # "file"
+    "code"
 
 
 #  ___  _                  
@@ -239,10 +239,10 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 25
+nCode4RAM = 700
 use_proj_merge =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 projs_to_use =
     c(
@@ -261,15 +261,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        "EROS"
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SMASH"
     )
 complete_by = "SMASH"
 
@@ -307,25 +307,25 @@ analyse_data =
     list(
         # c('WIP', simplify=FALSE)
         
-        # c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-        # c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
-        # c('Explore2_diag/002_serie', simplify=FALSE)
+        c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
+        c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
+        c('Explore2_diag/002_serie', simplify=FALSE)
         
-        c('Explore2_proj/001_serie', simplify=FALSE),
-        c('Explore2_proj/002_check', simplify=FALSE)
+        # c('Explore2_proj/001_serie', simplify=FALSE),
+        # c('Explore2_proj/002_check', simplify=FALSE)
         # c('Explore2_proj/003_delta', simplify=TRUE)    
     )
 
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX'
     )
@@ -389,10 +389,10 @@ Colors_of_models = c(
     "EROS"="#cecd8d", #vert clair
     "GRSD"="#619c6c", #vert foncé
     "J2000"="#74aeb9", #bleu clair
-    "SIM2"="#384a54", #bleu foncé
     "MORDOR-SD"="#d8714e", #orange
     "MORDOR-TS"="#ae473e", #rouge
     "ORCHIDEE"="#efa59d", #rose #f5c8c3
+    "SIM2"="#384a54", #bleu foncé
     "SMASH"="#f6ba62" #mimosa    
 )
 
@@ -695,7 +695,10 @@ if (mode == "proj") {
     files_to_use = projs_selection_data_nest$path
     names(files_to_use) = projs_selection_data_nest$ID
 
-
+    write_tibble(dplyr::select(projs_selection_data,
+                               -"path"),
+                 filedir=today_resdir,
+                 filename="projs_selection.txt")
     
 
     # files_to_use_tmp = list()

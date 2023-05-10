@@ -20,13 +20,18 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
+# import of install useful package
+if (!require(ASHE)) remotes::install_github("super-lou/ASHE")
+
+
 ## 1. INFO ___________________________________________________________
 ### 1.1. Data directory ______________________________________________
 data_dir = "./"
+projs_path = "projs_selection.txt"
 
 ### 1.2. Chain _______________________________________________________
 GCM = "CNRM-CM5"
-EXP = "historical"
+EXP = "rcp26"
 RCM = "ALADIN63"
 BC = "ADAMONT"
 Model = "J2000"
@@ -48,10 +53,11 @@ analyse =
 
 
 ## 3. EXECUTION (do not modify if you are not aware) _________________
-# import of install useful package
-if (!require(ASHE)) remotes::install_github("super-lou/ASHE")
-
-chain_dir = paste(GCM, EXP, RCM, BC, Model, sep="_")
+chain_dir = file.path(Model,
+                      paste(GCM, EXP, RCM, BC, Model, sep="_"))
+meta_path = file.path(data_dir,
+                      chain_dir,
+                      "meta.fst")
 dataEX_path = file.path(data_dir,
                         chain_dir,
                         paste0("dataEX_", analyse, ".fst"))
@@ -59,8 +65,14 @@ metaEX_path = file.path(data_dir,
                         chain_dir,
                         paste0("metaEX_", analyse, ".fst"))
 
+if (file.exists(projs_path)) {
+    projs = ASHE::read_tibble(filepath=projs_path)
+}
+meta = ASHE::read_tibble(filepath=meta_path)
 dataEX = ASHE::read_tibble(filepath=dataEX_path)
 metaEX = ASHE::read_tibble(filepath=metaEX_path)
 
+print(projs)
+print(meta)
 print(dataEX)
 print(metaEX)

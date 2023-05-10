@@ -220,15 +220,16 @@ NetCDF_to_tibble = function (NetCDF_path,
         Q_sim = Q_sim[CodeOrder,,drop=FALSE]
         Q_sim = c(t(Q_sim))
 
-        if ("topologicalSurface_model" %in% names(NCdata$var)) {
-            S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
-                                 start=start,
-                                 count=count)
-            S = S[station]
-            S = S[CodeOrder]
-        } else {
-            S = rep(NA, times=nCode)
-        }
+        # if ("topologicalSurface_model" %in% names(NCdata$var)) {
+        S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
+                             start=start,
+                             count=count)
+        S = S[station]
+        S = S[CodeOrder]
+        # }
+        # else {
+            # S = rep(NA, times=nCode)
+        # }
 
         data = dplyr::tibble(Code=rep(Code, each=nDate),
                              Date=rep(Date, times=nCode),
