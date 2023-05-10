@@ -485,13 +485,13 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         post("### Merging NetCDF file by time for projection")
         proj_merge_dirpath = file.path(computer_data_path,
                                        proj_merge_dir)
-        if (!dir.exists(proj_merge_dirpath)) {
-            if (rank == 0) {
-                dir.create(proj_merge_dirpath)
-            } else {
-                Sys.sleep(10)  
-            }
-        }
+        # if (!dir.exists(proj_merge_dirpath)) {
+        #     if (rank == 0) {
+        #         dir.create(proj_merge_dirpath)
+        #     } else {
+        #         Sys.sleep(10)  
+        #     }
+        # }
 
         Historicals =
             projs_selection_data[projs_selection_data$EXP ==
@@ -537,47 +537,47 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 proj = projs[j,]
                 proj_path = proj$path
                 proj_file = proj$file
-                proj_merge_file =
-                    gsub("[_]rcp", "_historical-rcp", proj_file)
-                proj_merge_path =
-                    file.path(proj_merge_dirpath,
-                              proj_merge_file)
+                # proj_merge_file =
+                    # gsub("[_]rcp", "_historical-rcp", proj_file)
+                # proj_merge_path =
+                    # file.path(proj_merge_dirpath,
+                              # proj_merge_file)
                 
-                post(paste0("#### Merging ",
-                            historical$file, " with ",
-                            proj$file, " in ",
-                            proj_merge_file))
+                # post(paste0("#### Merging ",
+                            # historical$file, " with ",
+                            # proj$file, " in ",
+                            # proj_merge_file))
 
-                cdoCmd = paste0(cdo_cmd_path,
-                                " --sortname --history -O mergetime ",
-                                historical_path, " ",
-                                proj_path, " ", 
-                                proj_merge_path)
-                system(cdoCmd)
+                # cdoCmd = paste0(cdo_cmd_path,
+                                # " --sortname --history -O mergetime ",
+                                # historical_path, " ",
+                                # proj_path, " ", 
+                                # proj_merge_path)
+                # system(cdoCmd)
 
                 NC_proj = ncdf4::nc_open(proj_path)
                 Date = NetCDF_extrat_time(NC_proj)
                 minDate_proj = min(Date)
                 maxDate_proj = max(Date)
                 
-                NC_proj_merge = ncdf4::nc_open(proj_merge_path,
-                                               write=TRUE)
-                code_value = ncdf4::ncvar_get(NC_proj, "code")
-                station_dim = NC_proj_merge$dim[['station']]
-                nchar_dim = ncdf4::ncdim_def("code_strlen",
-                                             "",
-                                             1:max(nchar(code_value)))
-                code_var = ncdf4::ncvar_def(name="code",
-                                            units="",
-                                            dim=list(nchar_dim,
-                                                     station_dim),
-                                            prec="char")
-                NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
-                                                 code_var)
-                ncdf4::ncvar_put(NC_proj_merge,
-                                 "code", code_value)
+                # NC_proj_merge = ncdf4::nc_open(proj_merge_path,
+                                               # write=TRUE)
+                # code_value = ncdf4::ncvar_get(NC_proj, "code")
+                # station_dim = NC_proj_merge$dim[['station']]
+                # nchar_dim = ncdf4::ncdim_def("code_strlen",
+                                             # "",
+                                             # 1:max(nchar(code_value)))
+                # code_var = ncdf4::ncvar_def(name="code",
+                                            # units="",
+                                            # dim=list(nchar_dim,
+                                                     # station_dim),
+                                            # prec="char")
+                # NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
+                                                 # code_var)
+                # ncdf4::ncvar_put(NC_proj_merge,
+                                 # "code", code_value)
                 ncdf4::nc_close(NC_proj)
-                ncdf4::nc_close(NC_proj_merge)
+                # ncdf4::nc_close(NC_proj_merge)
 
                 flag = dplyr::bind_rows(
                                   flag,
