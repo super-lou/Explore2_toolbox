@@ -144,16 +144,16 @@ lib_path =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
         # 'delete_tmp'
-        'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        # 'merge_nc'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -227,8 +227,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "file"
-    # "code"
+    # "file"
+    "code"
 
 
 #  ___  _                  
@@ -319,13 +319,13 @@ analyse_data =
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX'
     )
