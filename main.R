@@ -144,16 +144,16 @@ lib_path =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
         # 'delete_tmp'
-        'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        # 'merge_nc'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -227,8 +227,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "file"
-    # "code"
+    # "file"
+    "code"
 
 
 #  ___  _                  
@@ -277,7 +277,7 @@ codes_to_use =
     # ''
     c(
         'all'
-        # 'K2981910', #ref
+        # 'K2981910' #ref
         # "K221083001",
         # "^R"
         # "^K"
@@ -287,6 +287,13 @@ codes_to_use =
         # "M0014110",
         # "^A"
     )
+
+# existant :
+# K0910010
+# K2240810
+# conversion :
+# K0910050 -> K0910010
+# K2240820 -> K2240810
 
 
 ## 2. ANALYSE_DATA ___________________________________________________
@@ -319,8 +326,8 @@ analyse_data =
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
@@ -607,19 +614,6 @@ if (mode == "proj") {
     projs_selection_data$regexp = gsub("[_]", "[_]",
                                        projs_selection_data$regexp)
     
-    # if (use_proj_merge) {
-    #     projs_path = list.files(file.path(computer_data_path,
-    #                                       proj_merge_dir),
-    #                             recursive=TRUE)
-    #     projs_selection_data = projs_selection_data[projs_selection_data$EXP != "historical",]
-    # } else {
-    #     projs_path = list.files(file.path(computer_data_path, proj_dir),
-    #                             recursive=TRUE)
-    # }
-
-
-
-    
     if (use_proj_merge) {
         proj_path = file.path(computer_data_path,
                                proj_merge_dir)
@@ -655,33 +649,6 @@ if (mode == "proj") {
                                          c(file, path))
 
     if (all(projs_to_use != "all")) {
-    # if (all(projs_to_use == "all")) {    
-        # files_to_use =
-        #     unlist(lapply(projs_selection_data$regexp, apply_grepl,
-        #                   table=Files))
-        # files_to_use_name = c() 
-        # for (file in files_to_use) {
-        #     name = projs_selection_data$ID[sapply(
-        #                                     projs_selection_data$regexp,
-        #                                     grepl, file)]
-        #     files_to_use_name = c(files_to_use_name, name)
-        # }
-        # names(files_to_use) = files_to_use_name
-        # files_to_use = projs_selection_data_nest$file
-        # names(files_to_use) = projs_selection_data_nest$ID
-
-    # } else {
-        # projs_to_use = unlist(lapply(projs_to_use, apply_grepl,
-        #                              table=projs_selection_data$regexp))
-        # projs_to_use_name =
-        #     projs_selection_data$ID[projs_selection_data$regexp %in%
-        #                             projs_to_use]
-        # files_to_use = lapply(projs_to_use, apply_grepl,
-        #                       table=Files)
-        # names(files_to_use) = projs_to_use_name
-        # files_to_use = setNames(unlist(files_to_use, use.names=F),
-        #                         rep(names(files_to_use),
-        #                             lengths(files_to_use)))
         OK = apply(sapply(projs_to_use, grepl,
                           x=projs_selection_data$regexp),
                    1, any)
@@ -700,19 +667,6 @@ if (mode == "proj") {
                  filedir=today_resdir,
                  filename="projs_selection.txt")
     
-
-    # files_to_use_tmp = list()
-    # for (i in 1:length(files_to_use)) {
-    #     file_name = names(files_to_use)[i]
-    #     file = files_to_use[names(files_to_use) == file_name]
-    #     names(file) = NULL
-    #     files_to_use_tmp = append(files_to_use_tmp, list(file))
-    #     names(files_to_use_tmp)[length(files_to_use_tmp)] = file_name
-    # }
-    # files_to_use_tmp =
-    #     files_to_use_tmp[!duplicated(names(files_to_use_tmp))]
-    # files_to_use = files_to_use_tmp
-    
 } else if (mode == "diag") { #####
     diag_path = file.path(computer_data_path, diag_dir)
     models_to_use_name = models_to_use
@@ -722,10 +676,10 @@ if (mode == "proj") {
     files_to_use = lapply(models_to_use, apply_grepl,
                           table=models_file, target=models_path)
     names(files_to_use) = models_to_use_name
-    # files_to_use = files_to_use[sapply(files_to_use, length) > 0]
 }
 
 nFiles_to_use = length(files_to_use)
+
 
 
 codes_selection_data = read_tibble(file.path(computer_data_path,

@@ -60,7 +60,7 @@ obs_format = "_HYDRO_QJM.txt"
 diag_dir = "Explore2/diagnostic"
 proj_dir = "Explore2/projection"
 proj_merge_dir = "Explore2/projection_merge"
-codes_selection_file = "Explore2/Selection_points_simulation_V20230324.txt"
+codes_selection_file = "Explore2/Selection_points_simulation_V20230510.txt"
 projs_selection_file = "Explore2/ensembleProjectionClimatExplore2.txt"
 
 ### 2.2. Variables ___________________________________________________

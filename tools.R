@@ -74,7 +74,6 @@ NetCDF_to_tibble = function (NetCDF_path,
     if (mode == "diag") {
 
         CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-
         CodeRaw = convert_code8to10(CodeRaw)
         
         CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]

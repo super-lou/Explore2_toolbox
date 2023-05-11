@@ -469,7 +469,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                            include.dirs=TRUE,
                            full.names=TRUE)
         Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
-        Paths[!grepl("[.]", Paths)] = paste0(Paths[!grepl("[.]", Paths)], ".fst")
+        Paths[!grepl("[.]", Paths)] =
+            paste0(Paths[!grepl("[.]", Paths)], ".fst")
         Filenames = gsub("^.*[/]+", "", Paths)
         Filenames = gsub("[.].*$", "", Filenames)
         nFile = length(Filenames)
