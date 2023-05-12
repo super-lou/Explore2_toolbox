@@ -92,7 +92,7 @@ CARD_analyse_data = function () {
 
         if (rank == 0) {
             CARD_management(CARD=CARD_path,
-                            CARD_writing=tmppath,
+                            directory=tmppath,
                             type=analyse$type,
                             layout=c(analyse$name, "[",
                                      analyse$variable, "]"))
