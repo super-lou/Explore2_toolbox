@@ -39,18 +39,6 @@ CARD_analyse_data_hide = function (data, CARD_path, tmppath,
     metaEX = res$metaEX
     gc()
     
-    # if (analyse$simplify) {
-    #     dataEX = tidyr::separate(dataEX, col="ID",
-    #                              into=ID_colnames, sep="_")
-    # } else {
-    #     for (j in 1:length(dataEX)) {
-    #         dataEX[[j]] = tidyr::separate(dataEX[[j]],
-    #                                       col="ID",
-    #                                       into=ID_colnames,
-    #                                       sep="_")
-    #     }
-    # }
-    
     write_tibble(dataEX,
                  filedir=tmppath,
                  filename=paste0("dataEX_", analyse$name, "_",
@@ -82,14 +70,8 @@ CARD_analyse_data = function () {
     Code = Code_available[Code_available %in% CodeSUB10]
     nCode = length(Code)
 
-    # ID_colnames = names(dplyr::select(data, where(is.character)))    
-    # data = tidyr::unite(data, "ID", where(is.character), sep="_")
-    
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
-
-
-
 
         if (rank == 0) {
             CARD_management(CARD=CARD_path,
@@ -117,8 +99,6 @@ CARD_analyse_data = function () {
             }
         }
 
-
-        
         CARD_analyse_data_hide(data, CARD_path, tmppath,
                                analyse, period_analyse,
                                files_name_opt., subset_name,
