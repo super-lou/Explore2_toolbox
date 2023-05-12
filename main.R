@@ -239,9 +239,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
