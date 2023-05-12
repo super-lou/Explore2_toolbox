@@ -87,10 +87,14 @@ CARD_analyse_data = function () {
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
 
-        CARD_management(CARD=CARD_path,
-                        type=analyse$type,
-                        layout=c(analyse$name, "[",
-                                      analyse$variable, "]"))
+        if (rank == 0) {
+            CARD_management(CARD=CARD_path,
+                            type=analyse$type,
+                            layout=c(analyse$name, "[",
+                                     analyse$variable, "]"))
+        } else {
+            Sys.sleep(10)
+        }
         
         CARD_analyse_data_hide(data, CARD_path,
                                analyse, period_analyse, tmppath,
