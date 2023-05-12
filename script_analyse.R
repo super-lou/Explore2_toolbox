@@ -21,14 +21,15 @@
 
 
 
-CARD_analyse_data_hide = function (data, tmppath,
+CARD_analyse_data_hide = function (data, CARD_path, tmppath,
                                    analyse, period_analyse,
                                    files_name_opt., subset_name,
                                    subverbose) {
     
     res = CARD_extraction(data,
-                          CARD_path=tmppath,
+                          CARD_path=CARD_path,
                           CARD_dir=analyse$name,
+                          CARD_tmp=tmppath,
                           period=period_analyse,
                           simplify=analyse$simplify,
                           cancel_lim=analyse$cancel_lim,
@@ -92,8 +93,8 @@ CARD_analyse_data = function () {
 
         if (rank == 0) {
             CARD_management(CARD=CARD_path,
-                            directory=tmppath,
-                            type=analyse$type,
+                            tmp=tmppath,
+                            n=analyse$n,
                             layout=c(analyse$name, "[",
                                      analyse$variable, "]"))
             
@@ -118,7 +119,7 @@ CARD_analyse_data = function () {
 
 
         
-        CARD_analyse_data_hide(data, tmppath,
+        CARD_analyse_data_hide(data, CARD_path, tmppath,
                                analyse, period_analyse,
                                files_name_opt., subset_name,
                                subverbose)

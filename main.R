@@ -338,7 +338,7 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         type=2,
+         n=2,
          variable="mean{QA}",
          variable_names=NULL,
          cancel_lim=TRUE,
@@ -346,7 +346,7 @@ WIP =
 
 Explore2_diag_criteria_all = 
     list(name='Explore2_diag_criteria_all',
-         type=2,
+         n=2,
          variable=c("KGE", "KGEracine", "NSE", "NSEracine",
                     "NSElog", "NSEinv", "Biais", "Biais_SEA",
                     "STD", "Rc", "epsilon_P", "epsilon_P,SEA",
@@ -362,7 +362,7 @@ Explore2_diag_criteria_all =
 
 Explore2_diag_criteria_select =  
     list(name='Explore2_diag_criteria_select',
-         type=2,
+         n=2,
          variable=c("KGEracine", "Biais", "epsilon_T,DJF",
                     "epsilon_T,JJA", "epsilon_P,DJF", "epsilon_P,JJA",
                     "RAT_T", "RAT_P", "Q10", "median{tQJXA}",
@@ -373,7 +373,7 @@ Explore2_diag_criteria_select =
 
 Explore2_diag_serie = 
     list(name='Explore2_diag_serie',
-         type=2,
+         n=2,
          variable=c("QM", "PA", "QA", "median{QJ}",
                     "median{QJ}C5", "FDC"),
          variable_names=NULL,
@@ -382,7 +382,7 @@ Explore2_diag_serie =
 
 Explore2_diag_proj_serie =
     list(name='Explore2_diag_proj_serie',
-         type=1,
+         n=1,
          variable=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
                     "QA_mai", "QA_juin", "QA_juill", "QA_aout",
                     "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
@@ -395,7 +395,7 @@ Explore2_diag_proj_serie =
 
 Explore2_proj_serie =
     list(name='Explore2_proj_serie',
-         type=1,
+         n=1,
          variable=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
                     "QA_mai", "QA_juin", "QA_juill", "QA_aout",
                     "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
@@ -408,7 +408,7 @@ Explore2_proj_serie =
 
 Explore2_proj_check = 
     list(name='Explore2_proj_check',
-         type=1,
+         n=1,
          variable=c("tQJXA", "tCEN_etiage_check"),
          variable_names=c(Q="Q_sim"),
          cancel_lim=FALSE,
@@ -416,7 +416,7 @@ Explore2_proj_check =
 
 Explore2_proj_delta =
     list(name='Explore2_proj_delta',
-         type=1,
+         n=1,
          variable="deltaQA",
          variable_names=c(Q="Q_sim"),
          cancel_lim=FALSE,
