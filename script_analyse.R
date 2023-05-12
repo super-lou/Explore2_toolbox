@@ -93,9 +93,9 @@ CARD_analyse_data = function () {
             }
         } else {
             if (MPI != "") {
+                post("Waiting for rank 0")
                 Rmpi::mpi.recv(as.integer(0), type=1,
                                source=0, tag=1, comm=0)
-                post("Waiting for rank 0")
             }
         }
 
