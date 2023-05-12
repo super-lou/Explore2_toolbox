@@ -167,10 +167,10 @@ to_do =
 analyse_data =
     c(
         # "WIP"
-        'Explore2_diag_criteria_all',
-        'Explore2_diag_criteria_select',
-        'Explore2_diag_serie'
-        # 'Explore2_diag_proj_serie'
+        # 'Explore2_diag_criteria_all',
+        # 'Explore2_diag_criteria_select',
+        # 'Explore2_diag_serie'
+        'Explore2_diag_proj_serie'
         # 'Explore2_proj_serie',
         # 'Explore2_proj_check',
         # 'Explore2_proj_delta'    
@@ -234,8 +234,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
