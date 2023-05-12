@@ -234,14 +234,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -274,14 +274,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -322,19 +322,6 @@ codes_to_use =
 #   'Crue'/'Crue Nivale'/'Moyennes Eaux' and 'Étiage'. A directory can
 #   also be named 'Resume' in order to not include variables in an
 #   topic group.
-
-# analyse_data =
-#     list(
-#         # c('WIP', simplify=FALSE)
-        
-#         c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-#         c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
-#         c('Explore2_diag/002_serie', simplify=FALSE)
-        
-#         # c('Explore2_proj/001_serie', simplify=FALSE),
-#         # c('Explore2_proj/002_check', simplify=FALSE)
-#         # c('Explore2_proj/003_delta', simplify=TRUE)    
-#     )
 
 WIP = 
     list(name='WIP',
