@@ -22,48 +22,42 @@
 
 
 CARD_analyse_data_hide = function (data, CARD_path,
-                                   CARD_dir, period_analyse,
-                                   simplify, simplify_by, mode,
-                                   variable_names, subverbose,
-                                   ID_colnames, tmppath, CARD_var,
-                                   files_name_opt., subset_name) {
-    if (mode == "diag") {
-        no_lim = TRUE
-    } else if (mode == "proj") {
-        no_lim = FALSE
-    }
+                                   analyse, period_analyse, tmppath,
+                                   files_name_opt., subset_name,
+                                   subverbose) {
     
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
-                          CARD_dir=CARD_dir,
+                          CARD_dir=analyse$name,
                           period=period_analyse,
-                          simplify_by=simplify_by,
-                          no_lim=no_lim,
-                          variable_names=variable_names,
+                          simplify=analyse$simplify,
+                          cancel_lim=analyse$cancel_lim,
+                          variable_names=analyse$variable_names,
                           verbose=subverbose)
     dataEX = res$dataEX
     metaEX = res$metaEX
     gc()
-
-    if (simplify) {
-        dataEX = tidyr::separate(dataEX, col="ID",
-                                 into=ID_colnames, sep="_")
-    } else {
-        for (j in 1:length(dataEX)) {
-            dataEX[[j]] = tidyr::separate(dataEX[[j]],
-                                          col="ID",
-                                          into=ID_colnames,
-                                          sep="_")
-        }
-    }
+    
+    # if (analyse$simplify) {
+    #     dataEX = tidyr::separate(dataEX, col="ID",
+    #                              into=ID_colnames, sep="_")
+    # } else {
+    #     for (j in 1:length(dataEX)) {
+    #         dataEX[[j]] = tidyr::separate(dataEX[[j]],
+    #                                       col="ID",
+    #                                       into=ID_colnames,
+    #                                       sep="_")
+    #     }
+    # }
+    
     write_tibble(dataEX,
                  filedir=tmppath,
-                 filename=paste0("dataEX_", CARD_var, "_",
+                 filename=paste0("dataEX_", analyse$name, "_",
                                  files_name_opt.,
                                  subset_name, ".fst"))
     write_tibble(metaEX,
                  filedir=tmppath,
-                 filename=paste0("metaEX_", CARD_var, "_",
+                 filename=paste0("metaEX_", analyse$name, "_",
                                  files_name_opt.,
                                  subset_name, ".fst"))
 }
@@ -87,34 +81,21 @@ CARD_analyse_data = function () {
     Code = Code_available[Code_available %in% CodeSUB10]
     nCode = length(Code)
 
-    ID_colnames = names(dplyr::select(data, where(is.character)))    
-    data = tidyr::unite(data, "ID", where(is.character), sep="_")
+    # ID_colnames = names(dplyr::select(data, where(is.character)))    
+    # data = tidyr::unite(data, "ID", where(is.character), sep="_")
     
-    if (mode == "proj") {
-        variable_names = c(Q="Q_sim")
-    } else {
-        variable_names = NULL
-    }
-
     for (i in 1:length(analyse_data)) {
+        analyse = analyse_data[[i]]
+
+        CARD_management(CARD=CARD_path,
+                        type=analyse$type,
+                        layout=c(analyse$name, "[",
+                                      analyse$variable, "]"))
         
-        CARD_dir = analyse_data[[i]][1]
-        simplify = as.logical(analyse_data[[i]]["simplify"])
-        CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
-
-        if (simplify) {
-            simplify_by = "ID"
-        } else {
-            simplify_by = NULL
-        }
-
         CARD_analyse_data_hide(data, CARD_path,
-                               CARD_dir, period_analyse,
-                               simplify, simplify_by,
-                               mode, variable_names,
-                               subverbose, ID_colnames,
-                               tmppath, CARD_var, files_name_opt.,
-                               subset_name)
+                               analyse, period_analyse, tmppath,
+                               files_name_opt., subset_name,
+                               subverbose)
         gc()
         if (!is.null(wait)) {
             Sys.sleep(wait)

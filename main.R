@@ -164,6 +164,19 @@ to_do =
     )
 
 
+analyse_data =
+    c(
+        # "WIP"
+        'Explore2_diag_criteria_all',
+        'Explore2_diag_criteria_select',
+        'Explore2_diag_serie',
+        'Explore2_diag_proj_serie'
+        # 'Explore2_proj_serie',
+        # 'Explore2_proj_check',
+        # 'Explore2_proj_delta'    
+    )
+
+
 ## 3. PLOTTING PROCESSES _____________________________________________
 ### 3.1. Sheet _______________________________________________________
 # The use of this plot_sheet vector is quite similar to the to_do
@@ -310,18 +323,105 @@ codes_to_use =
 #   also be named 'Resume' in order to not include variables in an
 #   topic group.
 
-analyse_data =
-    list(
-        # c('WIP', simplify=FALSE)
+# analyse_data =
+#     list(
+#         # c('WIP', simplify=FALSE)
         
-        c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
-        c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
-        c('Explore2_diag/002_serie', simplify=FALSE)
+#         c('Explore2_diag/001_criteria/001_all', simplify=TRUE),
+#         c('Explore2_diag/001_criteria/002_select', simplify=TRUE),
+#         c('Explore2_diag/002_serie', simplify=FALSE)
         
-        # c('Explore2_proj/001_serie', simplify=FALSE),
-        # c('Explore2_proj/002_check', simplify=FALSE)
-        # c('Explore2_proj/003_delta', simplify=TRUE)    
-    )
+#         # c('Explore2_proj/001_serie', simplify=FALSE),
+#         # c('Explore2_proj/002_check', simplify=FALSE)
+#         # c('Explore2_proj/003_delta', simplify=TRUE)    
+#     )
+
+WIP = 
+    list(name='WIP',
+         type=2,
+         variable="mean{QA}",
+         variable_names=NULL,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_diag_criteria_all = 
+    list(name='Explore2_diag_criteria_all',
+         type=2,
+         variable=c("KGE", "KGEracine", "NSE", "NSEracine",
+                    "NSElog", "NSEinv", "Biais", "Biais_SEA",
+                    "STD", "Rc", "epsilon_P", "epsilon_P,SEA",
+                    "epsilon_T", "epsilon_T,SEA", "RAT_T", "RAT_P",
+                    "RAT_ET0", "Q10", "QJXA-10", "alphaQJXA",
+                    "median{tQJXA}", "median{dtCrue}", "Q50",
+                    "mean{QA}", "alphaCDC", "alphaQA", "Q90",
+                    "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10",
+                    "median{tVCN10}", "median{dtRec}", "BFI", "BFM"),
+         variable_names=NULL,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_diag_criteria_select =  
+    list(name='Explore2_diag_criteria_select',
+         type=2,
+         variable=c("KGEracine", "Biais", "epsilon_T,DJF",
+                    "epsilon_T,JJA", "epsilon_P,DJF", "epsilon_P,JJA",
+                    "RAT_T", "RAT_P", "Q10", "median{tQJXA}",
+                    "alphaCDC", "alphaQA", "Q90", "median{tVCN10}"),
+         variable_names=NULL,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_diag_serie = 
+    list(name='Explore2_diag_serie',
+         type=2,
+         variable=c("QM", "PA", "QA", "median{QJ}",
+                    "median{QJ}C5", "FDC"),
+         variable_names=NULL,
+         cancel_lim=TRUE,
+         simplify=FALSE)
+
+Explore2_diag_proj_serie =
+    list(name='Explore2_diag_proj_serie',
+         type=1,
+         variable=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
+                    "QA_mai", "QA_juin", "QA_juill", "QA_aout",
+                    "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
+                    "QA_MAM", "QA_JJA", "QA_SON", "QA05", "QA10",
+                    "QA50", "QA90", "QA95", "QJXA", "VCX3", "QMNA",
+                    "VCN10", "VCN3"),
+         variable_names=c(Q="Q_obs"),
+         cancel_lim=TRUE,
+         simplify=FALSE)
+
+Explore2_proj_serie =
+    list(name='Explore2_proj_serie',
+         type=1,
+         variable=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
+                    "QA_mai", "QA_juin", "QA_juill", "QA_aout",
+                    "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
+                    "QA_MAM", "QA_JJA", "QA_SON", "QA05", "QA10",
+                    "QA50", "QA90", "QA95", "QJXA", "VCX3", "QMNA",
+                    "VCN10", "VCN3"),
+         variable_names=c(Q="Q_sim"),
+         cancel_lim=FALSE,
+         simplify=FALSE)
+
+Explore2_proj_check = 
+    list(name='Explore2_proj_check',
+         type=1,
+         variable=c("tQJXA", "tCEN_etiage_check"),
+         variable_names=c(Q="Q_sim"),
+         cancel_lim=FALSE,
+         simplify=FALSE)
+
+Explore2_proj_delta =
+    list(name='Explore2_proj_delta',
+         type=1,
+         variable="deltaQA",
+         variable_names=c(Q="Q_sim"),
+         cancel_lim=FALSE,
+         simplify=TRUE)
+
 
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
@@ -480,7 +580,7 @@ if (any(file.exists(dev_path))) {
     print('Loading ASHE from package')
     library(ASHE)
 }
-
+logical
 # Import dataSHEEP
 dev_path = file.path(dev_lib_path,
                      c('', 'dataSHEEP_project'), 'dataSHEEP',
@@ -555,10 +655,6 @@ convert2bool = function (X, true) {
     return (X)
 }
 
-check_simplify = function (X) {
-    return (as.logical(X["simplify"]))  
-}
-
 if (mode == "diag") {
     period_analyse = period_analyse_diag
 } else if (mode == "proj") {
@@ -573,10 +669,14 @@ delete_tmp = FALSE
 merge_nc = FALSE
 read_tmp = FALSE
 
+analyse_data_tmp = lapply(analyse_data, get)
+names(analyse_data_tmp) = analyse_data
+analyse_data = analyse_data_tmp
+
+
 if ('plot_doc' %in% to_do) {
     plot_doc = get(paste0("doc_", plot_doc[1]))
 }
-
 
 if (mode == "proj") {
     projs_selection_data = read_tibble(file.path(computer_data_path,
@@ -698,7 +798,7 @@ if (all(codes_to_use == "")) {
 }
 if (all(codes_to_use == "all")) {
     CodeALL8 = codes8_selection
-    CodeALL10 = codes10_selection
+    CodeALL10 = convert_code8to10(codes8_selection)
 } else {
     codes_to_use[nchar(codes_to_use) == 10] =
         codes8_selection[codes10_selection %in%
@@ -711,9 +811,10 @@ if (all(codes_to_use == "all")) {
     
     okCode = codes_to_use %in% codes8_selection
     CodeALL8 = codes_to_use[okCode]
-    CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
+    # CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
+    CodeALL10 = convert_code8to10(codes8_selection)
 }
-CodeALL8 = CodeALL8[nchar(CodeALL10) > 0]
+CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
 CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
 nCodeALL = length(CodeALL10)
 
@@ -821,8 +922,6 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         if (size != nSubsets) {
             stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
         }
-        # Subsets = Subsets[as.integer(rank*(nSubsets/size+.5)+1):
-        #                   as.integer((rank+1)*(nSubsets/size+.5))]
         Subsets = Subsets[rank+1]
         Subsets = Subsets[!is.na(names(Subsets))]
         nSubsets = length(Subsets)
@@ -866,21 +965,16 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 }
                 if ('analyse_data' %in% to_do) {
                     for (aa in 1:length(analyse_data)) {
+                        analyse = analyse_data[[aa]]
                         
-                        CARD_dir = analyse_data[[aa]][1]
-                        simplify =
-                            as.logical(analyse_data[[aa]]["simplify"])
-
-                        CARD_var = gsub("[/][[:digit:]]+[_]", "_",
-                                        CARD_dir)
-                        if (simplify) {
+                        if (analyse$simplify) {
                             file_test = c(file_test,
-                                          paste0("dataEX_", CARD_var,
+                                          paste0("dataEX_", analyse$dir,
                                                  "_", files_name_opt.,
                                                  subset_name, ".fst"))
                         } else {
                             file_test = c(file_test,
-                                          paste0("dataEX_", CARD_var,
+                                          paste0("dataEX_", analyse$dir,
                                                  "_", files_name_opt.,
                                                  subset_name))
                         }

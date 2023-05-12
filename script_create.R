@@ -60,7 +60,7 @@ create_data = function () {
     }
 
     if (nrow(data_sim) > 0) {        
-        id = match(CodeSUB10, codes10_selection)
+        id = match(CodeSUB10, CodeALL10)
         meta =
             dplyr::tibble(
                        Code=CodeSUB10,
@@ -85,8 +85,7 @@ create_data = function () {
 
         Code10_available = levels(factor(data_sim$Code))
         Code10 = Code10_available[Code10_available %in% CodeSUB10]
-        Code8 = codes8_selection[match(Code10,
-                                       codes10_selection)]
+        Code8 = CodeALL8[match(Code10, CodeALL10)]
         Code8_filename = paste0(Code8, obs_format)
         nCode = length(Code10)
 

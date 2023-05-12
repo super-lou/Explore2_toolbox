@@ -55,10 +55,7 @@ manage_data = function () {
                  filename="meta.fst")
 
     for (i in 1:length(analyse_data)) {
-        
-        CARD_dir = analyse_data[[i]][1]
-        simplify = as.logical(analyse_data[[i]]["simplify"])
-        CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+        analyse = analyse_data[[i]]
         
         if (exists("metaEX")) {
             rm ("metaEX")
@@ -70,7 +67,7 @@ manage_data = function () {
             subset_name = names(Subsets_save)[j]
 
             if (!exists("metaEX")) {
-                filename = paste0("metaEX_", CARD_var, "_",
+                filename = paste0("metaEX_", analyse$name, "_",
                                   files_name_opt.,
                                   subset_name, ".fst")
                 if (file.exists(file.path(tmppath, filename))) {
@@ -80,7 +77,7 @@ manage_data = function () {
                 }
             }
             
-            dirname = paste0("dataEX_", CARD_var, "_",
+            dirname = paste0("dataEX_", analyse$name, "_",
                              files_name_opt.,
                              subset_name)
             filename = paste0(dirname, ".fst")
@@ -93,7 +90,7 @@ manage_data = function () {
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
                 } else {
-                    if (simplify) {
+                    if (analyse$simplify) {
                         dataEX = dplyr::bind_rows(dataEX,
                                                   dataEX_tmp)
                     } else {
@@ -111,7 +108,7 @@ manage_data = function () {
         if (exists("dataEX_tmp")) {
             rm ("dataEX_tmp")
 
-            if (simplify) {
+            if (analyse$simplify) {
                 dataEX = dataEX[order(dataEX$Model),]
                 
                 Vars = colnames(dataEX)
@@ -177,12 +174,12 @@ manage_data = function () {
 
         write_tibble(dataEX,
                      filedir=tmppath,
-                     filename=paste0("dataEX_", CARD_var,
+                     filename=paste0("dataEX_", analyse$name,
                                      .files_name_opt,
                                      ".fst"))
         write_tibble(metaEX,
                      filedir=tmppath,
-                     filename=paste0("metaEX_", CARD_var,
+                     filename=paste0("metaEX_", analyse$name,
                                      .files_name_opt,
                                      ".fst"))
         if (!is.null(wait)) {
@@ -248,12 +245,9 @@ save_data = function () {
     }
 
     for (i in 1:length(analyse_data)) {
+        analyse = analyse_data[[i]]
         
-        CARD_dir = analyse_data[[i]][1]
-        simplify = as.logical(analyse_data[[i]]["simplify"])
-        CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
-        
-        dirname = paste0("dataEX_", CARD_var,
+        dirname = paste0("dataEX_", analyse$name,
                          .files_name_opt)
         filename = paste0(dirname, ".fst")
         if (file.exists(file.path(tmppath, dirname)) |
@@ -263,7 +257,7 @@ save_data = function () {
                 metaEX = read_tibble(filedir=tmppath,
                                      filename=paste0(
                                          "metaEX_",
-                                         CARD_var,
+                                         analyse$name,
                                          .files_name_opt,
                                          ".fst"))
                 gc()
@@ -272,7 +266,7 @@ save_data = function () {
                 dataEX = read_tibble(filedir=tmppath,
                                      filename=paste0(
                                          "dataEX_",
-                                         CARD_var,
+                                         analyse$name,
                                          .files_name_opt,
                                          ".fst"))
                 gc()
@@ -285,20 +279,20 @@ save_data = function () {
             write_tibble(dataEX,
                          filedir=today_resdir_tmp,
                          filename=paste0("dataEX_",
-                                         CARD_var,
+                                         analyse$name,
                                          ".fst"))
             if ("Rdata" %in% saving_format) {
                 write_tibble(dataEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("dataEX_",
-                                             CARD_var,
+                                             analyse$name,
                                              ".Rdata"))
             }
             if ("txt" %in% saving_format) {
                 write_tibble(dataEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("dataEX_",
-                                             CARD_var,
+                                             analyse$name,
                                              ".txt"))
             }
             if (!is.null(wait)) {
@@ -311,20 +305,20 @@ save_data = function () {
             write_tibble(metaEX,
                          filedir=today_resdir_tmp,
                          filename=paste0("metaEX_",
-                                         CARD_var,
+                                         analyse$name,
                                          ".fst"))
             if ("Rdata" %in% saving_format) {
                 write_tibble(metaEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("metaEX_",
-                                             CARD_var,
+                                             analyse$name,
                                              ".Rdata"))
             }
             if ("txt" %in% saving_format) {
                 write_tibble(metaEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("metaEX_",
-                                             CARD_var,
+                                             analyse$name,
                                              ".txt"))
             }
             if (!is.null(wait)) {
@@ -383,9 +377,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                     read_saving))
 
         for (i in 1:length(analyse_data)) {
-            CARD_dir = analyse_data[[i]][1]
-            simplify = as.logical(analyse_data[[i]]["simplify"])
-            CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+            analyse = analyse_data[[i]]
             
             Paths = list.files(file.path(resdir, read_saving),
                                include.dirs=TRUE,
@@ -396,7 +388,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 paste0(pattern[!grepl("dataEX", pattern)], "[.]")
             pattern = paste0("(", paste0(pattern,
                                          collapse=")|("), ")")
-            pattern = gsub("EX", paste0("EX_", CARD_var), pattern)
+            pattern = gsub("EX", paste0("EX_", analyse$name), pattern)
             pattern = gsub("[_]", "[_]", pattern)
             Paths = Paths[grepl(pattern, Paths)]
             
@@ -418,13 +410,11 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         post("### Selecting variables")
         for (i in 1:length(analyse_data)) {
             
-            CARD_dir = analyse_data[[i]][1]
-            simplify = as.logical(analyse_data[[i]]["simplify"])
-            CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+            analyse = analyse_data[[i]]
 
-            if (simplify) {
-                dataEXname = paste0("dataEX_", CARD_var)
-                metaEXname = paste0("metaEX_", CARD_var)
+            if (analyse$simplify) {
+                dataEXname = paste0("dataEX_", analyse$name)
+                metaEXname = paste0("metaEX_", analyse$name)
                 dataEXtmp = get(dataEXname)
                 metaEXtmp = get(metaEXname)
                 dataEXtmp =
@@ -442,14 +432,11 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
     if ('write_warnings' %in% to_do) {
         post("### Writing warnings")
         for (i in 1:length(analyse_data)) {
-            
-            CARD_dir = analyse_data[[i]][1]
-            simplify = as.logical(analyse_data[[i]]["simplify"])
-            CARD_var = gsub("[/][[:digit:]]+[_]", "_", CARD_dir)
+            analyse = analyse_data[[i]]
 
-            if (simplify) {
-                dataEX = get(paste0("dataEX_", CARD_var))
-                metaEX = get(paste0("metaEX_", CARD_var))
+            if (analyse$simplify) {
+                dataEX = get(paste0("dataEX_", analyse$name))
+                metaEX = get(paste0("metaEX_", analyse$name))
                 Warnings = find_Warnings(dataEX, metaEX,
                                          resdir=today_resdir, save=TRUE)
             }
@@ -486,13 +473,13 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         post("### Merging NetCDF file by time for projection")
         proj_merge_dirpath = file.path(computer_data_path,
                                        proj_merge_dir)
-        # if (!dir.exists(proj_merge_dirpath)) {
-        #     if (rank == 0) {
-        #         dir.create(proj_merge_dirpath)
-        #     } else {
-        #         Sys.sleep(10)  
-        #     }
-        # }
+        if (!dir.exists(proj_merge_dirpath)) {
+            if (rank == 0) {
+                dir.create(proj_merge_dirpath)
+            } else {
+                Sys.sleep(10)  
+            }
+        }
 
         Historicals =
             projs_selection_data[projs_selection_data$EXP ==
@@ -538,47 +525,47 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 proj = projs[j,]
                 proj_path = proj$path
                 proj_file = proj$file
-                # proj_merge_file =
-                    # gsub("[_]rcp", "_historical-rcp", proj_file)
-                # proj_merge_path =
-                    # file.path(proj_merge_dirpath,
-                              # proj_merge_file)
+                proj_merge_file =
+                    gsub("[_]rcp", "_historical-rcp", proj_file)
+                proj_merge_path =
+                    file.path(proj_merge_dirpath,
+                              proj_merge_file)
                 
-                # post(paste0("#### Merging ",
-                            # historical$file, " with ",
-                            # proj$file, " in ",
-                            # proj_merge_file))
+                post(paste0("#### Merging ",
+                            historical$file, " with ",
+                            proj$file, " in ",
+                            proj_merge_file))
 
-                # cdoCmd = paste0(cdo_cmd_path,
-                                # " --sortname --history -O mergetime ",
-                                # historical_path, " ",
-                                # proj_path, " ", 
-                                # proj_merge_path)
-                # system(cdoCmd)
+                cdoCmd = paste0(cdo_cmd_path,
+                                " --sortname --history -O mergetime ",
+                                historical_path, " ",
+                                proj_path, " ", 
+                                proj_merge_path)
+                system(cdoCmd)
 
                 NC_proj = ncdf4::nc_open(proj_path)
                 Date = NetCDF_extrat_time(NC_proj)
                 minDate_proj = min(Date)
                 maxDate_proj = max(Date)
                 
-                # NC_proj_merge = ncdf4::nc_open(proj_merge_path,
-                                               # write=TRUE)
-                # code_value = ncdf4::ncvar_get(NC_proj, "code")
-                # station_dim = NC_proj_merge$dim[['station']]
-                # nchar_dim = ncdf4::ncdim_def("code_strlen",
-                                             # "",
-                                             # 1:max(nchar(code_value)))
-                # code_var = ncdf4::ncvar_def(name="code",
-                                            # units="",
-                                            # dim=list(nchar_dim,
-                                                     # station_dim),
-                                            # prec="char")
-                # NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
-                                                 # code_var)
-                # ncdf4::ncvar_put(NC_proj_merge,
-                                 # "code", code_value)
+                NC_proj_merge = ncdf4::nc_open(proj_merge_path,
+                                               write=TRUE)
+                code_value = ncdf4::ncvar_get(NC_proj, "code")
+                station_dim = NC_proj_merge$dim[['station']]
+                nchar_dim = ncdf4::ncdim_def("code_strlen",
+                                             "",
+                                             1:max(nchar(code_value)))
+                code_var = ncdf4::ncvar_def(name="code",
+                                            units="",
+                                            dim=list(nchar_dim,
+                                                     station_dim),
+                                            prec="char")
+                NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
+                                                 code_var)
+                ncdf4::ncvar_put(NC_proj_merge,
+                                 "code", code_value)
                 ncdf4::nc_close(NC_proj)
-                # ncdf4::nc_close(NC_proj_merge)
+                ncdf4::nc_close(NC_proj_merge)
 
                 flag = dplyr::bind_rows(
                                   flag,
