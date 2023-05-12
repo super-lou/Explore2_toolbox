@@ -87,14 +87,31 @@ CARD_analyse_data = function () {
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
 
+
+
+
         if (rank == 0) {
             CARD_management(CARD=CARD_path,
                             type=analyse$type,
                             layout=c(analyse$name, "[",
                                      analyse$variable, "]"))
+            
+            if (MPI != "") {
+                for (root in 1:(size-1)) {
+                    Rmpi::mpi.send(as.integer(1), type=1,
+                                   dest=root, tag=1, comm=0)
+                    post(paste0("Sending for rank ", root+1, " : "))
+                }
+            }
         } else {
-            Sys.sleep(10)
+            if (MPI != "") {
+                Rmpi::mpi.recv(as.integer(0), type=1,
+                               source=0, tag=1, comm=0)
+                post("Waiting for rank 0")
+            }
         }
+
+
         
         CARD_analyse_data_hide(data, CARD_path,
                                analyse, period_analyse, tmppath,
