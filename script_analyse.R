@@ -97,10 +97,14 @@ CARD_analyse_data = function () {
                                      analyse$variable, "]"))
             
             if (MPI != "") {
+                while (!dir.exists(file.path(CARD_path,
+                                             analyse$name))) {
+                    Sys.sleep(1)
+                }
                 for (root in 1:(size-1)) {
                     Rmpi::mpi.send(as.integer(1), type=1,
                                    dest=root, tag=1, comm=0)
-                    post(paste0("Sending for rank ", root+1, " : "))
+                    post(paste0("Sending for rank ", root+1))
                 }
             }
         } else {
