@@ -252,7 +252,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 10
+nCode4RAM = 15
 use_proj_merge =
     # TRUE
     FALSE
