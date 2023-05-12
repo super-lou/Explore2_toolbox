@@ -28,7 +28,7 @@ CARD_analyse_data_hide = function (data, CARD_path, tmppath,
     
     res = CARD_extraction(data,
                           CARD_path=CARD_path,
-                          CARD_dir=analyse$name,
+                          CARD_dir=paste0(analyse$name, "_", rank),
                           CARD_tmp=tmppath,
                           period=period_analyse,
                           simplify=analyse$simplify,
@@ -73,31 +73,11 @@ CARD_analyse_data = function () {
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
 
-        if (rank == 0) {
-            CARD_management(CARD=CARD_path,
-                            tmp=tmppath,
-                            n=analyse$n,
-                            layout=c(analyse$name, "[",
-                                     analyse$variable, "]"))
-            
-            if (MPI != "") {
-                while (!dir.exists(file.path(tmppath,
-                                             analyse$name))) {
-                    Sys.sleep(1)
-                }
-                for (root in 1:(size-1)) {
-                    Rmpi::mpi.send(as.integer(1), type=1,
-                                   dest=root, tag=1, comm=0)
-                    post(paste0("Sending for rank ", root+1))
-                }
-            }
-        } else {
-            if (MPI != "") {
-                post("Waiting for rank 0")
-                Rmpi::mpi.recv(as.integer(0), type=1,
-                               source=0, tag=1, comm=0)
-            }
-        }
+        CARD_management(CARD=CARD_path,
+                        tmp=tmppath,
+                        n=analyse$n,
+                        layout=c(paste0(analyse$name, "_", rank), "[",
+                                 analyse$variable, "]"))
 
         CARD_analyse_data_hide(data, CARD_path, tmppath,
                                analyse, period_analyse,
