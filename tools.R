@@ -646,6 +646,8 @@ find_Warnings = function (dataEXind, metaEXind,
                                  Warnings_code)
         }
 
+        Warnings_code$model_OK = list(model_OK)
+        
         allLines = dplyr::bind_rows(allLines,
                                     dplyr::tibble(var="Général",
                                                   niveau=niveau,
@@ -658,45 +660,27 @@ find_Warnings = function (dataEXind, metaEXind,
                 next
             }
             
-            if (length(unlist(Line$model)) == nModel) {
+            Model_OK = unlist(Line$model_OK)
+            nModel_OK = length(Model_OK)
+            
+            if (length(unlist(Line$model)) == nModel_OK) {
                 Line$line =
                     paste0(all_model, " ",
-                           gsub("([|].*[:])|([:])",
+                           gsub("([|][^:]*[:])|([:])",
                                 "",
                                 Line$line))
             } else {
-                # model = paste0("<b>",
-                #                unlist(Line$model),
-                #                "</b>")
-                # if (length(unlist(Line$model)) == 1) {
-                #     Line$line =
-                #         paste0(model, " ",
-                #                gsub("([|].*[:])|([:])",
-                #                     "",
-                #                     Line$line))
-                # } else {
-                #     model = paste0(
-                #         paste0(model[-length(model)],
-                #                collapse=", "),
-                #         " et ", model[length(model)])
-                #     Line$line =
-                #         paste0(model, " ",
-                #                gsub("([:].*[|])|([:])",
-                #                     "",
-                #                     Line$line))
-                # }
-
-                ##
                 models = unlist(Line$model)
                 models_len = length(models)
-                if (models_len > nModel/2) {
-                    models = Model[!(Model %in% models)]
+                
+                if (models_len > nModel_OK/2) {
+                    models = Model_OK[!(Model_OK %in% models)]
                     models_len = length(models)
                     models_str = paste0("<b>", models, "</b>")
                     if (models_len == 1) {
                         Line$line =
                             paste0("Seul ", models_str, " ",
-                                   gsub("([|].*[:])|([:])",
+                                   gsub("([|][^:]*[:])|([:])",
                                         "",
                                         Line$nline))
                     } else {
@@ -706,7 +690,7 @@ find_Warnings = function (dataEXind, metaEXind,
                             " et ", models_str[models_len])
                         Line$line =
                             paste0("Seuls ", models_str, " ",
-                                   gsub("([:].*[|])|([:])",
+                                   gsub("([:][^:]*[|])|([:])",
                                         "",
                                         Line$nline))
                     }
@@ -716,7 +700,7 @@ find_Warnings = function (dataEXind, metaEXind,
                     if (models_len == 1) {
                         Line$line =
                             paste0(models_str, " ",
-                                   gsub("([|].*[:])|([:])",
+                                   gsub("([|][^:]*[:])|([:])",
                                         "",
                                         Line$line))
                     } else {
@@ -726,7 +710,7 @@ find_Warnings = function (dataEXind, metaEXind,
                             " et ", models_str[models_len])
                         Line$line =
                             paste0(models_str, " ",
-                                   gsub("([:].*[|])|([:])",
+                                   gsub("([:][^:]*[|])|([:])",
                                         "",
                                         Line$line))
                     }
@@ -783,9 +767,9 @@ find_Warnings = function (dataEXind, metaEXind,
 }
 
 # W = find_Warnings(dataEX_Explore2_diag_criteria_select,
-#                   metaEX_Explore2_diag_criteria_select,
-#                   codeLight="K298191001",
-#                   save=FALSE)
+                  # metaEX_Explore2_diag_criteria_select,
+                  # codeLight="K298191001",
+                  # save=FALSE)
 # W = find_Warnings(dataEXind, metaEXind)
 # Warnings = W$Warnings
 # frq = W$frq
