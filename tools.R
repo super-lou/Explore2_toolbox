@@ -22,6 +22,7 @@
 
 convert_code8to10 = function (Code) {
     Code_save = Code
+
     if (any(nchar(Code) == 8)) {
         Code[nchar(Code) == 8] =
             codes10_selection[match(Code[nchar(Code) == 8],

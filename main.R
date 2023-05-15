@@ -770,6 +770,9 @@ nFiles_to_use = length(files_to_use)
 
 codes_selection_data = read_tibble(file.path(computer_data_path,
                                              codes_selection_file))
+codes_selection_data = dplyr::filter(codes_selection_data,
+                                     !grepl("Supprimer", X))
+
 if (mode == "diag") {
     ref = 1
 } else if (mode == "proj") {
@@ -779,6 +782,9 @@ codes_selection_data =
     codes_selection_data[codes_selection_data$Référence %in% ref,]
 codes8_selection = codes_selection_data$CODE
 codes10_selection = codes_selection_data$SuggestionCode
+codes8_selection = codes8_selection[!is.na(codes8_selection)]
+codes10_selection = codes10_selection[!is.na(codes10_selection)]
+
 if (all(codes_to_use == "")) {
     stop ("No station selected")
 }
