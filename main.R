@@ -259,6 +259,10 @@ use_proj_merge =
 projs_to_use =
     c(
         'all'
+
+        # "NorESM1.*M.*rcp85.*WRF381P.*CDFt.*J2000"
+        # "NorESM1.*rcp85.*WRF381P.*ADAMONT.*J2000"
+        
         # "(rcp26)|(rcp45)|(rcp85")
         # "MPI.*rcp26.*REMO.*CDFt.*MORDOR.*SD"
         # "EARTH.*HadREM3.*ADAMONT.*CTRIP"

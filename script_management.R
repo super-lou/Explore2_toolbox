@@ -23,40 +23,41 @@
 
 manage_data = function () {
 
-    if (exists("meta")) {
-        rm (meta)
-    }
-    for (i in 1:nSubsets_save) {
-        subset_name = names(Subsets_save)[i]
-        if (by_files | MPI == "file") {
-            subset_name = paste0(files_name_opt,
-                                 "_", subset_name)
-        }
-        filename = paste0("meta_", subset_name, ".fst")
-        if (file.exists(file.path(tmppath, filename))) {
-            meta_tmp = read_tibble(filedir=tmppath,
-                                   filename=filename)
-            if (!exists("meta")) {
-                meta = meta_tmp
-            } else {
-                meta = dplyr::bind_rows(meta, meta_tmp)
-            }
-        }
-        gc()
-    }
+    # if (exists("meta")) {
+    #     rm (meta)
+    # }
+    # for (i in 1:nSubsets_save) {
+    #     subset_name = names(Subsets_save)[i]
+    #     filename = paste0("meta_", files_name_opt.,
+    #                       subset_name, ".fst")
+    #     if (file.exists(file.path(tmppath, filename))) {
+    #         meta_tmp = read_tibble(filedir=tmppath,
+    #                                filename=filename)
+    #         if (!exists("meta")) {
+    #             meta = meta_tmp
+    #         } else {
+    #             meta = dplyr::bind_rows(meta, meta_tmp)
+    #         }
+    #     }
+    #     gc()
+    # }
     
-    if (exists("meta_tmp")) {
-        rm (meta_tmp)
-    }
-    meta = meta[order(meta$Code),]
+    # if (exists("meta_tmp")) {
+    #     rm (meta_tmp)
+    # }
+    # meta = meta[order(meta$Code),]
     
-    write_tibble(meta,
-                 filedir=tmppath,
-                 filename="meta.fst")
+    # write_tibble(meta,
+    #              filedir=tmppath,
+    #              filename=paste0("meta_", ".fst")
+    
 
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
-        
+
+        if (exists("meta")) {
+            rm (meta)
+        }
         if (exists("metaEX")) {
             rm ("metaEX")
         }
@@ -65,6 +66,19 @@ manage_data = function () {
         }
         for (j in 1:nSubsets_save) {
             subset_name = names(Subsets_save)[j]
+
+            filename = paste0("meta_", files_name_opt.,
+                              subset_name, ".fst")
+            if (file.exists(file.path(tmppath, filename))) {
+                meta_tmp = read_tibble(filedir=tmppath,
+                                       filename=filename)
+                gc()
+                if (!exists("meta")) {
+                    meta = meta_tmp
+                } else {
+                    meta = dplyr::bind_rows(meta, meta_tmp)
+                }
+            }            
 
             if (!exists("metaEX")) {
                 filename = paste0("metaEX_", analyse$name, "_",
@@ -172,6 +186,12 @@ manage_data = function () {
             }
         }
 
+        meta = meta[order(meta$Code),]
+        write_tibble(meta,
+                     filedir=tmppath,
+                     filename=paste0("meta_", analyse$name,
+                                     .files_name_opt,
+                                     ".fst"))
         write_tibble(dataEX,
                      filedir=tmppath,
                      filename=paste0("dataEX_", analyse$name,
@@ -220,39 +240,26 @@ save_data = function () {
         file.copy(data_paths,
                   file.path(today_resdir_tmp, data_files))
     }
-    
-    if ("meta" %in% var2save) {
-        meta = read_tibble(filedir=tmppath,
-                           filename="meta.fst")
-        
-        write_tibble(meta,
-                     filedir=today_resdir_tmp,
-                     filename=paste0("meta.fst"))
-        if ("Rdata" %in% saving_format) {
-            write_tibble(meta,
-                         filedir=today_resdir_tmp,
-                         filename=paste0("meta.Rdata"))
-        }
-        if ("txt" %in% saving_format) {
-            write_tibble(meta,
-                         filedir=today_resdir_tmp,
-                         filename=paste0("meta.txt"))
-        }
-        if (!is.null(wait)) {
-            post("Waiting for saving of meta data")
-            Sys.sleep(wait)
-        }
-    }
 
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
-        
+
         dirname = paste0("dataEX_", analyse$name,
                          .files_name_opt)
         filename = paste0(dirname, ".fst")
         if (file.exists(file.path(tmppath, dirname)) |
             file.exists(file.path(tmppath, filename))) {
 
+            if ("meta" %in% var2save) {
+                meta = read_tibble(filedir=tmppath,
+                                   filename=paste0(
+                                       "meta_",
+                                       analyse$name,
+                                       .files_name_opt,
+                                       ".fst"))
+                gc()
+            }
+            
             if ("metaEX" %in% var2save) {
                 metaEX = read_tibble(filedir=tmppath,
                                      filename=paste0(
@@ -273,6 +280,52 @@ save_data = function () {
             }
         } else {
             next
+        }
+
+        if ("meta" %in% var2save) {
+            write_tibble(meta,
+                         filedir=today_resdir_tmp,
+                         filename=paste0("meta.fst"))
+            if ("Rdata" %in% saving_format) {
+                write_tibble(meta,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("meta.Rdata"))
+            }
+            if ("txt" %in% saving_format) {
+                write_tibble(meta,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("meta.txt"))
+            }
+            if (!is.null(wait)) {
+                post("Waiting for saving of meta data")
+                Sys.sleep(wait)
+            }
+        }
+
+        if ("metaEX" %in% var2save) {
+            write_tibble(metaEX,
+                         filedir=today_resdir_tmp,
+                         filename=paste0("metaEX_",
+                                         analyse$name,
+                                         ".fst"))
+            if ("Rdata" %in% saving_format) {
+                write_tibble(metaEX,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("metaEX_",
+                                             analyse$name,
+                                             ".Rdata"))
+            }
+            if ("txt" %in% saving_format) {
+                write_tibble(metaEX,
+                             filedir=today_resdir_tmp,
+                             filename=paste0("metaEX_",
+                                             analyse$name,
+                                             ".txt"))
+            }
+            if (!is.null(wait)) {
+                post("Waiting for saving of extracted meta data")
+                Sys.sleep(wait)
+            }
         }
 
         if ("dataEX" %in% var2save) {
@@ -297,32 +350,6 @@ save_data = function () {
             }
             if (!is.null(wait)) {
                 post("Waiting for saving of extracted data")
-                Sys.sleep(wait)
-            }
-        }
-        
-        if ("metaEX" %in% var2save) {
-            write_tibble(metaEX,
-                         filedir=today_resdir_tmp,
-                         filename=paste0("metaEX_",
-                                         analyse$name,
-                                         ".fst"))
-            if ("Rdata" %in% saving_format) {
-                write_tibble(metaEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("metaEX_",
-                                             analyse$name,
-                                             ".Rdata"))
-            }
-            if ("txt" %in% saving_format) {
-                write_tibble(metaEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("metaEX_",
-                                             analyse$name,
-                                             ".txt"))
-            }
-            if (!is.null(wait)) {
-                post("Waiting for saving of extracted meta data")
                 Sys.sleep(wait)
             }
         }
