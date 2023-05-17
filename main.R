@@ -814,7 +814,8 @@ nCodeALL = length(CodeALL10)
 if (MPI != "") {
     tmppath = file.path(computer_work_path, paste0(tmpdir,
                                                    "_",
-                                                   models_to_use)) #########################################################
+                                                   paste0(models_to_use,
+                                                          collapse="_"))) #########################################################
 } else {
     tmppath = file.path(computer_work_path, tmpdir)
 }
@@ -970,12 +971,14 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                         
                         if (analyse$simplify) {
                             file_test = c(file_test,
-                                          paste0("dataEX_", analyse$dir,
+                                          paste0("dataEX_",
+                                                 analyse$name,
                                                  "_", files_name_opt.,
                                                  subset_name, ".fst"))
                         } else {
                             file_test = c(file_test,
-                                          paste0("dataEX_", analyse$dir,
+                                          paste0("dataEX_",
+                                                 analyse$name,
                                                  "_", files_name_opt.,
                                                  subset_name))
                         }
