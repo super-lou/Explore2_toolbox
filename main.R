@@ -279,8 +279,8 @@ models_to_use =
         # "J2000"
         # "SIM2"
         # "MORDOR-SD"
-        # "MORDOR-TS"
-        "ORCHIDEE"
+        "MORDOR-TS"
+        # "ORCHIDEE"
         # "SMASH"
     )
 complete_by = "SMASH"
