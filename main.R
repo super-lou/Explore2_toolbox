@@ -251,7 +251,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 25
+nCode4RAM = 10
 use_proj_merge =
     TRUE
     # FALSE
@@ -818,7 +818,7 @@ nCodeALL = length(CodeALL10)
 if (MPI != "") {
     tmppath = file.path(computer_work_path, paste0(tmpdir,
                                                    "_",
-                                                   models_to_use))
+                                                   models_to_use)) #########################################################
 } else {
     tmppath = file.path(computer_work_path, tmpdir)
 }
