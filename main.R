@@ -812,10 +812,11 @@ nCodeALL = length(CodeALL10)
 
 
 if (MPI != "") {
-    tmppath = file.path(computer_work_path, paste0(tmpdir,
-                                                   "_",
-                                                   paste0(models_to_use,
-                                                          collapse="_"))) #########################################################
+    tmppath = file.path(computer_work_path,
+                        paste0(tmpdir,
+                               "_",
+                               paste0(models_to_use,
+                                      collapse="_"))) #########################################################
 } else {
     tmppath = file.path(computer_work_path, tmpdir)
 }
@@ -885,13 +886,22 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         if (MPI == "file") {
             start = ceiling(seq(1, nFiles_to_use,
                                 by=(nFiles_to_use/size)))
-            end = c(start[-1]-1, nFiles_to_use)
+            if (any(diff(start) == 0)) {
+                start = 1:nFiles_to_use
+                end = start
+            } else {
+                end = c(start[-1]-1, nFiles_to_use)
+            }
             if (rank == 0) {
                 post(paste0(paste0("rank ", 0:(size-1), " get ",
                                    end-start+1, " files"),
                             collapse="    "))
             }
-            Files = files_to_use[start[rank+1]:end[rank+1]]
+            if (rank+1 > nFiles_to_use) {
+                Files = NULL
+            } else {
+                Files = files_to_use[start[rank+1]:end[rank+1]]
+            }
             
         } else {
             Files = files_to_use
