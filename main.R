@@ -277,9 +277,9 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP"
+        "CTRIP"
         # "EROS"
-        "GRSD"
+        # "GRSD"
         # "J2000",
         # "SIM2",
         # "MORDOR-SD",
@@ -814,7 +814,9 @@ CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
 CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
 nCodeALL = length(CodeALL10)
 
-tmppath = file.path(computer_work_path, tmpdir)
+tmppath = file.path(computer_work_path, paste0(tmpdir, "_",
+                                               format(Sys.time(),
+                                                      "%Y%m%d%H%M%S")))
 if ("delete_tmp" %in% to_do) {
     delete_tmp = TRUE
     to_do = to_do[to_do != "delete_tmp"]
