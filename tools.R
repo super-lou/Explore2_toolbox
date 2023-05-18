@@ -24,9 +24,11 @@ convert_code8to10 = function (Code) {
     Code_save = Code
 
     if (any(nchar(Code) == 8)) {
-        Code[nchar(Code) == 8] =
-            codes10_selection[match(Code[nchar(Code) == 8],
-                                    codes8_selection)]
+        matchCode = match(Code, codes8_selection)
+        matchCode = matchCode[!is.na(matchCode)]
+        Code[!is.na(matchCode)] =
+            codes10_selection[matchCode[!is.na(matchCode)]]
+        
         Code_try = lapply(paste0(Code_save[is.na(Code)],
                                  ".*"), apply_grepl,
                           table=codes10_selection)
