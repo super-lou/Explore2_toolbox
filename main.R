@@ -251,7 +251,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 10
+nCode4RAM = 15
 use_proj_merge =
     TRUE
     # FALSE
@@ -273,14 +273,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -997,6 +997,11 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 post(paste0(ss, "/", nSubsets,
                             " chunks of stations in analyse so ",
                             round(ss/nSubsets*100, 1), "% done"))
+
+
+                print(file_test)
+
+
                 
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
