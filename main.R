@@ -278,8 +278,8 @@ models_to_use =
         # "GRSD"
         # "J2000"
         # "SIM2"
-        # "MORDOR-SD"
-        "MORDOR-TS"
+        "MORDOR-SD"
+        # "MORDOR-TS"
         # "ORCHIDEE"
         # "SMASH"
     )
