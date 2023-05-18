@@ -969,7 +969,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                             paste0(subset, collapse=" -> ")))
                 
                 file_test = c()
-                if ('create_data' %in% to_do) {
+                if ('create_data' %in% to_do & "data" %in% var2save) {
                     file_test = c(file_test,
                                   paste0("data_",
                                          files_name_opt.,
