@@ -516,97 +516,112 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         if (MPI == "file") {
             start = ceiling(seq(1, nHistoricals,
                                 by=(nHistoricals/size)))
-            end = c(start[-1]-1, nHistoricals)
-            Historicals = Historicals[start[rank+1]:end[rank+1],]
+            # end = c(start[-1]-1, nHistoricals)
+            if (any(diff(start) == 0)) {
+                start = 1:nHistoricals
+                end = start
+            } else {
+                end = c(start[-1]-1, nHistoricals)
+            }
+            
+            # Historicals = Historicals[start[rank+1]:end[rank+1],]
+            if (rank+1 > nHistoricals) {
+                Historicals = NULL
+            } else {
+                Historicals = Historicals[start[rank+1]:end[rank+1],]
+            }
         } 
         
         nHistoricals = nrow(Historicals)
         flag = dplyr::tibble()
+
+        if (nHistoricals > 0) {
         
-        for (i in 1:nHistoricals) {
-            historical = Historicals[i,]
-            historical_path = historical$path
-            NC_historical = ncdf4::nc_open(historical_path)
-            Date = NetCDF_extrat_time(NC_historical)
-            ncdf4::nc_close(NC_historical)
-            minDate_historical = min(Date)
-            maxDate_historical = max(Date)
+            for (i in 1:nHistoricals) {
+                historical = Historicals[i,]
+                historical_path = historical$path
+                NC_historical = ncdf4::nc_open(historical_path)
+                Date = NetCDF_extrat_time(NC_historical)
+                ncdf4::nc_close(NC_historical)
+                minDate_historical = min(Date)
+                maxDate_historical = max(Date)
 
-            projs =
-                projs_selection_data[projs_selection_data$GCM ==
-                                     historical$GCM &
-                                     projs_selection_data$RCM ==
-                                     historical$RCM &
-                                     projs_selection_data$EXP !=
-                                     "historical" &
-                                     projs_selection_data$BC ==
-                                     historical$BC &
-                                     projs_selection_data$Model ==
-                                     historical$Model,]
+                projs =
+                    projs_selection_data[projs_selection_data$GCM ==
+                                         historical$GCM &
+                                         projs_selection_data$RCM ==
+                                         historical$RCM &
+                                         projs_selection_data$EXP !=
+                                         "historical" &
+                                         projs_selection_data$BC ==
+                                         historical$BC &
+                                         projs_selection_data$Model ==
+                                         historical$Model,]
 
-            # jehfezoifjezoifjezoifjezoiji EROS
-            projs = projs[substr(projs$file, "1", "15") ==
-                          substr(historical$file, "1", "15"),]
-            
-            for (j in 1:nrow(projs)) {
-                proj = projs[j,]
-                proj_path = proj$path
-                proj_file = proj$file
-                proj_merge_file =
-                    gsub("[_]rcp", "_historical-rcp", proj_file)
-                proj_merge_path =
-                    file.path(proj_merge_dirpath,
-                              proj_merge_file)
+                # jehfezoifjezoifjezoifjezoiji EROS
+                projs = projs[substr(projs$file, "1", "15") ==
+                              substr(historical$file, "1", "15"),]
                 
-                post(paste0("#### Merging ",
-                            historical$file, " with ",
-                            proj$file, " in ",
-                            proj_merge_file))
+                for (j in 1:nrow(projs)) {
+                    proj = projs[j,]
+                    proj_path = proj$path
+                    proj_file = proj$file
+                    proj_merge_file =
+                        gsub("[_]rcp", "_historical-rcp", proj_file)
+                    proj_merge_path =
+                        file.path(proj_merge_dirpath,
+                                  proj_merge_file)
+                    
+                    post(paste0("#### Merging ",
+                                historical$file, " with ",
+                                proj$file, " in ",
+                                proj_merge_file))
 
-                cdoCmd = paste0(cdo_cmd_path,
-                                " --sortname --history -O mergetime ",
-                                historical_path, " ",
-                                proj_path, " ", 
-                                proj_merge_path)
-                system(cdoCmd)
+                    cdoCmd = paste0(cdo_cmd_path,
+                                    " --sortname --history -O mergetime ",
+                                    historical_path, " ",
+                                    proj_path, " ", 
+                                    proj_merge_path)
+                    system(cdoCmd)
 
-                NC_proj = ncdf4::nc_open(proj_path)
-                Date = NetCDF_extrat_time(NC_proj)
-                minDate_proj = min(Date)
-                maxDate_proj = max(Date)
-                
-                NC_proj_merge = ncdf4::nc_open(proj_merge_path,
-                                               write=TRUE)
-                code_value = ncdf4::ncvar_get(NC_proj, "code")
-                station_dim = NC_proj_merge$dim[['station']]
-                nchar_dim = ncdf4::ncdim_def("code_strlen",
-                                             "",
-                                             1:max(nchar(code_value)))
-                code_var = ncdf4::ncvar_def(name="code",
-                                            units="",
-                                            dim=list(nchar_dim,
-                                                     station_dim),
-                                            prec="char")
-                NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
-                                                 code_var)
-                ncdf4::ncvar_put(NC_proj_merge,
-                                 "code", code_value)
-                ncdf4::nc_close(NC_proj)
-                ncdf4::nc_close(NC_proj_merge)
+                    NC_proj = ncdf4::nc_open(proj_path)
+                    Date = NetCDF_extrat_time(NC_proj)
+                    minDate_proj = min(Date)
+                    maxDate_proj = max(Date)
+                    
+                    NC_proj_merge = ncdf4::nc_open(proj_merge_path,
+                                                   write=TRUE)
+                    code_value = ncdf4::ncvar_get(NC_proj, "code")
+                    station_dim = NC_proj_merge$dim[['station']]
+                    nchar_dim = ncdf4::ncdim_def("code_strlen",
+                                                 "",
+                                                 1:max(nchar(code_value)))
+                    code_var = ncdf4::ncvar_def(name="code",
+                                                units="",
+                                                dim=list(nchar_dim,
+                                                         station_dim),
+                                                prec="char")
+                    NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
+                                                     code_var)
+                    ncdf4::ncvar_put(NC_proj_merge,
+                                     "code", code_value)
+                    ncdf4::nc_close(NC_proj)
+                    ncdf4::nc_close(NC_proj_merge)
 
-                flag = dplyr::bind_rows(
-                                  flag,
-                                  dplyr::tibble(ID=proj$ID,
-                                                start_historical=
-                                                    minDate_historical,
-                                                end_historical=
-                                                    maxDate_historical,
-                                                start_proj=
-                                                    minDate_proj,
-                                                end_proj=
-                                                    maxDate_proj,
-                                                gap=minDate_proj -
-                                                    maxDate_historical))
+                    flag = dplyr::bind_rows(
+                                      flag,
+                                      dplyr::tibble(ID=proj$ID,
+                                                    start_historical=
+                                                        minDate_historical,
+                                                    end_historical=
+                                                        maxDate_historical,
+                                                    start_proj=
+                                                        minDate_proj,
+                                                    end_proj=
+                                                        maxDate_proj,
+                                                    gap=minDate_proj -
+                                                        maxDate_historical))
+                }
             }
         }
         if (nrow(flag) > 0) {
@@ -638,10 +653,11 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
             flag = dplyr::tibble()
             for (root in 0:(size-1)) {
-                flag_tmp = read_tibble(file.path(tmppath,
-                                                 paste0("flag_",
-                                                        root , ".fst")))
-                flag = dplyr::bind_rows(flag, flag_tmp)
+                path = file.path(tmppath, paste0("flag_", root , ".fst"))
+                if (file.exists(path)) {
+                    flag_tmp = read_tibble(path)
+                    flag = dplyr::bind_rows(flag, flag_tmp)
+                }
             }
             write_tibble(flag, today_resdir, "flag.txt")
             

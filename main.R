@@ -1088,10 +1088,11 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
         timer = dplyr::tibble()
         for (root in 0:(size-1)) {
-            timer_tmp = read_tibble(file.path(tmppath,
-                                              paste0("timer_",
-                                                     root , ".fst")))
-            timer = dplyr::bind_rows(timer, timer_tmp)
+            path = file.path(tmppath, paste0("timer_", root , ".fst"))
+            if (file.exists(path)) {
+                timer_tmp = read_tibble(path)
+                timer = dplyr::bind_rows(timer, timer_tmp)
+            }
         }
         write_tibble(timer, today_resdir, "timer.txt")
         
