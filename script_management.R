@@ -526,7 +526,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             
             # Historicals = Historicals[start[rank+1]:end[rank+1],]
             if (rank+1 > nHistoricals) {
-                Historicals = NULL
+                Historicals = dplyr::tibble()
             } else {
                 Historicals = Historicals[start[rank+1]:end[rank+1],]
             }
