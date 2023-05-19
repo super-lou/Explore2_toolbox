@@ -994,14 +994,13 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                         }
                     }
                 }
-                post(paste0(ss, "/", nSubsets,
-                            " chunks of stations in analyse so ",
-                            round(ss/nSubsets*100, 1), "% done"))
 
 
                 print(file_test)
-
-
+                
+                post(paste0(ss, "/", nSubsets,
+                            " chunks of stations in analyse so ",
+                            round(ss/nSubsets*100, 1), "% done"))
                 
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
