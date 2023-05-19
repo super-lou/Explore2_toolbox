@@ -168,8 +168,8 @@ analyse_data =
         # "WIP"
         'Explore2_diag_criteria_all',
         'Explore2_diag_criteria_select',
-        'Explore2_diag_serie',
-        'Explore2_diag_proj_serie'
+        'Explore2_diag_serie'
+        # 'Explore2_diag_proj_serie'
         # 'Explore2_proj_serie',
         # 'Explore2_proj_check'
         # 'Explore2_proj_delta'
@@ -994,9 +994,6 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                         }
                     }
                 }
-
-
-                print(file_test)
                 
                 post(paste0(ss, "/", nSubsets,
                             " chunks of stations in analyse so ",
