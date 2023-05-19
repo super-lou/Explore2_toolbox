@@ -77,7 +77,8 @@ CARD_analyse_data = function () {
                         tmp=tmppath,
                         n=analyse$n,
                         layout=c(paste0(analyse$name, "_", rank), "[",
-                                 analyse$variable, "]"))
+                                 analyse$variable, "]"),
+                        overwrite=FALSE)
 
         CARD_analyse_data_hide(data, CARD_path, tmppath,
                                analyse, period_analyse,
