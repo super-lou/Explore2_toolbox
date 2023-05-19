@@ -150,10 +150,10 @@ mode =
 to_do =
     c(
         # 'delete_tmp'
-        # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        'merge_nc'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -253,8 +253,8 @@ period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 nCode4RAM = 15
 use_proj_merge =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 projs_to_use =
     c(
@@ -275,11 +275,11 @@ models_to_use =
     c(
         # "CTRIP"
         # "EROS"
-        "GRSD"
+        # "GRSD"
         # "J2000"
         # "SIM2"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
+        "MORDOR-SD",
+        "MORDOR-TS"
         # "ORCHIDEE"
         # "SMASH"
     )
