@@ -150,10 +150,10 @@ mode =
 to_do =
     c(
         # 'delete_tmp'
-        'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        # 'merge_nc'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
@@ -251,10 +251,10 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 15
+nCode4RAM = 25
 use_proj_merge =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 projs_to_use =
     c(
@@ -434,8 +434,8 @@ wait =
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving =
-    "ALL_diag/"
-    # "ALL_proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
+    "diag/"
+    # "proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
 
 var2search =
     c(
