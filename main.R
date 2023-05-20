@@ -944,7 +944,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     post(paste0("All ", nFiles, " files: ",
                 paste0(names(Files), collapse=" ")))
 
-    if (nFiles != 0) {
+    if (nFiles != 0 & nSubsets != 0) {
         for (ff in 1:nFiles) {
             files = Files[[ff]]
             files_name = Files_name[[ff]]
