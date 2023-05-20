@@ -167,11 +167,11 @@ analyse_data =
     c(
         # "WIP"
         # 'Explore2_diag_criteria_all',
-        'Explore2_diag_criteria_select',
-        'Explore2_diag_serie'
+        # 'Explore2_diag_criteria_select',
+        # 'Explore2_diag_serie'
         # 'Explore2_diag_proj_serie'
-        # 'Explore2_proj_serie',
-        # 'Explore2_proj_check'
+        'Explore2_proj_serie',
+        'Explore2_proj_check'
         # 'Explore2_proj_delta'
     )
 
