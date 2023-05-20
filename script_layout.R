@@ -94,7 +94,8 @@ if ('plot_doc' %in% to_do) {
 
 if (is.null(doc_chunk)) {
     chunkCode = list(CodeALL10)
-
+    # chunkCode = codes_to_use
+    
 } else if (doc_chunk == "all") {
     chunkCode = list(CodeALL10)
     

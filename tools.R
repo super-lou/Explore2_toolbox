@@ -25,7 +25,6 @@ convert_code8to10 = function (Code) {
 
     if (any(nchar(Code) == 8)) {
         matchCode = match(Code, codes8_selection)
-        matchCode = matchCode[!is.na(matchCode)]
         Code[!is.na(matchCode)] =
             codes10_selection[matchCode[!is.na(matchCode)]]
         
@@ -118,7 +117,6 @@ NetCDF_to_tibble = function (NetCDF_path,
                                  start=start,
                                  count=count)
         } else if (chain %in% c("SIM2")) {
-
             S = ncdf4::ncvar_get(NCdata, "surface_mod",
                                  start=start,
                                  count=count)
