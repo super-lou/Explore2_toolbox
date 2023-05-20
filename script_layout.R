@@ -30,7 +30,7 @@ plot_sheet_diagnostic_station = function (dataEXind_to_plot,
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
                        full.names=TRUE)
-    letterPaths = gsub("(.*[_])|([[:digit:]][.]fst)", "", Paths)
+    letterPaths = gsub("(.*[_])|([[:digit:]]+[.]fst)", "", Paths)
     Paths = Paths[letterPaths %in% substr(Code_to_plot, 1, 1)]
     for (path in Paths) {
         data = read_tibble(filepath=path) 
