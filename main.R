@@ -931,18 +931,20 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     Subsets_save = Subsets
     nSubsets_save = nSubsets
     if (MPI == "code") {
-        # if (size != nSubsets) {
-            # stop (paste0("Unoptimize number of threads. For this configuration you only need ", nSubsets, " threads not ", size, "."))
-        # }
         Subsets = Subsets[rank+1]
         Subsets = Subsets[!is.na(names(Subsets))]
         nSubsets = length(Subsets)
+
+        if (nSubsets == 0) {
+            Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
+            post(paste0("End signal from rank ", rank)) 
+        }
     }
 
     post(paste0("All ", nFiles, " files: ",
                 paste0(names(Files), collapse=" ")))
 
-    if (nFiles != 0 & nSubsets != 0) {
+    if (nFiles != 0) {
         for (ff in 1:nFiles) {
             files = Files[[ff]]
             files_name = Files_name[[ff]]
