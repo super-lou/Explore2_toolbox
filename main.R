@@ -155,8 +155,8 @@ to_do =
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
-        'read_saving',
-        'criteria_selection',
+        # 'read_saving',
+        # 'criteria_selection',
         # 'write_warnings'
         'plot_sheet'
         # 'plot_doc'
@@ -213,8 +213,8 @@ plot_sheet =
     c(
         # 'summary'
         # 'diagnostic_matrix'
-        'diagnostic_station'
-        # 'diagnostic_region'
+        # 'diagnostic_station'
+        'diagnostic_region'
         # 'diagnostic_regime'
     )
 
@@ -288,11 +288,11 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910', #ref
-        "A273011002",
-        "K010002010",
-        "K221083001"
+        'all'
+        # 'K2981910', #ref
+        # "A273011002",
+        # "K010002010",
+        # "K221083001"
         # "^R"
         # "^K"
         # 'K1363010',

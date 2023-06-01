@@ -96,7 +96,6 @@ if ('plot_doc' %in% to_do) {
 
 if (is.null(doc_chunk)) {
     chunkCode = list(CodeALL10)
-    # chunkCode = codes_to_use
     
 } else if (doc_chunk == "all") {
     chunkCode = list(CodeALL10)
@@ -174,7 +173,7 @@ for (i in 1:nChunk) {
                 )
             df_page = sheet_correlation_matrix(
                 dataEXind_to_plot,
-                metaEXind,
+                metaEXind_to_plot,
                 ModelGroup=group_of_models_to_use,
                 icon_path=icon_path,
                 logo_path=logo_path,
@@ -188,7 +187,7 @@ for (i in 1:nChunk) {
             df_page = sheet_diagnostic_regime(
                 meta,
                 dataEXind_to_plot,
-                metaEXind,
+                metaEXind_to_plot,
                 dataEXserie_to_plot,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
@@ -206,7 +205,7 @@ for (i in 1:nChunk) {
             df_page = sheet_diagnostic_region(
                 meta,
                 dataEXind_to_plot,
-                metaEXind,
+                metaEXind_to_plot,
                 dataEXserie_to_plot,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
