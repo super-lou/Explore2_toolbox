@@ -573,32 +573,35 @@ find_Warnings = function (dataEXind, metaEXind,
 
         Line_KGE = statLines[statLines$var == "KGEracine",]
         Line_Biais = statLines[statLines$var == "Biais",]
-        
-        if (nrow(Line_KGE) == 1 & nrow(Line_Biais) == 1) {          
-            if (Line_KGE$niveau == 0 & Line_Biais$niveau == 0) {
-                model_OK = Model
-                line = line_allOK
-                niveau = 1
-                line_model = line_allOK
-                Warnings_code = statLines[statLines$niveau != 0,]
-                Warnings_code = Warnings_code[c("var", "model",
-                                                "line", "nline")]
-                Warnings_code =
-                    dplyr::bind_rows(dplyr::tibble(var="Général",
-                                                   model=NA,
-                                                   line=line_model,
-                                                   nline=NA),
-                                     Warnings_code)
-            } else {
-                model_OK = c()
-                line = line_allNOK
-                niveau = -1
-                line_model = line_allNOK
-                Warnings_code = dplyr::tibble(var="Général",
-                                              model=NA,
-                                              line=line_model,
-                                              nline=NA)
-            }
+
+        if (all(Line_KGE$niveau == 0) &
+            all(Line_Biais$niveau == 0)) {
+            
+            # if (Line_KGE$niveau == 0 & Line_Biais$niveau == 0) {
+            model_OK = Model
+            line = line_allOK
+            niveau = 1
+            line_model = line_allOK
+            Warnings_code = statLines[statLines$niveau != 0,]
+            Warnings_code = Warnings_code[c("var", "model",
+                                            "line", "nline")]
+            Warnings_code =
+                dplyr::bind_rows(dplyr::tibble(var="Général",
+                                               model=NA,
+                                               line=line_model,
+                                               nline=NA),
+                                 Warnings_code)
+        } else if (all(Line_KGE$niveau != 0) &
+                   all(Line_Biais$niveau != 0)) {
+            model_OK = c()
+            line = line_allNOK
+            niveau = -1
+            line_model = line_allNOK
+            Warnings_code = dplyr::tibble(var="Général",
+                                          model=NA,
+                                          line=line_model,
+                                          nline=NA)
+            # }
 
         } else {            
             model_KGE_OK = unlist(Line_KGE$model[Line_KGE$niveau == 0])
@@ -669,14 +672,14 @@ find_Warnings = function (dataEXind, metaEXind,
             
             Model_OK = unlist(Line$model_OK)
             nModel_OK = length(Model_OK)
-            
+
             if (length(unlist(Line$model)) == nModel_OK) {
                 Line$line =
                     paste0(all_model, " ",
                            gsub("([|][^:]*[:])|([:])",
                                 "",
                                 Line$line))
-            } else {
+            } else if (nModel_OK > 0) {
                 models = unlist(Line$model)
                 models_len = length(models)
                 
@@ -775,8 +778,8 @@ find_Warnings = function (dataEXind, metaEXind,
 
 # W = find_Warnings(dataEX_Explore2_diag_criteria_select,
                   # metaEX_Explore2_diag_criteria_select,
-                  # # codeLight="K298191001",
-                  # codeLight="A273011002",
+                  # codeLight="K298191001",
+                  # codeLight="K010002010",
                   # save=FALSE)
 # Warnings = W$Warnings
 # Warnings

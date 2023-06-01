@@ -70,7 +70,9 @@ if (!exists("Shapefiles")) {
         bassinHydro_dir, bassinHydro_file,
         regionHydro_dir, regionHydro_file,
         entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
-        river_dir, river_file, river_selection=river_selection,
+        river_dir, river_file,
+        river_selection=river_selection,
+        river_length=river_length,
         toleranceRel=toleranceRel)
     Shapefiles$entiteHydro$Code =
         codes10_selection[match(Shapefiles$entiteHydro$Code,

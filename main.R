@@ -155,8 +155,8 @@ to_do =
         # 'analyse_data',
         # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
-        # 'criteria_selection',
+        'read_saving',
+        'criteria_selection',
         # 'write_warnings'
         'plot_sheet'
         # 'plot_doc'
@@ -289,9 +289,10 @@ codes_to_use =
     # ''
     c(
         # 'all'
-        'K2981910' #ref
-        # "A273011002"
-        # "K221083001",
+        'K2981910', #ref
+        "A273011002",
+        "K010002010",
+        "K221083001"
         # "^R"
         # "^K"
         # 'K1363010',
@@ -457,14 +458,17 @@ var2search =
 ## 6. PLOT_SHEET _____________________________________________________
 # If the hydrological network needs to be plot
 river_selection =
-    # 'none'
-    c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
-# 'all'
+    NULL
+    # c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
 
+river_length =
+    # NULL
+    300000
+    
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
     # 1000 # normal map
-    10000 # mini map
+    9000 # mini map
 
 # Which logo do you want to show in the footnote
 logo_to_show =
