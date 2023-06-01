@@ -574,8 +574,9 @@ find_Warnings = function (dataEXind, metaEXind,
         Line_KGE = statLines[statLines$var == "KGEracine",]
         Line_Biais = statLines[statLines$var == "Biais",]
         
-        if (nrow(Line_KGE) == 1 & nrow(Line_Biais) == 1) {            
+        if (nrow(Line_KGE) == 1 & nrow(Line_Biais) == 1) {          
             if (Line_KGE$niveau == 0 & Line_Biais$niveau == 0) {
+                model_OK = Model
                 line = line_allOK
                 niveau = 1
                 line_model = line_allOK
@@ -589,6 +590,7 @@ find_Warnings = function (dataEXind, metaEXind,
                                                    nline=NA),
                                      Warnings_code)
             } else {
+                model_OK = c()
                 line = line_allNOK
                 niveau = -1
                 line_model = line_allNOK
@@ -773,10 +775,11 @@ find_Warnings = function (dataEXind, metaEXind,
 
 # W = find_Warnings(dataEX_Explore2_diag_criteria_select,
                   # metaEX_Explore2_diag_criteria_select,
-                  # codeLight="K298191001",
+                  # # codeLight="K298191001",
+                  # codeLight="A273011002",
                   # save=FALSE)
-# W = find_Warnings(dataEXind, metaEXind)
 # Warnings = W$Warnings
+# Warnings
 # frq = W$frq
 # frq_short=select(frq, c(var, niveau, npv_pct))
 # frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)

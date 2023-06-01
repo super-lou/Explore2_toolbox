@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -144,21 +144,21 @@ lib_path =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
         # 'delete_tmp'
         # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -167,11 +167,11 @@ analyse_data =
     c(
         # "WIP"
         # 'Explore2_diag_criteria_all'
-        # 'Explore2_diag_criteria_select',
-        # 'Explore2_diag_serie'
+        'Explore2_diag_criteria_select',
+        'Explore2_diag_serie'
         # 'Explore2_diag_proj_serie'
-        'Explore2_proj_serie',
-        'Explore2_proj_check'
+        # 'Explore2_proj_serie',
+        # 'Explore2_proj_check'
         # 'Explore2_proj_delta'
     )
 
@@ -238,8 +238,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -253,8 +253,8 @@ period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 nCode4RAM = 15
 use_proj_merge =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 projs_to_use =
     c(
@@ -273,23 +273,24 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        "ORCHIDEE"
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SMASH"
     )
 complete_by = "SMASH"
 
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
+        # "A273011002"
         # "K221083001",
         # "^R"
         # "^K"
