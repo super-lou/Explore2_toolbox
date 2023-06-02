@@ -166,9 +166,9 @@ to_do =
 analyse_data =
     c(
         # "WIP"
-        # 'Explore2_diag_criteria_all'
+        'Explore2_diag_criteria_all'
         # 'Explore2_diag_criteria_select'
-        'Explore2_diag_serie'
+        # 'Explore2_diag_serie'
         # 'Explore2_diag_proj_serie'
         # 'Explore2_proj_serie',
         # 'Explore2_proj_check'
@@ -251,7 +251,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 1000
+nCode4RAM = 10
 use_proj_merge =
     # TRUE
     FALSE
