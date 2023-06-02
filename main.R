@@ -156,7 +156,7 @@ to_do =
         'save_analyse'
         # 'read_tmp'
         # 'read_saving',
-        # 'criteria_selection'
+        # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
         # 'plot_doc'
@@ -167,8 +167,8 @@ analyse_data =
     c(
         # "WIP"
         # 'Explore2_diag_criteria_all'
-        'Explore2_diag_criteria_select',
-        'Explore2_diag_serie'
+        'Explore2_diag_criteria_select'
+        # 'Explore2_diag_serie'
         # 'Explore2_diag_proj_serie'
         # 'Explore2_proj_serie',
         # 'Explore2_proj_check'

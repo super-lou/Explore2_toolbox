@@ -20,12 +20,13 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-plot_sheet_diagnostic_station = function (dataEXind_to_plot,
-                                          dataEXserie_to_plot,
+plot_sheet_diagnostic_station = function (dataEXind_chunk,
+                                          dataEXserie_chunk,
                                           Code_to_plot,
                                           today_figdir_leaf,
                                           df_page=NULL,
                                           subverbose=FALSE) {
+    
     Paths = list.files(file.path(resdir, read_saving),
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
@@ -41,9 +42,9 @@ plot_sheet_diagnostic_station = function (dataEXind_to_plot,
             df_page = sheet_diagnostic_station(
                 data,
                 meta,
-                dataEXind_to_plot,
-                metaEXind_to_plot,
-                dataEXserie_to_plot,
+                dataEXind_chunk,
+                metaEXind_chunk,
+                dataEXserie_chunk,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
@@ -52,6 +53,7 @@ plot_sheet_diagnostic_station = function (dataEXind_to_plot,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
                 verbose=subverbose)
+            break
         }
     }
     return (df_page)
