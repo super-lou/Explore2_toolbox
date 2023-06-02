@@ -20,31 +20,69 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-convert_code8to10 = function (Code) {
+# convert_code8to10 = function (Code) {
+#     Code_save = Code
+
+#     if (any(nchar(Code) == 8)) {
+#         matchCode = match(Code, codes8_selection)
+#         Code[!is.na(matchCode)] =
+#             codes10_selection[matchCode[!is.na(matchCode)]]
+        
+#         Code_try = lapply(paste0(Code_save[is.na(Code)],
+#                                  ".*"), apply_grepl,
+#                           table=codes10_selection)
+#         Code_len = sapply(Code_try, length)
+#         Code_NOk = Code_len > 1 | Code_len == 0
+#         Code_try[Code_NOk] = ""
+#         Code_try = unlist(Code_try)
+#         Code[is.na(Code)] = Code_try
+#     }
+#     Code[nchar(Code) > 10] =
+#         substr(Code[nchar(Code) > 10], 1, 10)
+#     Code[nchar(Code) < 10] =
+#         gsub(" ", "0",
+#              formatC(Code[nchar(Code) < 10],
+#                      width=10, flag="-"))
+#     return (Code)
+# }
+
+
+convert_codeNtoM = function (Code, N=8, M=10, crop=TRUE, top="0") {
     Code_save = Code
 
-    if (any(nchar(Code) == 8)) {
-        matchCode = match(Code, codes8_selection)
+    CodeN_table = get(paste0("codes", N, "_selection"))
+    CodeM_table = get(paste0("codes", M, "_selection"))
+
+    if (any(nchar(Code) == N)) {
+        matchCode = match(Code, CodeN_table)
         Code[!is.na(matchCode)] =
-            codes10_selection[matchCode[!is.na(matchCode)]]
+            CodeM_table[matchCode[!is.na(matchCode)]]
         
         Code_try = lapply(paste0(Code_save[is.na(Code)],
                                  ".*"), apply_grepl,
-                          table=codes10_selection)
+                          table=CodeM_table)
         Code_len = sapply(Code_try, length)
         Code_NOk = Code_len > 1 | Code_len == 0
         Code_try[Code_NOk] = ""
         Code_try = unlist(Code_try)
         Code[is.na(Code)] = Code_try
     }
-    Code[nchar(Code) > 10] =
-        substr(Code[nchar(Code) > 10], 1, 10)
-    Code[nchar(Code) < 10] =
-        gsub(" ", "0",
-             formatC(Code[nchar(Code) < 10],
-                     width=10, flag="-"))
+    
+    if (crop) {
+        Code[nchar(Code) > M] =
+            substr(Code[nchar(Code) > M], 1, M)
+    }
+    if (!is.null(top)) {
+        Code[nchar(Code) < M] =
+            gsub(" ", top,
+                 formatC(Code[nchar(Code) < M],
+                         width=M, flag="-"))
+    }
+    
     return (Code)
 }
+
+
 
 NetCDF_extrat_time = function (NCdata) {
     Date = ncdf4::ncvar_get(NCdata, "time")
@@ -76,7 +114,7 @@ NetCDF_to_tibble = function (NetCDF_path,
     if (mode == "diag") {
 
         CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
-        CodeRaw = convert_code8to10(CodeRaw)
+        CodeRaw = convert_codeNtoM(CodeRaw)
         
         CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
         CodeOrder = order(CodeRawSUB10)
@@ -189,7 +227,7 @@ NetCDF_to_tibble = function (NetCDF_path,
     } else if (mode == "proj") {
         CodeRaw = ncdf4::ncvar_get(NCdata, "code")
         
-        CodeRaw = convert_code8to10(CodeRaw)
+        CodeRaw = convert_codeNtoM(CodeRaw)
 
         CodeRawSUB10 = CodeRaw[CodeRaw %in% CodeSUB10]
         CodeOrder = order(CodeRawSUB10)
@@ -446,7 +484,7 @@ find_Warnings = function (dataEXind, metaEXind,
     line_allNOK = "<b>Aucun modèle</b> ne semble simuler de manière acceptable le régime."
 
     orderVar = c("Général", "^RAT.*T$",  "^RAT.*P$", "^KGE",
-                 "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}])",
+                 "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}]",
                  "^alpha", "^epsilon.*")
 
     if (is.null(codeLight)) {
@@ -729,8 +767,7 @@ find_Warnings = function (dataEXind, metaEXind,
             }
             Warnings_code[i,] = Line
         }
-
-
+        
         warningsOrder = c()
         for (i in 1:nrow(Warnings_code)) {
             var = Warnings_code$var[i]
@@ -779,7 +816,7 @@ find_Warnings = function (dataEXind, metaEXind,
 # W = find_Warnings(dataEX_Explore2_diag_criteria_select,
                   # metaEX_Explore2_diag_criteria_select,
                   # codeLight="K298191001",
-                  # codeLight="K010002010",
+                  # codeLight="V232000000",
                   # save=FALSE)
 # Warnings = W$Warnings
 # Warnings

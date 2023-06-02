@@ -95,23 +95,25 @@ if ('plot_doc' %in% to_do) {
 
 
 if (is.null(doc_chunk)) {
-    chunkCode = list(CodeALL10)
-    
-} else if (doc_chunk == "all") {
-    chunkCode = list(CodeALL10)
+    chunkCode = list(codes10_selection)#list(CodeALL10)
+    plotCode = list(CodeALL10)
+# } else if (doc_chunk == "all") {
+    # chunkCode = list(CodeALL10)
     
 } else if (doc_chunk == "region") {
     letter = factor(substr(CodeALL10, 1, 1))
     chunkCode = split(CodeALL10, letter)
     names(chunkCode) = paste0(iRegHydro()[names(chunkCode)],
                               " - ", levels(letter))
+    plotCode = chunkCode
 }
 
 nChunk = length(chunkCode)
 
 for (i in 1:nChunk) {
 
-    Code_to_plot = chunkCode[[i]]
+    chunk = chunkCode[[i]]
+    Code_to_plot = plotCode[[i]]
     chunkname = names(chunkCode)[i]
 
     doc_name_ns = gsub(" ", "_", doc_name)
@@ -129,23 +131,24 @@ for (i in 1:nChunk) {
     } else {
         today_figdir_leaf = today_figdir
     }
-
-    # dataEXind_to_plot = dataEXind[dataEXind$Code %in% Code_to_plot,]
-    # if (nrow(dataEXind_to_plot) == 0) {
-    #     next
-    # }
-    # dataEXserie_to_plot = list()
-    # for (j in 1:length(dataEXserie)) {
-    #     dataEXserie_to_plot = append(
-    #         dataEXserie_to_plot,
-    #         list(dataEXserie[[j]][dataEXserie[[j]]$Code %in%
-    #                               Code_to_plot,]))
-    # }
-    # names(dataEXserie_to_plot) = names(dataEXserie)
-    dataEXind_to_plot = dataEX_Explore2_diag_criteria_select
-    metaEXind_to_plot = metaEX_Explore2_diag_criteria_select
-    dataEXserie_to_plot = dataEX_Explore2_diag_serie
     
+    dataEXind = dataEX_Explore2_diag_criteria_select
+    metaEXind_chunk = metaEX_Explore2_diag_criteria_select
+    dataEXserie = dataEX_Explore2_diag_serie
+
+    dataEXind_chunk = dataEXind[dataEXind$Code %in% chunk,]
+    if (nrow(dataEXind_chunk) == 0) {
+        next
+    }
+    dataEXserie_chunk = list()
+    for (j in 1:length(dataEXserie)) {
+        dataEXserie_chunk = append(
+            dataEXserie_chunk,
+            list(dataEXserie[[j]][dataEXserie[[j]]$Code %in%
+                                  chunk,]))
+    }
+    names(dataEXserie_chunk) = names(dataEXserie)
+
     
     for (sheet in plot_list) {
 
@@ -172,8 +175,8 @@ for (i in 1:nChunk) {
                           "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
                 )
             df_page = sheet_correlation_matrix(
-                dataEXind_to_plot,
-                metaEXind_to_plot,
+                dataEXind_chunk,
+                metaEXind_chunk,
                 ModelGroup=group_of_models_to_use,
                 icon_path=icon_path,
                 logo_path=logo_path,
@@ -186,9 +189,9 @@ for (i in 1:nChunk) {
             post("### Plotting sheet diagnostic regime")
             df_page = sheet_diagnostic_regime(
                 meta,
-                dataEXind_to_plot,
-                metaEXind_to_plot,
-                dataEXserie_to_plot,
+                dataEXind_chunk,
+                metaEXind_chunk,
+                dataEXserie_chunk,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
@@ -204,9 +207,9 @@ for (i in 1:nChunk) {
             post("### Plotting sheet diagnostic region")
             df_page = sheet_diagnostic_region(
                 meta,
-                dataEXind_to_plot,
-                metaEXind_to_plot,
-                dataEXserie_to_plot,
+                dataEXind_chunk,
+                metaEXind_chunk,
+                dataEXserie_chunk,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
@@ -220,8 +223,8 @@ for (i in 1:nChunk) {
         if (sheet == 'diagnostic_station') {
             post("### Plotting sheet diagnostic station")
             df_page = plot_sheet_diagnostic_station(
-                dataEXind_to_plot,
-                dataEXserie_to_plot,
+                dataEXind_chunk,
+                dataEXserie_chunk,
                 Code_to_plot,
                 today_figdir_leaf=today_figdir_leaf,
                 df_page=df_page,

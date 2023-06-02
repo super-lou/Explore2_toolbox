@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -151,14 +151,14 @@ to_do =
     c(
         # 'delete_tmp'
         # 'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving',
-        # 'criteria_selection',
+        # 'criteria_selection'
         # 'write_warnings'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -238,9 +238,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -251,7 +251,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 15
+nCode4RAM = 1000
 use_proj_merge =
     # TRUE
     FALSE
@@ -288,11 +288,13 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910', #ref
-        "A273011002",
-        "K010002010",
-        "K221083001"
+        'all'
+        # 'K2981910' #ref
+        # "A273011002",
+        # "K010002010",
+
+        # "K649251001"
+
         # "^R"
         # "^K"
         # 'K1363010',
@@ -300,6 +302,8 @@ codes_to_use =
         # 'K1341810'
         # "M0014110",
         # "^V"
+
+        # "V232000000"
     )
 
 # existant :
@@ -414,13 +418,13 @@ Explore2_proj_delta =
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX'
     )
@@ -808,12 +812,12 @@ if (all(codes_to_use == "")) {
 }
 if (all(codes_to_use == "all")) {
     CodeALL8 = codes8_selection
-    CodeALL10 = convert_code8to10(codes8_selection)
+    CodeALL10 = convert_codeNtoM(codes8_selection)
 } else {
-    codes_to_use[nchar(codes_to_use) == 10] =
-        codes8_selection[codes10_selection %in%
-                         codes_to_use[nchar(codes_to_use) == 10]]
-    
+    # codes_to_use[nchar(codes_to_use) == 10] =
+        # codes8_selection[codes10_selection %in%
+                         # codes_to_use[nchar(codes_to_use) == 10]]
+    codes_to_use = convert_codeNtoM(codes_to_use, 10, 8, top=NULL)
     codes_to_use = convert_regexp(computer_data_path,
                                   obs_dir,
                                   codes_to_use,
@@ -822,7 +826,7 @@ if (all(codes_to_use == "all")) {
     okCode = codes_to_use %in% codes8_selection
     CodeALL8 = codes_to_use[okCode]
     # CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
-    CodeALL10 = convert_code8to10(CodeALL8)
+    CodeALL10 = convert_codeNtoM(CodeALL8)
 }
 CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
 CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]

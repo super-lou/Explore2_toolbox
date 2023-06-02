@@ -29,7 +29,7 @@ create_data_sim = function (p, chain) {
     if (is.null(data_sim)) {
         data_sim = dplyr::tibble()
     } else {
-        data_sim$Code = convert_code8to10(data_sim$Code)
+        data_sim$Code = convert_codeNtoM(data_sim$Code)
         data_sim = data_sim[data_sim$Code %in% CodeSUB10,]
         data_sim = data_sim[order(data_sim$Code),]
     }
@@ -99,7 +99,7 @@ create_data = function () {
         }
 
         if (nrow(meta_obs) > 0) {
-            meta_obs$Code = convert_code8to10(meta_obs$Code)
+            meta_obs$Code = convert_codeNtoM(meta_obs$Code)
             meta = dplyr::left_join(meta,
                                     dplyr::select(meta_obs,
                                                   Code,
@@ -140,7 +140,7 @@ create_data = function () {
                                       as.Date(period_analyse[1]),
                                       as.Date(period_analyse[2])))
 
-            data_obs$Code = convert_code8to10(data_obs$Code)
+            data_obs$Code = convert_codeNtoM(data_obs$Code)
             
             data_obs = dplyr::arrange(data_obs, Code)
             meta = get_lacune(data_obs, meta)
