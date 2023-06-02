@@ -213,8 +213,8 @@ plot_sheet =
     c(
         # 'summary'
         # 'diagnostic_matrix'
-        # 'diagnostic_station'
-        'diagnostic_region'
+        'diagnostic_station'
+        # 'diagnostic_region'
         # 'diagnostic_regime'
     )
 
@@ -288,18 +288,18 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910', #ref
-        # "A273011002",
-        # "K010002010",
-        # "K221083001"
+        # 'all'
+        'K2981910', #ref
+        "A273011002",
+        "K010002010",
+        "K221083001"
         # "^R"
         # "^K"
         # 'K1363010',
         # 'V0144010',
         # 'K1341810'
         # "M0014110",
-        # "^A"
+        # "^V"
     )
 
 # existant :
