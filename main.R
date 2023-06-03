@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -151,15 +151,15 @@ to_do =
     c(
         # 'delete_tmp'
         # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
-        # 'criteria_selection',
+        'read_saving',
+        'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
-        # 'plot_doc'
+        'plot_doc'
         # 'create_data_proj'
     )
 
@@ -167,7 +167,7 @@ analyse_data =
     c(
         # "WIP"
         'Explore2_diag_criteria_all'
-        # 'Explore2_diag_criteria_select'
+        # 'Explore2_diag_criteria_select',
         # 'Explore2_diag_serie'
         # 'Explore2_diag_proj_serie'
         # 'Explore2_proj_serie',
@@ -213,7 +213,7 @@ plot_sheet =
     c(
         # 'summary'
         # 'diagnostic_matrix'
-        'diagnostic_station'
+        # 'diagnostic_station'
         # 'diagnostic_region'
         # 'diagnostic_regime'
     )
@@ -221,9 +221,9 @@ plot_sheet =
 ### 3.2. Document ____________________________________________________
 plot_doc =
     c(
-        # "diagnostic_matrix"
+        "diagnostic_matrix"
         # 'diagnostic_regime'
-        'diagnostic_region'
+        # 'diagnostic_region'
     )
 
 
@@ -238,9 +238,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  

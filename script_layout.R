@@ -99,9 +99,9 @@ if ('plot_doc' %in% to_do) {
 if (is.null(doc_chunk)) {
     chunkCode = list(codes10_selection)#list(CodeALL10)
     plotCode = list(CodeALL10)
-# } else if (doc_chunk == "all") {
-    # chunkCode = list(CodeALL10)
-    
+} else if (doc_chunk == "all") {
+    chunkCode = list(codes10_selection)
+    plotCode = chunkCode
 } else if (doc_chunk == "region") {
     letter = factor(substr(CodeALL10, 1, 1))
     chunkCode = split(CodeALL10, letter)
@@ -133,24 +133,33 @@ for (i in 1:nChunk) {
     } else {
         today_figdir_leaf = today_figdir
     }
-    
-    dataEXind = dataEX_Explore2_diag_criteria_select
-    metaEXind_chunk = metaEX_Explore2_diag_criteria_select
-    dataEXserie = dataEX_Explore2_diag_serie
 
-    dataEXind_chunk = dataEXind[dataEXind$Code %in% chunk,]
-    if (nrow(dataEXind_chunk) == 0) {
-        next
+    if (any(c("diagnostic_station", "diagnostic_region",
+              "diagnostic_regime") %in% plot_list)) {
+        dataEXind = dataEX_Explore2_diag_criteria_select
+        metaEXind_chunk = metaEX_Explore2_diag_criteria_select
+        dataEXserie = dataEX_Explore2_diag_serie
+    } else if ("diagnostic_matrix" %in% plot_list) {
+        dataEXind = dataEX_Explore2_diag_criteria_all
+        metaEXind_chunk = metaEX_Explore2_diag_criteria_all
     }
-    dataEXserie_chunk = list()
-    for (j in 1:length(dataEXserie)) {
-        dataEXserie_chunk = append(
-            dataEXserie_chunk,
-            list(dataEXserie[[j]][dataEXserie[[j]]$Code %in%
-                                  chunk,]))
-    }
-    names(dataEXserie_chunk) = names(dataEXserie)
 
+    if (exists("dataEXind")) {
+        dataEXind_chunk = dataEXind[dataEXind$Code %in% chunk,]
+        if (nrow(dataEXind_chunk) == 0) {
+            next
+        }
+    }
+    if (exists("dataEXserie")) {
+        dataEXserie_chunk = list()
+        for (j in 1:length(dataEXserie)) {
+            dataEXserie_chunk = append(
+                dataEXserie_chunk,
+                list(dataEXserie[[j]][dataEXserie[[j]]$Code %in%
+                                      chunk,]))
+        }
+        names(dataEXserie_chunk) = names(dataEXserie)
+    }
     
     for (sheet in plot_list) {
 
