@@ -129,7 +129,7 @@ create_data = function () {
             data_obs = extract_data(computer_data_path,
                                     obs_dir,
                                     Code8_filename,
-                                    val2keep=c(val_E2=0),
+                                    # va2lkeep=c(val_E2=0), ###########################################################################################################################################
                                     verbose=subverbose)
             gc()
             data_obs =

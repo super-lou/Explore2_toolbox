@@ -149,24 +149,24 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp'
+        'delete_tmp',
         # 'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
+        'create_data',
+        'analyse_data',
         # 'save_analyse'
-        # 'read_tmp'
-        'read_saving',
-        'criteria_selection',
+        'read_tmp'
+        # 'read_saving'
+        # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
-        'plot_doc'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
 analyse_data =
     c(
-        # "WIP"
-        'Explore2_diag_criteria_all'
+        "WIP"
+        # 'Explore2_diag_criteria_all'
         # 'Explore2_diag_criteria_select',
         # 'Explore2_diag_serie'
         # 'Explore2_diag_proj_serie'
@@ -213,7 +213,7 @@ plot_sheet =
     c(
         # 'summary'
         # 'diagnostic_matrix'
-        # 'diagnostic_station'
+        'diagnostic_station'
         # 'diagnostic_region'
         # 'diagnostic_regime'
     )
@@ -233,8 +233,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -273,14 +273,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -288,8 +288,9 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
+        # "K0100020"
         # "A273011002",
         # "K010002010",
 
@@ -331,10 +332,10 @@ codes_to_use =
 WIP = 
     list(name='WIP',
          n=2,
-         variable="mean{QA}",
-         variable_names=NULL,
+         variable=c("tFIN_etiage"),
+         # variable_names=c(Q="Q_obs"),
          cancel_lim=TRUE,
-         simplify=TRUE)
+         simplify=FALSE)
 
 Explore2_diag_criteria_all = 
     list(name='Explore2_diag_criteria_all',
@@ -494,7 +495,7 @@ Colors_of_models = c(
     "MORDOR-SD"="#d8714e", #orange
     "MORDOR-TS"="#ae473e", #rouge
     "ORCHIDEE"="#efa59d", #rose #f5c8c3
-    "SIM2"="#384a54", #bleu foncé
+    "SIM2"="#475e6a", #bleu foncé
     "SMASH"="#f6ba62" #mimosa    
 )
 

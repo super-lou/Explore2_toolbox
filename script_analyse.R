@@ -38,7 +38,7 @@ CARD_analyse_data_hide = function (data, CARD_path, tmppath,
     dataEX = res$dataEX
     metaEX = res$metaEX
     gc()
-    
+
     write_tibble(dataEX,
                  filedir=tmppath,
                  filename=paste0("dataEX_", analyse$name, "_",
