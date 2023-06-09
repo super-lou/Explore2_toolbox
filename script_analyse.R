@@ -32,8 +32,9 @@ CARD_analyse_data_hide = function (data, CARD_path, tmppath,
                           CARD_tmp=tmppath,
                           period=period_analyse,
                           simplify=analyse$simplify,
+                          suffix=analyse$suffix,
                           cancel_lim=analyse$cancel_lim,
-                          variable_names=analyse$variable_names,
+                          # parameters=analyse$parameters,
                           verbose=subverbose)
     dataEX = res$dataEX
     metaEX = res$metaEX
@@ -77,7 +78,7 @@ CARD_analyse_data = function () {
                         tmp=tmppath,
                         n=analyse$n,
                         layout=c(paste0(analyse$name, "_", rank), "[",
-                                 analyse$variable, "]"),
+                                 analyse$variables, "]"),
                         overwrite=FALSE)
 
         CARD_analyse_data_hide(data, CARD_path, tmppath,

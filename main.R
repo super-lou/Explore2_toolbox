@@ -276,7 +276,7 @@ models_to_use =
         # "CTRIP",
         # "EROS",
         # "GRSD",
-        # "J2000",
+        # "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
@@ -331,16 +331,18 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         n=2,
-         variable=c("tFIN_etiage"),
-         # variable_names=c(Q="Q_obs"),
+         n=1,
+         variables=c("tDEB_etiage"),
+         # variables=c("tQJXA"),
+         # parameters=list(Q=c("Q_obs", "Q_sim")),
+         suffix=c("_obs", "_sim"),
          cancel_lim=TRUE,
          simplify=FALSE)
 
 Explore2_diag_criteria_all = 
     list(name='Explore2_diag_criteria_all',
          n=2,
-         variable=c("KGE", "KGEracine", "NSE", "NSEracine",
+         variables=c("KGE", "KGEracine", "NSE", "NSEracine",
                     "NSElog", "NSEinv", "Biais", "Biais_SEA",
                     "STD", "Rc", "epsilon_P", "epsilon_P,SEA",
                     "epsilon_T", "epsilon_T,SEA", "RAT_T", "RAT_P",
@@ -349,69 +351,69 @@ Explore2_diag_criteria_all =
                     "mean{QA}", "alphaCDC", "alphaQA", "Q90",
                     "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10",
                     "median{tVCN10}", "median{dtRec}", "BFI", "BFM"),
-         variable_names=NULL,
+         parameters=NULL,
          cancel_lim=TRUE,
          simplify=TRUE)
 
 Explore2_diag_criteria_select =  
     list(name='Explore2_diag_criteria_select',
          n=2,
-         variable=c("KGEracine", "Biais", "epsilon_T,DJF",
+         variables=c("KGEracine", "Biais", "epsilon_T,DJF",
                     "epsilon_T,JJA", "epsilon_P,DJF", "epsilon_P,JJA",
                     "RAT_T", "RAT_P", "Q10", "median{tQJXA}",
                     "alphaCDC", "alphaQA", "Q90", "median{tVCN10}"),
-         variable_names=NULL,
+         parameters=NULL,
          cancel_lim=TRUE,
          simplify=TRUE)
 
 Explore2_diag_serie = 
     list(name='Explore2_diag_serie',
          n=2,
-         variable=c("QM", "PA", "QA", "median{QJ}",
+         variables=c("QM", "PA", "QA", "median{QJ}",
                     "median{QJ}C5", "FDC"),
-         variable_names=NULL,
+         parameters=NULL,
          cancel_lim=TRUE,
          simplify=FALSE)
 
 Explore2_diag_proj_serie =
     list(name='Explore2_diag_proj_serie',
          n=1,
-         variable=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
+         variables=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
                     "QA_mai", "QA_juin", "QA_juill", "QA_aout",
                     "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
                     "QA_MAM", "QA_JJA", "QA_SON", "QA05", "QA10",
                     "QA50", "QA90", "QA95", "QJXA", "VCX3", "QMNA",
                     "VCN10", "VCN3"),
-         variable_names=c(Q="Q_obs"),
+         parameters=c(Q="Q_obs"),
          cancel_lim=TRUE,
          simplify=FALSE)
 
 Explore2_proj_serie =
     list(name='Explore2_proj_serie',
          n=1,
-         variable=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
+         variables=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
                     "QA_mai", "QA_juin", "QA_juill", "QA_aout",
                     "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
                     "QA_MAM", "QA_JJA", "QA_SON", "QA05", "QA10",
                     "QA50", "QA90", "QA95", "QJXA", "VCX3", "QMNA",
                     "VCN10", "VCN3"),
-         variable_names=c(Q="Q_sim"),
+         parameters=c(Q="Q_sim"),
          cancel_lim=FALSE,
          simplify=FALSE)
 
 Explore2_proj_check = 
     list(name='Explore2_proj_check',
          n=1,
-         variable=c("tQJXA", "tCEN_etiage_check"),
-         variable_names=c(Q="Q_sim"),
+         variables=c("tQJXA", "tCEN_etiage_check"),
+         parameters=c(Q="Q_sim"),
          cancel_lim=FALSE,
          simplify=FALSE)
 
 Explore2_proj_delta =
     list(name='Explore2_proj_delta',
          n=1,
-         variable="deltaQA",
-         variable_names=c(Q="Q_sim"),
+         variables="deltaQA",
+         parameters=c(Q="Q_sim"),
          cancel_lim=FALSE,
          simplify=TRUE)
 
