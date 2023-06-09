@@ -251,7 +251,7 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-nCode4RAM = 10
+nCode4RAM = 100
 use_proj_merge =
     # TRUE
     FALSE
@@ -289,8 +289,8 @@ codes_to_use =
     # ''
     c(
         # 'all'
-        'K2981910' #ref
-        # "K0100020"
+        'K2981910', #ref
+        "K0100020"
         # "A273011002",
         # "K010002010",
 
@@ -331,11 +331,12 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         n=1,
-         variables=c("tDEB_etiage"),
-         # variables=c("tQJXA"),
+         # n=1,
+         # variables=c("tDEB_etiage"),
+         variables=c("QA_month"),
          # parameters=list(Q=c("Q_obs", "Q_sim")),
-         suffix=c("_obs", "_sim"),
+         # suffix=c("_obs", "_sim"),
+         suffix=c("_obs"),
          cancel_lim=TRUE,
          simplify=FALSE)
 

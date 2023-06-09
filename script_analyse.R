@@ -76,7 +76,6 @@ CARD_analyse_data = function () {
 
         CARD_management(CARD=CARD_path,
                         tmp=tmppath,
-                        n=analyse$n,
                         layout=c(paste0(analyse$name, "_", rank), "[",
                                  analyse$variables, "]"),
                         overwrite=FALSE)
