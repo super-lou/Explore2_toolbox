@@ -167,7 +167,7 @@ analyse_data =
     c(
         "WIP"
         # 'Explore2_diag_criteria_all'
-        # 'Explore2_diag_criteria_select',
+        # 'Explore2_diag_criteria_select'
         # 'Explore2_diag_serie'
         # 'Explore2_diag_proj_serie'
         # 'Explore2_proj_serie',
@@ -290,11 +290,10 @@ codes_to_use =
     c(
         # 'all'
         'K2981910', #ref
-        "K0100020"
+        # "K0100020"
         # "A273011002",
-        # "K010002010",
 
-        # "K649251001"
+        "K6492510"
 
         # "^R"
         # "^K"
@@ -331,92 +330,115 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         # n=1,
          # variables=c("tDEB_etiage"),
-         variables=c("QA_month"),
-         # parameters=list(Q=c("Q_obs", "Q_sim")),
-         # suffix=c("_obs", "_sim"),
-         suffix=c("_obs"),
+         # variables=c("epsilon_P_season", "epsilon_T_season"),
+         variables=c("KGE"),
+         suffix=c("_obs", "_sim"),
+         # suffix=c("_obs"),
          cancel_lim=TRUE,
          simplify=FALSE)
 
-Explore2_diag_criteria_all = 
-    list(name='Explore2_diag_criteria_all',
-         n=2,
-         variables=c("KGE", "KGEracine", "NSE", "NSEracine",
-                    "NSElog", "NSEinv", "Biais", "Biais_SEA",
-                    "STD", "Rc", "epsilon_P", "epsilon_P,SEA",
-                    "epsilon_T", "epsilon_T,SEA", "RAT_T", "RAT_P",
-                    "RAT_ET0", "Q10", "QJXA-10", "alphaQJXA",
-                    "median{tQJXA}", "median{dtCrue}", "Q50",
-                    "mean{QA}", "alphaCDC", "alphaQA", "Q90",
-                    "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10",
-                    "median{tVCN10}", "median{dtRec}", "BFI", "BFM"),
-         parameters=NULL,
+Explore2_criteria_diag_performance = 
+    list(name='Explore2_criteria_diag_performance',
+         variables=c("KGE", "KGEracine",
+                     "NSE", "NSEracine", "NSElog", "NSEinv",
+                     "Biais", "Biais_season",
+                     "STD"),
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_diag_criteria_select =  
-    list(name='Explore2_diag_criteria_select',
-         n=2,
-         variables=c("KGEracine", "Biais", "epsilon_T,DJF",
-                    "epsilon_T,JJA", "epsilon_P,DJF", "epsilon_P,JJA",
-                    "RAT_T", "RAT_P", "Q10", "median{tQJXA}",
-                    "alphaCDC", "alphaQA", "Q90", "median{tVCN10}"),
-         parameters=NULL,
+Explore2_criteria_diag_sensibilite = 
+    list(name='Explore2_criteria_diag_sensibilite',
+         variables=c("Rc",
+                     "epsilon_P", "epsilon_P_season",
+                     "epsilon_T", "epsilon_T_season",
+                     "RAT_T", "RAT_P",
+                    "RAT_ET0"),
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_diag_serie = 
-    list(name='Explore2_diag_serie',
-         n=2,
-         variables=c("QM", "PA", "QA", "median{QJ}",
-                    "median{QJ}C5", "FDC"),
-         parameters=NULL,
+Explore2_criteria_diag_HE = 
+    list(name='Explore2_criteria_diag_HE',
+         variables=c("Q10",
+                     "QJXA-10", "alphaQJXA",
+                     "median{tQJXA}", "median{dtCrue}"),
          cancel_lim=TRUE,
-         simplify=FALSE)
-
-Explore2_diag_proj_serie =
-    list(name='Explore2_diag_proj_serie',
-         n=1,
-         variables=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
-                    "QA_mai", "QA_juin", "QA_juill", "QA_aout",
-                    "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
-                    "QA_MAM", "QA_JJA", "QA_SON", "QA05", "QA10",
-                    "QA50", "QA90", "QA95", "QJXA", "VCX3", "QMNA",
-                    "VCN10", "VCN3"),
-         parameters=c(Q="Q_obs"),
-         cancel_lim=TRUE,
-         simplify=FALSE)
-
-Explore2_proj_serie =
-    list(name='Explore2_proj_serie',
-         n=1,
-         variables=c("QA", "QA_janv", "QA_fevr", "QA_mars", "QA_avr",
-                    "QA_mai", "QA_juin", "QA_juill", "QA_aout",
-                    "QA_sept", "QA_oct", "QA_nov", "QA_dec", "QA_DJF",
-                    "QA_MAM", "QA_JJA", "QA_SON", "QA05", "QA10",
-                    "QA50", "QA90", "QA95", "QJXA", "VCX3", "QMNA",
-                    "VCN10", "VCN3"),
-         parameters=c(Q="Q_sim"),
-         cancel_lim=FALSE,
-         simplify=FALSE)
-
-Explore2_proj_check = 
-    list(name='Explore2_proj_check',
-         n=1,
-         variables=c("tQJXA", "tCEN_etiage_check"),
-         parameters=c(Q="Q_sim"),
-         cancel_lim=FALSE,
-         simplify=FALSE)
-
-Explore2_proj_delta =
-    list(name='Explore2_proj_delta',
-         n=1,
-         variables="deltaQA",
-         parameters=c(Q="Q_sim"),
-         cancel_lim=FALSE,
          simplify=TRUE)
+
+Explore2_criteria_diag_ME = 
+    list(name='Explore2_criteria_diag_ME',
+         variables=c("Q50",
+                    "mean{QA}", "alphaCDC", "alphaQA"),
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_criteria_diag_BE = 
+    list(name='Explore2_criteria_diag_BE',
+         variables=c("Q90",
+                     "QMNA-5", "VCN30-2", "VCN10-5",
+                     "alphaVCN10", "median{tVCN10}"),
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_criteria_diag_BF = 
+    list(name='Explore2_criteria_diag_BF',
+         variables=c("median{dtRec}", "BFI", "BFM"),
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_serie_diag_4plot = 
+    list(name='Explore2_serie_diag_4plot',
+         variables=c("QM", "PA", "QA",
+                     "median{QJ}C5", "FDC"),
+         cancel_lim=TRUE,
+         simplify=FALSE)
+
+
+Explore2_serie_proj_diag =
+    list(name='Explore2_serie_proj_diag',
+         variables=c("QA", "QA_month", "QA_season",
+                     "QA05", "QA10", "QA50", "QA90", "QA95",
+                     "QJXA", "VCX3",
+                     "QMNA", "VCN10", "VCN3"),
+         cancel_lim=TRUE,
+         simplify=FALSE)
+
+Explore2_more_serie_proj_diag =
+    list(name='Explore2_more_serie_proj_diag',
+         variables=c(),
+         cancel_lim=TRUE,
+         simplify=FALSE)
+
+
+Explore2_serie_proj =
+    list(name='Explore2_serie_proj',
+         variables=c("QA", "QA_month", "QA_season",
+                     "QA05", "QA10", "QA50", "QA90", "QA95",
+                     "QJXA", "VCX3",
+                     "QMNA", "VCN10", "VCN3"),
+         cancel_lim=TRUE,
+         simplify=FALSE)
+
+Explore2_more_serie_proj =
+    list(name='Explore2_more_serie_proj',
+         variables=c(),
+         cancel_lim=TRUE,
+         simplify=FALSE)
+
+
+# Explore2_proj_check = 
+#     list(name='Explore2_proj_check',
+#          n=1,
+#          variables=c("tQJXA", "tCEN_etiage_check"),
+#          parameters=c(Q="Q_sim"),
+#          cancel_lim=FALSE,
+#          simplify=FALSE)
+
+# Explore2_proj_delta =
+#     list(name='Explore2_proj_delta',
+#          variables="deltaQA",
+#          cancel_lim=FALSE,
+#          simplify=TRUE)
 
 
 ## 3. SAVE_ANALYSE ___________________________________________________

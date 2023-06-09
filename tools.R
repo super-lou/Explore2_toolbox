@@ -168,14 +168,14 @@ NetCDF_to_tibble = function (NetCDF_path,
         data = dplyr::bind_cols(data, S=rep(S, each=nDate))
         
         if (!(chain %in% c("CTRIP", "EROS", "GRSD", "SIM2"))) {
-            P = ncdf4::ncvar_get(NCdata, "P",
-                                 start=c(start, 1),
-                                 count=c(count, -1))
-            P = matrix(P, nrow=count)
-            P = P[station,,drop=FALSE]
-            P = P[CodeOrder,,drop=FALSE]
-            P = c(t(P))
-            data = dplyr::bind_cols(data, P=P)
+            # P = ncdf4::ncvar_get(NCdata, "P",
+                                 # start=c(start, 1),
+                                 # count=c(count, -1))
+            # P = matrix(P, nrow=count)
+            # P = P[station,,drop=FALSE]
+            # P = P[CodeOrder,,drop=FALSE]
+            # P = c(t(P))
+            # data = dplyr::bind_cols(data, P=P)
             
             Pl = ncdf4::ncvar_get(NCdata, "Pl",
                                   start=c(start, 1),
@@ -186,14 +186,14 @@ NetCDF_to_tibble = function (NetCDF_path,
             Pl = c(t(Pl))
             data = dplyr::bind_cols(data, Pl=Pl)
             
-            Ps = ncdf4::ncvar_get(NCdata, "Ps",
-                                  start=c(start, 1),
-                                  count=c(count, -1))
-            Ps = matrix(Ps, nrow=count)
-            Ps = Ps[station,,drop=FALSE]
-            Ps = Ps[CodeOrder,,drop=FALSE]
-            Ps = c(t(Ps))
-            data = dplyr::bind_cols(data, Ps=Ps)
+            # Ps = ncdf4::ncvar_get(NCdata, "Ps",
+                                  # start=c(start, 1),
+                                  # count=c(count, -1))
+            # Ps = matrix(Ps, nrow=count)
+            # Ps = Ps[station,,drop=FALSE]
+            # Ps = Ps[CodeOrder,,drop=FALSE]
+            # Ps = c(t(Ps))
+            # data = dplyr::bind_cols(data, Ps=Ps)
         }
         
         if (!(chain %in% c("CTRIP", "SIM2"))) {

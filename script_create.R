@@ -119,6 +119,8 @@ create_data = function () {
                                     names_glue="Surface_{Model}_km2")
         meta = dplyr::left_join(meta, meta_S, by="Code")
         data_sim = dplyr::select(data_sim, -"S")
+
+        val2check = c("T", "ET0", "Pl")
         
         if (mode == "diag") {
             post("### Observation data")
@@ -129,7 +131,7 @@ create_data = function () {
             data_obs = extract_data(computer_data_path,
                                     obs_dir,
                                     Code8_filename,
-                                    # va2lkeep=c(val_E2=0), ###########################################################################################################################################
+                                    val2keep=c(val_E2=0),
                                     verbose=subverbose)
             gc()
             data_obs =
@@ -156,7 +158,6 @@ create_data = function () {
 
             if (!is.null(complete_by) & complete_by != "") {
                 model4complete = complete_by[complete_by %in% Model][1]
-                val2check = c("T", "ET0", "Pl", "Ps", "P")
                 nVal2check = length(val2check)
                 
                 if (!is.na(model4complete)) {
@@ -206,6 +207,16 @@ create_data = function () {
                 data = dplyr::relocate(data, Q_obs, .before=Q_sim)
             }
             data = dplyr::relocate(data, "T", .before=ET0)
+
+            for (i in 1:nVal2check) {
+                data =
+                    dplyr::mutate(data,
+                                  !!paste0(val2check[i],
+                                           "_obs"):=get(val2check[i]),
+                                  !!paste0(val2check[i],
+                                           "_sim"):=get(val2check[i]))
+                data = dplyr::select(data, -val2check[i])
+            }
 
         } else if (mode == "proj") {
             data = data_sim
