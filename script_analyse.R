@@ -33,14 +33,13 @@ CARD_analyse_data_hide = function (data, CARD_path, tmppath,
                           period=period_analyse,
                           simplify=analyse$simplify,
                           suffix=analyse$suffix,
+                          expand_overwrite=analyse$expand,
                           cancel_lim=analyse$cancel_lim,
                           # parameters=analyse$parameters,
                           verbose=subverbose)
     dataEX = res$dataEX
     metaEX = res$metaEX
     gc()
-
-    print(dataEX)
 
     write_tibble(dataEX,
                  filedir=tmppath,

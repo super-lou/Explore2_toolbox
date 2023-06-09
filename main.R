@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,12 +149,12 @@ mode =
 
 to_do =
     c(
-        'delete_tmp',
+        # 'delete_tmp',
         # 'merge_nc'
         'create_data',
         'analyse_data',
-        # 'save_analyse'
-        'read_tmp'
+        'save_analyse'
+        # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
@@ -165,14 +165,19 @@ to_do =
 
 analyse_data =
     c(
-        "WIP"
-        # 'Explore2_diag_criteria_all'
-        # 'Explore2_diag_criteria_select'
-        # 'Explore2_diag_serie'
-        # 'Explore2_diag_proj_serie'
-        # 'Explore2_proj_serie',
-        # 'Explore2_proj_check'
-        # 'Explore2_proj_delta'
+        # 'WIP'
+        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT',
+        'Explore2_criteria_diag_HE',
+        'Explore2_criteria_diag_ME',
+        'Explore2_criteria_diag_BE',
+        'Explore2_criteria_diag_BF'
+        # 'Explore2_serie_diag_plot',
+        # 'Explore2_serie_proj_safran',
+        # 'Explore2_more_serie_proj_safran'
+        # 'Explore2_serie_proj',
+        # 'Explore2_more_serie_proj'
     )
 
 
@@ -233,14 +238,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -273,14 +278,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000"
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000"
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -288,12 +293,12 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910', #ref
+        'all'
+        # 'K2981910', #ref
         # "K0100020"
         # "A273011002",
 
-        "K6492510"
+        # "K6492510"
 
         # "^R"
         # "^K"
@@ -330,20 +335,24 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         # variables=c("tDEB_etiage"),
+         variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("KGE"),
-         suffix=c("_obs", "_sim"),
-         # suffix=c("_obs"),
+         # variables=c("KGE"),
+         # suffix=c("_obs", "_sim"),
+         suffix=c("_obs"),
+         expand=TRUE,
          cancel_lim=TRUE,
          simplify=FALSE)
 
+# diag
 Explore2_criteria_diag_performance = 
     list(name='Explore2_criteria_diag_performance',
          variables=c("KGE", "KGEracine",
                      "NSE", "NSEracine", "NSElog", "NSEinv",
                      "Biais", "Biais_season",
                      "STD"),
+         suffix=NULL,
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
@@ -351,9 +360,17 @@ Explore2_criteria_diag_sensibilite =
     list(name='Explore2_criteria_diag_sensibilite',
          variables=c("Rc",
                      "epsilon_P", "epsilon_P_season",
-                     "epsilon_T", "epsilon_T_season",
-                     "RAT_T", "RAT_P",
-                    "RAT_ET0"),
+                     "epsilon_T", "epsilon_T_season"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_criteria_diag_sensibilite_RAT = 
+    list(name='Explore2_criteria_diag_sensibilite_RAT',
+         variables=c("RAT_T", "RAT_P", "RAT_ET0"),
+         suffix=NULL,
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
@@ -361,14 +378,18 @@ Explore2_criteria_diag_HE =
     list(name='Explore2_criteria_diag_HE',
          variables=c("Q10",
                      "QJXA-10", "alphaQJXA",
-                     "median{tQJXA}", "median{dtCrue}"),
+                     "med{tQJXA}", "med{dtCrue}"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
 Explore2_criteria_diag_ME = 
     list(name='Explore2_criteria_diag_ME',
          variables=c("Q50",
-                    "mean{QA}", "alphaCDC", "alphaQA"),
+                     "moyQA", "alphaCDC", "alphaQA"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
@@ -376,63 +397,70 @@ Explore2_criteria_diag_BE =
     list(name='Explore2_criteria_diag_BE',
          variables=c("Q90",
                      "QMNA-5", "VCN30-2", "VCN10-5",
-                     "alphaVCN10", "median{tVCN10}"),
+                     "alphaVCN10", "med{tVCN10}"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
 Explore2_criteria_diag_BF = 
     list(name='Explore2_criteria_diag_BF',
-         variables=c("median{dtRec}", "BFI", "BFM"),
+         variables=c("med{dtRec}", "BFI", "BFM"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_serie_diag_4plot = 
-    list(name='Explore2_serie_diag_4plot',
-         variables=c("QM", "PA", "QA",
-                     "median{QJ}C5", "FDC"),
+Explore2_serie_diag_plot = 
+    list(name='Explore2_serie_diag_plot',
+         variables=c("QM", "PAl", "QA",
+                     "medQJC5", "CDC"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=FALSE)
 
-
-Explore2_serie_proj_diag =
-    list(name='Explore2_serie_proj_diag',
+# proj safran
+Explore2_serie_proj_safran =
+    list(name='Explore2_serie_proj_safran',
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
                      "QJXA", "VCX3",
                      "QMNA", "VCN10", "VCN3"),
-         cancel_lim=TRUE,
+         suffix="_obs",
+         expand=TRUE,
+         cancel_lim=FALSE,
          simplify=FALSE)
 
-Explore2_more_serie_proj_diag =
-    list(name='Explore2_more_serie_proj_diag',
-         variables=c(),
-         cancel_lim=TRUE,
+Explore2_more_serie_proj_safran =
+    list(name='Explore2_more_serie_proj_safran',
+         variables=c("tQJXA", "fQA05", "fQA10", 
+                     "dtBE", "debutBE", "centreBE", "finBE", "vBE"),
+         suffix="_obs",
+         expand=TRUE,
+         cancel_lim=FALSE,
          simplify=FALSE)
 
-
+# proj
 Explore2_serie_proj =
     list(name='Explore2_serie_proj',
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
                      "QJXA", "VCX3",
                      "QMNA", "VCN10", "VCN3"),
-         cancel_lim=TRUE,
+         suffix="_sim",
+         expand=TRUE,
+         cancel_lim=FALSE,
          simplify=FALSE)
 
 Explore2_more_serie_proj =
     list(name='Explore2_more_serie_proj',
-         variables=c(),
-         cancel_lim=TRUE,
+         variables=c("tQJXA", "fQA05", "fQA10", 
+                     "dtBE", "debutBE", "centreBE", "finBE", "vBE"),
+         suffix="_sim",
+         expand=TRUE,
+         cancel_lim=FALSE,
          simplify=FALSE)
-
-
-# Explore2_proj_check = 
-#     list(name='Explore2_proj_check',
-#          n=1,
-#          variables=c("tQJXA", "tCEN_etiage_check"),
-#          parameters=c(Q="Q_sim"),
-#          cancel_lim=FALSE,
-#          simplify=FALSE)
 
 # Explore2_proj_delta =
 #     list(name='Explore2_proj_delta',
@@ -693,6 +721,7 @@ if (mode == "diag") {
     period_analyse = period_analyse_diag
 } else if (mode == "proj") {
     period_analyse = period_analyse_proj
+    var2save = var2save[var2save != "data"]
 }
 
 if (!(file.exists(resources_path)) & rank == 0) {
