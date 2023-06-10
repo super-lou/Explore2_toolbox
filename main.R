@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,12 +149,12 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
+        'delete_tmp',
         # 'merge_nc'
         'create_data',
         'analyse_data',
-        'save_analyse'
-        # 'read_tmp'
+        # 'save_analyse'
+        'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
@@ -281,7 +281,7 @@ models_to_use =
         "CTRIP",
         "EROS",
         "GRSD",
-        "J2000"
+        "J2000",
         "SIM2",
         "MORDOR-SD",
         "MORDOR-TS",
@@ -295,20 +295,19 @@ codes_to_use =
     c(
         'all'
         # 'K2981910', #ref
-        # "K0100020"
-        # "A273011002",
-
-        # "K6492510"
-
-        # "^R"
         # "^K"
-        # 'K1363010',
-        # 'V0144010',
-        # 'K1341810'
-        # "M0014110",
-        # "^V"
 
-        # "V232000000"
+        ## échange code
+        # "K2240820",
+        # "K2240810",
+        # "K0910010"
+
+        ## edf problème
+        # "K0100020",
+        # "K1930010",
+        # "K2680810"
+
+        
     )
 
 # existant :
@@ -335,11 +334,12 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         variables=c("QA", "QA_season"),
+         # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         # variables=c("KGE"),
+         variables=c("KGEracine"),
          # suffix=c("_obs", "_sim"),
-         suffix=c("_obs"),
+         # suffix=c("_obs"),
+         suffix=NULL,
          expand=TRUE,
          cancel_lim=TRUE,
          simplify=FALSE)
