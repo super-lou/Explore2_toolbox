@@ -23,47 +23,22 @@
 
 manage_data = function () {
 
-    # if (exists("meta")) {
-    #     rm (meta)
-    # }
-    # for (i in 1:nSubsets_save) {
-    #     subset_name = names(Subsets_save)[i]
-    #     filename = paste0("meta_", files_name_opt.,
-    #                       subset_name, ".fst")
-    #     if (file.exists(file.path(tmppath, filename))) {
-    #         meta_tmp = read_tibble(filedir=tmppath,
-    #                                filename=filename)
-    #         if (!exists("meta")) {
-    #             meta = meta_tmp
-    #         } else {
-    #             meta = dplyr::bind_rows(meta, meta_tmp)
-    #         }
-    #     }
-    #     gc()
-    # }
-    
-    # if (exists("meta_tmp")) {
-    #     rm (meta_tmp)
-    # }
-    # meta = meta[order(meta$Code),]
-    
-    # write_tibble(meta,
-    #              filedir=tmppath,
-    #              filename=paste0("meta_", ".fst")
-    
-
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
 
         if (exists("meta")) {
-            rm (meta)
+            rm ("meta")
+            gc()
         }
         if (exists("metaEX")) {
             rm ("metaEX")
+            gc()
         }
         if (exists("dataEX")) {
             rm ("dataEX")
+            gc()
         }
+        
         for (j in 1:nSubsets_save) {
             subset_name = names(Subsets_save)[j]
 
@@ -72,12 +47,14 @@ manage_data = function () {
             if (file.exists(file.path(tmppath, filename))) {
                 meta_tmp = read_tibble(filedir=tmppath,
                                        filename=filename)
-                gc()
+                
                 if (!exists("meta")) {
                     meta = meta_tmp
                 } else {
                     meta = dplyr::bind_rows(meta, meta_tmp)
                 }
+                rm ("meta_tmp")
+                gc()
             }            
 
             if (!exists("metaEX")) {
@@ -87,7 +64,7 @@ manage_data = function () {
                 if (file.exists(file.path(tmppath, filename))) {
                     metaEX = read_tibble(filedir=tmppath,
                                          filename=filename)
-                    gc()
+                    
                 }
             }
             
@@ -99,7 +76,7 @@ manage_data = function () {
                 file.exists(file.path(tmppath, filename))) {
                 dataEX_tmp = read_tibble(filedir=tmppath,
                                          filename=filename)
-                gc()
+                
 
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
@@ -112,10 +89,12 @@ manage_data = function () {
                             dataEX[[k]] =
                                 dplyr::bind_rows(dataEX[[k]],
                                                  dataEX_tmp[[k]])
-                            gc()
-                        }  
+                            
+                        }
                     }
                 }
+                rm ("dataEX_tmp")
+                gc()
             }
         }
 
@@ -124,9 +103,7 @@ manage_data = function () {
             "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
         regexp_ratio = "(Rc)|(^epsilon)|(^alpha)"
 
-        if (exists("dataEX_tmp")) {
-            rm ("dataEX_tmp")
-
+        if (exists("dataEX")) {
             if (analyse$simplify) {
                 dataEX = dataEX[order(dataEX$Model),]
                 
@@ -184,7 +161,7 @@ manage_data = function () {
                 for (j in 1:length(dataEX)) {
                     dataEX[[j]] =
                         dataEX[[j]][order(dataEX[[j]]$Model),]
-                    gc()
+                    
                 }
             }
         }
@@ -205,9 +182,18 @@ manage_data = function () {
                      filename=paste0("metaEX_", analyse$name,
                                      .files_name_opt,
                                      ".fst"))
-        if (!is.null(wait)) {
-            post("Waiting for writting of extracted data")
-            Sys.sleep(wait)
+
+        if (exists("meta")) {
+            rm ("meta")
+            gc()
+        }
+        if (exists("metaEX")) {
+            rm ("metaEX")
+            gc()
+        }
+        if (exists("dataEX")) {
+            rm ("dataEX")
+            gc()
         }
     }
 }
@@ -260,7 +246,7 @@ save_data = function () {
                                        analyse$name,
                                        .files_name_opt,
                                        ".fst"))
-                gc()
+                
             }
             
             if ("metaEX" %in% var2save) {
@@ -270,7 +256,7 @@ save_data = function () {
                                          analyse$name,
                                          .files_name_opt,
                                          ".fst"))
-                gc()
+                
             }
             if ("dataEX" %in% var2save) {
                 dataEX = read_tibble(filedir=tmppath,
@@ -279,7 +265,7 @@ save_data = function () {
                                          analyse$name,
                                          .files_name_opt,
                                          ".fst"))
-                gc()
+                
             }
         } else {
             next
@@ -351,10 +337,18 @@ save_data = function () {
                                              analyse$name,
                                              ".txt"))
             }
-            if (!is.null(wait)) {
-                post("Waiting for saving of extracted data")
-                Sys.sleep(wait)
-            }
+        }
+        if (exists("meta")) {
+            rm ("meta")
+            gc()
+        }
+        if (exists("metaEX")) {
+            rm ("metaEX")
+            gc()
+        }
+        if (exists("dataEX")) {
+            rm ("dataEX")
+            gc()
         }
     }
 }

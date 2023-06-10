@@ -47,7 +47,6 @@ lib_path =
     # "./"
     '/home/herautl/library/Explore2_toolbox'
 
-
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
 # For example if you write 'create_data', a tibble of hydrological
@@ -166,7 +165,7 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',    # \ ok
+        # 'Explore2_criteria_diag_performance'    # \ ok
         # 'Explore2_criteria_diag_sensibilite',    #  |
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
@@ -282,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 6
+nCode4RAM = 14
 use_proj_merge =
     # TRUE
     FALSE
@@ -342,6 +341,21 @@ codes_to_use =
 # conversion :
 # K0910050 -> K0910010
 # K2240820 -> K2240810
+
+
+# print(analyse_data[[i]])
+# print(
+#     tidyr::pivot_longer(dplyr::tibble(!!!sapply(ls(), function (x) {
+#         format(object.size(get(x)),
+#                units="MB",
+#                standard="legacy",
+#                digits=3)})),
+#         dplyr::everything(),
+#         names_to="object", values_to="size"),
+#     n=Inf, digits=10)
+
+# print("")
+# print("")
 
 
 ## 2. ANALYSE_DATA ___________________________________________________
@@ -1112,7 +1126,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
                     Create_ok = c(Create_ok, TRUE)
-                    gc()
+                    
                     next
                 }
                 
@@ -1145,7 +1159,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                     }
                 }
                 Create_ok = c(Create_ok, create_ok)
-                gc()
+                
                 print("")
             }
 

@@ -19,22 +19,22 @@
 # along with Explore2 R toolbox.
 # If not, see <https://www.gnu.org/licenses/>.
 
-create_data_sim = function (p, chain) {
-    if (grepl(".*[.]nc", p)) {
-        data_sim = NetCDF_to_tibble(p,
-                                    chain=chain,
-                                    mode=mode)
-        gc()
-    }
-    if (is.null(data_sim)) {
-        data_sim = dplyr::tibble()
-    } else {
-        data_sim$Code = convert_codeNtoM(data_sim$Code)
-        data_sim = data_sim[data_sim$Code %in% CodeSUB10,]
-        data_sim = data_sim[order(data_sim$Code),]
-    }
-    return (data_sim)
-}
+# create_data_sim = function (p, chain) {
+#     if (grepl(".*[.]nc", p)) {
+#         data_sim = NetCDF_to_tibble(p,
+#                                     chain=chain,
+#                                     mode=mode)
+        
+#     }
+#     if (is.null(data_sim)) {
+#         data_sim = dplyr::tibble()
+#     } else {
+#         data_sim$Code = convert_codeNtoM(data_sim$Code)
+#         data_sim = data_sim[data_sim$Code %in% CodeSUB10,]
+#         data_sim = data_sim[order(data_sim$Code),]
+#     }
+#     return (data_sim)
+# }
 
 create_data = function () {
 
@@ -53,8 +53,26 @@ create_data = function () {
                 Chain = c(Chain, chain)
                 post(paste0("Get simulated data from ", chain,
                             " in ", p))
-                data_sim = dplyr::bind_rows(data_sim,
-                                            create_data_sim(p, chain))
+
+                if (grepl(".*[.]nc", p)) {
+                    data_sim_tmp = NetCDF_to_tibble(p,
+                                                chain=chain,
+                                                mode=mode)
+                }
+                if (is.null(data_sim_tmp)) {
+                    data_sim_tmp = dplyr::tibble()
+                } else {
+                    data_sim_tmp$Code =
+                        convert_codeNtoM(data_sim_tmp$Code)
+                    data_sim_tmp = data_sim_tmp[data_sim_tmp$Code %in%
+                                                CodeSUB10,]
+                    data_sim_tmp =
+                        data_sim_tmp[order(data_sim_tmp$Code),]
+                }
+                data_sim = dplyr::bind_rows(data_sim, data_sim_tmp)
+
+                rm ("data_sim_tmp")
+                gc()
             }
         }
     }
@@ -107,6 +125,10 @@ create_data = function () {
                                                   Altitude_m),
                                     by="Code")
         }
+
+        rm ("meta_obs")
+        gc()
+        
         meta = dplyr::arrange(meta, Code)
 
         meta_S = dplyr::summarise(dplyr::group_by(data_sim,
@@ -118,6 +140,10 @@ create_data = function () {
                                     values_from=S,
                                     names_glue="Surface_{Model}_km2")
         meta = dplyr::left_join(meta, meta_S, by="Code")
+
+        rm ("meta_S")
+        gc()
+        
         data_sim = dplyr::select(data_sim, -"S")
 
         val2check = c("T", "ET0", "Pl")
@@ -133,7 +159,7 @@ create_data = function () {
                                     Code8_filename,
                                     val2keep=c(val_E2=0),
                                     verbose=subverbose)
-            gc()
+            
             data_obs =
                 dplyr::filter(
                            data_obs,
@@ -152,6 +178,10 @@ create_data = function () {
             data = dplyr::inner_join(data_sim,
                                      data_obs,
                                      by=c("Code", "Date"))
+
+            rm ("data_sim")
+            gc()
+            rm ("data_obs")
             gc()
             
             nModel = length(Model)
@@ -189,8 +219,9 @@ create_data = function () {
                         data_model = dplyr::bind_cols(Model=model,
                                                       data_model)
                         data_model = data_model[names(data)]
-                        
                         data[data$Model == model,] = data_model
+
+                        rm ("data_model")
                         gc()
                     }
                 }
@@ -220,34 +251,26 @@ create_data = function () {
 
         } else if (mode == "proj") {
             data = data_sim
+
+            rm ("data_sim")
+            gc()
         }
-
-        # print(meta)
-        # print(data)
-
-        # meta = dplyr::left_join(meta,
-        #                         dplyr::select(data,
-        #                                       c("Code", "S")),
-        #                         by="Code")
-        # data = dplyr::select(data, -"S")
-
-        # print(meta)
-        # print(data)
-        # print("")
         
         write_tibble(data,
                      filedir=tmppath,
                      filename=paste0("data_",
                                      files_name_opt.,
                                      subset_name, ".fst"))
+        rm ("data")
+        gc()
+        
         write_tibble(meta,
                      filedir=tmppath,
                      filename=paste0("meta_",
                                      files_name_opt.,
                                      subset_name, ".fst"))
-        if (!is.null(wait)) {
-            Sys.sleep(wait)
-        }
+        rm ("meta")
+        gc()
         
         res = TRUE
         

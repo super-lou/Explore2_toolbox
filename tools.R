@@ -20,33 +20,6 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-# convert_code8to10 = function (Code) {
-#     Code_save = Code
-
-#     if (any(nchar(Code) == 8)) {
-#         matchCode = match(Code, codes8_selection)
-#         Code[!is.na(matchCode)] =
-#             codes10_selection[matchCode[!is.na(matchCode)]]
-        
-#         Code_try = lapply(paste0(Code_save[is.na(Code)],
-#                                  ".*"), apply_grepl,
-#                           table=codes10_selection)
-#         Code_len = sapply(Code_try, length)
-#         Code_NOk = Code_len > 1 | Code_len == 0
-#         Code_try[Code_NOk] = ""
-#         Code_try = unlist(Code_try)
-#         Code[is.na(Code)] = Code_try
-#     }
-#     Code[nchar(Code) > 10] =
-#         substr(Code[nchar(Code) > 10], 1, 10)
-#     Code[nchar(Code) < 10] =
-#         gsub(" ", "0",
-#              formatC(Code[nchar(Code) < 10],
-#                      width=10, flag="-"))
-#     return (Code)
-# }
-
-
 convert_codeNtoM = function (Code, N=8, M=10, crop=TRUE, top="0") {
     Code_save = Code
 
@@ -81,7 +54,6 @@ convert_codeNtoM = function (Code, N=8, M=10, crop=TRUE, top="0") {
     
     return (Code)
 }
-
 
 
 NetCDF_extrat_time = function (NCdata) {
