@@ -152,7 +152,7 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         'create_data',
-        'analyse_data',
+        # 'analyse_data',
         'save_analyse'
         # 'read_tmp'
         # 'read_saving'
@@ -175,9 +175,9 @@ analyse_data =
         # 'Explore2_criteria_diag_BF'
         # 'Explore2_serie_diag_plot'
         'Explore2_serie_proj_safran'
-        # 'Explore2_more_serie_proj_safran'
+        # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj',
-        # 'Explore2_more_serie_proj'
+        # 'Explore2_serie_more_proj'
     )
 
 
@@ -261,7 +261,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3
 # tasks     | 27 | 27
 ## proj ?
-nCode4RAM = 9
+nCode4RAM = 100
 use_proj_merge =
     # TRUE
     FALSE
@@ -437,8 +437,8 @@ Explore2_serie_proj_safran =
          cancel_lim=FALSE,
          simplify=FALSE)
 
-Explore2_more_serie_proj_safran =
-    list(name='Explore2_more_serie_proj_safran',
+Explore2_serie_more_proj_safran =
+    list(name='Explore2_serie_more_proj_safran',
          variables=c("tQJXA", "fQA05", "fQA10", 
                      "dtBE", "debutBE", "centreBE", "finBE", "vBE"),
          suffix="_obs",
@@ -458,8 +458,8 @@ Explore2_serie_proj =
          cancel_lim=FALSE,
          simplify=FALSE)
 
-Explore2_more_serie_proj =
-    list(name='Explore2_more_serie_proj',
+Explore2_serie_more_proj =
+    list(name='Explore2_serie_more_proj',
          variables=c("tQJXA", "fQA05", "fQA10", 
                      "dtBE", "debutBE", "centreBE", "finBE", "vBE"),
          suffix="_sim",
