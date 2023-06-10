@@ -181,6 +181,27 @@ analyse_data =
     )
 
 
+##  Analyse name                         | nCode4RAM | nodes | tasks
+# ---------------------------------------+-----------+-------+-------
+# Explore2_criteria_diag_performance     |           |       |
+# Explore2_criteria_diag_sensibilite     |     9     |   3   |  27
+# Explore2_criteria_diag_sensibilite_RAT |           |       |
+# ---------------------------------------+-----------+-------+-------
+# Explore2_criteria_diag_HE              |           |       |
+# Explore2_criteria_diag_ME              |     9     |   3   |  27 
+# ---------------------------------------+-----------+-------+-------
+# Explore2_criteria_diag_BE              |     6     |   4   |  28
+# ---------------------------------------+-----------+-------+-------
+# Explore2_criteria_diag_BF              |     9     |   3   |  27 
+# ---------------------------------------+-----------+-------+-------
+# Explore2_serie_diag_plot               |     9     |   3   |  27 
+# ---------------------------------------+-----------+-------+-------
+# Explore2_serie_proj_safran             |     9     |   3   |  27 
+# ---------------------------------------+-----------+-------+-------
+# Explore2_serie_more_proj_safran        |     9     |   3   |  27 
+# ---------------------------------------+-----------+-------+-------
+
+
 ## 3. PLOTTING PROCESSES _____________________________________________
 ### 3.1. Sheet _______________________________________________________
 # The use of this plot_sheet vector is quite similar to the to_do
@@ -257,11 +278,11 @@ period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 ## diag
-# nCode4RAM | 14 |  9
-# nodes     |  2 |  3
-# tasks     | 27 | 27
+# nCode4RAM | 14 |  9 |  6
+# nodes     |  2 |  3 |  4
+# tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 9
+nCode4RAM = 6
 use_proj_merge =
     # TRUE
     FALSE
