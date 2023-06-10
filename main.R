@@ -148,13 +148,13 @@ mode =
 
 to_do =
     c(
-        'delete_tmp',
+        # 'delete_tmp',
         # 'merge_nc'
-        'create_data',
-        'analyse_data',
+        # 'create_data',
+        # 'analyse_data',
         # 'save_analyse'
-        'read_tmp'
-        # 'read_saving'
+        # 'read_tmp'
+        'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -164,8 +164,8 @@ to_do =
 
 analyse_data =
     c(
-        'WIP'
-        # 'Explore2_criteria_diag_performance'    # \ ok
+        # 'WIP'
+        'Explore2_criteria_diag_performance'    # \ ok
         # 'Explore2_criteria_diag_sensibilite',    #  |
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
@@ -306,7 +306,7 @@ models_to_use =
         # "CTRIP",
         # "EROS",
         # "GRSD",
-        # "J2000",
+        # "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
@@ -319,8 +319,8 @@ codes_to_use =
     # ''
     c(
         # 'all'
-        'K2981910', #ref
-        # "^K"
+        # 'K2981910', #ref
+        "^K"
 
         ## échange code
         # "K2240820",
@@ -328,9 +328,9 @@ codes_to_use =
         # "K0910010"
 
         ## edf problème
-        "K0100020",
-        "K1930010",
-        "K2680810"
+        # "K0100020",
+        # "K1930010",
+        # "K2680810"
 
         
     )
@@ -374,11 +374,11 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         variables=c("QA", "QA_season"),
+         # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         # variables=c("KGEracine"),
-         suffix=c("_obs", "_sim"),
-         # suffix=c("_obs"),
+         variables=c("QJXA"),
+         # suffix=c("_obs", "_sim"),
+         suffix=c("_obs"),
          # suffix=NULL,
          expand=TRUE,
          cancel_lim=TRUE,
