@@ -166,16 +166,16 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diag_performance',
-        'Explore2_criteria_diag_sensibilite',
-        'Explore2_criteria_diag_sensibilite_RAT',
-        'Explore2_criteria_diag_HE',
-        'Explore2_criteria_diag_ME',
-        'Explore2_criteria_diag_BE',
-        'Explore2_criteria_diag_BF'
-        # 'Explore2_serie_diag_plot',
-        # 'Explore2_serie_proj_safran',
-        # 'Explore2_more_serie_proj_safran'
+        # 'Explore2_criteria_diag_performance',
+        # 'Explore2_criteria_diag_sensibilite',
+        # 'Explore2_criteria_diag_sensibilite_RAT',
+        # 'Explore2_criteria_diag_HE',
+        # 'Explore2_criteria_diag_ME',
+        # 'Explore2_criteria_diag_BE',
+        # 'Explore2_criteria_diag_BF'
+        'Explore2_serie_diag_plot',
+        'Explore2_serie_proj_safran',
+        'Explore2_more_serie_proj_safran'
         # 'Explore2_serie_proj',
         # 'Explore2_more_serie_proj'
     )
@@ -256,8 +256,11 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-# diag 25
-# proj ?
+## diag
+# nCode4RAM 25
+# nodes 2
+# tasks 23
+## proj ?
 nCode4RAM = 25
 use_proj_merge =
     # TRUE
