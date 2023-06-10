@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -148,12 +148,12 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
+        'delete_tmp',
         # 'merge_nc'
         'create_data',
         'analyse_data',
-        'save_analyse'
-        # 'read_tmp'
+        # 'save_analyse'
+        'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
@@ -164,13 +164,13 @@ to_do =
 
 analyse_data =
     c(
-        # 'WIP'
+        'WIP'
         # 'Explore2_criteria_diag_performance'    # \ ok
         # 'Explore2_criteria_diag_sensibilite',    #  |
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
         # 'Explore2_criteria_diag_ME'  # / 
-        'Explore2_criteria_diag_BE'
+        # 'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
         # 'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
@@ -258,14 +258,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -303,14 +303,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -318,8 +318,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910', #ref
+        # 'all'
+        'K2981910', #ref
         # "^K"
 
         ## échange code
@@ -328,9 +328,9 @@ codes_to_use =
         # "K0910010"
 
         ## edf problème
-        # "K0100020",
-        # "K1930010",
-        # "K2680810"
+        "K0100020",
+        "K1930010",
+        "K2680810"
 
         
     )
@@ -374,12 +374,12 @@ codes_to_use =
 
 WIP = 
     list(name='WIP',
-         # variables=c("QA", "QA_season"),
+         variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("KGEracine"),
-         # suffix=c("_obs", "_sim"),
+         # variables=c("KGEracine"),
+         suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
-         suffix=NULL,
+         # suffix=NULL,
          expand=TRUE,
          cancel_lim=TRUE,
          simplify=FALSE)
