@@ -118,7 +118,12 @@ manage_data = function () {
                 }
             }
         }
-        
+
+        regexp_bool = "^HYP.*"
+        regexp_time =
+            "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
+        regexp_ratio = "(Rc)|(^epsilon)|(^alpha)"
+
         if (exists("dataEX_tmp")) {
             rm ("dataEX_tmp")
 
@@ -137,15 +142,14 @@ manage_data = function () {
                     for (j in 1:nVarsREL) {
                         varREL = VarsREL[j]
                         
-                        if (grepl("^HYP.*", varREL)) {
+                        if (grepl(regexp_bool, varREL)) {
                             dataEX[[varREL]] =
                                 dataEX[[paste0(varREL,
                                                "_sim")]] &
                                 dataEX[[paste0(varREL,
                                                "_obs")]]
 
-                        } else if (grepl("(^t)|([{]t)",
-                                         varREL)) {
+                        } else if (grepl(regexp_time, varREL)) {
                             dataEX[[varREL]] =
                                 circular_minus(
                                     dataEX[[paste0(varREL,
@@ -154,8 +158,7 @@ manage_data = function () {
                                                    "_obs")]],
                                     period=365.25)/30.4375
 
-                        } else if (grepl("(Rc)|(^epsilon)|(^alpha)",
-                                         varREL)) {
+                        } else if (grepl(regexp_ratio, varREL)) {
                             dataEX[[varREL]] =
                                 dataEX[[paste0(varREL, "_sim")]] /
                                 dataEX[[paste0(varREL, "_obs")]]

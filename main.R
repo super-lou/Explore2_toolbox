@@ -152,7 +152,7 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         'create_data',
-        # 'analyse_data',
+        'analyse_data',
         'save_analyse'
         # 'read_tmp'
         # 'read_saving'
@@ -166,15 +166,15 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT'
+        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT'
         # 'Explore2_criteria_diag_HE',
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF'
         # 'Explore2_serie_diag_plot'
-        'Explore2_serie_proj_safran'
+        # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj',
         # 'Explore2_serie_more_proj'
@@ -261,7 +261,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3
 # tasks     | 27 | 27
 ## proj ?
-nCode4RAM = 100
+nCode4RAM = 9
 use_proj_merge =
     # TRUE
     FALSE
@@ -402,7 +402,9 @@ Explore2_criteria_diag_BE =
     list(name='Explore2_criteria_diag_BE',
          variables=c("Q90",
                      "QMNA-5", "VCN30-2", "VCN10-5",
-                     "alphaVCN10", "med{tVCN10}"),
+                     "alphaVCN10", "med{tVCN10}",
+                     "med{debutBE}", "med{centreBE}",
+                     "med{finBE}", "med{dtBE}", "med{vBE}"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
          cancel_lim=TRUE,
@@ -410,7 +412,9 @@ Explore2_criteria_diag_BE =
 
 Explore2_criteria_diag_BF = 
     list(name='Explore2_criteria_diag_BF',
-         variables=c("med{dtRec}", "BFI", "BFM"),
+         variables=c("med{dtRec}", "BFI", "BFM",
+                     "med{debutBF}", "med{centreBF}",
+                     "med{finBF}", "med{dtBF}", "med{vBF}"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
          cancel_lim=TRUE,
@@ -439,8 +443,9 @@ Explore2_serie_proj_safran =
 
 Explore2_serie_more_proj_safran =
     list(name='Explore2_serie_more_proj_safran',
-         variables=c("tQJXA", "fQA05", "fQA10", 
-                     "dtBE", "debutBE", "centreBE", "finBE", "vBE"),
+         variables=c("tQJXA", "fQA01", "fQA05", "fQA10", 
+                     "dtBE", "debutBE", "centreBE", "finBE", "vBE",
+                     "dtBF", "debutBF", "centreBF", "finBF", "vBF"),
          suffix="_obs",
          expand=TRUE,
          cancel_lim=FALSE,
@@ -460,8 +465,9 @@ Explore2_serie_proj =
 
 Explore2_serie_more_proj =
     list(name='Explore2_serie_more_proj',
-         variables=c("tQJXA", "fQA05", "fQA10", 
-                     "dtBE", "debutBE", "centreBE", "finBE", "vBE"),
+         variables=c("tQJXA", "fQA01", "fQA05", "fQA10", 
+                     "dtBE", "debutBE", "centreBE", "finBE", "vBE",
+                     "dtBF", "debutBF", "centreBF", "finBF", "vBF"),
          suffix="_sim",
          expand=TRUE,
          cancel_lim=FALSE,
