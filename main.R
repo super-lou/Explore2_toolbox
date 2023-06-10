@@ -173,9 +173,9 @@ analyse_data =
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF'
-        # 'Explore2_serie_diag_plot'
-        'Explore2_serie_proj_safran',
-        'Explore2_more_serie_proj_safran'
+        'Explore2_serie_diag_plot'
+        # 'Explore2_serie_proj_safran',
+        # 'Explore2_more_serie_proj_safran'
         # 'Explore2_serie_proj',
         # 'Explore2_more_serie_proj'
     )
@@ -257,11 +257,11 @@ period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 ## diag
-# nCode4RAM 14
-# nodes 2
-# tasks 27
+# nCode4RAM | 14 |  9
+# nodes     |  2 |  3
+# tasks     | 27 | 27
 ## proj ?
-nCode4RAM = 14
+nCode4RAM = 9
 use_proj_merge =
     # TRUE
     FALSE
