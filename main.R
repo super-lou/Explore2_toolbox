@@ -148,13 +148,13 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
+        'delete_tmp',
         # 'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
+        'create_data',
+        'analyse_data',
         # 'save_analyse'
-        # 'read_tmp'
-        'read_saving'
+        'read_tmp'
+        # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -165,12 +165,12 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diag_performance'    # \ ok
+        # 'Explore2_criteria_diag_performance',    # \ ok
         # 'Explore2_criteria_diag_sensibilite',    #  |
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
         # 'Explore2_criteria_diag_ME'  # / 
-        # 'Explore2_criteria_diag_BE'
+        'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
         # 'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
@@ -376,9 +376,9 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("QJXA"),
-         # suffix=c("_obs", "_sim"),
-         suffix=c("_obs"),
+         variables=c("moyQA"),
+         suffix=c("_obs", "_sim"),
+         # suffix=c("_obs"),
          # suffix=NULL,
          expand=TRUE,
          cancel_lim=TRUE,
