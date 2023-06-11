@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -148,12 +148,12 @@ mode =
 
 to_do =
     c(
-        'delete_tmp',
+        # 'delete_tmp',
         # 'merge_nc'
         'create_data',
         'analyse_data',
-        # 'save_analyse'
-        'read_tmp'
+        'save_analyse'
+        # 'read_tmp'
         # 'read_saving'
         # 'criteria_selection',
         # 'write_warnings'
@@ -258,14 +258,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -281,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 100
+nCode4RAM = 9
 use_proj_merge =
     # TRUE
     FALSE
@@ -303,14 +303,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000"
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000"
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
@@ -318,9 +318,9 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K2981910', #ref
-        "^K"
+        # "^K"
 
         ## échange code
         # "K2240820",
