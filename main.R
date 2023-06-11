@@ -172,9 +172,9 @@ analyse_data =
         # 'Explore2_criteria_diag_ME'  # / 
         # 'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
-        # 'Explore2_serie_diag_plot' # ] ok
+        'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
-        'Explore2_serie_more_proj_safran' # ] ok
+        # 'Explore2_serie_more_proj_safran' # ] ok
         # 'Explore2_serie_proj',
         # 'Explore2_serie_more_proj'
     )
@@ -319,7 +319,7 @@ codes_to_use =
     # ''
     c(
         'all'
-        # 'K2981910', #ref
+        # 'K2981910' #ref
         # "^K"
 
         ## échange code
@@ -376,11 +376,11 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("moyQA"),
+         variables=c("medQJC5"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          # suffix=NULL,
-         expand=TRUE,
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=FALSE)
 
