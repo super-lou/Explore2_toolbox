@@ -165,14 +165,14 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',    # \ ok
-        # 'Explore2_criteria_diag_sensibilite',    #  |
-        # 'Explore2_criteria_diag_sensibilite_RAT', # /
-        # 'Explore2_criteria_diag_HE', # \ ok
-        # 'Explore2_criteria_diag_ME'  # / 
+        'Explore2_criteria_diag_performance',    # \ ok
+        'Explore2_criteria_diag_sensibilite',    #  |
+        'Explore2_criteria_diag_sensibilite_RAT', # /
+        'Explore2_criteria_diag_HE', # \ ok
+        'Explore2_criteria_diag_ME'  # / 
         # 'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
-        'Explore2_serie_diag_plot' # ] ok
+        # 'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
         # 'Explore2_serie_more_proj_safran' # ] ok
         # 'Explore2_serie_proj',
@@ -258,8 +258,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
@@ -281,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 100
+nCode4RAM = 9
 use_proj_merge =
     # TRUE
     FALSE
@@ -320,7 +320,7 @@ codes_to_use =
     c(
         'all'
         # 'K2981910' #ref
-        # "^K"
+        # "^H"
 
         ## échange code
         # "K2240820",
@@ -376,7 +376,7 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("medQJC5"),
+         variables=c("CDC"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          # suffix=NULL,
