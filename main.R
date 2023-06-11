@@ -173,8 +173,8 @@ analyse_data =
         # 'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
         # 'Explore2_serie_diag_plot' # ] ok
-        'Explore2_serie_proj_safran' # ] ok
-        # 'Explore2_serie_more_proj_safran' # ] ok
+        # 'Explore2_serie_proj_safran' # ] ok
+        'Explore2_serie_more_proj_safran' # ] ok
         # 'Explore2_serie_proj',
         # 'Explore2_serie_more_proj'
     )
