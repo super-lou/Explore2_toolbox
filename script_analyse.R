@@ -55,7 +55,6 @@ CARD_analyse_data = function () {
                               suffix=analyse$suffix,
                               expand_overwrite=analyse$expand,
                               cancel_lim=analyse$cancel_lim,
-                              # parameters=analyse$parameters,
                               verbose=subverbose)
 
         write_tibble(res$dataEX,
