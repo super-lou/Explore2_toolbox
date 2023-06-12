@@ -435,20 +435,11 @@ Explore2_criteria_diag_ME =
          cancel_lim=TRUE,
          simplify=TRUE)
 
-# Explore2_criteria_diag_BE = 
-#     list(name='Explore2_criteria_diag_BE',
-#          variables=c("Q90",
-#                      "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
-#                      "med{tVCN10}", "med{allBE}"),
-#          suffix=c("_obs", "_sim"),
-#          expand=FALSE,
-#          cancel_lim=TRUE,
-#          simplify=TRUE)
-
 Explore2_criteria_diag_BE = 
     list(name='Explore2_criteria_diag_BE',
-         variables=c("med{debutBE}", "med{finBE}",
-                     "med{dtBE}", "med{vBE}"),
+         variables=c("Q90",
+                     "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
+                     "med{tVCN10}", "med{allBE}"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
          cancel_lim=TRUE,
