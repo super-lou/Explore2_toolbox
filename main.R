@@ -170,8 +170,8 @@ analyse_data =
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
         # 'Explore2_criteria_diag_ME'  # / 
-        'Explore2_criteria_diag_BE1'
-        # 'Explore2_criteria_diag_BE2'
+        # 'Explore2_criteria_diag_BE1'
+        'Explore2_criteria_diag_BE2'
         # 'Explore2_criteria_diag_BF' 
         # 'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
