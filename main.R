@@ -297,7 +297,7 @@ projs_to_use =
         # "MPI.*rcp26.*REMO.*CDFt.*MORDOR.*SD"
         # "EARTH.*HadREM3.*ADAMONT.*CTRIP"
         # "HadGEM2.*rcp45.*CCLM.*ADAMONT.*SIM2"
-        # "MPI-ESM-LR.*historical.*RegCM4.*CDFt"
+        # "MPI.*rcp26.*RegCM4.*ADAMONT"
         # "ALADIN.*ADAMONT"
         # "rcp26"
         # "EC-EARTH.*rcp26.*HadREM3.*ADAMONT.*CTRIP"
@@ -872,13 +872,17 @@ if (mode == "proj") {
                                          c(file, path))
 
     if (all(projs_to_use != "all")) {
-        OK = apply(sapply(projs_to_use, grepl,
-                          x=projs_selection_data$regexp),
-                   1, any)
+
+        
+        OK = apply(as.matrix(
+            sapply(projs_to_use, grepl,
+                   x=projs_selection_data$file)),
+            1, any)
         projs_selection_data = projs_selection_data[OK,]
-        OK_nest = apply(sapply(projs_to_use, grepl,
-                               x=projs_selection_data_nest$regexp),
-                        1, any)
+        OK_nest = apply(as.matrix(
+            sapply(projs_to_use, grepl,
+                   x=projs_selection_data_nest$regexp)),
+            1, any)
         projs_selection_data_nest = projs_selection_data_nest[OK_nest,]
     }
 
