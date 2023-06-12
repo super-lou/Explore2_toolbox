@@ -258,8 +258,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -378,7 +378,7 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("PA"),
+         variables=c("medQJC5"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          # suffix=NULL,
