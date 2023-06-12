@@ -408,7 +408,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         
         for (i in 1:length(analyse_data)) {
             analyse = analyse_data[[i]]
-            
+
             Paths = list.files(file.path(resdir, read_saving),
                                include.dirs=TRUE,
                                full.names=TRUE)
@@ -416,10 +416,26 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             pattern = var2search
             pattern = paste0("(", paste0(pattern,
                                          collapse=")|("), ")")
-            pattern = gsub("EX", paste0("EX[_]",
-                                        gsub("[_]", "[_]",
-                                             analyse$name)),
+
+            if (analyse$simplify) {
+                pattern = gsub("dataEX", paste0("dataEX[_]",
+                                                gsub("[_]", "[_]",
+                                                     analyse$name),
+                                                "[.]"),
+                               pattern)
+            } else {
+                pattern = gsub("dataEX", paste0("dataEX[_]",
+                                                gsub("[_]", "[_]",
+                                                     analyse$name),
+                                                "$"),
+                               pattern)
+            }
+            pattern = gsub("metaEX", paste0("metaEX[_]",
+                                            gsub("[_]", "[_]",
+                                                 analyse$name),
+                                            "[.]"),
                            pattern)
+            
             Paths = Paths[grepl(pattern, Paths)]
             Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
             Paths[!grepl("[.]", Paths)] =
@@ -431,7 +447,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 post(paste0(Filenames[i], " reads in ", Paths[i]))
                 
                 if (merge_read_saving) {
-                    
+
                     if (grepl("dataEX.*criteria", Filenames[i])) {
                         if (nrow(dataEX_criteria) == 0) {
                             dataEX_criteria = read_tibble(filepath=Paths[i])

@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -150,14 +150,14 @@ to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'create_data',
+        # 'analyse_data',
+        # 'save_analyse'
         # 'read_tmp'
-        # 'read_saving',
-        # 'criteria_selection',
+        'read_saving',
+        'criteria_selection',
         # 'write_warnings'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -165,13 +165,13 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT',
-        # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME', 
-        # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF',
+        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT',
+        'Explore2_criteria_diag_HE',
+        'Explore2_criteria_diag_ME', 
+        'Explore2_criteria_diag_BE',
+        'Explore2_criteria_diag_BF',
         'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
@@ -258,14 +258,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -281,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 28 | 28 | 28
 ## proj ?
-nCode4RAM = 14
+nCode4RAM = 1
 use_proj_merge =
     # TRUE
     FALSE
@@ -318,8 +318,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "^K"
 
         ## échange code
@@ -554,12 +554,14 @@ var2search =
         'Warnings'
     )
 
-merge_read_saving = TRUE
+merge_read_saving =
+    TRUE
+    # FALSE
 
 # ## 5. CRITERIA_SELECTION _____________________________________________
 criteria_selection =
 #     # "all"
-    c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$", "RAT[_]T$", "RAT[_]P$", "Q10$", "med.*tQJXA$", "alphaQA$", "alphaCDC$", "Q90$", "med.*tVCN10$")
+    c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$", "RAT[_]T$", "RAT[_]P$", "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^alphaCDC$", "Q90$", "med[{]tVCN10[}]$")
 
 
 ## 6. PLOT_SHEET _____________________________________________________
@@ -784,6 +786,7 @@ if (!(file.exists(resources_path)) & rank == 0) {
 delete_tmp = FALSE
 merge_nc = FALSE
 read_tmp = FALSE
+
 
 analyse_data_tmp = lapply(analyse_data, get)
 names(analyse_data_tmp) = analyse_data
