@@ -170,10 +170,9 @@ analyse_data =
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
         # 'Explore2_criteria_diag_ME'  # / 
-        # 'Explore2_criteria_diag_BE1'
-        # 'Explore2_criteria_diag_BE2'
+        'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
-        'Explore2_serie_diag_plot' # ] ok
+        # 'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
         # 'Explore2_serie_more_proj_safran' # ] ok
         # 'Explore2_serie_proj',
@@ -282,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 9
+nCode4RAM = 6
 use_proj_merge =
     # TRUE
     FALSE
@@ -379,11 +378,11 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("CDC"),
+         variables=c("allBE"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          # suffix=NULL,
-         expand=FALSE,
+         expand=TRUE,
          cancel_lim=TRUE,
          simplify=FALSE)
 
@@ -436,24 +435,24 @@ Explore2_criteria_diag_ME =
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_criteria_diag_BE1 = 
-    list(name='Explore2_criteria_diag_BE1',
+Explore2_criteria_diag_BE = 
+    list(name='Explore2_criteria_diag_BE',
          variables=c("Q90",
                      "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
-                     "med{tVCN10}"),
+                     "med{tVCN10}", "med{allBE}"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_criteria_diag_BE2 = 
-    list(name='Explore2_criteria_diag_BE2',
-         variables=c("med{debutBE}", "med{finBE}",
-                     "med{dtBE}", "med{vBE}"),
-         suffix=c("_obs", "_sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+# Explore2_criteria_diag_BE2 = 
+#     list(name='Explore2_criteria_diag_BE2',
+#          variables=c("med{debutBE}", "med{finBE}",
+#                      "med{dtBE}", "med{vBE}"),
+#          suffix=c("_obs", "_sim"),
+#          expand=FALSE,
+#          cancel_lim=TRUE,
+#          simplify=TRUE)
 
 Explore2_criteria_diag_BF = 
     list(name='Explore2_criteria_diag_BF',
@@ -489,8 +488,9 @@ Explore2_serie_proj_safran =
 Explore2_serie_more_proj_safran =
     list(name='Explore2_serie_more_proj_safran',
          variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
-                     "debutBE", "tVCN10", "finBE", "dtBE", "vBE",
-                     "debutBF", "centreBF", "finBF", "dtBF", "vBF", "dtRec"),
+                     "tVCN10", "allBE",
+                     "debutBF", "centreBF", "finBF",
+                     "dtBF", "vBF", "dtRec"),
          suffix="_obs",
          expand=TRUE,
          cancel_lim=FALSE,
@@ -511,8 +511,9 @@ Explore2_serie_proj =
 Explore2_serie_more_proj =
     list(name='Explore2_serie_more_proj',
          variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
-                     "debutBE", "tVCN10", "finBE", "dtBE", "vBE",
-                     "debutBF", "centreBF", "finBF", "dtBF", "vBF", "dtRec"),
+                     "tVCN10", "allBE",
+                     "debutBF", "centreBF", "finBF",
+                     "dtBF", "vBF", "dtRec"),
          suffix="_sim",
          expand=TRUE,
          cancel_lim=FALSE,
