@@ -165,16 +165,16 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',    # \ ok
-        # 'Explore2_criteria_diag_sensibilite',    #  |
-        # 'Explore2_criteria_diag_sensibilite_RAT', # /
-        # 'Explore2_criteria_diag_HE', # \ ok
-        # 'Explore2_criteria_diag_ME'  # / 
+        'Explore2_criteria_diag_performance',    # \ ok
+        'Explore2_criteria_diag_sensibilite',    #  |
+        'Explore2_criteria_diag_sensibilite_RAT', # /
+        'Explore2_criteria_diag_HE', # \ ok
+        'Explore2_criteria_diag_ME'  # / 
         # 'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
         # 'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
-        'Explore2_serie_more_proj_safran' # ] ok
+        # 'Explore2_serie_more_proj_safran' # ] ok
         # 'Explore2_serie_proj',
         # 'Explore2_serie_more_proj'
     )
@@ -320,7 +320,7 @@ codes_to_use =
     c(
         'all'
         # 'K2981910' #ref
-        # "^D"
+        # "^K"
 
         ## échange code
         # "K2240820",
@@ -332,7 +332,9 @@ codes_to_use =
         # "K1930010",
         # "K2680810"
 
-        
+
+        ## CTRIP 0
+        # "D020601001"
     )
 
 # existant :
