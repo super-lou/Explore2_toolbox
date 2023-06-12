@@ -286,8 +286,8 @@ propagate_NA = TRUE
 # tasks     | 28
 nCode4RAM = 19
 use_proj_merge =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 projs_to_use =
     c(
