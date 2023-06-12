@@ -282,7 +282,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 9
+nCode4RAM = 6
 use_proj_merge =
     # TRUE
     FALSE
