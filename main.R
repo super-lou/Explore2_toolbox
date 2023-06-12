@@ -281,10 +281,11 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 28 | 28 | 28
 ## proj per model ##
-# nCode4RAM | 19
-# nodes     |  8
-# tasks     | 28
-nCode4RAM = 19
+# nProj     | 82 | 41
+# nCode4RAM | 20 | 20
+# nodes     |  3 |  2
+# tasks     | 28 | 28
+nCode4RAM = 20
 use_proj_merge =
     TRUE
     # FALSE
