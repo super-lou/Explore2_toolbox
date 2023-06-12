@@ -151,7 +151,7 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         'create_data',
-        'analyse_data',
+        # 'analyse_data',
         'save_analyse'
         # 'read_tmp'
         # 'read_saving'
@@ -164,13 +164,13 @@ to_do =
 
 analyse_data =
     c(
-        # 'WIP'
+        'WIP'
         # 'Explore2_criteria_diag_performance',    # \ ok
         # 'Explore2_criteria_diag_sensibilite',    #  |
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
         # 'Explore2_criteria_diag_ME'  # / 
-        'Explore2_criteria_diag_BE'
+        # 'Explore2_criteria_diag_BE'
         # 'Explore2_criteria_diag_BF' 
         # 'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
@@ -281,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 6
+nCode4RAM = 100
 use_proj_merge =
     # TRUE
     FALSE
@@ -435,24 +435,24 @@ Explore2_criteria_diag_ME =
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_criteria_diag_BE = 
-    list(name='Explore2_criteria_diag_BE',
-         variables=c("Q90",
-                     "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
-                     "med{tVCN10}", "med{allBE}"),
-         suffix=c("_obs", "_sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
-
-# Explore2_criteria_diag_BE2 = 
-#     list(name='Explore2_criteria_diag_BE2',
-#          variables=c("med{debutBE}", "med{finBE}",
-#                      "med{dtBE}", "med{vBE}"),
+# Explore2_criteria_diag_BE = 
+#     list(name='Explore2_criteria_diag_BE',
+#          variables=c("Q90",
+#                      "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
+#                      "med{tVCN10}", "med{allBE}"),
 #          suffix=c("_obs", "_sim"),
 #          expand=FALSE,
 #          cancel_lim=TRUE,
 #          simplify=TRUE)
+
+Explore2_criteria_diag_BE = 
+    list(name='Explore2_criteria_diag_BE',
+         variables=c("med{debutBE}", "med{finBE}",
+                     "med{dtBE}", "med{vBE}"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
+         cancel_lim=TRUE,
+         simplify=TRUE)
 
 Explore2_criteria_diag_BF = 
     list(name='Explore2_criteria_diag_BF',
