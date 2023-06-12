@@ -280,7 +280,7 @@ propagate_NA = TRUE
 # nCode4RAM | 14 |  9 |  6
 # nodes     |  2 |  3 |  4
 # tasks     | 28 | 28 | 28
-## proj ##
+## proj per model ##
 # nCode4RAM | 19
 # nodes     |  8
 # tasks     | 28
@@ -306,14 +306,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
     )
 complete_by = "SMASH"
