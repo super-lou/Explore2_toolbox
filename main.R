@@ -457,8 +457,7 @@ Explore2_criteria_diag_BF =
 
 Explore2_serie_diag_plot = 
     list(name='Explore2_serie_diag_plot',
-         variables=c("QM", "QA",
-                     "PA", "PAl", "PAs",
+         variables=c("QM", "QA", "PA",
                      "medQJC5", "CDC"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
