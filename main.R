@@ -461,7 +461,7 @@ Explore2_serie_diag_plot =
                      "PA", "PAl", "PAs",
                      "medQJC5", "CDC"),
          suffix=c("_obs", "_sim"),
-         expand=TRUE,
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=FALSE)
 
