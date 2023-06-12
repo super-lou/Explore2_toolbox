@@ -151,7 +151,7 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         'create_data',
-        'analyse_data',
+        # 'analyse_data',
         'save_analyse'
         # 'read_tmp'
         # 'read_saving'
@@ -281,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 28 | 28 | 28
 ## proj ?
-nCode4RAM = 9
+nCode4RAM = 100
 use_proj_merge =
     # TRUE
     FALSE
