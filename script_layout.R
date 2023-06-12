@@ -136,12 +136,12 @@ for (i in 1:nChunk) {
 
     if (any(c("diagnostic_station", "diagnostic_region",
               "diagnostic_regime") %in% plot_list)) {
-        dataEXind = dataEX_Explore2_diag_criteria_select
-        metaEXind_chunk = metaEX_Explore2_diag_criteria_select
-        dataEXserie = dataEX_Explore2_diag_serie
+        dataEXind = dataEX_criteria
+        metaEXind_chunk = metaEX_criteria
+        dataEXserie = dataEX_serie
     } else if ("diagnostic_matrix" %in% plot_list) {
-        dataEXind = dataEX_Explore2_diag_criteria_all
-        metaEXind_chunk = metaEX_Explore2_diag_criteria_all
+        dataEXind = dataEX_criteria
+        metaEXind_chunk = metaEX_criteria
     }
 
     if (exists("dataEXind")) {

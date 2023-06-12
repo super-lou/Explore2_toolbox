@@ -151,10 +151,10 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         'create_data',
-        # 'analyse_data',
+        'analyse_data',
         'save_analyse'
         # 'read_tmp'
-        # 'read_saving'
+        # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
         # 'plot_sheet'
@@ -165,16 +165,16 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',    # \ ok
-        # 'Explore2_criteria_diag_sensibilite',    #  |
-        # 'Explore2_criteria_diag_sensibilite_RAT' # /
-        # 'Explore2_criteria_diag_HE', # \ ok
-        # 'Explore2_criteria_diag_ME'  # / 
-        'Explore2_criteria_diag_BE'
-        # 'Explore2_criteria_diag_BF' 
-        # 'Explore2_serie_diag_plot' # ] ok
-        # 'Explore2_serie_proj_safran' # ] ok
-        # 'Explore2_serie_more_proj_safran' # ] ok
+        # 'Explore2_criteria_diag_performance',
+        # 'Explore2_criteria_diag_sensibilite',
+        # 'Explore2_criteria_diag_sensibilite_RAT',
+        # 'Explore2_criteria_diag_HE',
+        # 'Explore2_criteria_diag_ME', 
+        # 'Explore2_criteria_diag_BE',
+        # 'Explore2_criteria_diag_BF',
+        'Explore2_serie_diag_plot'
+        # 'Explore2_serie_proj_safran'
+        # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj',
         # 'Explore2_serie_more_proj'
     )
@@ -183,21 +183,21 @@ analyse_data =
 ##  Analyse name                         | nCode4RAM | nodes | tasks
 # ---------------------------------------+-----------+-------+-------
 # Explore2_criteria_diag_performance     |           |       |
-# Explore2_criteria_diag_sensibilite     |     9     |   3   |  27
+# Explore2_criteria_diag_sensibilite     |     9     |   3   |  28
 # Explore2_criteria_diag_sensibilite_RAT |           |       |
 # ---------------------------------------+-----------+-------+-------
 # Explore2_criteria_diag_HE              |           |       |
-# Explore2_criteria_diag_ME              |     9     |   3   |  27 
+# Explore2_criteria_diag_ME              |     9     |   3   |  28 
 # ---------------------------------------+-----------+-------+-------
-# Explore2_criteria_diag_BE              |     6     |   4   |  28
+# Explore2_criteria_diag_BE              |     6     |   3   |  28
 # ---------------------------------------+-----------+-------+-------
-# Explore2_criteria_diag_BF              |     9     |   3   |  27 
+# Explore2_criteria_diag_BF              |     9     |   3   |  28 
 # ---------------------------------------+-----------+-------+-------
-# Explore2_serie_diag_plot               |     9     |   3   |  27 
+# Explore2_serie_diag_plot               |     9     |   3   |  28 
 # ---------------------------------------+-----------+-------+-------
-# Explore2_serie_proj_safran             |     9     |   3   |  27 
+# Explore2_serie_proj_safran             |     9     |   3   |  28 
 # ---------------------------------------+-----------+-------+-------
-# Explore2_serie_more_proj_safran        |     9     |   3   |  27 
+# Explore2_serie_more_proj_safran        |     9     |   3   |  28 
 # ---------------------------------------+-----------+-------+-------
 
 
@@ -281,7 +281,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 28 | 28 | 28
 ## proj ?
-nCode4RAM = 100
+nCode4RAM = 14
 use_proj_merge =
     # TRUE
     FALSE
@@ -457,7 +457,7 @@ Explore2_criteria_diag_BF =
 
 Explore2_serie_diag_plot = 
     list(name='Explore2_serie_diag_plot',
-         variables=c("QM", "PAl", "QA",
+         variables=c("QM", "PA", "QA",
                      "medQJC5", "CDC"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
@@ -547,18 +547,19 @@ read_saving =
 
 var2search =
     c(
-        'meta',
-        'data',
+        'meta[.]',
+        # 'data[_]',
         'dataEX',
         'metaEX',
         'Warnings'
     )
 
+merge_read_saving = TRUE
 
 # ## 5. CRITERIA_SELECTION _____________________________________________
-# criteria_selection =
+criteria_selection =
 #     # "all"
-#     c("KGEracine", "Biais$", "epsilon_{T,JJA}", "epsilon_{T,DJF}", "epsilon_{P,JJA}", "epsilon_{P,DJF}", "RAT_T", "RAT_P", "Q10", "median{tQJXA}", "^alphaQA", "^alphaCDC", "Q90", "median{tVCN10}")
+    c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$", "RAT[_]T$", "RAT[_]P$", "Q10$", "med.*tQJXA$", "alphaQA$", "alphaCDC$", "Q90$", "med.*tVCN10$")
 
 
 ## 6. PLOT_SHEET _____________________________________________________
@@ -738,6 +739,10 @@ if (MPI != "") {
 } else {
     rank = 0
     size = 1
+}
+
+any_grepl = function (pattern, x, ...) {
+    return (any(grepl(pattern=pattern, x=x, ...)))
 }
 
 apply_grepl = function (x, table, target=NULL) {

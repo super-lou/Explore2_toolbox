@@ -400,6 +400,12 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         post(paste0("Reading extracted data and metadata in ",
                     read_saving))
 
+        data = dplyr::tibble()
+        dataEX_criteria = dplyr::tibble()
+        dataEX_serie = dplyr::tibble()
+        metaEX_criteria = dplyr::tibble()
+        metaEX_serie = dplyr::tibble()
+        
         for (i in 1:length(analyse_data)) {
             analyse = analyse_data[[i]]
             
@@ -408,14 +414,13 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                full.names=TRUE)
 
             pattern = var2search
-            pattern[!grepl("dataEX", pattern)] =
-                paste0(pattern[!grepl("dataEX", pattern)], "[.]")
             pattern = paste0("(", paste0(pattern,
                                          collapse=")|("), ")")
-            pattern = gsub("EX", paste0("EX_", analyse$name), pattern)
-            pattern = gsub("[_]", "[_]", pattern)
+            pattern = gsub("EX", paste0("EX[_]",
+                                        gsub("[_]", "[_]",
+                                             analyse$name)),
+                           pattern)
             Paths = Paths[grepl(pattern, Paths)]
-            
             Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
             Paths[!grepl("[.]", Paths)] =
                 paste0(Paths[!grepl("[.]", Paths)], ".fst")
@@ -424,29 +429,92 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             nFile = length(Filenames)
             for (i in 1:nFile) {
                 post(paste0(Filenames[i], " reads in ", Paths[i]))
-                assign(Filenames[i], read_tibble(filepath=Paths[i]))
+                
+                if (merge_read_saving) {
+                    
+                    if (grepl("dataEX.*criteria", Filenames[i])) {
+                        if (nrow(dataEX_criteria) == 0) {
+                            dataEX_criteria = read_tibble(filepath=Paths[i])
+                        } else {
+                            by = names(dataEX_criteria)[sapply(dataEX_criteria,
+                                                               is.character)]
+                            dataEX_criteria =
+                                dplyr::full_join(dataEX_criteria,
+                                                 read_tibble(filepath=Paths[i]),
+                                                 by=by)
+                        }
+                    } else if (grepl("dataEX.*serie", Filenames[i])) {
+                        dataEX_serie =
+                            append(dataEX_serie,
+                                   read_tibble(filepath=Paths[i]))
+                    } else if (grepl("metaEX.*criteria", Filenames[i])) {
+                        metaEX_criteria =
+                            dplyr::bind_rows(metaEX_criteria,
+                                             read_tibble(filepath=Paths[i]))
+
+                    } else if (grepl("metaEX.*serie", Filenames[i])) {
+                        metaEX_serie =
+                            dplyr::bind_rows(metaEX_serie,
+                                             read_tibble(filepath=Paths[i]))
+                        
+                    } else if (grepl("data[_]", Filenames[i])) {
+                        data =
+                            dplyr::bind_rows(data,
+                                             read_tibble(filepath=Paths[i]))
+                    } else {
+                        assign(Filenames[i],
+                               read_tibble(filepath=Paths[i]))
+                    }
+                    
+                } else {
+                    assign(Filenames[i],
+                           read_tibble(filepath=Paths[i]))
+                }
             }
         }
-
+        if (merge_read_saving) {
+            analyse_data = list()
+            analyse_data = append(analyse_data,
+                                  list(list(name='criteria',
+                                            variables=metaEX_criteria$var,
+                                            simplify=TRUE)))
+            names(analyse_data)[length(analyse_data)] = "criteria"
+            
+            analyse_data = append(analyse_data,
+                                  list(list(name='serie',
+                                            variables=metaEX_serie$var,
+                                            simplify=FALSE)))
+            names(analyse_data)[length(analyse_data)] = "serie"
+        }
     }
 
     if ('criteria_selection' %in% to_do) {
         post("### Selecting variables")
+        
         for (i in 1:length(analyse_data)) {
-            
             analyse = analyse_data[[i]]
-
+            
             if (analyse$simplify) {
                 dataEXname = paste0("dataEX_", analyse$name)
                 metaEXname = paste0("metaEX_", analyse$name)
                 dataEXtmp = get(dataEXname)
                 metaEXtmp = get(metaEXname)
-                dataEXtmp =
-                    dataEXtmp[!grepl("(^HYP)|([_]obs$)|([_]sim$)",
-                                     names(dataEXtmp))]
-                metaEXtmp =
-                    metaEXtmp[!grepl("(^HYP)|([_]obs$)|([_]sim$)",
-                                     metaEXtmp$var),]
+
+                by = names(dataEXtmp)[sapply(dataEXtmp,
+                                             is.character)]
+                pattern = paste0("(",
+                                 paste0(by, collapse=")|("),
+                                 ")|(",
+                                 paste0(criteria_selection,
+                                        collapse=")|("),
+                                 ")")
+                col2rm = sapply(names(dataEXtmp), any_grepl,
+                             pattern=pattern)
+                row2rm = sapply(metaEXtmp$var, any_grepl,
+                                 pattern=pattern)
+                    
+                dataEXtmp = dataEXtmp[col2rm]
+                metaEXtmp = metaEXtmp[row2rm,]
                 assign(dataEXname, dataEXtmp)
                 assign(metaEXname, metaEXtmp)
             }   
@@ -462,7 +530,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 dataEX = get(paste0("dataEX_", analyse$name))
                 metaEX = get(paste0("metaEX_", analyse$name))
                 Warnings = find_Warnings(dataEX, metaEX,
-                                         resdir=today_resdir, save=TRUE)
+                                         resdir=today_resdir,
+                                         save=TRUE)
             }
         }
     }
