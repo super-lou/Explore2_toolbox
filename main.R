@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -143,21 +143,21 @@ lib_path =
 #       directory.
 
 mode =
-    "diag"
-    # "proj"
+    # "diag"
+    "proj"
 
 to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
-        'read_saving',
-        'criteria_selection',
+        # 'read_saving',
+        # 'criteria_selection',
         # 'write_warnings'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -165,18 +165,18 @@ to_do =
 analyse_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diag_performance',
-        'Explore2_criteria_diag_sensibilite',
-        'Explore2_criteria_diag_sensibilite_RAT',
-        'Explore2_criteria_diag_HE',
-        'Explore2_criteria_diag_ME', 
-        'Explore2_criteria_diag_BE',
-        'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot'
+        # 'Explore2_criteria_diag_performance',
+        # 'Explore2_criteria_diag_sensibilite',
+        # 'Explore2_criteria_diag_sensibilite_RAT',
+        # 'Explore2_criteria_diag_HE',
+        # 'Explore2_criteria_diag_ME', 
+        # 'Explore2_criteria_diag_BE',
+        # 'Explore2_criteria_diag_BF',
+        # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
-        # 'Explore2_serie_proj',
-        # 'Explore2_serie_more_proj'
+        'Explore2_serie_proj',
+        'Explore2_serie_more_proj'
     )
 
 
@@ -258,13 +258,13 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -276,12 +276,15 @@ MPI =
 period_analyse_diag = c('1976-01-01', '2019-12-31')
 period_analyse_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
-## diag
+## diag ##
 # nCode4RAM | 14 |  9 |  6
 # nodes     |  2 |  3 |  4
 # tasks     | 28 | 28 | 28
-## proj ?
-nCode4RAM = 1
+## proj ##
+# nCode4RAM | 19
+# nodes     |  8
+# tasks     | 28
+nCode4RAM = 19
 use_proj_merge =
     # TRUE
     FALSE
@@ -318,8 +321,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "^K"
 
         ## échange code
@@ -520,13 +523,13 @@ Explore2_serie_more_proj =
 ## 3. SAVE_ANALYSE ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 var2save =
     c(
         'meta',
-        'data',
+        # 'data',
         'dataEX',
         'metaEX'
     )
