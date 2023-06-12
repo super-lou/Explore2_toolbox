@@ -171,9 +171,9 @@ analyse_data =
         # 'Explore2_criteria_diag_HE', # \ ok
         # 'Explore2_criteria_diag_ME'  # / 
         # 'Explore2_criteria_diag_BE1'
-        'Explore2_criteria_diag_BE2'
+        # 'Explore2_criteria_diag_BE2'
         # 'Explore2_criteria_diag_BF' 
-        # 'Explore2_serie_diag_plot' # ] ok
+        'Explore2_serie_diag_plot' # ] ok
         # 'Explore2_serie_proj_safran' # ] ok
         # 'Explore2_serie_more_proj_safran' # ] ok
         # 'Explore2_serie_proj',
@@ -282,7 +282,7 @@ propagate_NA = TRUE
 # nodes     |  2 |  3 |  4
 # tasks     | 27 | 27 | 28
 ## proj ?
-nCode4RAM = 6
+nCode4RAM = 9
 use_proj_merge =
     # TRUE
     FALSE
