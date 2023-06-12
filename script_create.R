@@ -146,7 +146,7 @@ create_data = function () {
         
         data_sim = dplyr::select(data_sim, -"S")
 
-        val2check = c("T", "ET0", "Pl")
+        val2check = c("T", "ET0", "P", "Pl", "Ps")
         
         if (mode == "diag") {
             post("### Observation data")
