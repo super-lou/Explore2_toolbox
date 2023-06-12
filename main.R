@@ -170,10 +170,11 @@ analyse_data =
         # 'Explore2_criteria_diag_sensibilite_RAT' # /
         # 'Explore2_criteria_diag_HE', # \ ok
         # 'Explore2_criteria_diag_ME'  # / 
-        # 'Explore2_criteria_diag_BE'
+        'Explore2_criteria_diag_BE1',
+        'Explore2_criteria_diag_BE2'
         # 'Explore2_criteria_diag_BF' 
         # 'Explore2_serie_diag_plot' # ] ok
-        'Explore2_serie_proj_safran' # ] ok
+        # 'Explore2_serie_proj_safran' # ] ok
         # 'Explore2_serie_more_proj_safran' # ] ok
         # 'Explore2_serie_proj',
         # 'Explore2_serie_more_proj'
@@ -435,11 +436,19 @@ Explore2_criteria_diag_ME =
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_criteria_diag_BE = 
-    list(name='Explore2_criteria_diag_BE',
+Explore2_criteria_diag_BE1 = 
+    list(name='Explore2_criteria_diag_BE1',
          variables=c("Q90",
                      "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
-                     "med{debutBE}", "med{tVCN10}", "med{finBE}",
+                     "med{tVCN10}"),
+         suffix=c("_obs", "_sim"),
+         expand=FALSE,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_criteria_diag_BE2 = 
+    list(name='Explore2_criteria_diag_BE2',
+         variables=c("med{debutBE}", "med{finBE}",
                      "med{dtBE}", "med{vBE}"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
