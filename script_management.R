@@ -38,10 +38,14 @@ manage_data = function () {
             rm ("dataEX")
             gc()
         }
+
+        post("a")
         
         for (j in 1:nSubsets_save) {
             subset_name = names(Subsets_save)[j]
 
+            post("b")
+            
             filename = paste0("meta_", files_name_opt.,
                               subset_name, ".fst")
             if (file.exists(file.path(tmppath, filename))) {
@@ -55,7 +59,9 @@ manage_data = function () {
                 }
                 rm ("meta_tmp")
                 gc()
-            }            
+            }
+
+            post("c")
 
             if (!exists("metaEX")) {
                 filename = paste0("metaEX_", analyse$name, "_",
@@ -67,6 +73,8 @@ manage_data = function () {
                     
                 }
             }
+
+            post("d")
             
             dirname = paste0("dataEX_", analyse$name, "_",
                              files_name_opt.,
@@ -98,6 +106,8 @@ manage_data = function () {
             }
         }
 
+        post("e")
+
         regexp_bool = "^HYP.*"
         regexp_time =
             "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
@@ -118,6 +128,8 @@ manage_data = function () {
                     
                     for (j in 1:nVarsREL) {
                         varREL = VarsREL[j]
+
+                        post("f")
                         
                         if (grepl(regexp_bool, varREL)) {
                             dataEX[[varREL]] =
@@ -149,6 +161,8 @@ manage_data = function () {
                                 dataEX[[paste0(varREL,
                                                "_obs")]]
                         }
+
+                        post("g")
                         dataEX =
                             dplyr::relocate(dataEX,
                                             !!varREL,
@@ -156,6 +170,8 @@ manage_data = function () {
                                                             "_sim"))
                     }
                 }
+
+                post("h")
                 
             } else {
                 for (j in 1:length(dataEX)) {
@@ -166,6 +182,8 @@ manage_data = function () {
             }
         }
 
+        post("i")
+        
         meta = meta[order(meta$Code),]
         write_tibble(meta,
                      filedir=tmppath,
@@ -183,6 +201,8 @@ manage_data = function () {
                                      .files_name_opt,
                                      ".fst"))
 
+        post("j")
+        
         if (exists("meta")) {
             rm ("meta")
             gc()
@@ -203,6 +223,8 @@ save_data = function () {
     files_name_regexp = gsub("[_]", "[_]",
                              gsub("[-]", "[-]",
                                   files_name_opt))
+
+    post("k")
     
     if (by_files | MPI == "file") {
         today_resdir_tmp = file.path(today_resdir,
@@ -213,6 +235,8 @@ save_data = function () {
         today_resdir_tmp = today_resdir
         pattern = "data[_].*[.]fst"
     }
+
+    post("l")
 
     if (!(file.exists(today_resdir_tmp))) {
         dir.create(today_resdir_tmp, recursive=TRUE)
@@ -230,6 +254,8 @@ save_data = function () {
                   file.path(today_resdir_tmp, data_files))
     }
 
+    post("m")
+    
     for (i in 1:length(analyse_data)) {
         analyse = analyse_data[[i]]
 
@@ -239,6 +265,8 @@ save_data = function () {
         if (file.exists(file.path(tmppath, dirname)) |
             file.exists(file.path(tmppath, filename))) {
 
+            post("n")
+            
             if ("meta" %in% var2save) {
                 meta = read_tibble(filedir=tmppath,
                                    filename=paste0(
@@ -265,7 +293,7 @@ save_data = function () {
                                          analyse$name,
                                          .files_name_opt,
                                          ".fst"))
-                
+                post("o")
             }
         } else {
             next
@@ -290,6 +318,8 @@ save_data = function () {
                 Sys.sleep(wait)
             }
         }
+
+        post("p")
 
         if ("metaEX" %in% var2save) {
             write_tibble(metaEX,
@@ -317,6 +347,9 @@ save_data = function () {
             }
         }
 
+
+        post("q")
+        
         if ("dataEX" %in% var2save) {
             write_tibble(dataEX,
                          filedir=today_resdir_tmp,
@@ -338,6 +371,9 @@ save_data = function () {
                                              ".txt"))
             }
         }
+
+        post("r")
+        
         if (exists("meta")) {
             rm ("meta")
             gc()
@@ -389,6 +425,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                          paste0(saving_format, collapse=", ")))
             save_data()
         }
+
+        post("s")
 
     } else if (MPI == "code") {
         Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
