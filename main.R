@@ -309,13 +309,13 @@ models_to_use =
     c(
         # "CTRIP",
         # "EROS",
-        "GRSD"
-        # "J2000",
+        # "GRSD" #ok
+        "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
         # "ORCHIDEE",
-        # "SMASH"
+        # "SMASH" #ok
     )
 complete_by = "SMASH"
 
