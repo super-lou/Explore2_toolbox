@@ -311,10 +311,10 @@ models_to_use =
         # "EROS"
         # "GRSD" #ok
         # "J2000" #ok
-        "SIM2"
+        # "SIM2" #ok
         # "MORDOR-SD" #ok
         # "MORDOR-TS" #ok
-        # "ORCHIDEE"
+        "ORCHIDEE"
         # "SMASH" #ok
     )
 complete_by = "SMASH"
