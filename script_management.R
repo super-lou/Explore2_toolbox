@@ -394,27 +394,25 @@ save_data = function () {
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if (!read_tmp & !merge_nc & !delete_tmp) {
 
-    if (MPI == "code" & rank == 0 | MPI != "code") {
-        if (MPI == "code" & rank == 0) {
-            Root = rep(0, times=size)
-            Root[1] = 1
-            post("Waiting for rank 1 : ")
+    if (rank == 0) {
+        Root = rep(0, times=size)
+        Root[1] = 1
+        post("Waiting for rank 1 : ")
+        post(paste0(gsub("1", "-", 
+                         gsub("0", "_",
+                              Root)), collapse=""))
+        for (root in 1:(size-1)) {
+            Root[root+1] = Rmpi::mpi.recv(as.integer(0),
+                                          type=1,
+                                          source=root,
+                                          tag=1, comm=0)
+            post(paste0("End signal received from rank ", root))
+            post(paste0("Waiting for rank ", root+1, " : "))
             post(paste0(gsub("1", "-", 
                              gsub("0", "_",
                                   Root)), collapse=""))
-            for (root in 1:(size-1)) {
-                Root[root+1] = Rmpi::mpi.recv(as.integer(0),
-                                              type=1,
-                                              source=root,
-                                              tag=1, comm=0)
-                post(paste0("End signal received from rank ", root))
-                post(paste0("Waiting for rank ", root+1, " : "))
-                post(paste0(gsub("1", "-", 
-                                 gsub("0", "_",
-                                      Root)), collapse=""))
-            }
         }
-        
+    
         if ('analyse_data' %in% to_do) {
             manage_data()
         }
@@ -428,7 +426,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
         post("s")
 
-    } else if (MPI == "code") {
+    } else {
         Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
         post(paste0("End signal from rank ", rank)) 
     }
