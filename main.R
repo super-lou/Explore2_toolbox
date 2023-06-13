@@ -310,9 +310,9 @@ models_to_use =
         # "CTRIP",
         # "EROS",
         # "GRSD" #ok
-        "J2000"
+        # "J2000" #ok
         # "SIM2",
-        # "MORDOR-SD",
+        "MORDOR-SD" #ok
         # "MORDOR-TS",
         # "ORCHIDEE",
         # "SMASH" #ok
