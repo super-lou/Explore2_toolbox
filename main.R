@@ -294,7 +294,7 @@ projs_to_use =
     c(
         'all'
         # "(rcp26)|(rcp45)|(rcp85")
-        # "MPI.*rcp26.*REMO.*CDFt.*MORDOR.*SD"
+        # "MPI.*rcp85.*RegCM4.*CDFt"
         # "EARTH.*HadREM3.*ADAMONT.*CTRIP"
         # "HadGEM2.*rcp45.*CCLM.*ADAMONT.*SIM2"
         # "MPI.*rcp26.*RegCM4.*ADAMONT"
@@ -325,6 +325,7 @@ codes_to_use =
         'all'
         # 'K2981910' #ref
         # "^K"
+        # "A105003001"
 
         ## échange code
         # "K2240820",
