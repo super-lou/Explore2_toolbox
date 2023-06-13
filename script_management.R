@@ -397,7 +397,6 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
     if (rank == 0) {
         Root = rep(0, times=size)
         Root[1] = 1
-        post("Waiting for rank 1 : ")
         post(paste0(gsub("1", "-", 
                          gsub("0", "_",
                               Root)), collapse=""))
@@ -406,8 +405,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                           type=1,
                                           source=root,
                                           tag=1, comm=0)
-            post(paste0("End signal received from rank ", root))
-            post(paste0("Waiting for rank ", root+1, " : "))
+            post(paste0("End signal for analyse received from rank ", root))
             post(paste0(gsub("1", "-", 
                              gsub("0", "_",
                                   Root)), collapse=""))
@@ -428,7 +426,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
     } else {
         Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-        post(paste0("End signal from rank ", rank)) 
+        post(paste0("End signal for analyse from rank ", rank)) 
     }
 
     if ('read_saving' %in% to_do) {

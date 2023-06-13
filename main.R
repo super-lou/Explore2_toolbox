@@ -1200,6 +1200,10 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         }
         
     } else {
+        if (rank != 0) {
+            Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
+            post(paste0("End signal for analyse from rank ", rank)) 
+        }
         warning ("No files")
     }
 
@@ -1210,7 +1214,6 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
     if (MPI == "file" & rank == 0) {
         Root = rep(0, times=size)
         Root[1] = 1
-        post("Waiting for rank 1 : ")
         post(paste0(gsub("1", "-", 
                          gsub("0", "_",
                               Root)), collapse=""))
@@ -1218,9 +1221,8 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             Root[root+1] = Rmpi::mpi.recv(as.integer(0),
                                           type=1,
                                           source=root,
-                                          tag=1, comm=0)
-            post(paste0("End signal received from rank ", root))
-            post(paste0("Waiting for rank ", root+1, " : "))
+                                          tag=2, comm=0)
+            post(paste0("End signal for timer received from rank ", root))
             post(paste0(gsub("1", "-", 
                              gsub("0", "_",
                                   Root)), collapse=""))
@@ -1237,8 +1239,8 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         write_tibble(timer, today_resdir, "timer.txt")
         
     } else if (MPI == "file") {
-        Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-        post(paste0("End signal from rank ", rank)) 
+        Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=2, comm=0)
+        post(paste0("End signal for timer from rank ", rank)) 
 
     } else {
         write_tibble(timer, today_resdir, "timer.txt")
