@@ -258,8 +258,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -308,9 +308,9 @@ projs_to_use =
 models_to_use =
     c(
         # "CTRIP" #ok
-        "EROS" #ok
+        # "EROS" #ok
         # "GRSD" #ok
-        # "J2000" #ok
+        "J2000" #ok
         # "SIM2" #ok
         # "MORDOR-SD" #ok
         # "MORDOR-TS" #ok
