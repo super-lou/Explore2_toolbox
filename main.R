@@ -1198,6 +1198,10 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             }
             print("")
         }
+
+        timer$time = timer$stop - timer$start
+        write_tibble(timer, tmppath,
+                     paste0("timer_", rank , ".fst"))
         
     } else {
         if (rank != 0) {
@@ -1206,10 +1210,6 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         }
         warning ("No files")
     }
-
-    timer$time = timer$stop - timer$start
-    write_tibble(timer, tmppath,
-                 paste0("timer_", rank , ".fst"))
 
     if (MPI == "file" & rank == 0) {
         Root = rep(0, times=size)
