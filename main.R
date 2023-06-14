@@ -305,13 +305,14 @@ projs_to_use =
         # "HadGEM2.*histo.*RegCM4.*CDFt"
         # "MPI.*rcp45.*CCLM.*ADAMONT"
         # "MPI.*rcp85.*RegCM4.*ADAMONT"
+        # "EC.*rcp45.*RACMO22E.*ADAMONT"
     )
 
 models_to_use =
     c(
         # "CTRIP" #run
         # "EROS" #ok
-        # "GRSD" #~~~ok
+        # "GRSD" #re runok
         # "J2000" #ok
         "SIM2"  #run
         # "MORDOR-SD" 
@@ -327,9 +328,9 @@ codes_to_use =
         'all'
         # 'K2981910' #ref
         # "^K"
-        # "A105003001"
-        # "H640201001"
-        # "B413201001"
+
+
+        
         ## échange code
         # "K2240820",
         # "K2240810",
@@ -340,8 +341,10 @@ codes_to_use =
         # "K1930010",
         # "K2680810"
 
-
-        ## CTRIP 0
+        ## pourri
+        # "H640201001" #SIM2
+        # "H640201001"
+        # "B413201001" #CTRIP
         # "D020601001"
     )
 
