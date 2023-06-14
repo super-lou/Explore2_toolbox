@@ -312,11 +312,11 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP" #ok
+        "CTRIP" #ok
         # "EROS" #ok
         # "GRSD" #ok
         # "J2000" #ok
-        "SIM2"  #ok
+        # "SIM2"  #ok
         # "MORDOR-SD" 
         # "MORDOR-TS" 
         # "ORCHIDEE" #run
