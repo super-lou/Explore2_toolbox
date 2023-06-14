@@ -258,8 +258,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
@@ -314,13 +314,13 @@ models_to_use =
     c(
         # "CTRIP" #run
         # "EROS" #ok
-        # "GRSD" #re runok
+        # "GRSD" #ok
         # "J2000" #ok
         "SIM2"  #run
         # "MORDOR-SD" 
         # "MORDOR-TS" 
         # "ORCHIDEE" #run
-        # "SMASH" #re run ~~~ok
+        # "SMASH" #run ~~~ok
     )
 complete_by = "SMASH"
 
@@ -1208,57 +1208,12 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         }
 
         timer$time = as.numeric(timer$stop - timer$start)
-        write_tibble(timer, tmppath,
-                     paste0("timer_", rank , ".fst"))
-        
     } else {
-        if (rank != 0) {
-            Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-            post(paste0("End signal for analyse from rank ", rank)) 
-        }
         warning ("No files")
     }
 
-    if (rank == 0) {
-        if (MPI != "") {
-            Root = rep(0, times=size)
-            Root[1] = 1
-            post(paste0(gsub("1", "-", 
-                             gsub("0", "_",
-                                  Root)), collapse=""))
-            for (root in 1:(size-1)) {
-                Root[root+1] = Rmpi::mpi.recv(as.integer(0),
-                                              type=1,
-                                              source=root,
-                                              tag=2, comm=0)
-                post(paste0("End signal for timer received from rank ", root))
-                post(paste0(gsub("1", "-", 
-                                 gsub("0", "_",
-                                      Root)), collapse=""))
-            }
-        }
-
-        timer = dplyr::tibble()
-        for (root in 0:(size-1)) {
-            path = file.path(tmppath, paste0("timer_", root , ".fst"))
-            if (file.exists(path)) {
-                timer_tmp = read_tibble(path)
-                timer = dplyr::bind_rows(timer, timer_tmp)
-            }
-        }
-        write_tibble(timer, today_resdir, "timer.txt")
-
-        post("End main process for analyse")
-
-    } else  {
-        Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=2, comm=0)
-        post(paste0("End signal for timer from rank ", rank))
-    }
-
-    # } else {
-    #     write_tibble(timer, today_resdir, "timer.txt")
-    #     post("End main process for analyse")
-    # }
+    write_tibble(timer, today_resdir,
+                 paste0("timer_", rank, ".txt"))
 }
 
 if (any(c('criteria_selection', 'write_warnings',

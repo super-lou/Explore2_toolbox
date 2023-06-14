@@ -359,8 +359,8 @@ save_data = function () {
 ## 1. MANAGEMENT OF DATA ______________________________________________
 if (!read_tmp & !merge_nc & !delete_tmp) {
 
-    if (rank == 0) {
-        if (MPI != "") {
+    if (MPI == "code") {
+        if (rank == 0) {
             Root = rep(0, times=size)
             Root[1] = 1
             post(paste0(gsub("1", "-", 
@@ -376,23 +376,30 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                  gsub("0", "_",
                                       Root)), collapse=""))
             }
+        } else {
+            Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
+            post(paste0("End signal for analyse from rank ", rank)) 
         }
-    
-        if ('analyse_data' %in% to_do) {
+    }
+        
+    if ('analyse_data' %in% to_do) {
+        if (MPI == "code" & rank == 0 |
+            MPI != "code") {
             manage_data()
         }
+    }
         
-        if ('save_analyse' %in% to_do) {
+    if ('save_analyse' %in% to_do) {
+        if (MPI == "code" & rank == 0 |
+            MPI != "code") {
             post("### Saving analyses")
             post(paste0("Save extracted data and metadata in ",
-                         paste0(saving_format, collapse=", ")))
+                        paste0(saving_format, collapse=", ")))
+            
             save_data()
         }
-
-    } else {
-        Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-        post(paste0("End signal for analyse from rank ", rank)) 
     }
+
 
     if ('read_saving' %in% to_do) {
         post("### Reading saving")
