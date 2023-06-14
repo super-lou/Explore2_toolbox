@@ -1199,7 +1199,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             print("")
         }
 
-        timer$time = timer$stop - timer$start
+        timer$time = as.numeric(timer$stop - timer$start)
         write_tibble(timer, tmppath,
                      paste0("timer_", rank , ".fst"))
         
