@@ -360,20 +360,22 @@ save_data = function () {
 if (!read_tmp & !merge_nc & !delete_tmp) {
 
     if (rank == 0) {
-        Root = rep(0, times=size)
-        Root[1] = 1
-        post(paste0(gsub("1", "-", 
-                         gsub("0", "_",
-                              Root)), collapse=""))
-        for (root in 1:(size-1)) {
-            Root[root+1] = Rmpi::mpi.recv(as.integer(0),
-                                          type=1,
-                                          source=root,
-                                          tag=1, comm=0)
-            post(paste0("End signal for analyse received from rank ", root))
+        if (MPI != "") {
+            Root = rep(0, times=size)
+            Root[1] = 1
             post(paste0(gsub("1", "-", 
                              gsub("0", "_",
                                   Root)), collapse=""))
+            for (root in 1:(size-1)) {
+                Root[root+1] = Rmpi::mpi.recv(as.integer(0),
+                                              type=1,
+                                              source=root,
+                                              tag=1, comm=0)
+                post(paste0("End signal for analyse received from rank ", root))
+                post(paste0(gsub("1", "-", 
+                                 gsub("0", "_",
+                                      Root)), collapse=""))
+            }
         }
     
         if ('analyse_data' %in% to_do) {

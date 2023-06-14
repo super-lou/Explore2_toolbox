@@ -303,19 +303,21 @@ projs_to_use =
         # "EC-EARTH.*rcp26.*HadREM3.*ADAMONT.*CTRIP"
         # "NorESM1-M.*rcp26.*REMO.*ADAMONT"
         # "HadGEM2.*histo.*RegCM4.*CDFt"
+        # "MPI.*rcp45.*CCLM.*ADAMONT"
+        # "MPI.*rcp85.*RegCM4.*ADAMONT"
     )
 
 models_to_use =
     c(
-        # "CTRIP" 
+        # "CTRIP" #run
         # "EROS" #ok
-        # "GRSD" #ok
+        "GRSD" #~~~ok
         # "J2000" #ok
-        # "SIM2"  
+        # "SIM2"  #run
         # "MORDOR-SD" 
         # "MORDOR-TS" 
-        "ORCHIDEE" 
-        # "SMASH" #~~ok
+        # "ORCHIDEE" #run
+        # "SMASH" #re run ~~~ok
     )
 complete_by = "SMASH"
 
@@ -326,7 +328,8 @@ codes_to_use =
         # 'K2981910' #ref
         # "^K"
         # "A105003001"
-
+        # "H640201001"
+        # "B413201001"
         ## échange code
         # "K2240820",
         # "K2240810",
@@ -1211,21 +1214,23 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
         warning ("No files")
     }
 
-    if (MPI == "file" & rank == 0) {
-        Root = rep(0, times=size)
-        Root[1] = 1
-        post(paste0(gsub("1", "-", 
-                         gsub("0", "_",
-                              Root)), collapse=""))
-        for (root in 1:(size-1)) {
-            Root[root+1] = Rmpi::mpi.recv(as.integer(0),
-                                          type=1,
-                                          source=root,
-                                          tag=2, comm=0)
-            post(paste0("End signal for timer received from rank ", root))
+    if (rank == 0) {
+        if (MPI != "") {
+            Root = rep(0, times=size)
+            Root[1] = 1
             post(paste0(gsub("1", "-", 
                              gsub("0", "_",
                                   Root)), collapse=""))
+            for (root in 1:(size-1)) {
+                Root[root+1] = Rmpi::mpi.recv(as.integer(0),
+                                              type=1,
+                                              source=root,
+                                              tag=2, comm=0)
+                post(paste0("End signal for timer received from rank ", root))
+                post(paste0(gsub("1", "-", 
+                                 gsub("0", "_",
+                                      Root)), collapse=""))
+            }
         }
 
         timer = dplyr::tibble()
@@ -1240,14 +1245,15 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
 
         post("End main process for analyse")
 
-    } else if (MPI == "file") {
+    } else  {
         Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=2, comm=0)
-        post(paste0("End signal for timer from rank ", rank)) 
-
-    } else {
-        write_tibble(timer, today_resdir, "timer.txt")
-        post("End main process for analyse")
+        post(paste0("End signal for timer from rank ", rank))
     }
+
+    # } else {
+    #     write_tibble(timer, today_resdir, "timer.txt")
+    #     post("End main process for analyse")
+    # }
 }
 
 if (any(c('criteria_selection', 'write_warnings',
