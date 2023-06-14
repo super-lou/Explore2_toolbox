@@ -258,8 +258,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -306,6 +306,8 @@ projs_to_use =
         # "MPI.*rcp45.*CCLM.*ADAMONT"
         # "MPI.*rcp85.*RegCM4.*ADAMONT"
         # "EC.*rcp45.*RACMO22E.*ADAMONT"
+
+        # "CNRM.*rcp45.*ALADIN63.*ADAMONT"
     )
 
 models_to_use =
@@ -327,7 +329,7 @@ codes_to_use =
     c(
         'all'
         # 'K2981910' #ref
-        # "^K"
+        # "^I"
 
 
         
@@ -389,8 +391,8 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("medQJC5"),
-         suffix=c("_obs", "_sim"),
+         variables=c("dtRec"),
+         suffix=c("_sim"),
          # suffix=c("_obs"),
          # suffix=NULL,
          expand=TRUE,
