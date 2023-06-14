@@ -307,15 +307,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP" #ok
+        "CTRIP" 
         # "EROS" #ok
         # "GRSD" #ok
         # "J2000" #ok
-        "SIM2"  #ok
+        # "SIM2"  
         # "MORDOR-SD" 
         # "MORDOR-TS" 
-        # "ORCHIDEE" #ok
-        # "SMASH" #ok
+        # "ORCHIDEE" 
+        # "SMASH" #~~ok
     )
 complete_by = "SMASH"
 
