@@ -258,8 +258,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
@@ -310,12 +310,12 @@ models_to_use =
         # "CTRIP"
         # "EROS" #ok
         # "GRSD" #ok
-        "J2000" #ok
+        # "J2000" #ok
         # "SIM2" 
         # "MORDOR-SD" 
         # "MORDOR-TS" 
         # "ORCHIDEE" 
-        # "SMASH" #ok
+        "SMASH" #ok
     )
 complete_by = "SMASH"
 
@@ -1237,13 +1237,16 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             }
         }
         write_tibble(timer, today_resdir, "timer.txt")
-        
+
+        post("End main process for analyse")
+
     } else if (MPI == "file") {
         Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=2, comm=0)
         post(paste0("End signal for timer from rank ", rank)) 
 
     } else {
         write_tibble(timer, today_resdir, "timer.txt")
+        post("End main process for analyse")
     }
 }
 
