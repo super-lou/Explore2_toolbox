@@ -318,8 +318,8 @@ models_to_use =
         # "J2000" #ok
         # "SIM2"  #ok
         # "MORDOR-SD",
-        # "MORDOR-TS" 
-        "ORCHIDEE" #run
+        "MORDOR-TS" 
+        # "ORCHIDEE" #run
         # "SMASH" #ok
     )
 complete_by = "SMASH"
