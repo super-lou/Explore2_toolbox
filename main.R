@@ -317,8 +317,8 @@ models_to_use =
         # "GRSD" #ok
         # "J2000" #ok
         # "SIM2"  #ok
-        # "MORDOR-SD",
-        "MORDOR-TS" 
+        "MORDOR-SD"
+        # "MORDOR-TS" 
         # "ORCHIDEE" #run
         # "SMASH" #ok
     )
