@@ -149,10 +149,10 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'merge_nc'
-        # 'create_data',
-        # 'analyse_data',
-        # 'save_analyse'
+        # 'merge_nc'
+        'create_data',
+        'analyse_data',
+        'save_analyse'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
@@ -287,8 +287,8 @@ propagate_NA = TRUE
 # tasks     | 28 | 28
 nCode4RAM = 25
 use_proj_merge =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 projs_to_use =
     c(
@@ -317,9 +317,9 @@ models_to_use =
         # "GRSD" #ok
         # "J2000" #ok
         # "SIM2"  #ok
-        "MORDOR-SD",
-        "MORDOR-TS" 
-        # "ORCHIDEE" #run
+        # "MORDOR-SD",
+        # "MORDOR-TS" 
+        "ORCHIDEE" #run
         # "SMASH" #ok
     )
 complete_by = "SMASH"
