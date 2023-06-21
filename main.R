@@ -44,15 +44,15 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
 # For example if you write 'create_data', a tibble of hydrological
 # data will be created according to the info you provide in the ## 1.
 # CREATE_DATA section of the STEPS part below. If you also add
-# 'analyse_data' in the vector, the analyse will also be perfom
+# 'extract_data' in the vector, the extract will also be perfom
 # following the creation of data. But if you only write, for example,
 # 'plot_sheet', without having previously execute the code to have
 # loading data to plot, it will results in a failure.
@@ -81,10 +81,10 @@ lib_path =
 #     > tmpdir/meta_K1.fst :
 #        An other fst file that contain info about the data file.
 #
-# - 'analyse_data' :
+# - 'extract_data' :
 #     Perfom the requested analysis on the created data contained in
 #     the tmpdir/. Details about the analysis are given with the
-#     analyse_data variable in the ## 2. ANALYSE_DATA section of the
+#     extract_data variable in the ## 2. EXTRACT_DATA section of the
 #     STEPS part below. This variable needs to be a path to a CARD
 #     directory. See CARD toolbox for more info
 #     https://github.com/super-lou/CARD.
@@ -100,10 +100,10 @@ lib_path =
 #     > tmpdir/metaEXserie_K1.fst :
 #        Info about variables stored in dataEXserie_K1.
 #
-# - 'save_analyse' :
+# - 'save_extract' :
 #     Saves all the data contained in the tmpdir/ to the resdir/. The
 #     format used is specified in the saving_format variable of the 
-#     ## 3. SAVE_ANALYSE section of the STEPS part.
+#     ## 3. SAVE_EXTRACT section of the STEPS part.
 #     > Moves all temporary data in tmpdir/ to the resdir/.
 #
 # - 'read_tmp' :
@@ -143,44 +143,45 @@ lib_path =
 #       directory.
 
 mode =
-    # "diag"
-    "proj"
+    "diag"
+    # "proj"
 
 to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        'create_data',
-        'analyse_data',
-        'save_analyse'
+        # 'create_data',
+        # 'extract_data',
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
+        'analyse_data'
         # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
 
-analyse_data =
+extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT',
-        # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME', 
-        # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF',
-        # 'Explore2_serie_diag_plot'
-        # 'Explore2_serie_proj_safran'
-        # 'Explore2_serie_more_proj_safran'
-        'Explore2_serie_proj',
-        'Explore2_serie_more_proj'
+        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT',
+        'Explore2_criteria_diag_HE',
+        'Explore2_criteria_diag_ME', 
+        'Explore2_criteria_diag_BE',
+        'Explore2_criteria_diag_BF',
+        'Explore2_serie_diag_plot',
+        'Explore2_serie_proj_safran',
+        'Explore2_serie_more_proj_safran'
+        # 'Explore2_serie_proj',
+        # 'Explore2_serie_more_proj'
     )
 
 
-##  Analyse name                         | nCode4RAM | nodes | tasks
+##  Extract name                         | nCode4RAM | nodes | tasks
 # ---------------------------------------+-----------+-------+-------
 # Explore2_criteria_diag_performance     |           |       |
 # Explore2_criteria_diag_sensibilite     |     9     |   3   |  28
@@ -206,7 +207,7 @@ analyse_data =
 # The use of this plot_sheet vector is quite similar to the to_do
 # vector. It regroups all the different datasheet you want to plot
 # individually. For example if you write 'diagnostic_station', the
-# data previously analysed saved and read will be use to plot the
+# data previously extractd saved and read will be use to plot the
 # diagnostic datasheet for specific stations.  
 #
 # Options are listed below with associated results after '>' :
@@ -246,9 +247,9 @@ plot_sheet =
 ### 3.2. Document ____________________________________________________
 plot_doc =
     c(
-        "diagnostic_matrix"
+        # "diagnostic_matrix"
         # 'diagnostic_regime'
-        # 'diagnostic_region'
+        'diagnostic_region'
     )
 
 
@@ -263,8 +264,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -273,8 +274,8 @@ MPI =
 # \__ \|  _|/ -_)| '_ \(_-<
 # |___/ \__|\___|| .__//__/ __________________________________________
 ## 1. CREATE_DATA|_| _________________________________________________ 
-period_analyse_diag = c('1976-01-01', '2019-12-31')
-period_analyse_proj = c('1975-09-01', '2100-08-31')
+period_extract_diag = c('1976-01-01', '2019-12-31')
+period_extract_proj = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 14 |  9 |  6
@@ -312,17 +313,17 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP" #ok
-        # "EROS" #ok
-        # "GRSD" #ok
-        # "J2000" #ok
-        # "SIM2"  #ok
-        "MORDOR-SD"
-        # "MORDOR-TS" 
-        # "ORCHIDEE" #run
-        # "SMASH" #ok
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS", 
+        "ORCHIDEE", 
+        "SMASH"
     )
-complete_by = "SMASH"
+complete_by = "MORDOR-SD"
 
 codes_to_use =
     # ''
@@ -358,7 +359,7 @@ codes_to_use =
 # K2240820 -> K2240810
 
 
-# print(analyse_data[[i]])
+# print(extract_data[[i]])
 # print(
 #     tidyr::pivot_longer(dplyr::tibble(!!!sapply(ls(), function (x) {
 #         format(object.size(get(x)),
@@ -373,14 +374,14 @@ codes_to_use =
 # print("")
 
 
-## 2. ANALYSE_DATA ___________________________________________________
+## 2. EXTRACT_DATA ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
-# analyse. If no subdirectory is selected, all variable files will be
+# extract. If no subdirectory is selected, all variable files will be
 # used in 'CARD_dir' (which is may be too much).
 # This subdirectory can follows some rules :
 # - Variable files can be rename to began with a number followed by an
 #   underscore '_' to create an order in variables. For example,
-#   '2_QA.R' will be analysed and plotted after '1_QMNA.R'.
+#   '2_QA.R' will be extractd and plotted after '1_QMNA.R'.
 # - Directory of variable files can also be created in order to make a
 #   group of variable of similar topic. Names should be chosen between
 #   'Crue'/'Crue Nivale'/'Moyennes Eaux' and 'Étiage'. A directory can
@@ -391,10 +392,10 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("dtRec"),
-         suffix=c("_sim"),
+         variables=c("KGEracine"),
+         # suffix=c("_sim"),
          # suffix=c("_obs"),
-         # suffix=NULL,
+         suffix=NULL,
          expand=TRUE,
          cancel_lim=TRUE,
          simplify=FALSE)
@@ -530,11 +531,11 @@ Explore2_serie_more_proj =
 #          simplify=TRUE)
 
 
-## 3. SAVE_ANALYSE ___________________________________________________
+## 3. SAVE_EXTRACT ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
@@ -544,7 +545,7 @@ var2save =
         'metaEX'
     )
 
-# Saving format to use to save analyse data
+# Saving format to use to save extract data
 saving_format =
     ""
     # c('Rdata', 'txt')
@@ -572,16 +573,26 @@ merge_read_saving =
     # FALSE
 
 # ## 5. CRITERIA_SELECTION _____________________________________________
-criteria_selection =
+diag_criteria_selection =
 #     # "all"
-    c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$", "RAT[_]T$", "RAT[_]P$", "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^alphaCDC$", "Q90$", "med[{]tVCN10[}]$")
+    c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$",
+      "RAT[_]T$", "RAT[_]P$", "Q10$", "med[{]tQJXA[}]$",
+      "^alphaQA$", "^alphaCDC$", "Q90$", "med[{]tVCN10[}]$")
+
+diag_period_selection =
+    list(
+        "MORDOR-TS"=c(NA, as.Date("2017-08-31"))
+    )
 
 
 ## 6. PLOT_SHEET _____________________________________________________
 # If the hydrological network needs to be plot
 river_selection =
     NULL
-    # c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
+    # c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$',
+    #   '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$',
+    #   '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$',
+    #   'Le Tarn$', 'Le Rhône$', 'La Saône$')
 
 river_length =
     # NULL
@@ -786,9 +797,9 @@ convert2bool = function (X, true) {
 }
 
 if (mode == "diag") {
-    period_analyse = period_analyse_diag
+    period_extract = period_extract_diag
 } else if (mode == "proj") {
-    period_analyse = period_analyse_proj
+    period_extract = period_extract_proj
     var2save = var2save[var2save != "data"]
 }
 
@@ -801,9 +812,9 @@ merge_nc = FALSE
 read_tmp = FALSE
 
 
-analyse_data_tmp = lapply(analyse_data, get)
-names(analyse_data_tmp) = analyse_data
-analyse_data = analyse_data_tmp
+extract_data_tmp = lapply(extract_data, get)
+names(extract_data_tmp) = extract_data
+extract_data = extract_data_tmp
 
 
 if ('plot_doc' %in% to_do) {
@@ -923,6 +934,18 @@ codes_selection_data = read_tibble(file.path(computer_data_path,
 codes_selection_data = dplyr::filter(codes_selection_data,
                                      !grepl("Supprimer", X))
 
+codes_selection_data$SuggestionNOM =
+    gsub(" A ", " à ",
+         gsub("L ", "l'",
+              gsub("^L ", "L'",
+                   stringr::str_to_title(
+                                gsub("L'", "L ",
+                                     codes_selection_data$SuggestionNOM
+                                     )))))
+write_tibble(codes_selection_data,
+             filedir=today_resdir,
+             filename="codes_selection_data.txt")
+
 if (mode == "diag") {
     ref = 1
 } else if (mode == "proj") {
@@ -992,15 +1015,15 @@ if ("merge_nc" %in% to_do) {
            encoding='UTF-8')
 }
 
-if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
+if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
 
-    if (all(c('create_data', 'analyse_data') %in% to_do)) {
-        post("## CREATING AND ANALYSING DATA")
+    if (all(c('create_data', 'extract_data') %in% to_do)) {
+        post("## CREATING AND EXTRACTING DATA")
     } else if ('create_data' %in% to_do) {
         post("## CREATING DATA")
-    } else if ('analyse_data' %in% to_do) {
-        post("## ANALYSING DATA")
-    } else if (!('save_analyse' %in% to_do)) {
+    } else if ('extract_data' %in% to_do) {
+        post("## EXTRACTING DATA")
+    } else if (!('save_extract' %in% to_do)) {
         post("Maybe you can start by creating data")
     }
 
@@ -1127,20 +1150,20 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                                          files_name_opt.,
                                          subset_name, ".fst"))
                 }
-                if ('analyse_data' %in% to_do) {
-                    for (aa in 1:length(analyse_data)) {
-                        analyse = analyse_data[[aa]]
+                if ('extract_data' %in% to_do) {
+                    for (aa in 1:length(extract_data)) {
+                        extract = extract_data[[aa]]
                         
-                        if (analyse$simplify) {
+                        if (extract$simplify) {
                             file_test = c(file_test,
                                           paste0("dataEX_",
-                                                 analyse$name,
+                                                 extract$name,
                                                  "_", files_name_opt.,
                                                  subset_name, ".fst"))
                         } else {
                             file_test = c(file_test,
                                           paste0("dataEX_",
-                                                 analyse$name,
+                                                 extract$name,
                                                  "_", files_name_opt.,
                                                  subset_name))
                         }
@@ -1148,7 +1171,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                 }
                 
                 post(paste0(ss, "/", nSubsets,
-                            " chunks of stations in analyse so ",
+                            " chunks of stations in extract so ",
                             round(ss/nSubsets*100, 1), "% done"))
                 
                 if (all(file_test %in% list.files(tmppath,
@@ -1175,13 +1198,13 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
                                               subset_name))
                 }        
                 if (create_ok) {
-                    if ('analyse_data' %in% to_do) {
-                        timer = start_timer(timer, rank, "analyse",
+                    if ('extract_data' %in% to_do) {
+                        timer = start_timer(timer, rank, "extract",
                                             paste0(files_name_opt.,
                                                    subset_name))
-                        source(file.path(lib_path, 'script_analyse.R'),
+                        source(file.path(lib_path, 'script_extraction.R'),
                                encoding='UTF-8')
-                        timer = stop_timer(timer, rank, "analyse",
+                        timer = stop_timer(timer, rank, "extract",
                                            paste0(files_name_opt.,
                                                   subset_name))
                     }
@@ -1192,7 +1215,7 @@ if (any(c('create_data', 'analyse_data', 'save_analyse') %in% to_do)) {
             }
 
             if (any(Create_ok)) {
-                if (any(c('analyse_data', 'save_analyse') %in% to_do)) {
+                if (any(c('extract_data', 'save_extract') %in% to_do)) {
                     post("## MANAGING DATA")
                     timer = start_timer(timer, rank, "save",
                                         paste0(files_name_opt.,
@@ -1234,6 +1257,12 @@ if ("read_tmp" %in% to_do) {
 if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
     post("## PLOTTING DATA")
     source(file.path(lib_path, 'script_layout.R'),
+           encoding='UTF-8')
+}
+
+if (any(c('analyse_data') %in% to_do)) {
+    post("## ANALYSING DATA")
+    source(file.path(lib_path, 'script_analyse.R'),
            encoding='UTF-8')
 }
 

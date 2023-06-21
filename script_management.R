@@ -23,8 +23,8 @@
 
 manage_data = function () {
 
-    for (i in 1:length(analyse_data)) {
-        analyse = analyse_data[[i]]
+    for (i in 1:length(extract_data)) {
+        extract = extract_data[[i]]
 
         if (exists("meta")) {
             rm ("meta")
@@ -58,7 +58,7 @@ manage_data = function () {
             }
 
             if (!exists("metaEX")) {
-                filename = paste0("metaEX_", analyse$name, "_",
+                filename = paste0("metaEX_", extract$name, "_",
                                   files_name_opt.,
                                   subset_name, ".fst")
                 if (file.exists(file.path(tmppath, filename))) {
@@ -68,7 +68,7 @@ manage_data = function () {
                 }
             }
             
-            dirname = paste0("dataEX_", analyse$name, "_",
+            dirname = paste0("dataEX_", extract$name, "_",
                              files_name_opt.,
                              subset_name)
             filename = paste0(dirname, ".fst")
@@ -81,7 +81,7 @@ manage_data = function () {
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
                 } else {
-                    if (analyse$simplify) {
+                    if (extract$simplify) {
                         dataEX = dplyr::bind_rows(dataEX,
                                                   dataEX_tmp)
                     } else {
@@ -101,10 +101,10 @@ manage_data = function () {
         regexp_bool = "^HYP.*"
         regexp_time =
             "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
-        regexp_ratio = "(Rc)|(^epsilon)|(^alpha)"
+        regexp_ratio = "(Rc)|(^epsilon)|(^alpha)|(^STD)"
 
         if (exists("dataEX")) {
-            if (analyse$simplify) {
+            if (extract$simplify) {
                 dataEX = dataEX[order(dataEX$Model),]
                 
                 Vars = colnames(dataEX)
@@ -169,17 +169,17 @@ manage_data = function () {
         meta = meta[order(meta$Code),]
         write_tibble(meta,
                      filedir=tmppath,
-                     filename=paste0("meta_", analyse$name,
+                     filename=paste0("meta_", extract$name,
                                      .files_name_opt,
                                      ".fst"))
         write_tibble(dataEX,
                      filedir=tmppath,
-                     filename=paste0("dataEX_", analyse$name,
+                     filename=paste0("dataEX_", extract$name,
                                      .files_name_opt,
                                      ".fst"))
         write_tibble(metaEX,
                      filedir=tmppath,
-                     filename=paste0("metaEX_", analyse$name,
+                     filename=paste0("metaEX_", extract$name,
                                      .files_name_opt,
                                      ".fst"))
         
@@ -230,10 +230,10 @@ save_data = function () {
                   file.path(today_resdir_tmp, data_files))
     }
     
-    for (i in 1:length(analyse_data)) {
-        analyse = analyse_data[[i]]
+    for (i in 1:length(extract_data)) {
+        extract = extract_data[[i]]
 
-        dirname = paste0("dataEX_", analyse$name,
+        dirname = paste0("dataEX_", extract$name,
                          .files_name_opt)
         filename = paste0(dirname, ".fst")
         if (file.exists(file.path(tmppath, dirname)) |
@@ -243,7 +243,7 @@ save_data = function () {
                 meta = read_tibble(filedir=tmppath,
                                    filename=paste0(
                                        "meta_",
-                                       analyse$name,
+                                       extract$name,
                                        .files_name_opt,
                                        ".fst"))
                 
@@ -253,7 +253,7 @@ save_data = function () {
                 metaEX = read_tibble(filedir=tmppath,
                                      filename=paste0(
                                          "metaEX_",
-                                         analyse$name,
+                                         extract$name,
                                          .files_name_opt,
                                          ".fst"))
                 
@@ -262,7 +262,7 @@ save_data = function () {
                 dataEX = read_tibble(filedir=tmppath,
                                      filename=paste0(
                                          "dataEX_",
-                                         analyse$name,
+                                         extract$name,
                                          .files_name_opt,
                                          ".fst"))
             }
@@ -294,20 +294,20 @@ save_data = function () {
             write_tibble(metaEX,
                          filedir=today_resdir_tmp,
                          filename=paste0("metaEX_",
-                                         analyse$name,
+                                         extract$name,
                                          ".fst"))
             if ("Rdata" %in% saving_format) {
                 write_tibble(metaEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("metaEX_",
-                                             analyse$name,
+                                             extract$name,
                                              ".Rdata"))
             }
             if ("txt" %in% saving_format) {
                 write_tibble(metaEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("metaEX_",
-                                             analyse$name,
+                                             extract$name,
                                              ".txt"))
             }
             if (!is.null(wait)) {
@@ -321,20 +321,20 @@ save_data = function () {
             write_tibble(dataEX,
                          filedir=today_resdir_tmp,
                          filename=paste0("dataEX_",
-                                         analyse$name,
+                                         extract$name,
                                          ".fst"))
             if ("Rdata" %in% saving_format) {
                 write_tibble(dataEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("dataEX_",
-                                             analyse$name,
+                                             extract$name,
                                              ".Rdata"))
             }
             if ("txt" %in% saving_format) {
                 write_tibble(dataEX,
                              filedir=today_resdir_tmp,
                              filename=paste0("dataEX_",
-                                             analyse$name,
+                                             extract$name,
                                              ".txt"))
             }
         }
@@ -371,28 +371,28 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                               type=1,
                                               source=root,
                                               tag=1, comm=0)
-                post(paste0("End signal for analyse received from rank ", root))
+                post(paste0("End signal for extract received from rank ", root))
                 post(paste0(gsub("1", "-", 
                                  gsub("0", "_",
                                       Root)), collapse=""))
             }
         } else {
             Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-            post(paste0("End signal for analyse from rank ", rank)) 
+            post(paste0("End signal for extract from rank ", rank)) 
         }
     }
         
-    if ('analyse_data' %in% to_do) {
+    if ('extract_data' %in% to_do) {
         if (MPI == "code" & rank == 0 |
             MPI != "code") {
             manage_data()
         }
     }
         
-    if ('save_analyse' %in% to_do) {
+    if ('save_extract' %in% to_do) {
         if (MPI == "code" & rank == 0 |
             MPI != "code") {
-            post("### Saving analyses")
+            post("### Saving extracts")
             post(paste0("Save extracted data and metadata in ",
                         paste0(saving_format, collapse=", ")))
             
@@ -412,8 +412,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         metaEX_criteria = dplyr::tibble()
         metaEX_serie = dplyr::tibble()
         
-        for (i in 1:length(analyse_data)) {
-            analyse = analyse_data[[i]]
+        for (i in 1:length(extract_data)) {
+            extract = extract_data[[i]]
 
             Paths = list.files(file.path(resdir, read_saving),
                                include.dirs=TRUE,
@@ -423,22 +423,22 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             pattern = paste0("(", paste0(pattern,
                                          collapse=")|("), ")")
 
-            if (analyse$simplify) {
+            if (extract$simplify) {
                 pattern = gsub("dataEX", paste0("dataEX[_]",
                                                 gsub("[_]", "[_]",
-                                                     analyse$name),
+                                                     extract$name),
                                                 "[.]"),
                                pattern)
             } else {
                 pattern = gsub("dataEX", paste0("dataEX[_]",
                                                 gsub("[_]", "[_]",
-                                                     analyse$name),
+                                                     extract$name),
                                                 "$"),
                                pattern)
             }
             pattern = gsub("metaEX", paste0("metaEX[_]",
                                             gsub("[_]", "[_]",
-                                                 analyse$name),
+                                                 extract$name),
                                             "[.]"),
                            pattern)
             
@@ -495,62 +495,91 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             }
         }
         if (merge_read_saving) {
-            analyse_data = list()
-            analyse_data = append(analyse_data,
+            extract_data = list()
+            extract_data = append(extract_data,
                                   list(list(name='criteria',
                                             variables=metaEX_criteria$var,
                                             simplify=TRUE)))
-            names(analyse_data)[length(analyse_data)] = "criteria"
+            names(extract_data)[length(extract_data)] = "criteria"
             
-            analyse_data = append(analyse_data,
+            extract_data = append(extract_data,
                                   list(list(name='serie',
                                             variables=metaEX_serie$var,
                                             simplify=FALSE)))
-            names(analyse_data)[length(analyse_data)] = "serie"
+            names(extract_data)[length(extract_data)] = "serie"
         }
     }
 
     if ('criteria_selection' %in% to_do) {
         post("### Selecting variables")
-        
-        for (i in 1:length(analyse_data)) {
-            analyse = analyse_data[[i]]
-            
-            if (analyse$simplify) {
-                dataEXname = paste0("dataEX_", analyse$name)
-                metaEXname = paste0("metaEX_", analyse$name)
+
+        if (mode == "diag") {
+            for (i in 1:length(extract_data)) {
+                extract = extract_data[[i]]
+
+                dataEXname = paste0("dataEX_", extract$name)
+                metaEXname = paste0("metaEX_", extract$name)
                 dataEXtmp = get(dataEXname)
                 metaEXtmp = get(metaEXname)
-
-                by = names(dataEXtmp)[sapply(dataEXtmp,
-                                             is.character)]
-                pattern = paste0("(",
-                                 paste0(by, collapse=")|("),
-                                 ")|(",
-                                 paste0(criteria_selection,
-                                        collapse=")|("),
-                                 ")")
-                col2rm = sapply(names(dataEXtmp), any_grepl,
-                             pattern=pattern)
-                row2rm = sapply(metaEXtmp$var, any_grepl,
-                                 pattern=pattern)
+                
+                if (extract$simplify) {
+                    by = names(dataEXtmp)[sapply(dataEXtmp,
+                                                 is.character)]
+                    pattern = paste0("(",
+                                     paste0(by, collapse=")|("),
+                                     ")|(",
+                                     paste0(diag_criteria_selection,
+                                            collapse=")|("),
+                                     ")")
+                    col2rm = sapply(names(dataEXtmp), any_grepl,
+                                    pattern=pattern)
+                    row2rm = sapply(metaEXtmp$var, any_grepl,
+                                    pattern=pattern)
                     
-                dataEXtmp = dataEXtmp[col2rm]
-                metaEXtmp = metaEXtmp[row2rm,]
+                    dataEXtmp = dataEXtmp[col2rm]
+                    metaEXtmp = metaEXtmp[row2rm,]
+
+                } else {
+                    for (j in 1:length(diag_period_selection)) {
+                        model = names(diag_period_selection)[j]
+                        period = diag_period_selection[[j]]
+                        start = period[1]
+                        if (is.na(start)) {
+                            start = min(as.Date(period_extract_diag))
+                        }
+                        end = period[2]
+                        if (is.na(end)) {
+                            end = max(as.Date(period_extract_diag))
+                        }                        
+                        for (k in 1:length(dataEXtmp)) {
+                            if (!("Date" %in% names(dataEXtmp[[k]])) |
+                                !any(sapply(dataEXtmp[[k]],
+                                           lubridate::is.Date))) {
+                                next
+                            }
+                            dataEXtmp[[k]] =
+                                dplyr::filter(dataEXtmp[[k]],
+                                              Model != model |
+                                              (Model == model & 
+                                               start < Date &
+                                               Date < end))
+                        }
+                    }
+                }
                 assign(dataEXname, dataEXtmp)
                 assign(metaEXname, metaEXtmp)
-            }   
+            }
         }
     }
 
     if ('write_warnings' %in% to_do) {
         post("### Writing warnings")
-        for (i in 1:length(analyse_data)) {
-            analyse = analyse_data[[i]]
+        for (i in 1:length(extract_data)) {
+            extract = extract_data[[i]]
 
-            if (analyse$simplify) {
-                dataEX = get(paste0("dataEX_", analyse$name))
-                metaEX = get(paste0("metaEX_", analyse$name))
+            if (extract$simplify) {
+                dataEX = get(paste0("dataEX_", extract$name))
+                metaEX = get(paste0("metaEX_", extract$name))
                 Warnings = find_Warnings(dataEX, metaEX,
                                          resdir=today_resdir,
                                          save=TRUE)

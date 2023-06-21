@@ -121,14 +121,15 @@ for (i in 1:nChunk) {
     doc_name_ns = gsub(" ", "_", doc_name)
     
     if (!is.null(chunkname)) {
-        doc_chunkname = paste0(doc_name_ns, "_",
-                               gsub(" ", "_",
-                                    gsub(" [-] ", "_",
-                                         chunkname)))
+        doc_chunkname = gsub(" ", "_",
+                             gsub(" [-] ", "_",
+                                  chunkname))
         today_figdir_leaf = file.path(today_figdir,
+                                      doc_name_ns,
                                       doc_chunkname, "PDF")
     } else if ('plot_doc' %in% to_do) {
-        today_figdir_leaf = file.path(today_figdir, doc_name_ns,
+        today_figdir_leaf = file.path(today_figdir,
+                                      doc_name_ns,
                                       "PDF")
     } else {
         today_figdir_leaf = today_figdir

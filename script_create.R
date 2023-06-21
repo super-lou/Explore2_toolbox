@@ -95,11 +95,11 @@ create_data = function () {
                        Surface_km2=
                            as.numeric(codes_selection_data$S_HYDRO[id]))
 
-        meta$Nom = gsub("L[']", "L ", meta$Nom)
-        meta$Nom = gsub(" A ", " à ",
-                        stringr::str_to_title(meta$Nom))
-        meta$Nom = gsub("^L ", "L'", meta$Nom)
-        meta$Nom = gsub(" l ", " l'", meta$Nom)
+        # meta$Nom = gsub("L[']", "L ", meta$Nom)
+        # meta$Nom = gsub(" A ", " à ",
+        #                 stringr::str_to_title(meta$Nom))
+        # meta$Nom = gsub("^L ", "L'", meta$Nom)
+        # meta$Nom = gsub(" l ", " l'", meta$Nom)
 
         Code10_available = levels(factor(data_sim$Code))
         Code10 = Code10_available[Code10_available %in% CodeSUB10]
@@ -108,7 +108,7 @@ create_data = function () {
         nCode = length(Code10)
 
         if (length(Code8) > 0) {
-            meta_obs = extract_meta(computer_data_path,
+            meta_obs = create_meta(computer_data_path,
                                     obs_dir,
                                     Code8_filename,
                                     verbose=subverbose)
@@ -154,7 +154,7 @@ create_data = function () {
             Model = Chain
             
             # Extract data about selected stations
-            data_obs = extract_data(computer_data_path,
+            data_obs = create_data(computer_data_path,
                                     obs_dir,
                                     Code8_filename,
                                     val2keep=c(val_E2=0),
@@ -165,8 +165,8 @@ create_data = function () {
                            data_obs,
                            dplyr::between(
                                       Date,
-                                      as.Date(period_analyse[1]),
-                                      as.Date(period_analyse[2])))
+                                      as.Date(period_extract[1]),
+                                      as.Date(period_extract[2])))
 
             data_obs$Code = convert_codeNtoM(data_obs$Code)
             
@@ -237,6 +237,7 @@ create_data = function () {
                                                    Ref=Q_obs))
                 data = dplyr::relocate(data, Q_obs, .before=Q_sim)
             }
+            
             data = dplyr::relocate(data, "T", .before=ET0)
 
             for (i in 1:nVal2check) {

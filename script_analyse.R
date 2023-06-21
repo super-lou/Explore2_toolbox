@@ -19,67 +19,29 @@
 # along with Explore2 R toolbox.
 # If not, see <https://www.gnu.org/licenses/>.
 
-CARD_analyse_data = function () {
-    data = read_tibble(filedir=tmppath,
-                       filename=paste0("data_",
-                                       files_name_opt.,
-                                       subset_name, ".fst"))
-    meta = read_tibble(filedir=tmppath,
-                       filename=paste0("meta_",
-                                       files_name_opt.,
-                                       subset_name, ".fst"))
-
-    Model = levels(factor(data$Model))
-    nModel = length(Model)
-    
-    Code_available = levels(factor(data$Code))
-    Code = Code_available[Code_available %in% CodeSUB10]
-    nCode = length(Code)
-
-    for (i in 1:length(analyse_data)) {
-        
-        analyse = analyse_data[[i]]
-
-        CARD_management(CARD=CARD_path,
-                        tmp=tmppath,
-                        layout=c(paste0(analyse$name, "_", rank), "[",
-                                 analyse$variables, "]"),
-                        overwrite=FALSE)
-
-        res = CARD_extraction(data,
-                              CARD_path=CARD_path,
-                              CARD_dir=paste0(analyse$name, "_", rank),
-                              CARD_tmp=tmppath,
-                              period=period_analyse,
-                              simplify=analyse$simplify,
-                              suffix=analyse$suffix,
-                              expand_overwrite=analyse$expand,
-                              cancel_lim=analyse$cancel_lim,
-                              verbose=subverbose)
-
-        write_tibble(res$dataEX,
-                     filedir=tmppath,
-                     filename=paste0("dataEX_", analyse$name, "_",
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
-        write_tibble(res$metaEX,
-                     filedir=tmppath,
-                     filename=paste0("metaEX_", analyse$name, "_",
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
-        rm ("res")
-        gc()
-    }
-
-    rm ("data")
-    gc()
-    rm ("meta")
-    gc()
-}
-
 
 ## 1. ANALYSING OF DATA ______________________________________________
 if ('analyse_data' %in% to_do) {
-    post("### Analysing data")
-    CARD_analyse_data()
+    post("### Analaysing data")
+    
+    print("number of simulated station")
+    print(summarise(group_by(dataEX_criteria, Model),
+                    n=length(unique(Code))))
+
+    print("Choice of best modele for complete")
+    # which(is.na(meta$Surface_km2))
+    # which(is.na(meta[["Surface_MORDOR-SD_km2"]]))
+    # which(is.na(meta$Surface_SMASH_km2))
+    SMASH_surface =
+        sum(abs(meta$Surface_km2 - meta[["Surface_SMASH_km2"]]) /
+            meta$Surface_km2,
+            na.rm=TRUE)
+    MORDOR_SD_surface =
+        sum(abs(meta$Surface_km2 - meta[["Surface_MORDOR-SD_km2"]]) /
+        meta$Surface_km2,
+        na.rm=TRUE)
+    print("SMASH")
+    print(SMASH_surface)
+    print("MORDOR-SD")
+    print(MORDOR_SD_surface)
 }
