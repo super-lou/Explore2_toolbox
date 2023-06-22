@@ -537,8 +537,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 }
                 model = names(diag_station_selection)[j]
                 code = diag_station_selection[j]
-                meta[[paste0("Surface_", model, "_km2")]][grepl(code, meta$Code)] = NA
-            } 
+                meta[[paste0("Surface_", model, "_km2")]][grepl(code,
+                                                                meta$Code)] = NA
+            }
             
             for (i in 1:length(extract_data)) {
                 extract = extract_data[[i]]
