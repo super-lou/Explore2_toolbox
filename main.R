@@ -150,9 +150,9 @@ to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        'create_data'
+        'create_data',
         # 'extract_data',
-        # 'save_extract'
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
