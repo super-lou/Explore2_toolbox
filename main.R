@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -150,14 +150,14 @@ to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
-        'analyse_data'
+        # 'analyse_data'
         # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
@@ -264,9 +264,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -286,10 +286,10 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 25
+nCode4RAM = 9
 use_proj_merge =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 projs_to_use =
     c(
