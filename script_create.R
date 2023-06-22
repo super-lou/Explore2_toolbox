@@ -108,10 +108,10 @@ create_data = function () {
         nCode = length(Code10)
 
         if (length(Code8) > 0) {
-            meta_obs = create_meta(computer_data_path,
-                                    obs_dir,
-                                    Code8_filename,
-                                    verbose=subverbose)
+            meta_obs = create_meta_HYDRO(computer_data_path,
+                                         obs_dir,
+                                         Code8_filename,
+                                         verbose=subverbose)
         } else {
             meta_obs = dplyr::tibble()
         }
@@ -154,11 +154,11 @@ create_data = function () {
             Model = Chain
             
             # Extract data about selected stations
-            data_obs = create_data(computer_data_path,
-                                    obs_dir,
-                                    Code8_filename,
-                                    val2keep=c(val_E2=0),
-                                    verbose=subverbose)
+            data_obs = create_data_HYDRO(computer_data_path,
+                                         obs_dir,
+                                         Code8_filename,
+                                         val2keep=c(val_E2=0),
+                                         verbose=subverbose)
             
             data_obs =
                 dplyr::filter(
