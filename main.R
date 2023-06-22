@@ -150,13 +150,14 @@ to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        'create_data'
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'criteria_selection',
         # 'write_warnings'
+        # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
         # 'plot_doc'
@@ -166,14 +167,14 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_performance'
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
         # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME', 
+        # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF'
-        # 'Explore2_serie_diag_plot',
+        # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj',
@@ -238,8 +239,8 @@ extract_data =
 plot_sheet =
     c(
         # 'summary'
-        # 'diagnostic_matrix'
-        'diagnostic_station'
+        'diagnostic_matrix'
+        # 'diagnostic_station'
         # 'diagnostic_region'
         # 'diagnostic_regime'
     )
@@ -346,9 +347,9 @@ codes_to_use =
 
         ## pourri
         # "H640201001" #SIM2
-        # "H640201001"
         # "B413201001" #CTRIP
-        # "D020601001"
+        # "D020601001" #CTRIP
+        # "K649*" #ORCHIDEE
     )
 
 # existant :
@@ -392,11 +393,11 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("KGEracine"),
-         # suffix=c("_sim"),
+         variables=c("KGE", "STD"),
+         # suffix=c("_obs""_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
-         expand=TRUE,
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=FALSE)
 
@@ -582,6 +583,11 @@ diag_criteria_selection =
 diag_period_selection =
     list(
         "MORDOR-TS"=c(NA, as.Date("2017-08-31"))
+    )
+
+diag_station_selection =
+    c(
+        "ORCHIDEE"="K649*"
     )
 
 
@@ -812,9 +818,11 @@ merge_nc = FALSE
 read_tmp = FALSE
 
 
-extract_data_tmp = lapply(extract_data, get)
-names(extract_data_tmp) = extract_data
-extract_data = extract_data_tmp
+# if ('extract_data' %in% to_do) {
+    extract_data_tmp = lapply(extract_data, get)
+    names(extract_data_tmp) = extract_data
+    extract_data = extract_data_tmp
+# }
 
 
 if ('plot_doc' %in% to_do) {
@@ -1239,7 +1247,7 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                  paste0("timer_", rank, ".txt"))
 }
 
-if (any(c('criteria_selection', 'write_warnings',
+if (any(c('criteria_selection', 'write_warnings', 'add_regime_hydro',
           'read_saving') %in% to_do)) {
     post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),

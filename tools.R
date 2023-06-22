@@ -482,10 +482,6 @@ find_Warnings = function (dataEXind, metaEXind,
 
         dataEXind_code = dataEXind[dataEXind$Code == code,]
         
-        # logicalCol = names(dataEXind_code)[sapply(dataEXind_code, class) == "logical"]
-        # dataEXind_code = dataEXind_code[!(names(dataEXind_code) %in% logicalCol)]
-        # metaEXind = metaEXind[!(metaEXind$var %in% logicalCol),]
-        
         vars2keep = names(dataEXind_code)
         vars2keep = vars2keep[!grepl("([_]obs)|([_]sim)", vars2keep)]
 

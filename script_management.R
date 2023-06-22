@@ -27,14 +27,17 @@ manage_data = function () {
         extract = extract_data[[i]]
 
         if (exists("meta")) {
+            rm ("meta", envir=.GlobalEnv)
             rm ("meta")
             gc()
         }
         if (exists("metaEX")) {
+            rm ("metaEX", envir=.GlobalEnv)
             rm ("metaEX")
             gc()
         }
         if (exists("dataEX")) {
+            rm ("dataEX", envir=.GlobalEnv)
             rm ("dataEX")
             gc()
         }
@@ -77,10 +80,14 @@ manage_data = function () {
                 dataEX_tmp = read_tibble(filedir=tmppath,
                                          filename=filename)
                 
-
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
                 } else {
+
+                    print(dataEX_tmp)
+                    print(dataEX)
+                    print("")
+                    
                     if (extract$simplify) {
                         dataEX = dplyr::bind_rows(dataEX,
                                                   dataEX_tmp)
@@ -495,18 +502,27 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             }
         }
         if (merge_read_saving) {
-            extract_data = list()
-            extract_data = append(extract_data,
-                                  list(list(name='criteria',
-                                            variables=metaEX_criteria$var,
-                                            simplify=TRUE)))
-            names(extract_data)[length(extract_data)] = "criteria"
-            
-            extract_data = append(extract_data,
-                                  list(list(name='serie',
-                                            variables=metaEX_serie$var,
-                                            simplify=FALSE)))
-            names(extract_data)[length(extract_data)] = "serie"
+            extract_data_tmp = list()
+            if (any(sapply(extract_data, '[[', 'simplify'))) {
+                extract_data_tmp =
+                    append(extract_data_tmp,
+                           list(list(name='criteria',
+                                     variables=
+                                         metaEX_criteria$var,
+                                     simplify=TRUE)))
+                names(extract_data_tmp)[length(extract_data_tmp)] =
+                    "criteria"
+            }
+            if (any(!sapply(extract_data, '[[', 'simplify'))) {
+                extract_data_tmp =
+                    append(extract_data_tmp,
+                           list(list(name='serie',
+                                     variables=metaEX_serie$var,
+                                     simplify=FALSE)))
+                names(extract_data_tmp)[length(extract_data_tmp)] =
+                    "serie"
+            }
+            extract_data = extract_data_tmp
         }
     }
 
@@ -514,6 +530,16 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         post("### Selecting variables")
 
         if (mode == "diag") {
+
+            for (j in 1:length(diag_station_selection)) {
+                if (length(diag_station_selection) == 0) {
+                    break
+                }
+                model = names(diag_station_selection)[j]
+                code = diag_station_selection[j]
+                meta[[paste0("Surface_", model, "_km2")]][grepl(code, meta$Code)] = NA
+            } 
+            
             for (i in 1:length(extract_data)) {
                 extract = extract_data[[i]]
 
@@ -535,9 +561,19 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                     pattern=pattern)
                     row2rm = sapply(metaEXtmp$var, any_grepl,
                                     pattern=pattern)
-                    
                     dataEXtmp = dataEXtmp[col2rm]
                     metaEXtmp = metaEXtmp[row2rm,]
+                    
+                    for (j in 1:length(diag_station_selection)) {
+                        if (length(diag_station_selection) == 0) {
+                            break
+                        }
+                        model = names(diag_station_selection)[j]
+                        code = diag_station_selection[j]
+                        dataEXtmp = dplyr::filter(dataEXtmp,
+                                                  !(Model == model &
+                                                    grepl(code, Code)))  
+                    }
 
                 } else {
                     for (j in 1:length(diag_period_selection)) {
@@ -564,6 +600,20 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                                start < Date &
                                                Date < end))
                         }
+
+                    }
+                    for (j in 1:length(diag_station_selection)) {
+                        if (length(diag_station_selection) == 0) {
+                            break
+                        }
+                        model = names(diag_station_selection)[j]
+                        code = diag_station_selection[j]
+                        for (k in 1:length(dataEXtmp)) {
+                            dataEXtmp[[k]] =
+                                dplyr::filter(dataEXtmp[[k]],
+                                              !(Model == model &
+                                                grepl(code, Code)))
+                        }
                     }
                 }
                 assign(dataEXname, dataEXtmp)
@@ -583,6 +633,48 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 Warnings = find_Warnings(dataEX, metaEX,
                                          resdir=today_resdir,
                                          save=TRUE)
+            }
+        }
+    }
+
+    if ('add_regime_hydro' %in% to_do) {
+        post("### Add hydro regime")
+
+        for (i in 1:length(extract_data)) {
+            extract = extract_data[[i]]
+
+            if (!extract$simplify) {
+                dataEX = get(paste0("dataEX_", extract$name))
+                meta = get("meta")
+
+                Code = levels(factor(dataEX$Code))
+                nCode = length(Code)
+
+                dataEXserieQM_obs =
+                    dplyr::summarise(dplyr::group_by(dataEX$QM,
+                                                     Code, Date),
+                                     QM=select_good(QM_obs),
+                                     .groups="drop")
+                dataEXseriePA_med =
+                    dplyr::summarise(dplyr::group_by(dataEX$PA,
+                                                     Code, Date),
+                                     PAs=median(PAs_obs, na.rm=TRUE),
+                                     PAl=median(PAl_obs, na.rm=TRUE),
+                                     PA=median(PA_obs, na.rm=TRUE),
+                                     .groups="drop")
+                regimeHydro = find_regimeHydro(dataEXserieQM_obs,
+                                               lim_number=2,
+                                               dataEXseriePA_med)
+
+                ok = names(regimeHydro) != "Code"
+                names(regimeHydro)[ok] =
+                    paste0("Regime_hydro_", names(regimeHydro)[ok])
+                
+                meta = dplyr::full_join(meta, regimeHydro, "Code")
+                
+                write_tibble(meta,
+                             filedir=today_resdir,
+                             filename="meta.fst")
             }
         }
     }
