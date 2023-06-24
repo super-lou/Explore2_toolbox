@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -117,8 +117,8 @@ lib_path =
 #     based on var2search.
 #     > Same as 'read_tmp' results but again from resdir/.
 #
-# - 'criteria_selection' :
-#     Select only the criteria listed in the criteria_selection
+# - 'selection' :
+#     Select only the criteria listed in the selection
 #     variable in the extracted data.
 #     > For example, if dataEXind exists, it will returns the same
 #       dataEXind tibble but only with columns of selected criteria. 
@@ -148,14 +148,14 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
+        'delete_tmp',
         # 'merge_nc'
         'create_data',
         'extract_data',
-        'save_extract'
-        # 'read_tmp'
-        # 'read_saving',
-        # 'criteria_selection',
+        # 'save_extract'
+        'read_tmp'
+        # 'read_saving'
+        # 'selection',
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -166,14 +166,14 @@ to_do =
 
 extract_data =
     c(
-        # 'WIP'
-        'Explore2_criteria_diag_performance'
+        'WIP'
+        # 'Explore2_criteria_diag_performance',
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
         # 'Explore2_criteria_diag_HE',
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF'
+        # 'Explore2_criteria_diag_BF',
         # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
@@ -239,8 +239,8 @@ extract_data =
 plot_sheet =
     c(
         # 'summary'
-        'diagnostic_matrix'
-        # 'diagnostic_station'
+        # 'diagnostic_matrix'
+        'diagnostic_station'
         # 'diagnostic_region'
         # 'diagnostic_regime'
     )
@@ -248,9 +248,9 @@ plot_sheet =
 ### 3.2. Document ____________________________________________________
 plot_doc =
     c(
-        # "diagnostic_matrix"
+        "diagnostic_matrix"
         # 'diagnostic_regime'
-        'diagnostic_region'
+        # 'diagnostic_region'
     )
 
 
@@ -260,14 +260,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -287,7 +287,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 14
+nCode4RAM = 100
 use_proj_merge =
     # TRUE
     FALSE
@@ -314,14 +314,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS", 
-        "ORCHIDEE", 
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS", 
+        # "ORCHIDEE", 
         "SMASH"
     )
 complete_by = "MORDOR-SD"
@@ -329,8 +329,8 @@ complete_by = "MORDOR-SD"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "^I"
 
 
@@ -393,8 +393,8 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("KGE", "STD"),
-         # suffix=c("_obs""_sim"),
+         variables=c("QJXA"),
+         suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
          expand=FALSE,
@@ -472,7 +472,7 @@ Explore2_criteria_diag_BF =
 
 Explore2_serie_diag_plot = 
     list(name='Explore2_serie_diag_plot',
-         variables=c("QM", "QA", "PA",
+         variables=c("QM", "QA", "PA_all",
                      "medQJC5", "CDC"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
@@ -573,7 +573,7 @@ merge_read_saving =
     TRUE
     # FALSE
 
-# ## 5. CRITERIA_SELECTION _____________________________________________
+# ## 5. SELECTION _____________________________________________
 diag_criteria_selection =
 #     # "all"
     c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$",
@@ -991,7 +991,6 @@ CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
 CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
 nCodeALL = length(CodeALL10)
 
-
 if (MPI != "") {
     tmppath = file.path(computer_work_path,
                         paste0(tmpdir,
@@ -1247,7 +1246,7 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                  paste0("timer_", rank, ".txt"))
 }
 
-if (any(c('criteria_selection', 'write_warnings', 'add_regime_hydro',
+if (any(c('selection', 'write_warnings', 'add_regime_hydro',
           'read_saving') %in% to_do)) {
     post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),

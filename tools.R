@@ -777,6 +777,9 @@ find_Warnings = function (dataEXind, metaEXind,
         write_tibble(Warnings,
                      filedir=resdir,
                      filename="Warnings.fst")
+        write_tibble(frq,
+                     filedir=resdir,
+                     filename="Warnings_frequency.fst")
     }
     return (list(Warnings=Warnings, frq=frq))
 }
