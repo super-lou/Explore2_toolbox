@@ -155,12 +155,12 @@ to_do =
         # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection',
+        # 'selection'
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
-        # 'plot_sheet'
-        'plot_doc'
+        'plot_sheet'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
@@ -242,15 +242,16 @@ plot_sheet =
         # 'diagnostic_matrix'
         # 'diagnostic_station'
         # 'diagnostic_region'
-        'diagnostic_regime'
+        # 'diagnostic_regime'
+        'diagnostic_map'
     )
 
 ### 3.2. Document ____________________________________________________
 plot_doc =
     c(
         # "diagnostic_matrix"
-        # 'diagnostic_regime'
-        'diagnostic_region'
+        'diagnostic_regime'
+        # 'diagnostic_region'
     )
 
 
@@ -606,8 +607,8 @@ river_length =
     
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
-    # 1000 # normal map
-    9000 # mini map
+    1000 # normal map
+    # 9000 # mini map
 
 # Which logo do you want to show in the footnote
 logo_to_show =

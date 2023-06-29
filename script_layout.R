@@ -63,6 +63,22 @@ plot_sheet_diagnostic_station = function (dataEXind_chunk,
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
+group_of_models_to_use =
+    list(
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SMASH",        
+        "Multi-Model"=
+            c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
+              "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
+    )
+
 
 if (!exists("Shapefiles")) {
     post("### Loading shapefiles")
@@ -135,15 +151,9 @@ for (i in 1:nChunk) {
         today_figdir_leaf = today_figdir
     }
 
-    if (any(c("diagnostic_station", "diagnostic_region",
-              "diagnostic_regime") %in% plot_list)) {
-        dataEXind = dataEX_criteria
-        metaEXind_chunk = metaEX_criteria
-        dataEXserie = dataEX_serie
-    } else if ("diagnostic_matrix" %in% plot_list) {
-        dataEXind = dataEX_criteria
-        metaEXind_chunk = metaEX_criteria
-    }
+    dataEXind = dataEX_criteria
+    metaEXind_chunk = metaEX_criteria
+    dataEXserie = dataEX_serie
 
     if (exists("dataEXind")) {
         dataEXind_chunk = dataEXind[dataEXind$Code %in% chunk,]
@@ -171,21 +181,6 @@ for (i in 1:nChunk) {
 
         if (sheet == 'diagnostic_matrix') {
             post("### Plotting correlation matrix")
-            group_of_models_to_use =
-                list(
-                    "CTRIP",
-                    "EROS",
-                    "GRSD",
-                    "J2000",
-                    "SIM2",
-                    "MORDOR-SD",
-                    "MORDOR-TS",
-                    "ORCHIDEE",
-                    "SMASH",        
-                    "Multi-Model"=
-                        c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
-                          "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
-                )
             df_page = sheet_correlation_matrix(
                 dataEXind_chunk,
                 metaEXind_chunk,
@@ -196,6 +191,23 @@ for (i in 1:nChunk) {
                 df_page=df_page,
                 verbose=subverbose)
         }
+
+
+        if (sheet == 'diagnostic_map') {
+            post("### Plotting map")
+            df_page = sheet_criteria_map(
+                dataEXind_chunk,
+                metaEXind_chunk,
+                meta,
+                ModelGroup=group_of_models_to_use,
+                icon_path=icon_path,
+                logo_path=logo_path,
+                figdir=today_figdir_leaf,
+                df_page=df_page,
+                Shapefiles=Shapefiles,
+                verbose=subverbose)
+        }
+        
 
         if (sheet == 'diagnostic_regime') {
             post("### Plotting sheet diagnostic regime")
@@ -270,9 +282,11 @@ for (i in 1:nChunk) {
         if (!is.null(chunkname)) {            
             pdf_combine(input=listfile_path,
                         output=file.path(today_figdir,
+                                         doc_name_ns,
                                          doc_chunkname,
                                          paste0(doc_chunkname,
                                                 ".pdf")))
+            
         } else {
             pdf_combine(input=listfile_path,
                         output=file.path(today_figdir,
