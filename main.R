@@ -155,7 +155,7 @@ to_do =
         # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection'
+        # 'selection',
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -261,8 +261,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -394,7 +394,7 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("QJXA"),
+         variables=c("med{dtRec}"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
@@ -631,7 +631,8 @@ Colors_of_models = c(
     "MORDOR-TS"="#ae473e", #rouge
     "ORCHIDEE"="#efa59d", #rose #f5c8c3
     "SIM2"="#475e6a", #bleu foncé
-    "SMASH"="#f6ba62" #mimosa    
+    "SMASH"="#f6ba62", #mimosa
+    "Multi-model"=""
 )
 
 

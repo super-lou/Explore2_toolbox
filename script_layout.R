@@ -65,18 +65,18 @@ icon_path = file.path(resources_path, icon_dir)
 
 group_of_models_to_use =
     list(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SMASH",        
-        "Multi-Model"=
-            c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
-              "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        "SMASH"       
+        # "Multi-model"=
+            # c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
+              # "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
     )
 
 
@@ -200,6 +200,7 @@ for (i in 1:nChunk) {
                 metaEXind_chunk,
                 meta,
                 ModelGroup=group_of_models_to_use,
+                Colors=Colors_of_models,
                 icon_path=icon_path,
                 logo_path=logo_path,
                 figdir=today_figdir_leaf,
