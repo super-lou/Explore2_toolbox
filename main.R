@@ -178,6 +178,7 @@ extract_data =
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj',
+        
         # 'Explore2_serie_more_proj'
     )
 
@@ -261,8 +262,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =

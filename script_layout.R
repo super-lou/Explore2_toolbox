@@ -63,23 +63,6 @@ plot_sheet_diagnostic_station = function (dataEXind_chunk,
 logo_path = load_logo(resources_path, logo_dir, logo_to_show)
 icon_path = file.path(resources_path, icon_dir)
 
-group_of_models_to_use =
-    list(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
-        "SMASH"       
-        # "Multi-model"=
-            # c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
-              # "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
-    )
-
-
 if (!exists("Shapefiles")) {
     post("### Loading shapefiles")
     Shapefiles = load_shapefile(
@@ -181,6 +164,21 @@ for (i in 1:nChunk) {
 
         if (sheet == 'diagnostic_matrix') {
             post("### Plotting correlation matrix")
+            group_of_models_to_use =
+                list(
+                    "CTRIP",
+                    "EROS",
+                    "GRSD",
+                    "J2000",
+                    "SIM2",
+                    "MORDOR-SD",
+                    "MORDOR-TS",
+                    "ORCHIDEE",
+                    "SMASH",     
+                    "Multi-model"=
+                        c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
+                          "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
+                )
             df_page = sheet_correlation_matrix(
                 dataEXind_chunk,
                 metaEXind_chunk,
@@ -195,6 +193,17 @@ for (i in 1:nChunk) {
 
         if (sheet == 'diagnostic_map') {
             post("### Plotting map")
+            group_of_models_to_use =
+                list(
+                    "CTRIP",
+                    "EROS",
+                    "GRSD",
+                    "J2000",
+                    "SIM2",
+                    "MORDOR-SD",
+                    "MORDOR-TS",
+                    "ORCHIDEE",
+                    "SMASH")
             df_page = sheet_criteria_map(
                 dataEXind_chunk,
                 metaEXind_chunk,
