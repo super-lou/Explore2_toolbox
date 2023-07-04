@@ -142,15 +142,19 @@ lib_path =
 #       those individual file in a specific directory of the figdir/
 #       directory.
 
+type =
+    # "hydrologie"
+    "piezometrie"
+
 mode =
-    "diag"
-    # "proj"
+    "diagnostic"
+  # "projection"
 
 to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        # 'create_data',
+        'create_data'
         # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
@@ -159,7 +163,7 @@ to_do =
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -805,9 +809,9 @@ convert2bool = function (X, true) {
     return (X)
 }
 
-if (mode == "diag") {
+if (mode == "diagnostic") {
     period_extract = period_extract_diag
-} else if (mode == "proj") {
+} else if (mode == "projection") {
     period_extract = period_extract_proj
     var2save = var2save[var2save != "data"]
 }
@@ -832,7 +836,7 @@ if ('plot_doc' %in% to_do) {
     plot_doc = get(paste0("doc_", plot_doc[1]))
 }
 
-if (mode == "proj") {
+if (mode == "projection") {
     projs_selection_data = read_tibble(file.path(computer_data_path,
                                                  projs_selection_file))  
     EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
@@ -870,12 +874,12 @@ if (mode == "proj") {
     
     if (use_proj_merge) {
         proj_path = file.path(computer_data_path,
-                               proj_merge_dir)
+                              paste0(mode, "_merge"))
         projs_selection_data =
             projs_selection_data[projs_selection_data$EXP !=
                                  "historical",]
     } else {
-        proj_path = file.path(computer_data_path, proj_dir)
+        proj_path = file.path(computer_data_path, mode)
     }    
 
     Paths = list.files(proj_path,
@@ -925,10 +929,10 @@ if (mode == "proj") {
                  filedir=today_resdir,
                  filename="projs_selection.txt")
     
-} else if (mode == "diag") { #####
-    diag_path = file.path(computer_data_path, diag_dir)
+} else if (mode == "diagnostic") { #####
+    diag_path = file.path(computer_data_path, mode)
     models_to_use_name = models_to_use
-    models_path = list.files(file.path(computer_data_path, diag_dir),
+    models_path = list.files(file.path(computer_data_path, mode),
                              full.names=TRUE)
     models_file = basename(models_path)
     files_to_use = lapply(models_to_use, apply_grepl,
@@ -941,7 +945,7 @@ nFiles_to_use = length(files_to_use)
 
 
 codes_selection_data = read_tibble(file.path(computer_data_path,
-                                             codes_selection_file))
+                                             codes_hydro_selection_file))
 codes_selection_data = dplyr::filter(codes_selection_data,
                                      !grepl("Supprimer", X))
 
@@ -957,9 +961,9 @@ write_tibble(codes_selection_data,
              filedir=today_resdir,
              filename="codes_selection_data.txt")
 
-if (mode == "diag") {
+if (mode == "diagnostic") {
     ref = 1
-} else if (mode == "proj") {
+} else if (mode == "projection") {
     ref = c(0, 1)
 }
 codes_selection_data =
@@ -981,9 +985,9 @@ if (all(codes_to_use == "all")) {
                          # codes_to_use[nchar(codes_to_use) == 10]]
     codes_to_use = convert_codeNtoM(codes_to_use, 10, 8, top=NULL)
     codes_to_use = convert_regexp(computer_data_path,
-                                  obs_dir,
+                                  obs_hydro_dir,
                                   codes_to_use,
-                                  obs_format)
+                                  obs_hydro_format)
     
     okCode = codes_to_use %in% codes8_selection
     CodeALL8 = codes_to_use[okCode]

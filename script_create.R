@@ -56,18 +56,21 @@ create_data = function () {
 
                 if (grepl(".*[.]nc", p)) {
                     data_sim_tmp = NetCDF_to_tibble(p,
-                                                chain=chain,
-                                                mode=mode)
+                                                    chain=chain,
+                                                    type=type,
+                                                    mode=mode)
                 }
                 if (is.null(data_sim_tmp)) {
                     data_sim_tmp = dplyr::tibble()
                 } else {
-                    data_sim_tmp$Code =
-                        convert_codeNtoM(data_sim_tmp$Code)
-                    data_sim_tmp = data_sim_tmp[data_sim_tmp$Code %in%
-                                                CodeSUB10,]
-                    data_sim_tmp =
-                        data_sim_tmp[order(data_sim_tmp$Code),]
+                    if (type == "hydrologie") {
+                        data_sim_tmp$Code =
+                            convert_codeNtoM(data_sim_tmp$Code)
+                        data_sim_tmp = data_sim_tmp[data_sim_tmp$Code %in%
+                                                    CodeSUB10,]
+                        data_sim_tmp =
+                            data_sim_tmp[order(data_sim_tmp$Code),]
+                    }
                 }
                 data_sim = dplyr::bind_rows(data_sim, data_sim_tmp)
 
@@ -95,21 +98,15 @@ create_data = function () {
                        Surface_km2=
                            as.numeric(codes_selection_data$S_HYDRO[id]))
 
-        # meta$Nom = gsub("L[']", "L ", meta$Nom)
-        # meta$Nom = gsub(" A ", " à ",
-        #                 stringr::str_to_title(meta$Nom))
-        # meta$Nom = gsub("^L ", "L'", meta$Nom)
-        # meta$Nom = gsub(" l ", " l'", meta$Nom)
-
         Code10_available = levels(factor(data_sim$Code))
         Code10 = Code10_available[Code10_available %in% CodeSUB10]
         Code8 = CodeALL8[match(Code10, CodeALL10)]
-        Code8_filename = paste0(Code8, obs_format)
+        Code8_filename = paste0(Code8, obs_hydro_format)
         nCode = length(Code10)
 
         if (length(Code8) > 0) {
             meta_obs = create_meta_HYDRO(computer_data_path,
-                                         obs_dir,
+                                         obs_hydro_dir,
                                          Code8_filename,
                                          verbose=subverbose)
         } else {
@@ -148,14 +145,14 @@ create_data = function () {
 
         val2check = c("T", "ET0", "P", "Pl", "Ps")
         
-        if (mode == "diag") {
+        if (mode == "diagnostic") {
             post("### Observation data")
 
             Model = Chain
             
             # Extract data about selected stations
             data_obs = create_data_HYDRO(computer_data_path,
-                                         obs_dir,
+                                         obs_hydro_dir,
                                          Code8_filename,
                                          val2keep=c(val_E2=0),
                                          verbose=subverbose)
@@ -250,7 +247,7 @@ create_data = function () {
                 data = dplyr::select(data, -val2check[i])
             }
 
-        } else if (mode == "proj") {
+        } else if (mode == "projection") {
             data = data_sim
 
             rm ("data_sim")

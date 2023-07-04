@@ -57,12 +57,12 @@ cdo_cmd_path = "/home/herautl/cdo/bin/cdo"
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
 computer_data_path = '/home/herautl/scratch/data'
-obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
-obs_format = "_HYDRO_QJM.txt"
-diag_dir = "Explore2/diagnostic"
-proj_dir = "Explore2/projection"
+obs_hydro_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
+obs_hydro_format = "_HYDRO_QJM.txt"
+mode = "Explore2/diagnostic"
+mode = "Explore2/projection"
 proj_merge_dir = "Explore2/projection_merge"
-codes_selection_file = "Explore2/Selection_points_simulation_V20230510.txt"
+codes_hydro_selection_file = "Explore2/Selection_points_simulation_V20230510.txt"
 projs_selection_file = "Explore2/ensembleProjectionClimatExplore2.txt"
 
 ### 2.2. Variables ___________________________________________________

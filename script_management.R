@@ -524,7 +524,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
     if ('selection' %in% to_do) {
         post("### Selecting variables")
 
-        if (mode == "diag") {
+        if (mode == "diagnostic") {
 
             for (j in 1:length(diag_station_selection)) {
                 if (length(diag_station_selection) == 0) {

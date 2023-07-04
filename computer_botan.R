@@ -55,13 +55,14 @@ cdo_cmd_path = "cdo"
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
 computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
-obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
-obs_format = "_HYDRO_QJM.txt"
-diag_dir = "Explore2/diagnostic"
-proj_dir = "Explore2/projection"
-proj_merge_dir = "Explore2/projection_merge"
-codes_selection_file = "Explore2/Selection_points_simulation_V20230510.txt"
-projs_selection_file = "Explore2/ensembleProjectionClimatExplore2.txt"
+projs_selection_file = "Explore2/hydrologie/ensembleProjectionClimatExplore2.txt"
+#### 2.1.1 Hydro _____________________________________________________
+obs_hydro_dir = "Explore2/hydrologie/Explore2 HYDRO QJM critiques 2023"
+obs_hydro_format = "_HYDRO_QJM.txt"
+codes_hydro_selection_file = "Explore2/hydrologie/Selection_points_simulation_V20230510.txt"
+#### 2.1.2. Piezo ____________________________________________________
+obs_piezo_dir = "Explore2/piezometrie/diagnostic/diagnostic_piezos_ref_explore2_v1.nc"
+codes_piezo_selection_file = "Explore2/piezometrie/piezometres_references_hubeau.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
@@ -103,6 +104,10 @@ entiteHydro_coord = c('L93', 'L2')
 river_dir = file.path('map', 'river')
 river_file = 'CoursEau_FXX.shp'
 
+entitePiezo_dir = file.path(shp_dir, 'entitePiezo_niveau1_extension')
+entitePiezo_file = "entitePiezo_niveau1_extension.shp"
+piezoRef_dir = file.path(shp_dir, 'piezometres_references')
+piezoRef_file = "piezometres_references.shp"
 
 ## 3. OUTPUT DIRECTORIES _____________________________________________
 ### 3.0. Info ________________________________________________________
