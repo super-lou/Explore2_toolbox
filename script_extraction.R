@@ -21,20 +21,18 @@
 
 CARD_extract_data = function () {
     data = read_tibble(filedir=tmppath,
-                       filename=paste0("data_",
+                       filename=paste0("data", sep,
                                        files_name_opt.,
                                        subset_name, ".fst"))
+    
     meta = read_tibble(filedir=tmppath,
-                       filename=paste0("meta_",
+                       filename=paste0("meta", sep,
                                        files_name_opt.,
                                        subset_name, ".fst"))
 
-    Model = levels(factor(data$Model))
-    nModel = length(Model)
-    
-    Code_available = levels(factor(data$Code))
-    Code = Code_available[Code_available %in% CodeSUB10]
-    nCode = length(Code)
+    if (type == "piezometrie") {
+        data = dplyr::rename(data, Q_obs=H_obs, Q_sim=H_sim)
+    }
 
     for (i in 1:length(extract_data)) {
         
@@ -59,12 +57,12 @@ CARD_extract_data = function () {
 
         write_tibble(res$dataEX,
                      filedir=tmppath,
-                     filename=paste0("dataEX_", extract$name, "_",
+                     filename=paste0("dataEX_", extract$name, sep,
                                      files_name_opt.,
                                      subset_name, ".fst"))
         write_tibble(res$metaEX,
                      filedir=tmppath,
-                     filename=paste0("metaEX_", extract$name, "_",
+                     filename=paste0("metaEX_", extract$name, sep,
                                      files_name_opt.,
                                      subset_name, ".fst"))
         rm ("res")
@@ -81,5 +79,5 @@ CARD_extract_data = function () {
 ## 1. EXTRACTION OF DATA ______________________________________________
 if ('extract_data' %in% to_do) {
     post("### Extracting data")
-    CARD_extract_data()
+    CARD_extract_data()    
 }

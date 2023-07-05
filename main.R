@@ -154,16 +154,17 @@ to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        'create_data'
-        # 'extract_data',
+        # 'reshape_data'
+        # 'create_data',
+        # 'extract_data'
         # 'save_extract'
         # 'read_tmp'
-        # 'read_saving',
+        'read_saving',
         # 'selection',
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -172,12 +173,12 @@ extract_data =
     c(
         # 'WIP'
         'Explore2_criteria_diag_performance',
-        'Explore2_criteria_diag_sensibilite',
-        'Explore2_criteria_diag_sensibilite_RAT',
-        'Explore2_criteria_diag_HE',
-        'Explore2_criteria_diag_ME',
-        'Explore2_criteria_diag_BE',
-        'Explore2_criteria_diag_BF',
+        # 'Explore2_criteria_diag_sensibilite',
+        # 'Explore2_criteria_diag_sensibilite_RAT',
+        # 'Explore2_criteria_diag_HE',
+        # 'Explore2_criteria_diag_ME',
+        # 'Explore2_criteria_diag_BE',
+        # 'Explore2_criteria_diag_BF',
         'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
@@ -247,8 +248,9 @@ plot_sheet =
         # 'diagnostic_matrix'
         # 'diagnostic_station'
         # 'diagnostic_region'
+        'diagnostic_couche'
         # 'diagnostic_regime'
-        'diagnostic_map'
+        # 'diagnostic_map'
     )
 
 ### 3.2. Document ____________________________________________________
@@ -266,8 +268,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -328,18 +330,20 @@ models_to_use =
         "MORDOR-SD",
         "MORDOR-TS", 
         "ORCHIDEE", 
-        "SMASH"
+        "SMASH",
+
+        "AquiFR",
+        "EROS Bretagne",
+        "MONA"
     )
 complete_by = "MORDOR-SD"
 
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
-        # "^I"
-
-
+        # 'all'
+        'K2981910', #ref
+        "00241X0012/P1"
         
         ## échange code
         # "K2240820",
@@ -399,7 +403,7 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("med{dtRec}"),
+         variables=c("medQJC5"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
@@ -485,6 +489,10 @@ Explore2_serie_diag_plot =
          cancel_lim=TRUE,
          simplify=FALSE)
 
+if (type == "piezometrie") {
+    Explore2_serie_diag_plot$variables = "medQJC5"
+}
+
 # proj safran
 Explore2_serie_proj_safran =
     list(name='Explore2_serie_proj_safran',
@@ -563,7 +571,7 @@ wait =
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving =
-    "diag/"
+    "diagnostic/"
     # "proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
 
 var2search =
@@ -632,12 +640,16 @@ Colors_of_models = c(
     "EROS"="#cecd8d", #vert clair
     "GRSD"="#619c6c", #vert foncé
     "J2000"="#74aeb9", #bleu clair
-    "MORDOR-SD"="#d8714e", #orange
+    "MORDOR-SD"="#d8714e", #orangeel
     "MORDOR-TS"="#ae473e", #rouge
     "ORCHIDEE"="#efa59d", #rose #f5c8c3
     "SIM2"="#475e6a", #bleu foncé
     "SMASH"="#f6ba62", #mimosa
-    "Multi-model"=""
+    "Multi-model"="",
+
+    "AquiFR"="#D394E3", #violet
+    "EROS Bretagne"="#FCCB0C", #jaune
+    "MONA"="#F38459" #orange
 )
 
 
@@ -836,212 +848,175 @@ if ('plot_doc' %in% to_do) {
     plot_doc = get(paste0("doc_", plot_doc[1]))
 }
 
-if (mode == "projection") {
-    projs_selection_data = read_tibble(file.path(computer_data_path,
-                                                 projs_selection_file))  
-    EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
-    names(projs_selection_data)[3:6] = EXP
-    projs_selection_data =
-        dplyr::mutate(projs_selection_data,
-                      dplyr::across(.cols=EXP,
-                                    .fns=convert2bool, true="x"))
-    projs_selection_data =
-        tidyr::pivot_longer(data=projs_selection_data,
-                            cols=EXP,
-                            names_to="EXP")
-    projs_selection_data$value = as.logical(projs_selection_data$value)
-    projs_selection_data = dplyr::filter(projs_selection_data, value)
-    projs_selection_data = dplyr::select(projs_selection_data, -"value")
+if (type == "hydrologie") {
 
-    BC = c("ADAMONT", "CDFt")
-    projs_selection_data = tidyr::crossing(projs_selection_data,
-                                           BC, Model=models_to_use)
-    projs_selection_data$ID =
-        paste0(projs_selection_data$GCM, "|",
-               projs_selection_data$EXP, "|",
-               projs_selection_data$RCM, "|",
-               projs_selection_data$BC, "|",
-               projs_selection_data$Model)
-    
-    projs_selection_data$regexp =
-        paste0(".*", 
-               gsub("[|]", ".*", projs_selection_data$ID),
-               ".*")
-    projs_selection_data$regexp = gsub("[-]", "[-]",
-                                       projs_selection_data$regexp)
-    projs_selection_data$regexp = gsub("[_]", "[_]",
-                                       projs_selection_data$regexp)
-    
-    if (use_proj_merge) {
-        proj_path = file.path(computer_data_path,
-                              paste0(mode, "_merge"))
+    if (mode == "projection") {
+        projs_selection_data = read_tibble(file.path(
+            computer_data_path,
+            type,
+            projs_selection_file))  
+        EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
+        names(projs_selection_data)[3:6] = EXP
         projs_selection_data =
-            projs_selection_data[projs_selection_data$EXP !=
-                                 "historical",]
-    } else {
-        proj_path = file.path(computer_data_path, mode)
-    }    
+            dplyr::mutate(projs_selection_data,
+                          dplyr::across(.cols=EXP,
+                                        .fns=convert2bool, true="x"))
+        projs_selection_data =
+            tidyr::pivot_longer(data=projs_selection_data,
+                                cols=EXP,
+                                names_to="EXP")
+        projs_selection_data$value = as.logical(projs_selection_data$value)
+        projs_selection_data = dplyr::filter(projs_selection_data, value)
+        projs_selection_data = dplyr::select(projs_selection_data, -"value")
 
-    Paths = list.files(proj_path,
-                       pattern=".*[.]nc",
-                       include.dirs=FALSE,
-                       full.names=TRUE,
-                       recursive=TRUE)
-    Files = basename(Paths)
-    
-    any_grepl = function (pattern, x) {
-        any(grepl(pattern, x))
-    }
-    projs_selection_data =
-        projs_selection_data[sapply(projs_selection_data$regexp,
-                                    any_grepl,
-                                    x=Files),]
-    projs_selection_data$file =
-        lapply(projs_selection_data$regexp, apply_grepl, table=Files)
-    projs_selection_data$path =
-        lapply(projs_selection_data$file,
-               apply_match, table=Files, target=Paths)
-    
-    projs_selection_data_nest = projs_selection_data
-    projs_selection_data = tidyr::unnest(projs_selection_data,
-                                         c(file, path))
-
-    if (all(projs_to_use != "all")) {
-
+        BC = c("ADAMONT", "CDFt")
+        projs_selection_data = tidyr::crossing(projs_selection_data,
+                                               BC, Model=models_to_use)
+        projs_selection_data$ID =
+            paste0(projs_selection_data$GCM, "|",
+                   projs_selection_data$EXP, "|",
+                   projs_selection_data$RCM, "|",
+                   projs_selection_data$BC, "|",
+                   projs_selection_data$Model)
         
-        OK = apply(as.matrix(
-            sapply(projs_to_use, grepl,
-                   x=projs_selection_data$file)),
-            1, any)
-        projs_selection_data = projs_selection_data[OK,]
-        OK_nest = apply(as.matrix(
-            sapply(projs_to_use, grepl,
-                   x=projs_selection_data_nest$regexp)),
-            1, any)
-        projs_selection_data_nest = projs_selection_data_nest[OK_nest,]
+        projs_selection_data$regexp =
+            paste0(".*", 
+                   gsub("[|]", ".*", projs_selection_data$ID),
+                   ".*")
+        projs_selection_data$regexp = gsub("[-]", "[-]",
+                                           projs_selection_data$regexp)
+        projs_selection_data$regexp = gsub("[_]", "[_]",
+                                           projs_selection_data$regexp)
+        
+        if (use_proj_merge) {
+            proj_path = file.path(computer_data_path, type,
+                                  paste0(mode, "_merge"))
+            projs_selection_data =
+                projs_selection_data[projs_selection_data$EXP !=
+                                     "historical",]
+        } else {
+            proj_path = file.path(computer_data_path, type, mode)
+        }    
+
+        Paths = list.files(proj_path,
+                           pattern=".*[.]nc",
+                           include.dirs=FALSE,
+                           full.names=TRUE,
+                           recursive=TRUE)
+        Files = basename(Paths)
+        
+        any_grepl = function (pattern, x) {
+            any(grepl(pattern, x))
+        }
+        projs_selection_data =
+            projs_selection_data[sapply(projs_selection_data$regexp,
+                                        any_grepl,
+                                        x=Files),]
+        projs_selection_data$file =
+            lapply(projs_selection_data$regexp, apply_grepl, table=Files)
+        projs_selection_data$path =
+            lapply(projs_selection_data$file,
+                   apply_match, table=Files, target=Paths)
+        
+        projs_selection_data_nest = projs_selection_data
+        projs_selection_data = tidyr::unnest(projs_selection_data,
+                                             c(file, path))
+
+        if (all(projs_to_use != "all")) {
+
+            
+            OK = apply(as.matrix(
+                sapply(projs_to_use, grepl,
+                       x=projs_selection_data$file)),
+                1, any)
+            projs_selection_data = projs_selection_data[OK,]
+            OK_nest = apply(as.matrix(
+                sapply(projs_to_use, grepl,
+                       x=projs_selection_data_nest$regexp)),
+                1, any)
+            projs_selection_data_nest = projs_selection_data_nest[OK_nest,]
+        }
+
+        files_to_use = projs_selection_data_nest$path
+        names(files_to_use) = projs_selection_data_nest$ID
+
+        write_tibble(dplyr::select(projs_selection_data,
+                                   -"path"),
+                     filedir=today_resdir,
+                     filename="projs_selection.txt")
+        
+    } else if (mode == "diagnostic") { #####
+        diag_path = file.path(computer_data_path, type, mode)
+        models_to_use_name = models_to_use
+        models_path = list.files(file.path(computer_data_path,
+                                           type,
+                                           mode),
+                                 full.names=TRUE)
+        models_file = basename(models_path)
+        files_to_use = lapply(models_to_use, apply_grepl,
+                              table=models_file, target=models_path)
+        names(files_to_use) = models_to_use_name
     }
+    
+    nFiles_to_use = length(files_to_use)
 
-    files_to_use = projs_selection_data_nest$path
-    names(files_to_use) = projs_selection_data_nest$ID
+    codes_selection_data = read_tibble(file.path(
+        computer_data_path, type,
+        codes_hydro_selection_file))
+    codes_selection_data = dplyr::filter(codes_selection_data,
+                                         !grepl("Supprimer", X))
 
-    write_tibble(dplyr::select(projs_selection_data,
-                               -"path"),
+    codes_selection_data$SuggestionNOM =
+        gsub(" A ", " à ",
+             gsub("L ", "l'",
+                  gsub("^L ", "L'",
+                       stringr::str_to_title(
+                                    gsub("L'", "L ",
+                                         codes_selection_data$SuggestionNOM
+                                         )))))
+    write_tibble(codes_selection_data,
                  filedir=today_resdir,
-                 filename="projs_selection.txt")
-    
-} else if (mode == "diagnostic") { #####
-    diag_path = file.path(computer_data_path, mode)
-    models_to_use_name = models_to_use
-    models_path = list.files(file.path(computer_data_path, mode),
-                             full.names=TRUE)
-    models_file = basename(models_path)
-    files_to_use = lapply(models_to_use, apply_grepl,
-                          table=models_file, target=models_path)
-    names(files_to_use) = models_to_use_name
-}
+                 filename="codes_selection_data.txt")
 
-nFiles_to_use = length(files_to_use)
-
-
-
-codes_selection_data = read_tibble(file.path(computer_data_path,
-                                             codes_hydro_selection_file))
-codes_selection_data = dplyr::filter(codes_selection_data,
-                                     !grepl("Supprimer", X))
-
-codes_selection_data$SuggestionNOM =
-    gsub(" A ", " à ",
-         gsub("L ", "l'",
-              gsub("^L ", "L'",
-                   stringr::str_to_title(
-                                gsub("L'", "L ",
-                                     codes_selection_data$SuggestionNOM
-                                     )))))
-write_tibble(codes_selection_data,
-             filedir=today_resdir,
-             filename="codes_selection_data.txt")
-
-if (mode == "diagnostic") {
-    ref = 1
-} else if (mode == "projection") {
-    ref = c(0, 1)
-}
-codes_selection_data =
-    codes_selection_data[codes_selection_data$Référence %in% ref,]
-codes8_selection = codes_selection_data$CODE
-codes10_selection = codes_selection_data$SuggestionCode
-codes8_selection = codes8_selection[!is.na(codes8_selection)]
-codes10_selection = codes10_selection[!is.na(codes10_selection)]
-
-if (all(codes_to_use == "")) {
-    stop ("No station selected")
-}
-if (all(codes_to_use == "all")) {
-    CodeALL8 = codes8_selection
-    CodeALL10 = convert_codeNtoM(codes8_selection)
-} else {
-    # codes_to_use[nchar(codes_to_use) == 10] =
-        # codes8_selection[codes10_selection %in%
-                         # codes_to_use[nchar(codes_to_use) == 10]]
-    codes_to_use = convert_codeNtoM(codes_to_use, 10, 8, top=NULL)
-    codes_to_use = convert_regexp(computer_data_path,
-                                  obs_hydro_dir,
-                                  codes_to_use,
-                                  obs_hydro_format)
-    
-    okCode = codes_to_use %in% codes8_selection
-    CodeALL8 = codes_to_use[okCode]
-    # CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
-    CodeALL10 = convert_codeNtoM(CodeALL8)
-}
-CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
-CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
-nCodeALL = length(CodeALL10)
-
-if (MPI != "") {
-    tmppath = file.path(computer_work_path,
-                        paste0(tmpdir,
-                               "_",
-                               paste0(models_to_use,
-                                      collapse="_"))) #########################################################
-} else {
-    tmppath = file.path(computer_work_path, tmpdir)
-}
-
-
-if ("delete_tmp" %in% to_do) {
-    delete_tmp = TRUE
-    to_do = to_do[to_do != "delete_tmp"]
-    post("## MANAGING DATA")
-    source(file.path(lib_path, 'script_management.R'),
-           encoding='UTF-8')
-}
-
-if (!(file.exists(tmppath)) & rank == 0) {
-    dir.create(tmppath, recursive=TRUE)
-}
-
-if ("merge_nc" %in% to_do) {
-    merge_nc = TRUE
-    to_do = to_do[to_do != "merge_nc"]
-    post("## MANAGING DATA")
-    source(file.path(lib_path, 'script_management.R'),
-           encoding='UTF-8')
-}
-
-if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
-
-    if (all(c('create_data', 'extract_data') %in% to_do)) {
-        post("## CREATING AND EXTRACTING DATA")
-    } else if ('create_data' %in% to_do) {
-        post("## CREATING DATA")
-    } else if ('extract_data' %in% to_do) {
-        post("## EXTRACTING DATA")
-    } else if (!('save_extract' %in% to_do)) {
-        post("Maybe you can start by creating data")
+    if (mode == "diagnostic") {
+        ref = 1
+    } else if (mode == "projection") {
+        ref = c(0, 1)
     }
+    codes_selection_data =
+        codes_selection_data[codes_selection_data$Référence %in%
+                             ref,]
+    codes8_selection = codes_selection_data$CODE
+    codes10_selection = codes_selection_data$SuggestionCode
+    codes8_selection = codes8_selection[!is.na(codes8_selection)]
+    codes10_selection = codes10_selection[!is.na(codes10_selection)]
 
-    timer = dplyr::tibble()
+    if (all(codes_to_use == "")) {
+        stop ("No station selected")
+    }
+    if (all(codes_to_use == "all")) {
+        CodeALL8 = codes8_selection
+        CodeALL10 = convert_codeNtoM(codes8_selection)
+    } else {
+        # codes_to_use[nchar(codes_to_use) == 10] =
+        # codes8_selection[codes10_selection %in%
+        # codes_to_use[nchar(codes_to_use) == 10]]
+        codes_to_use = convert_codeNtoM(codes_to_use, 10,
+                                        8, top=NULL)
+        codes_to_use = convert_regexp(computer_data_path,
+                                      file.path(type,
+                                                obs_hydro_dir),
+                                      codes_to_use,
+                                      obs_hydro_format)
+        
+        okCode = codes_to_use %in% codes8_selection
+        CodeALL8 = codes_to_use[okCode]
+        # CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
+        CodeALL10 = convert_codeNtoM(CodeALL8)
+    }
+    CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
+    CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
+    nCodeALL = length(CodeALL10)
 
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
@@ -1131,6 +1106,86 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
     post(paste0("All ", nFiles, " files: ",
                 paste0(names(Files), collapse=" ")))
 
+    
+} else if (type == "piezometrie") {
+    nCode4RAM = 300
+    files_to_use = ""
+    Subsets = ""
+    nSubsets = 1
+    
+    Files = ""
+    Files_name = ""
+    nFiles = 1
+    
+    codes_selection_data = read_tibble(file.path(
+        computer_data_path, type,
+        codes_piezo_selection_file))
+    
+    codes_selection = codes_selection_data$code_bss
+
+    if (all(codes_to_use == "all")) {
+        CodeALL = codes_selection
+    } else {
+        okCode = grepl(paste0("(",
+                              paste0(codes_to_use, collapse=")|("),
+                              ")"), codes_selection)
+        CodeALL = codes_selection[okCode]
+    }
+}
+
+
+
+if (MPI != "") {
+    tmppath = file.path(computer_work_path,
+                        paste0(tmpdir,
+                               "_",
+                               paste0(models_to_use,
+                                      collapse="_"))) #########################################################
+} else {
+    tmppath = file.path(computer_work_path, tmpdir)
+}
+
+
+if ("delete_tmp" %in% to_do) {
+    delete_tmp = TRUE
+    to_do = to_do[to_do != "delete_tmp"]
+    post("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
+}
+
+if (!(file.exists(tmppath)) & rank == 0) {
+    dir.create(tmppath, recursive=TRUE)
+}
+
+if ("merge_nc" %in% to_do) {
+    merge_nc = TRUE
+    to_do = to_do[to_do != "merge_nc"]
+    post("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
+}
+
+if ('reshape_data' %in% to_do) {
+    post("## RESHAPE DATA")
+    source(file.path(lib_path, 'script_reshape_data.R'),
+           encoding='UTF-8')
+}
+
+if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
+
+    if (all(c('create_data', 'extract_data') %in% to_do)) {
+        post("## CREATING AND EXTRACTING DATA")
+    } else if ('create_data' %in% to_do) {
+        post("## CREATING DATA")
+    } else if ('extract_data' %in% to_do) {
+        post("## EXTRACTING DATA")
+    } else if (!('save_extract' %in% to_do)) {
+        post("Maybe you can start by creating data")
+    }
+
+    timer = dplyr::tibble()
+
     if (nFiles != 0 & nSubsets != 0) {
         for (ff in 1:nFiles) {
             files = Files[[ff]]
@@ -1146,6 +1201,12 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                 .files_name_opt. = ""
                 .files_name_opt = ""
             }
+
+            if (type == "hydrologie") {
+                sep = "_"
+            } else if (type == "piezometrie") {
+                sep = ""
+            }
             
             Create_ok = c()
             
@@ -1160,7 +1221,7 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                 file_test = c()
                 if ('create_data' %in% to_do & "data" %in% var2save) {
                     file_test = c(file_test,
-                                  paste0("data_",
+                                  paste0("data", sep,
                                          files_name_opt.,
                                          subset_name, ".fst"))
                 }
@@ -1172,13 +1233,13 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                             file_test = c(file_test,
                                           paste0("dataEX_",
                                                  extract$name,
-                                                 "_", files_name_opt.,
+                                                 sep, files_name_opt.,
                                                  subset_name, ".fst"))
                         } else {
                             file_test = c(file_test,
                                           paste0("dataEX_",
                                                  extract$name,
-                                                 "_", files_name_opt.,
+                                                 sep, files_name_opt.,
                                                  subset_name))
                         }
                     }
@@ -1191,15 +1252,18 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
                     Create_ok = c(Create_ok, TRUE)
-                    
                     next
                 }
-                
-                CodeSUB8 = CodeALL8[subset[1]:subset[2]]
-                CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
-                CodeSUB10 = CodeALL10[subset[1]:subset[2]]
-                CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
-                nCodeSUB = length(CodeSUB10)
+
+                if (type == "hydrologie") {
+                    CodeSUB8 = CodeALL8[subset[1]:subset[2]]
+                    CodeSUB8 = CodeSUB8[!is.na(CodeSUB8)]
+                    CodeSUB10 = CodeALL10[subset[1]:subset[2]]
+                    CodeSUB10 = CodeSUB10[!is.na(CodeSUB10)]
+                    nCodeSUB = length(CodeSUB10)
+                } else if (type == "piezometrie") {                    
+                    CodeSUB = CodeALL
+                }
 
                 if ('create_data' %in% to_do) {
                     timer = start_timer(timer, rank, "create",
@@ -1216,7 +1280,8 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                         timer = start_timer(timer, rank, "extract",
                                             paste0(files_name_opt.,
                                                    subset_name))
-                        source(file.path(lib_path, 'script_extraction.R'),
+                        source(file.path(lib_path,
+                                         'script_extraction.R'),
                                encoding='UTF-8')
                         timer = stop_timer(timer, rank, "extract",
                                            paste0(files_name_opt.,

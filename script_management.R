@@ -413,11 +413,14 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         dataEX_serie = dplyr::tibble()
         metaEX_criteria = dplyr::tibble()
         metaEX_serie = dplyr::tibble()
+
+        read_saving_tmp = file.path(read_saving, type)
         
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
 
-            Paths = list.files(file.path(resdir, read_saving),
+            Paths = list.files(file.path(resdir,
+                                         read_saving_tmp),
                                include.dirs=TRUE,
                                full.names=TRUE)
 
@@ -519,6 +522,12 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             }
             extract_data = extract_data_tmp
         }
+
+
+        if (type == "piezometrie" & exists("meta")) {
+            meta = get_couche_in_meta(meta)
+        }
+        
     }
 
     if ('selection' %in% to_do) {

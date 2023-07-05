@@ -106,7 +106,8 @@ create_data = function () {
 
         if (length(Code8) > 0) {
             meta_obs = create_meta_HYDRO(computer_data_path,
-                                         obs_hydro_dir,
+                                         file.path(type,
+                                                   obs_hydro_dir),
                                          Code8_filename,
                                          verbose=subverbose)
         } else {
@@ -152,7 +153,8 @@ create_data = function () {
             
             # Extract data about selected stations
             data_obs = create_data_HYDRO(computer_data_path,
-                                         obs_hydro_dir,
+                                         file.path(type,
+                                                   obs_hydro_dir),
                                          Code8_filename,
                                          val2keep=c(val_E2=0),
                                          verbose=subverbose)

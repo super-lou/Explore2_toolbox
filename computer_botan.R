@@ -54,15 +54,15 @@ cdo_cmd_path = "cdo"
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
-computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
-projs_selection_file = "Explore2/hydrologie/ensembleProjectionClimatExplore2.txt"
+computer_data_path = '/home/louis/Documents/bouleau/INRAE/data/Explore2'
+projs_selection_file = "ensembleProjectionClimatExplore2.txt"
 #### 2.1.1 Hydro _____________________________________________________
-obs_hydro_dir = "Explore2/hydrologie/Explore2 HYDRO QJM critiques 2023"
+obs_hydro_dir = "Explore2 HYDRO QJM critiques 2023"
 obs_hydro_format = "_HYDRO_QJM.txt"
-codes_hydro_selection_file = "Explore2/hydrologie/Selection_points_simulation_V20230510.txt"
+codes_hydro_selection_file = "Selection_points_simulation_V20230510.txt"
 #### 2.1.2. Piezo ____________________________________________________
-obs_piezo_dir = "Explore2/piezometrie/diagnostic/diagnostic_piezos_ref_explore2_v1.nc"
-codes_piezo_selection_file = "Explore2/piezometrie/piezometres_references_hubeau.txt"
+raw_data_piezo_file = "diagnostic_piezos_ref_explore2_v1.nc"
+codes_piezo_selection_file = "piezometres_references_hubeau.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
@@ -86,28 +86,20 @@ logo_dir = 'logo'
 icon_dir = 'icon'
 
 #### 2.3.3. Shapefile ________________________________________________
-shp_dir = 'map'
+computer_shp_path =
+    '/home/louis/Documents/bouleau/INRAE/data/map'
 # Path to the shapefile for france contour from 'computer_data_path' 
-france_dir = file.path(shp_dir, 'france')
-france_file = 'gadm36_FRA_0.shp'
+france_shp_path = 'france/gadm36_FRA_0.shp'
 # Path to the shapefile for basin shape from 'computer_data_path' 
-bassinHydro_dir = file.path(shp_dir, 'bassinHydro')
-bassinHydro_file = 'bassinHydro.shp'
+bassinHydro_shp_path = 'bassinHydro/bassinHydro.shp'
 # Path to the shapefile for sub-basin shape from 'computer_data_path' 
-regionHydro_dir = file.path(shp_dir, 'regionHydro')
-regionHydro_file = 'regionHydro.shp'
+regionHydro_shp_path = 'regionHydro/regionHydro.shp'
 # Path to the shapefile for station basins shape from 'computer_data_path' 
-entiteHydro_dir = file.path(shp_dir, 'entiteHydro')
-entiteHydro_file = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
+entiteHydro_shp_path = c('entiteHydro/BV_4207_stations.shp', 'entiteHydro/3BVs_FRANCE_L2E_2018.shp')
 entiteHydro_coord = c('L93', 'L2')
-# Path to the shapefile for river shape from 'computer_data_path' 
-river_dir = file.path('map', 'river')
-river_file = 'CoursEau_FXX.shp'
-
-entitePiezo_dir = file.path(shp_dir, 'entitePiezo_niveau1_extension')
-entitePiezo_file = "entitePiezo_niveau1_extension.shp"
-piezoRef_dir = file.path(shp_dir, 'piezometres_references')
-piezoRef_file = "piezometres_references.shp"
+river_shp_path = 'river/CoursEau_FXX.shp'
+# piezo
+entitePiezo_shp_path = "entitePiezo_niveau1_extension/entitePiezo_niveau1_extension.shp"
 
 ## 3. OUTPUT DIRECTORIES _____________________________________________
 ### 3.0. Info ________________________________________________________

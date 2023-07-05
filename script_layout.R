@@ -27,7 +27,7 @@ plot_sheet_diagnostic_station = function (dataEXind_chunk,
                                           df_page=NULL,
                                           subverbose=FALSE) {
     
-    Paths = list.files(file.path(resdir, read_saving),
+    Paths = list.files(file.path(resdir, read_saving, type),
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
                        full.names=TRUE)
@@ -65,19 +65,30 @@ icon_path = file.path(resources_path, icon_dir)
 
 if (!exists("Shapefiles")) {
     post("### Loading shapefiles")
+
+    if (type == "hydrologie") {
+        Code_shp = CodeALL8
+    } else if (type == "piezometrie") {
+        Code_shp = CodeALL
+    }
+    
     Shapefiles = load_shapefile(
-        computer_data_path, CodeALL8,
-        france_dir, france_file,
-        bassinHydro_dir, bassinHydro_file,
-        regionHydro_dir, regionHydro_file,
-        entiteHydro_dir, entiteHydro_file, entiteHydro_coord,
-        river_dir, river_file,
+        computer_shp_path, Code_shp,
+        france_shp_path,
+        bassinHydro_shp_path,
+        regionHydro_shp_path,
+        entiteHydro_shp_path, entiteHydro_coord,
+        entitePiezo_shp_path,
+        river_shp_path,
         river_selection=river_selection,
         river_length=river_length,
         toleranceRel=toleranceRel)
-    Shapefiles$entiteHydro$Code =
-        codes10_selection[match(Shapefiles$entiteHydro$Code,
-                                codes8_selection)]
+
+    if (type == "hydrologie") {
+        Shapefiles$entiteHydro$Code =
+            codes10_selection[match(Shapefiles$entiteHydro$Code,
+                                    codes8_selection)]
+    }
 }
 
 
@@ -96,8 +107,13 @@ if ('plot_doc' %in% to_do) {
 
 
 if (is.null(doc_chunk)) {
-    chunkCode = list(codes10_selection)#list(CodeALL10)
-    plotCode = list(CodeALL10)
+    if (type == "hydrologie") {
+        chunkCode = list(codes10_selection)#list(CodeALL10)
+        plotCode = list(CodeALL10)
+    } else if (type == "piezometrie") {
+        chunkCode = list(codes_selection)
+        plotCode = list(CodeALL)
+    }
 } else if (doc_chunk == "all") {
     chunkCode = list(codes10_selection)
     plotCode = chunkCode
@@ -229,6 +245,22 @@ for (i in 1:nChunk) {
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
+                logo_path=logo_path,
+                Shapefiles=Shapefiles,
+                figdir=today_figdir_leaf,
+                df_page=df_page,
+                verbose=subverbose)
+        }
+
+        if (sheet == 'diagnostic_couche') {
+            post("### Plotting sheet diagnostic couche")
+            df_page = sheet_diagnostic_couche(
+                meta,
+                dataEXind_chunk,
+                metaEXind_chunk,
+                dataEXserie_chunk,
+                Colors=Colors_of_models,
+                icon_path=icon_path,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,

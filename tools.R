@@ -20,6 +20,23 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
+
+get_couche_in_meta = function (meta) {
+    Couche = sapply(meta$Couche, strsplit, "|", fixed=TRUE, USE.NAMES=FALSE)
+    Couche[lapply(Couche, length) == 0] = ""
+    meta$Couche = Couche
+    return (meta)
+}
+
+any_in = function (x, y) {
+    return (any(x %in% y))
+}
+
+is_in_couche = function (Couche, couche) {
+    return (sapply(Couche, any_in, couche))
+}
+    
+
 convert_codeNtoM = function (Code, N=8, M=10, crop=TRUE, top="0") {
     Code_save = Code
 
@@ -56,8 +73,8 @@ convert_codeNtoM = function (Code, N=8, M=10, crop=TRUE, top="0") {
 }
 
 
-NetCDF_extrat_time = function (NCdata) {
-    Date = ncdf4::ncvar_get(NCdata, "time")
+NetCDF_extrat_time = function (NCdata, data_name="time") {
+    Date = ncdf4::ncvar_get(NCdata, data_name)
     if (Date[2] - Date[1] == 86400) {
         Date = Date/86400
     }
@@ -66,7 +83,7 @@ NetCDF_extrat_time = function (NCdata) {
                    origin=
                        as.Date(str_extract(
                            ncdf4::ncatt_get(NCdata,
-                                            "time")$units,
+                                            data_name)$units,
                            "[0-9]+-[0-9]+-[0-9]+")))
 
     Date = as.Date(as.character(Date), origin=as.Date("1970-01-01"))
