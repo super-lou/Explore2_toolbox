@@ -159,7 +159,7 @@ to_do =
         # 'extract_data'
         # 'save_extract'
         # 'read_tmp'
-        'read_saving',
+        # 'read_saving',
         # 'selection',
         # 'write_warnings'
         # 'add_regime_hydro'
@@ -257,8 +257,9 @@ plot_sheet =
 plot_doc =
     c(
         # "diagnostic_matrix"
-        'diagnostic_regime'
+        # 'diagnostic_regime'
         # 'diagnostic_region'
+        'diagnostic_couche'
     )
 
 
@@ -268,8 +269,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
@@ -341,9 +342,9 @@ complete_by = "MORDOR-SD"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910', #ref
-        "00241X0012/P1"
+        'all'
+        # 'K2981910', #ref
+        # "00241X0012/P1"
         
         ## échange code
         # "K2240820",
@@ -620,8 +621,8 @@ river_length =
     
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
-    1000 # normal map
-    # 9000 # mini map
+    # 1000 # normal map
+    9000 # mini map
 
 # Which logo do you want to show in the footnote
 logo_to_show =
@@ -677,7 +678,13 @@ doc_diagnostic_region =
         'diagnostic_region',
         'diagnostic_station'
     )
-
+doc_diagnostic_couche =
+    list(
+        name='Diagnostic Hydrologique par Entité Piézomètrique',
+        chunk='couche',
+        'summary',
+        'diagnostic_couche'
+    )
 
 
 #  ___        _  _    _        _  _            _    _            

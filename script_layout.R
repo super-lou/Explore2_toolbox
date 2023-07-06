@@ -123,6 +123,20 @@ if (is.null(doc_chunk)) {
     names(chunkCode) = paste0(iRegHydro()[names(chunkCode)],
                               " - ", levels(letter))
     plotCode = chunkCode
+} else if (doc_chunk == "couche") {
+    get_chunkCode = function (couche, CodeALL) {
+        return (CodeALL[is_in_couche(meta$Couche, couche)])  
+    }
+    Couche = levels(factor(unlist(meta$Couche)))
+    Couche = Couche[nchar(Couche) > 0]
+    chunkCode = lapply(Couche, get_chunkCode, CodeALL=CodeALL)
+    names(chunkCode) = paste0(
+        levels(Shapefiles$entitePiezo$libelleeh)[
+            match(Couche,
+                  Shapefiles$entitePiezo$codeeh)],
+        " - ", Couche)
+
+    plotCode = chunkCode
 }
 
 nChunk = length(chunkCode)
@@ -150,6 +164,7 @@ for (i in 1:nChunk) {
         today_figdir_leaf = today_figdir
     }
 
+    meta_chunk = meta[meta$Code %in% chunk,]
     dataEXind = dataEX_criteria
     metaEXind_chunk = metaEX_criteria
     dataEXserie = dataEX_serie
@@ -255,7 +270,7 @@ for (i in 1:nChunk) {
         if (sheet == 'diagnostic_couche') {
             post("### Plotting sheet diagnostic couche")
             df_page = sheet_diagnostic_couche(
-                meta,
+                meta_chunk,
                 dataEXind_chunk,
                 metaEXind_chunk,
                 dataEXserie_chunk,
