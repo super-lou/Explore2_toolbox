@@ -66,9 +66,7 @@ codes_piezo_selection_file = "piezometres_references_hubeau.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
-CARD_path = file.path(gsub("[/]project[/].*$", "",
-                           computer_work_path),
-                      "project",
+CARD_path = file.path(dev_lib_path,
                       "CARD_project",
                       "CARD")
 # Name of the tool directory that includes all the functions needed to

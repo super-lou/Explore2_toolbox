@@ -53,17 +53,17 @@ dev_lib_path = '/home/herautl/library'
 # cdo_cmd_path = "/home/herautl/work_inrae-infra/cdo/bin/cdo"
 cdo_cmd_path = "/home/herautl/cdo/bin/cdo"
 
-
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
 computer_data_path = '/home/herautl/scratch/data'
-obs_hydro_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
+projs_selection_file = "ensembleProjectionClimatExplore2.txt"
+#### 2.1.1 Hydro _____________________________________________________
+obs_hydro_dir = "Explore2 HYDRO QJM critiques 2023"
 obs_hydro_format = "_HYDRO_QJM.txt"
-mode = "Explore2/diagnostic"
-mode = "Explore2/projection"
-proj_merge_dir = "Explore2/projection_merge"
-codes_hydro_selection_file = "Explore2/Selection_points_simulation_V20230510.txt"
-projs_selection_file = "Explore2/ensembleProjectionClimatExplore2.txt"
+codes_hydro_selection_file = "Selection_points_simulation_V20230510.txt"
+#### 2.1.2. Piezo ____________________________________________________
+raw_data_piezo_file = "diagnostic_piezos_ref_explore2_v1.nc"
+codes_piezo_selection_file = "piezometres_references_hubeau.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
@@ -74,33 +74,29 @@ init_tools_dir = '__tools__'
 # Name of the default parameters file for a variable
 init_var_file = '__default__.R'
 
-#### 2.3. Shapefile ________________________________________________
-shp_dir = 'map'
-# Path to the shapefile for france contour from 'computer_data_path' 
-france_dir = file.path(shp_dir, 'france')
-france_file = 'gadm36_FRA_0.shp'
-# Path to the shapefile for basin shape from 'computer_data_path' 
-bassinHydro_dir = file.path(shp_dir, 'bassinHydro')
-bassinHydro_file = 'bassinHydro.shp'
-# Path to the shapefile for sub-basin shape from 'computer_data_path' 
-regionHydro_dir = file.path(shp_dir, 'regionHydro')
-regionHydro_file = 'regionHydro.shp'
-# Path to the shapefile for station basins shape from 'computer_data_path' 
-entiteHydro_dir = file.path(shp_dir, 'entiteHydro')
-entiteHydro_file = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
-entiteHydro_coord = c('L93', 'L2')
-# Path to the shapefile for river shape from 'computer_data_path' 
-river_dir = file.path('map', 'river')
-river_file = 'CoursEau_FXX.shp'
-
-### 2.4. Resources ___________________________________________________
-resources_path = file.path(dev_lib_path, "Explore2_toolbox", 'resources')
-#### 2.4.1. Logo _____________________________________________________
+### 2.3. Resources ___________________________________________________
+resources_path = file.path(computer_work_path, 'resources')
+#### 2.3.1. Logo _____________________________________________________
 logo_dir = 'logo'
 
-#### 2.4.2. Icon _____________________________________________________
+#### 2.3.2. Icon _____________________________________________________
 icon_dir = 'icon'
 
+#### 2.3.3. Shapefile ________________________________________________
+computer_shp_path =
+    '/home/herautl/scratch/data/map'
+# Path to the shapefile for france contour from 'computer_data_path' 
+france_shp_path = 'france/gadm36_FRA_0.shp'
+# Path to the shapefile for basin shape from 'computer_data_path' 
+bassinHydro_shp_path = 'bassinHydro/bassinHydro.shp'
+# Path to the shapefile for sub-basin shape from 'computer_data_path' 
+regionHydro_shp_path = 'regionHydro/regionHydro.shp'
+# Path to the shapefile for station basins shape from 'computer_data_path' 
+entiteHydro_shp_path = c('entiteHydro/BV_4207_stations.shp', 'entiteHydro/3BVs_FRANCE_L2E_2018.shp')
+entiteHydro_coord = c('L93', 'L2')
+river_shp_path = 'river/CoursEau_FXX.shp'
+# piezo
+entitePiezo_shp_path = "entitePiezo_niveau1_extension/entitePiezo_niveau1_extension.shp"
 
 ## 3. OUTPUT DIRECTORIES _____________________________________________
 ### 3.0. Info ________________________________________________________
@@ -119,3 +115,4 @@ now_figdir = file.path(computer_work_path, 'figures', today, now)
 
 ### 3.3. Tmp  ________________________________________________________
 tmpdir = "tmp"
+
