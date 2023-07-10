@@ -76,13 +76,10 @@ init_var_file = '__default__.R'
 
 ### 2.3. Resources ___________________________________________________
 resources_path = file.path(computer_work_path, 'resources')
-#### 2.3.1. Logo _____________________________________________________
 logo_dir = 'logo'
-
-#### 2.3.2. Icon _____________________________________________________
 icon_dir = 'icon'
 
-#### 2.3.3. Shapefile ________________________________________________
+### 2.4. Shapefile ________________________________________________
 computer_shp_path =
     '/home/herautl/scratch/data/map'
 # Path to the shapefile for france contour from 'computer_data_path' 

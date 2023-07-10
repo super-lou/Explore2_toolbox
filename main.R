@@ -309,7 +309,7 @@ models_to_use =
         # "GRSD",
         # "J2000",
         # "SIM2",
-        "MORDOR-SD",
+        # "MORDOR-SD",
         "MORDOR-TS"
         # "ORCHIDEE", 
         # "SMASH"
@@ -834,9 +834,9 @@ if (mode == "diagnostic") {
     var2save = var2save[var2save != "data"]
 }
 
-if (!(file.exists(resources_path)) & rank == 0) {
-  dir.create(resources_path)
-}
+# if (!(file.exists(resources_path)) & rank == 0) {
+  # dir.create(resources_path)
+# }
 
 delete_tmp = FALSE
 merge_nc = FALSE
@@ -844,9 +844,9 @@ read_tmp = FALSE
 
 
 # if ('extract_data' %in% to_do) {
-    extract_data_tmp = lapply(extract_data, get)
-    names(extract_data_tmp) = extract_data
-    extract_data = extract_data_tmp
+extract_data_tmp = lapply(extract_data, get)
+names(extract_data_tmp) = extract_data
+extract_data = extract_data_tmp
 # }
 
 
