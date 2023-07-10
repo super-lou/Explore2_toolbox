@@ -182,8 +182,8 @@ extract_data =
         # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
-        'Explore2_serie_proj',
-        'Explore2_serie_more_proj'
+        'Explore2_serie_proj'
+        # 'Explore2_serie_more_proj'
     )
 
 
