@@ -143,20 +143,20 @@ lib_path =
 #       directory.
 
 type =
-    # "hydrologie"
-    "piezometrie"
+    "hydrologie"
+    # "piezometrie"
 
 mode =
-    "diagnostic"
-  # "projection"
+    # "diagnostic"
+  "projection"
 
 to_do =
     c(
         # 'delete_tmp',
-        # 'merge_nc'
+        'merge_nc'
         # 'reshape_data'
         # 'create_data',
-        # 'extract_data'
+        # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -164,7 +164,7 @@ to_do =
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
         # 'create_data_proj'
     )
@@ -172,14 +172,14 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diag_performance',
+        # 'Explore2_criteria_diag_performance',
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
         # 'Explore2_criteria_diag_HE',
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot'
+        # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj',
@@ -248,9 +248,9 @@ plot_sheet =
         # 'diagnostic_matrix'
         # 'diagnostic_station'
         # 'diagnostic_region'
-        'diagnostic_couche'
+        # 'diagnostic_couche'
         # 'diagnostic_regime'
-        # 'diagnostic_map'
+        'diagnostic_map'
     )
 
 ### 3.2. Document ____________________________________________________
@@ -259,7 +259,9 @@ plot_doc =
         # "diagnostic_matrix"
         # 'diagnostic_regime'
         # 'diagnostic_region'
-        'diagnostic_couche'
+        # 'diagnostic_couche'
+        # 'diagnostic_map_model'
+        'diagnostic_map_critere'
     )
 
 
@@ -274,8 +276,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -323,19 +325,20 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
         "MORDOR-SD",
-        "MORDOR-TS", 
-        "ORCHIDEE", 
-        "SMASH",
+        "MORDOR-TS"
+        # "ORCHIDEE", 
+        # "SMASH"
 
-        "AquiFR",
-        "EROS Bretagne",
-        "MONA"
+        # "AquiFR",
+        # "EROS Bretagne",
+        # "MONA"
+        
     )
 complete_by = "MORDOR-SD"
 
@@ -345,6 +348,9 @@ codes_to_use =
         'all'
         # 'K2981910', #ref
         # "00241X0012/P1"
+        # "^H",
+        # "^K",
+        # "^O"
         
         ## échange code
         # "K2240820",
@@ -404,7 +410,7 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("medQJC5"),
+         variables=c("alphaPAl"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
@@ -621,8 +627,8 @@ river_length =
     
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
-    # 1000 # normal map
-    9000 # mini map
+    1000 # normal map
+    # 9000 # mini map
 
 # Which logo do you want to show in the footnote
 logo_to_show =
@@ -684,6 +690,20 @@ doc_diagnostic_couche =
         chunk='couche',
         'summary',
         'diagnostic_couche'
+    )
+doc_diagnostic_map_model =
+    list(
+        name='Diagnostic Hydrologique Cartographique par Modèle',
+        chunk='model',
+        'summary',
+        'diagnostic_map'
+    )
+doc_diagnostic_map_critere =
+    list(
+        name='Diagnostic Hydrologique Cartographique par Critère',
+        chunk='critere',
+        'summary',
+        'diagnostic_map'
     )
 
 
@@ -860,7 +880,6 @@ if (type == "hydrologie") {
     if (mode == "projection") {
         projs_selection_data = read_tibble(file.path(
             computer_data_path,
-            type,
             projs_selection_file))  
         EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
         names(projs_selection_data)[3:6] = EXP

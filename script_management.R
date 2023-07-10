@@ -744,7 +744,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
     if (merge_nc) {
         post("### Merging NetCDF file by time for projection")
         proj_merge_dirpath = file.path(computer_data_path,
-                                       proj_merge_dir)
+                                       type,
+                                       "projection_merge")
         if (!dir.exists(proj_merge_dirpath)) {
             if (rank == 0) {
                 dir.create(proj_merge_dirpath)

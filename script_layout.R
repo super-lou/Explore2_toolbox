@@ -94,7 +94,7 @@ if (!exists("Shapefiles")) {
 
 if ('plot_sheet' %in% to_do & !('plot_doc' %in% to_do)) {
     df_page = NULL
-    doc_chunk = NULL
+    doc_chunk = ""
     doc_name = default_doc_name
     plot_list = plot_sheet
 }
@@ -106,7 +106,7 @@ if ('plot_doc' %in% to_do) {
 }
 
 
-if (is.null(doc_chunk)) {
+if (doc_chunk == "") {    
     if (type == "hydrologie") {
         chunkCode = list(codes10_selection)#list(CodeALL10)
         plotCode = list(CodeALL10)
@@ -114,15 +114,18 @@ if (is.null(doc_chunk)) {
         chunkCode = list(codes_selection)
         plotCode = list(CodeALL)
     }
+    
 } else if (doc_chunk == "all") {
     chunkCode = list(codes10_selection)
     plotCode = chunkCode
+    
 } else if (doc_chunk == "region") {
     letter = factor(substr(CodeALL10, 1, 1))
     chunkCode = split(CodeALL10, letter)
     names(chunkCode) = paste0(iRegHydro()[names(chunkCode)],
                               " - ", levels(letter))
     plotCode = chunkCode
+    
 } else if (doc_chunk == "couche") {
     get_chunkCode = function (couche, CodeALL) {
         return (CodeALL[is_in_couche(meta$Couche, couche)])  
@@ -137,7 +140,22 @@ if (is.null(doc_chunk)) {
         " - ", Couche)
 
     plotCode = chunkCode
+    
+} else if (doc_chunk == "model") {
+    chunkCode = replicate(length(models_to_use),
+                         codes10_selection,
+                         simplify=FALSE)
+    names(chunkCode) = models_to_use
+    plotCode = chunkCode
+
+} else if (doc_chunk == "critere") {
+    chunkCode = replicate(length(metaEX_criteria$var),
+                         codes10_selection,
+                         simplify=FALSE)
+    names(chunkCode) = metaEX_criteria$var
+    plotCode = chunkCode
 }
+
 
 nChunk = length(chunkCode)
 
@@ -224,23 +242,28 @@ for (i in 1:nChunk) {
 
         if (sheet == 'diagnostic_map') {
             post("### Plotting map")
-            group_of_models_to_use =
-                list(
-                    "CTRIP",
-                    "EROS",
-                    "GRSD",
-                    "J2000",
-                    "SIM2",
-                    "MORDOR-SD",
-                    "MORDOR-TS",
-                    "ORCHIDEE",
-                    "SMASH")
+            one_colorbar = FALSE
+            if (doc_chunk == "model") {
+                ModelSelection = chunkname
+            } else {
+                ModelSelection = NULL
+            }
+
+            if (doc_chunk == "critere") {
+                one_colorbar = TRUE
+                metaEXind_chunk =
+                    metaEXind_chunk[metaEXind_chunk$var == chunkname,]
+            } else {
+                metaEXind_chunk = metaEXind_chunk
+            }
+
             df_page = sheet_criteria_map(
                 dataEXind_chunk,
                 metaEXind_chunk,
                 meta,
-                ModelGroup=group_of_models_to_use,
+                ModelSelection=ModelSelection,
                 Colors=Colors_of_models,
+                one_colorbar=one_colorbar,
                 icon_path=icon_path,
                 logo_path=logo_path,
                 figdir=today_figdir_leaf,

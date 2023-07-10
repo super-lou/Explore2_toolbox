@@ -239,6 +239,17 @@ create_data = function () {
             
             data = dplyr::relocate(data, "T", .before=ET0)
 
+            
+            #####
+            data$P[!is.finite(data$P)] = NA
+            data$Pl[!is.finite(data$Pl)] = NA
+            data$Ps[!is.finite(data$Ps)] = NA
+            data = dplyr::filter(data,
+                                 rep(!all(is.na(P)), length(P)),
+                                 .by="Code")
+            #####
+            
+            
             for (i in 1:nVal2check) {
                 data =
                     dplyr::mutate(data,
