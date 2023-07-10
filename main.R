@@ -188,27 +188,6 @@ extract_data =
     )
 
 
-##  Extract name                         | nCode4RAM | nodes | tasks
-# ---------------------------------------+-----------+-------+-------
-# Explore2_criteria_diag_performance     |           |       |
-# Explore2_criteria_diag_sensibilite     |     9     |   3   |  28
-# Explore2_criteria_diag_sensibilite_RAT |           |       |
-# ---------------------------------------+-----------+-------+-------
-# Explore2_criteria_diag_HE              |           |       |
-# Explore2_criteria_diag_ME              |     9     |   3   |  28 
-# ---------------------------------------+-----------+-------+-------
-# Explore2_criteria_diag_BE              |     6     |   3   |  28
-# ---------------------------------------+-----------+-------+-------
-# Explore2_criteria_diag_BF              |     9     |   3   |  28 
-# ---------------------------------------+-----------+-------+-------
-# Explore2_serie_diag_plot               |     9     |   3   |  28 
-# ---------------------------------------+-----------+-------+-------
-# Explore2_serie_proj_safran             |     9     |   3   |  28 
-# ---------------------------------------+-----------+-------+-------
-# Explore2_serie_more_proj_safran        |     9     |   3   |  28 
-# ---------------------------------------+-----------+-------+-------
-
-
 ## 3. PLOTTING PROCESSES _____________________________________________
 ### 3.1. Sheet _______________________________________________________
 # The use of this plot_sheet vector is quite similar to the to_do
