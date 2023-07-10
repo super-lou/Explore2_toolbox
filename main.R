@@ -153,11 +153,11 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'merge_nc'
+        # 'merge_nc'
         # 'reshape_data'
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection',
@@ -182,9 +182,8 @@ extract_data =
         # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
-        # 'Explore2_serie_proj',
-        
-        # 'Explore2_serie_more_proj'
+        'Explore2_serie_proj',
+        'Explore2_serie_more_proj'
     )
 
 
@@ -277,10 +276,10 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 20
 use_proj_merge =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 projs_to_use =
     c(
