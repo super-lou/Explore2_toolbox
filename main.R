@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -534,13 +534,13 @@ Explore2_serie_more_proj =
 ## 3. SAVE_EXTRACT ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 var2save =
     c(
         'meta',
-        'data',
+        # 'data',
         'dataEX',
         'metaEX'
     )

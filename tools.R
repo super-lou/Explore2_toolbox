@@ -280,9 +280,6 @@ NetCDF_to_tibble = function (NetCDF_path,
     } else if (type == "piezometrie") {
 
 
-        print(NCdata)
-
-
     }
     
     ncdf4::nc_close(NCdata)

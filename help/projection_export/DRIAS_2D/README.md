@@ -1,10 +1,10 @@
-# DRIAS export 1D
+# DRIAS export 2D
 
 ## Introduction
 ### Avant propos
 L'objectif de ce code est de simplifier l'export de donnée [NetCDF](https://fr.wikipedia.org/wiki/NetCDF) pour le portail [DRIAS](http://www.drias-climat.fr/accompagnement/sections/311) des données hydro-climatiques de [Explore2](https://professionnels.ofb.fr/fr/node/1244). 
 
-L'ensemble de ce code et des informations qu'il contient on été tiré du pdf [Format_NetCDF_1D_Hydro_Portail-DRIAS_v2022.08.pdf](https://github.com/super-lou/Ex2D_toolbox/blob/main/resources/Format_NetCDF_1D_Hydro_Portail-DRIAS_v2022.08.pdf) fourni dans le cadre du projet [Explore2](https://professionnels.ofb.fr/fr/node/1244). L'organisation du document a été modifié pour rendre son appréhension la plus aisée possible compte tenu de sa transformation en code R.
+L'ensemble de ce code et des informations qu'il contient on été tiré du pdf [Format_NetCDF_2D_Hydro_Portail-DRIAS_v2022.08.pdf](https://github.com/super-lou/Explore2_toolbox/blob/main/resources/Format_NetCDF_2D_Hydro_Portail-DRIAS_v2022.08.pdf) fourni dans le cadre du projet [Explore2](https://professionnels.ofb.fr/fr/node/1244). L'organisation du document a été modifié pour rendre son appréhension la plus aisée possible compte tenu de sa transformation en code R.
 
 Il peut évidemment se trouver des incohérences donc il ne faut pas hésiter à me contacter (Louis Héraut). Pour des problèmes de compréhesion, il est aussi possible que Flore Tocquer soit plus à même de donner des éléments de réponse.
 
@@ -88,9 +88,13 @@ des données par les utilisateurs.
 
 Exemple de variables hydrologiques :
 
-| Accronyme | Name   | Long name    | Units  | Cell methods |
-| --------- | ------ | -------------| ------ | ------------ |
-| debit     | debit  | Debit Modcou | m3.s-1 | time:sum     |
+| Accronyme | Name    | Long name                | Units  | Cell methods |
+| --------- | ------- | -------------------------| ------ | ------------ |
+| DRAINC    | DRAINC  | Drainage for tile nature | mm     | time:sum     |
+| EVAPC     | EVAPC   | Evapotranspiration       | mm     | time:sum     |
+| RUNOFFC   | RUNOFFC | Runoff for tile nature   | mm     | time:sum     |
+| SWE       | SWE     | Snow Water Equivalent    | mm     | time:mean ?  |
+| SWI       | SWI     | Soil Water Index         | -      | time:mean ?  |
 
 Voir aussi :
 > [CF Standard Name Table](http://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html)</br>
@@ -102,13 +106,13 @@ Voir aussi :
 ## Documentation du code
 
 ### Téléchargement
-Le plus simple est de télécharger l'intégralité du repository github associé et de retrouver ces fichiers en suivant le chemin *help/DRIAS_export/DRIAS_export_1D* afin de pouvoir les modifiers et les exécuter. Pour cela, il est possible de le faire en ligne de commande : 
+Le plus simple est de télécharger l'intégralité du repository github associé et de retrouver ces fichiers en suivant le chemin *help/projection_export/DRIAS_2D* afin de pouvoir les modifiers et les exécuter. Pour cela, il est possible de le faire en ligne de commande : 
 
 ``` 
-git clone https://github.com/super-lou/Ex2D_toolbox
+git clone https://github.com/super-lou/Explore2_toolbox
 ```
 
-Ou alors en le téléchargeant en *zip* avec le lien suivant [Ex2D_toolbox-main.zip](https://github.com/super-lou/Ex2D_toolbox/archive/refs/heads/main.zip).
+Ou alors en le téléchargeant en *zip* avec le lien suivant [Explore2_toolbox-main.zip](https://github.com/super-lou/Explore2_toolbox/archive/refs/heads/main.zip).
 
 
 ### Structure
