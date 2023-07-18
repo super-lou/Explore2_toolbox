@@ -79,6 +79,8 @@ manage_data = function () {
                 file.exists(file.path(tmppath, filename))) {
                 dataEX_tmp = read_tibble(filedir=tmppath,
                                          filename=filename)
+
+
                 
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
@@ -414,13 +416,13 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         metaEX_criteria = dplyr::tibble()
         metaEX_serie = dplyr::tibble()
 
-        read_saving_tmp = file.path(read_saving, type)
+        # read_saving_tmp = file.path(read_saving)
         
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
 
             Paths = list.files(file.path(resdir,
-                                         read_saving_tmp),
+                                         read_saving),
                                include.dirs=TRUE,
                                full.names=TRUE)
 
@@ -533,7 +535,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
     if ('selection' %in% to_do) {
         post("### Selecting variables")
 
-        if (mode == "diagnostic") {
+        if (grepl("diagnostic", mode)) {
 
             for (j in 1:length(diag_station_selection)) {
                 if (length(diag_station_selection) == 0) {

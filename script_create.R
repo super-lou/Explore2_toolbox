@@ -146,7 +146,7 @@ create_data = function () {
 
         val2check = c("T", "ET0", "P", "Pl", "Ps")
         
-        if (mode == "diagnostic") {
+        if (grepl("diagnostic", mode)) {
             post("### Observation data")
 
             Model = Chain
@@ -236,20 +236,24 @@ create_data = function () {
                                                    Ref=Q_obs))
                 data = dplyr::relocate(data, Q_obs, .before=Q_sim)
             }
-            
-            data = dplyr::relocate(data, "T", .before=ET0)
 
+            data = dplyr::relocate(data, "T", .before=ET0)
             
             #####
-            data$P[!is.finite(data$P)] = NA
-            data$Pl[!is.finite(data$Pl)] = NA
-            data$Ps[!is.finite(data$Ps)] = NA
-            data = dplyr::filter(data,
-                                 rep(!all(is.na(P)), length(P)),
-                                 .by="Code")
+            if ("Pl" %in% names(data)) {
+                data$Pl[!is.finite(data$Pl)] = NA
+            }
+            if ("Ps" %in% names(data)) {
+                data$Ps[!is.finite(data$Ps)] = NA
+            }
+            if ("P" %in% names(data)) {
+                data$P[!is.finite(data$P)] = NA
+                data = dplyr::filter(data,
+                                     rep(!all(is.na(P)), length(P)),
+                                     .by="Code")
+            }
             #####
-            
-            
+
             for (i in 1:nVal2check) {
                 data =
                     dplyr::mutate(data,
@@ -260,7 +264,7 @@ create_data = function () {
                 data = dplyr::select(data, -val2check[i])
             }
 
-        } else if (mode == "projection") {
+        } else if (grepl("projection", mode)) {
             data = data_sim
 
             rm ("data_sim")

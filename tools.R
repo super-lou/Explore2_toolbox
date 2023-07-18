@@ -103,7 +103,7 @@ NetCDF_to_tibble = function (NetCDF_path,
     nDate = length(Date)
 
     if (type == "hydrologie") {
-        if (mode == "diagnostic") {
+        if (grepl("diagnostic", mode)) {
 
             CodeRaw = ncdf4::ncvar_get(NCdata, "code_hydro")
             CodeRaw = convert_codeNtoM(CodeRaw)
@@ -216,7 +216,7 @@ NetCDF_to_tibble = function (NetCDF_path,
             
             data = dplyr::bind_cols(Model=chain, data)
             
-        } else if (mode == "projection") {
+        } else if (grepl("projection", mode)) {
             CodeRaw = ncdf4::ncvar_get(NCdata, "code")
             
             CodeRaw = convert_codeNtoM(CodeRaw)
@@ -276,9 +276,6 @@ NetCDF_to_tibble = function (NetCDF_path,
             names(ID) = IDname
             data = dplyr::bind_cols(ID, data)
         }
-
-    } else if (type == "piezometrie") {
-
 
     }
     

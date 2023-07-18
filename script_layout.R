@@ -77,6 +77,7 @@ if (!exists("Shapefiles")) {
         france_shp_path,
         bassinHydro_shp_path,
         regionHydro_shp_path,
+        secteurHydro_shp_path,
         entiteHydro_shp_path, entiteHydro_coord,
         entitePiezo_shp_path,
         river_shp_path,
@@ -224,7 +225,7 @@ for (i in 1:nChunk) {
                     "MORDOR-TS",
                     "ORCHIDEE",
                     "SMASH",     
-                    "Multi-model"=
+                    "Multi-modèle"=
                         c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
                           "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
                 )
@@ -266,6 +267,8 @@ for (i in 1:nChunk) {
                 one_colorbar=one_colorbar,
                 icon_path=icon_path,
                 logo_path=logo_path,
+                is_foot=is_foot_for_map,
+                is_secteur=is_secteur_for_map,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
                 Shapefiles=Shapefiles,

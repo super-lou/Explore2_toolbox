@@ -148,16 +148,18 @@ type =
 
 mode =
     # "diagnostic"
-  "projection"
+    "diagnostic_ungauged"
+    # "projection"
+    # "projection_merge"
 
 to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data'
-        'create_data',
-        'extract_data',
-        'save_extract'
+        'create_data'
+        # 'extract_data',
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection',
@@ -174,15 +176,15 @@ extract_data =
         # 'WIP'
         # 'Explore2_criteria_diag_performance',
         # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT',
+        # 'Explore2_criteria_diag_sensibilite_RAT'
         # 'Explore2_criteria_diag_HE',
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF',
+        # 'Explore2_criteria_diag_BF'
         # 'Explore2_serie_diag_plot'
-        # 'Explore2_serie_proj_safran',
-        # 'Explore2_serie_more_proj_safran'
-        'Explore2_serie_proj'
+        # 'Explore2_serie_proj_safran'
+        'Explore2_serie_more_proj_safran'
+        # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
 
@@ -234,12 +236,12 @@ plot_sheet =
 ### 3.2. Document ____________________________________________________
 plot_doc =
     c(
-        # "diagnostic_matrix"
+        "diagnostic_matrix"
         # 'diagnostic_regime'
         # 'diagnostic_region'
         # 'diagnostic_couche'
         # 'diagnostic_map_model'
-        'diagnostic_map_critere'
+        # 'diagnostic_map_critere'
     )
 
 
@@ -254,8 +256,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -276,10 +278,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 20
-use_proj_merge =
-    TRUE
-    # FALSE
+nCode4RAM = 100
 
 projs_to_use =
     c(
@@ -303,22 +302,23 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        "MORDOR-TS"
-        # "ORCHIDEE", 
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE", 
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
         # "MONA"
         
     )
-complete_by = "MORDOR-SD"
+complete_by = c("MORDOR-SD",
+                "SMASH")
 
 codes_to_use =
     # ''
@@ -326,9 +326,7 @@ codes_to_use =
         'all'
         # 'K2981910', #ref
         # "00241X0012/P1"
-        # "^H",
-        # "^K",
-        # "^O"
+        # "^K"
         
         ## échange code
         # "K2240820",
@@ -388,7 +386,7 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("alphaPAl"),
+         variables=c("QA"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
@@ -534,13 +532,13 @@ Explore2_serie_more_proj =
 ## 3. SAVE_EXTRACT ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
         'meta',
-        # 'data',
+        'data',
         'dataEX',
         'metaEX'
     )
@@ -556,7 +554,7 @@ wait =
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving =
-    "diagnostic/"
+    file.path(mode, type)
     # "proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
 
 var2search =
@@ -684,6 +682,16 @@ doc_diagnostic_map_critere =
         'diagnostic_map'
     )
 
+is_foot_for_map = FALSE
+is_secteur_for_map = TRUE
+
+
+if (is_secteur_for_map) {
+    doc_diagnostic_map_critere$name =
+        paste0(doc_diagnostic_map_critere$name, " (secteur)")
+    doc_diagnostic_map_model$name =
+        paste0(doc_diagnostic_map_model$name, " (secteur)")
+}
 
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
@@ -826,9 +834,9 @@ convert2bool = function (X, true) {
     return (X)
 }
 
-if (mode == "diagnostic") {
+if (grepl("diagnostic", mode)) {
     period_extract = period_extract_diag
-} else if (mode == "projection") {
+} else if (grepl("projection", mode)) {
     period_extract = period_extract_proj
     var2save = var2save[var2save != "data"]
 }
@@ -855,7 +863,7 @@ if ('plot_doc' %in% to_do) {
 
 if (type == "hydrologie") {
 
-    if (mode == "projection") {
+    if (grepl("projection", mode)) {
         projs_selection_data = read_tibble(file.path(
             computer_data_path,
             projs_selection_file))  
@@ -892,15 +900,13 @@ if (type == "hydrologie") {
         projs_selection_data$regexp = gsub("[_]", "[_]",
                                            projs_selection_data$regexp)
         
-        if (use_proj_merge) {
-            proj_path = file.path(computer_data_path, type,
-                                  paste0(mode, "_merge"))
+        if (mode == "projection_merge") {
             projs_selection_data =
                 projs_selection_data[projs_selection_data$EXP !=
                                      "historical",]
-        } else {
-            proj_path = file.path(computer_data_path, type, mode)
-        }    
+        }
+        
+        proj_path = file.path(computer_data_path, type, mode)
 
         Paths = list.files(proj_path,
                            pattern=".*[.]nc",
@@ -948,8 +954,9 @@ if (type == "hydrologie") {
                                    -"path"),
                      filedir=today_resdir,
                      filename="projs_selection.txt")
+
         
-    } else if (mode == "diagnostic") { #####
+    } else if (grepl("diagnostic", mode)) { #####
         diag_path = file.path(computer_data_path, type, mode)
         models_to_use_name = models_to_use
         models_path = list.files(file.path(computer_data_path,
@@ -960,6 +967,10 @@ if (type == "hydrologie") {
         files_to_use = lapply(models_to_use, apply_grepl,
                               table=models_file, target=models_path)
         names(files_to_use) = models_to_use_name
+        files_to_use = files_to_use[sapply(files_to_use, length) > 0]
+
+        complete_by =
+            complete_by[complete_by %in% names(files_to_use)][1]
     }
     
     nFiles_to_use = length(files_to_use)
@@ -982,9 +993,9 @@ if (type == "hydrologie") {
                  filedir=today_resdir,
                  filename="codes_selection_data.txt")
 
-    if (mode == "diagnostic") {
+    if (grepl("diagnostic", mode)) {
         ref = 1
-    } else if (mode == "projection") {
+    } else if (grepl("projection", mode)) {
         ref = c(0, 1)
     }
     codes_selection_data =
