@@ -27,7 +27,7 @@ plot_sheet_diagnostic_station = function (dataEXind_chunk,
                                           df_page=NULL,
                                           subverbose=FALSE) {
     
-    Paths = list.files(file.path(resdir, read_saving, type),
+    Paths = list.files(file.path(resdir, read_saving),
                        pattern="^data[_].*[.]fst$",
                        include.dirs=TRUE,
                        full.names=TRUE)

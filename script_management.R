@@ -105,7 +105,9 @@ manage_data = function () {
         regexp_bool = "^HYP.*"
         regexp_time =
             "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
-        regexp_ratio = "(Rc)|(^epsilon)|(^alpha)|(^STD)"
+        regexp_ratio_alpha = "^alpha"
+        regexp_ratio = "(Rc)|(^epsilon)|(^a)|(^STD)"
+        
 
         if (exists("dataEX")) {
             if (extract$simplify) {
@@ -139,11 +141,23 @@ manage_data = function () {
                                                    "_obs")]],
                                     period=365.25)/30.4375
 
+                        } else if (grepl(regexp_ratio_alpha,
+                                         varREL)) {
+                            
+                            dataEX[[varREL]] =
+                                dataEX[[paste0(varREL, "_sim")]] /
+                                dataEX[[paste0(varREL, "_obs")]]
+
+                            dataEX[[varREL]][
+                                !dataEX[[paste0("HYP", varREL, "_obs")]]
+                            ] = NA
+                            
+                            
                         } else if (grepl(regexp_ratio, varREL)) {
                             dataEX[[varREL]] =
                                 dataEX[[paste0(varREL, "_sim")]] /
                                 dataEX[[paste0(varREL, "_obs")]]
-                            
+
                         } else {
                             dataEX[[varREL]] =
                                 (dataEX[[paste0(varREL,

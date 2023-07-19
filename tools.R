@@ -324,8 +324,10 @@ find_Warnings = function (dataEXind, metaEXind,
     tick_range = list(
         "^KGE"=c(0.5, 1),
         "^Biais$"=c(-0.2, 0.2),
-        "(^epsilon.*)|(^alpha)"=c(0.5, 2),
-        "(^Q[[:digit:]]+$)|([{]t.*[}])"=c(-1, 1),
+        "(^epsilon.*)|(^alpha)|(^a)"=c(0.5, 2),
+        "^Q10$"=c(-0.2, 0.2),
+        "^Q90$"=c(-0.8, 0.8),
+        "[{]t.*[}]"=c(-1, 1),
         "^RAT"=c(TRUE, FALSE))
 
     all_model = "<b>L'ensemble des modèles</b>"
@@ -372,7 +374,7 @@ find_Warnings = function (dataEXind, metaEXind,
             ":simule|simulent: de manière correcte la temporalité annuelle des crues.",
             ":produit|produisent: des crues trop tard dans l'année."),
 
-        "^alphaCDC$"=c(
+        "^aCDC$"=c(
             ":simule|simulent: un régime des moyennes eaux pas suffisamment contrasté.",
             ":simule|simulent: de manière correcte le régime des moyennes eaux.",
             ":simule|simulent: un régime des moyennes eaux trop contrasté."),
@@ -443,7 +445,7 @@ find_Warnings = function (dataEXind, metaEXind,
             "ne :simule|simulent: pas de manière correcte la temporalité annuelle des crues.",
             ":simule|simulent: de manière correcte la temporalité annuelle des crues."),
 
-        "^alphaCDC$"=c(
+        "^aCDC$"=c(
             ":simule|simulent: de manière correcte le régime des moyennes eaux.",
             "ne :simule|simulent: pas de manière correcte le régime des moyennes eaux.",
             ":simule|simulent: de manière correcte le régime des moyennes eaux."),
