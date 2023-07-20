@@ -96,14 +96,16 @@ if (!exists("Shapefiles")) {
 if ('plot_sheet' %in% to_do & !('plot_doc' %in% to_do)) {
     df_page = NULL
     doc_chunk = ""
-    doc_name = default_doc_name
-    plot_list = plot_sheet
+    doc_title = default_doc_title
+    doc_subtitle = NULL
+    sheet_list = plot_sheet
 }
 if ('plot_doc' %in% to_do) {
     df_page = dplyr::tibble()
     doc_chunk = plot_doc$chunk
-    doc_name = plot_doc$name
-    plot_list = plot_doc[!(names(plot_doc) %in% c("name", "chunk"))]
+    doc_title = plot_doc$title
+    doc_subtitle = plot_doc$subtitle
+    sheet_list = plot_doc$sheet
 }
 
 
@@ -117,8 +119,13 @@ if (doc_chunk == "") {
     }
     
 } else if (doc_chunk == "all") {
-    chunkCode = list(codes10_selection)
-    plotCode = chunkCode
+    if (type == "hydrologie") {
+        chunkCode = list(codes10_selection)
+        plotCode = chunkCode
+    } else if (type == "piezometrie") {
+        chunkCode = list(codes_selection)
+        plotCode = chunkCode
+    }
     
 } else if (doc_chunk == "region") {
     letter = factor(substr(CodeALL10, 1, 1))
@@ -166,23 +173,30 @@ for (i in 1:nChunk) {
     Code_to_plot = plotCode[[i]]
     chunkname = names(chunkCode)[i]
 
-    doc_name_ns = gsub(" ", "_", doc_name)
+    doc_title_ns = gsub(" ", "_", doc_title)
+
+    if (!is.null(doc_subtitle)) {
+        doc_title_ns = paste0(doc_title_ns,
+                              "_",
+                              gsub(" ", "_", doc_subtitle))
+    }
     
     if (!is.null(chunkname)) {
         doc_chunkname = gsub(" ", "_",
                              gsub(" [-] ", "_",
                                   chunkname))
         today_figdir_leaf = file.path(today_figdir,
-                                      doc_name_ns,
+                                      doc_title_ns,
                                       doc_chunkname, "PDF")
     } else if ('plot_doc' %in% to_do) {
         today_figdir_leaf = file.path(today_figdir,
-                                      doc_name_ns,
+                                      doc_title_ns,
                                       "PDF")
     } else {
         today_figdir_leaf = today_figdir
     }
 
+    data_chunk = data[data$Code %in% chunk,]
     meta_chunk = meta[meta$Code %in% chunk,]
     dataEXind = dataEX_criteria
     metaEXind_chunk = metaEX_criteria
@@ -205,34 +219,32 @@ for (i in 1:nChunk) {
         names(dataEXserie_chunk) = names(dataEXserie)
     }
     
-    for (sheet in plot_list) {
+    for (sheet in sheet_list) {
 
-        if (sheet == 'summary') {
+        if (sheet == 'sommaire') {
             post("### Plotting summary")
             df_page = tibble(section='Sommaire', subsection=NA, n=1)
         }
 
-        if (sheet == 'diagnostic_matrix') {
+        if (sheet == 'correlation_matrix') {
             post("### Plotting correlation matrix")
-            group_of_models_to_use =
-                list(
-                    "CTRIP",
-                    "EROS",
-                    "GRSD",
-                    "J2000",
-                    "SIM2",
-                    "MORDOR-SD",
-                    "MORDOR-TS",
-                    "ORCHIDEE",
-                    "SMASH",     
-                    "Multi-modèle"=
-                        c("CTRIP", "EROS", "GRSD", "J2000", "SIM2",
-                          "MORDOR-SD", "MORDOR-TS", "ORCHIDEE", "SMASH")
-                )
+
+            group_of_models_to_use = as.list(models_to_use)
+            names(group_of_models_to_use) = models_to_use
+            if (length(models_to_use) > 2) {
+                group_of_models_to_use =
+                    append(group_of_models_to_use,
+                           list(models_to_use))
+                names(group_of_models_to_use)[
+                    length(group_of_models_to_use)] = "Multi-modèle"
+            }
+
             df_page = sheet_correlation_matrix(
                 dataEXind_chunk,
                 metaEXind_chunk,
                 ModelGroup=group_of_models_to_use,
+                Colors=Colors_of_models,
+                subtitle=doc_subtitle,
                 icon_path=icon_path,
                 logo_path=logo_path,
                 figdir=today_figdir_leaf,
@@ -241,7 +253,8 @@ for (i in 1:nChunk) {
         }
 
 
-        if (sheet == 'diagnostic_map') {
+        if (sheet %in% c('carte_critere',
+                         'carte_critere_secteur')) {
             post("### Plotting map")
             one_colorbar = FALSE
             if (doc_chunk == "model") {
@@ -258,17 +271,24 @@ for (i in 1:nChunk) {
                 metaEXind_chunk = metaEXind_chunk
             }
 
+            if (sheet == 'carte_critere') {
+                is_secteur = FALSE
+            } else if (sheet == 'carte_critere_secteur') {
+                is_secteur = TRUE
+            }
+
             df_page = sheet_criteria_map(
                 dataEXind_chunk,
                 metaEXind_chunk,
                 meta,
                 ModelSelection=ModelSelection,
                 Colors=Colors_of_models,
+                subtitle=doc_subtitle,
                 one_colorbar=one_colorbar,
                 icon_path=icon_path,
                 logo_path=logo_path,
-                is_foot=is_foot_for_map,
-                is_secteur=is_secteur_for_map,
+                is_foot=FALSE,
+                is_secteur=is_secteur,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
                 Shapefiles=Shapefiles,
@@ -276,7 +296,7 @@ for (i in 1:nChunk) {
         }
         
 
-        if (sheet == 'diagnostic_regime') {
+        if (sheet == 'fiche_diagnostic_regime') {
             post("### Plotting sheet diagnostic regime")
             df_page = sheet_diagnostic_regime(
                 meta,
@@ -293,9 +313,10 @@ for (i in 1:nChunk) {
                 verbose=subverbose)
         }
 
-        if (sheet == 'diagnostic_couche') {
+        if (sheet == 'fiche_diagnostic_piezometre') {
             post("### Plotting sheet diagnostic couche")
             df_page = sheet_diagnostic_couche(
+                data_chunk,
                 meta_chunk,
                 dataEXind_chunk,
                 metaEXind_chunk,
@@ -310,7 +331,7 @@ for (i in 1:nChunk) {
         }
 
 
-        if (sheet == 'diagnostic_region') {
+        if (sheet == 'fiche_diagnostic_region') {
             post("### Plotting sheet diagnostic region")
             df_page = sheet_diagnostic_region(
                 meta,
@@ -327,7 +348,7 @@ for (i in 1:nChunk) {
                 verbose=subverbose)
         }
 
-        if (sheet == 'diagnostic_station') {
+        if (sheet == 'fiche_diagnostic_station') {
             post("### Plotting sheet diagnostic station")
             df_page = plot_sheet_diagnostic_station(
                 dataEXind_chunk,
@@ -339,10 +360,19 @@ for (i in 1:nChunk) {
         }
     }
 
-    if ('summary' %in% plot_list) {
+    if ('sommaire' %in% sheet_list) {
+        if (is.null(chunkname) & !is.null(doc_subtitle)) {
+            subtitle = doc_subtitle
+        } else if (!is.null(chunkname) & is.null(doc_subtitle)) {
+            subtitle = chunkname
+        } else if (!is.null(chunkname) & !is.null(doc_subtitle)) {
+            subtitle = paste0(chunkname, " ", doc_subtitle)
+        } else {
+            subtitle = ""
+        }
         sheet_summary(df_page,
-                      title=doc_name,
-                      subtitle=chunkname,
+                      title=doc_title,
+                      subtitle=subtitle,
                       logo_path=logo_path,
                       figdir=today_figdir_leaf)
     }
@@ -356,7 +386,7 @@ for (i in 1:nChunk) {
         details = details[with(details, order(as.POSIXct(mtime))),]
         listfile_path = rownames(details)
 
-        if ('summary' %in% plot_list) {
+        if ('sommaire' %in% sheet_list) {
             summary_path = listfile_path[length(listfile_path)]
             listfile_path = listfile_path[-length(listfile_path)]
             listfile_path = c(summary_path, listfile_path)
@@ -365,7 +395,7 @@ for (i in 1:nChunk) {
         if (!is.null(chunkname)) {            
             pdf_combine(input=listfile_path,
                         output=file.path(today_figdir,
-                                         doc_name_ns,
+                                         doc_title_ns,
                                          doc_chunkname,
                                          paste0(doc_chunkname,
                                                 ".pdf")))
@@ -373,8 +403,8 @@ for (i in 1:nChunk) {
         } else {
             pdf_combine(input=listfile_path,
                         output=file.path(today_figdir,
-                                         doc_name_ns,
-                                         paste0(doc_name_ns,
+                                         doc_title_ns,
+                                         paste0(doc_title_ns,
                                                     ".pdf")))
         }
     }

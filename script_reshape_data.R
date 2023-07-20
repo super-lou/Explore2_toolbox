@@ -68,6 +68,17 @@ if (type == "piezometrie") {
                          H_obs=H_obs,
                          H_sim=H_sim)
 
+    data = dplyr::filter(data,
+                         is.finite(H_sim) | Model != "MONA")
+    data[data$Model == "MONA",]$Date =
+        as.Date(
+            paste0(
+                lubridate::year(data$Date[data$Model == "MONA"]),
+                "-01-01"))
+
+    data$H_obs[!is.finite(data$H_obs)] = NA
+    data$H_sim[!is.finite(data$H_sim)] = NA
+
     meta = dplyr::tibble(Code=Code_bss,
                          Couche=Code_bdlisa,
                          Nom=libelle_pe,
@@ -93,23 +104,27 @@ if (type == "piezometrie") {
                       Code=Code_bss,
                       NSEbiais=nash_ss_biais,
                       NSEips=nash_spli,
-                      Biais=bias,
-                      r=correlation)
+                      r=correlation,
+                      Biaismoy=bias)
     
     metaEX_Explore2_criteria_diag_performance =
         dplyr::tibble(
                    var=c("NSEbiais",
-                         "NSEips", "Biais",
-                         "r"),
-                   unit="sans unité",
+                         "NSEips",
+                         "r",
+                         "Biaismoy"),
+                   unit=c("sans unité",
+                          "sans unité",
+                          "sans unité",
+                          "m"),
                    is_date=FALSE,
                    normalize=FALSE,
                    reverse_palette=FALSE,
                    glose=c(
                        "Coeffcient d'efficacité de Nash-Sutcliffe des débits retranchés du biais",
                        "Coeffcient d'efficacité de Nash-Sutcliffe entre l’Indicateur Piézomètre Standardisé (IPS) simulé et l’IPS observé",
-                       "Différence entre les moyennes des débits journaliers simulés et observés",
-                       "Corrélation"),
+                       "Corrélation",
+                       "Biais des moyennes, différence entre les moyennes des débits journaliers simulés et observés"),
                    topic="Performance",
                    samplePeriod="")
 
