@@ -143,8 +143,8 @@ lib_path =
 #       directory.
 
 type =
-    # "hydrologie"
-    "piezometrie"
+    "hydrologie"
+    # "piezometrie"
 
 mode =
     "diagnostic"
@@ -161,8 +161,8 @@ to_do =
         # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
-        # 'read_saving',
-        # 'selection',
+        'read_saving',
+        'selection',
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -175,12 +175,12 @@ extract_data =
     c(
         # 'WIP'
         'Explore2_criteria_diag_performance',
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT',
-        # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME',
-        # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT',
+        'Explore2_criteria_diag_HE',
+        'Explore2_criteria_diag_ME',
+        'Explore2_criteria_diag_BE',
+        'Explore2_criteria_diag_BF',
         'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
@@ -226,7 +226,7 @@ plot_sheet =
     c(
         # 'sommaire'
         # 'correlation_matrix'
-        # 'fiche_diagnostic_station'
+        'fiche_diagnostic_station'
         # 'diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
@@ -240,7 +240,7 @@ plot_doc =
         # "correlation_matrix_ungauged"
         # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
-        'fiche_diagnostic_piezometre'
+        # 'fiche_diagnostic_piezometre'
         
         # "carte_critere_model"
         # "carte_critere_model_secteur"
@@ -251,6 +251,13 @@ plot_doc =
         # "carte_critere_model_ungauged_secteur"
         # "carte_critere_critere_ungauged"
         # "carte_critere_critere_ungauged_secteur"
+
+        # "carte_critere_model_avertissement_secteur"
+        "carte_critere_critere_avertissement_secteur"
+        
+        # "carte_piezo_critere_model"
+        # "carte_piezo_critere_critere"
+        
     )
 
 
@@ -311,19 +318,19 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE", 
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE", 
+        "SMASH"
 
-        "AquiFR",
-        "EROS Bretagne",
-        "MONA"
+        # "AquiFR",
+        # "EROS Bretagne",
+        # "MONA"
         
     )
 complete_by = c("MORDOR-SD",
@@ -334,6 +341,7 @@ codes_to_use =
     c(
         'all'
         # 'K2981910' #ref
+        # "O038401001"
         # "00241X0012/P1"
         # "^K"
         
@@ -348,8 +356,8 @@ codes_to_use =
         # "K2680810"
 
         ## pourri
-        # "H640201001" #SIM2
-        # "B413201001" #CTRIP
+        # "H640201001", #SIM2
+        # "B413201001", #CTRIP
         # "D020601001" #CTRIP
         # "K649*" #ORCHIDEE
     )
@@ -628,21 +636,23 @@ logo_to_show =
 exXprob = 0.01
 
 Colors_of_models = c(
-    "CTRIP"="#a88d72", #marron
-    "EROS"="#cecd8d", #vert clair
-    "GRSD"="#619c6c", #vert foncé
-    "J2000"="#74aeb9", #bleu clair
-    "MORDOR-SD"="#d8714e", #orangeel
-    "MORDOR-TS"="#ae473e", #rouge
-    "ORCHIDEE"="#efa59d", #rose #f5c8c3
-    "SIM2"="#475e6a", #bleu foncé
-    "SMASH"="#f6ba62", #mimosa
-    "Multi-model"="",
+    "CTRIP"="#A88D72", #marron
+    "EROS"="#CECD8D", #vert clair
+    "GRSD"="#619C6C", #vert foncé
+    "J2000"="#74AEB9", #bleu clair
+    "MORDOR-SD"="#D8714E", #orange
+    "MORDOR-TS"="#AE473E", #rouge
+    "ORCHIDEE"="#EFA59D", #rose
+    "SIM2"="#475E6A", #bleu foncé
+    "SMASH"="#F6BA62", #mimosa
+    # "Multi-modèle"="",
 
-    "AquiFR"="#D394E3", #violet
-    "EROS Bretagne"="#FCCB0C", #jaune
-    "MONA"="#F38459" #orange
+    "AquiFR"="#AF3FA5", #violet
+    "EROS Bretagne"="#CECD8D", #vert clair
+    "MONA"="#F5D80E" #jaune
 )
+
+add_multi = TRUE
 
 
 ## 7. PLOT_DOC _______________________________________________________
@@ -761,6 +771,45 @@ doc_carte_critere_critere_ungauged_secteur =
         chunk='critere',
         sheet=c('sommaire',
                 'carte_critere_secteur')
+    )
+
+### Warning
+doc_carte_critere_model_avertissement_secteur =
+    list(
+        title="Carte des avertissements par modèle (secteur)",
+        subtitle="Avertissements",
+        chunk='model',
+        sheet=c('sommaire',
+                'carte_critere_avertissement_secteur')
+    )
+doc_carte_critere_critere_avertissement_secteur =
+    list(
+        title="Carte des avertissements par critère (secteur)",
+        subtitle="Avertissements",
+        chunk='critere',
+        sheet=c('sommaire',
+                'carte_critere_avertissement_secteur')
+    )
+
+
+
+## Carte piezo
+### Station
+doc_carte_piezo_critere_model =
+    list(
+        title="Carte des critères d'évaluation par modèle",
+        subtitle="Piézomètre",
+        chunk='model',
+        sheet=c('sommaire',
+                'carte_critere')
+    )
+doc_carte_piezo_critere_critere =
+    list(
+        title="Carte des critères d'évaluation par critère",
+        subtitle="Piézomètre",
+        chunk='critere',
+        sheet=c('sommaire',
+                'carte_critere')
     )
 
 
@@ -1207,15 +1256,15 @@ if (type == "hydrologie") {
         computer_data_path, type,
         codes_piezo_selection_file))
     
-    codes_selection = codes_selection_data$code_bss
+    codes10_selection = codes_selection_data$code_bss
 
     if (all(codes_to_use == "all")) {
-        CodeALL = codes_selection
+        CodeALL = codes10_selection
     } else {
         okCode = grepl(paste0("(",
                               paste0(codes_to_use, collapse=")|("),
-                              ")"), codes_selection)
-        CodeALL = codes_selection[okCode]
+                              ")"), codes10_selection)
+        CodeALL = codes10_selection[okCode]
     }
 }
 

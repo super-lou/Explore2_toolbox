@@ -93,6 +93,22 @@ if (!exists("Shapefiles")) {
 }
 
 
+if (add_multi) {
+    group_of_models_to_use = as.list(models_to_use)
+    names(group_of_models_to_use) = models_to_use
+    if (length(models_to_use) > 2) {
+        group_of_models_to_use =
+            append(group_of_models_to_use,
+                   list(models_to_use))
+        names(group_of_models_to_use)[
+            length(group_of_models_to_use)] = "Multi-modèle"
+    }
+} else {
+    group_of_models_to_use = as.list(models_to_use)
+    names(group_of_models_to_use) = models_to_use
+}
+
+
 if ('plot_sheet' %in% to_do & !('plot_doc' %in% to_do)) {
     df_page = NULL
     doc_chunk = ""
@@ -110,22 +126,12 @@ if ('plot_doc' %in% to_do) {
 
 
 if (doc_chunk == "") {    
-    if (type == "hydrologie") {
-        chunkCode = list(codes10_selection)#list(CodeALL10)
-        plotCode = list(CodeALL10)
-    } else if (type == "piezometrie") {
-        chunkCode = list(codes_selection)
-        plotCode = list(CodeALL)
-    }
+    chunkCode = list(codes10_selection)#list(CodeALL10)
+    plotCode = list(CodeALL10)
     
 } else if (doc_chunk == "all") {
-    if (type == "hydrologie") {
-        chunkCode = list(codes10_selection)
-        plotCode = chunkCode
-    } else if (type == "piezometrie") {
-        chunkCode = list(codes_selection)
-        plotCode = chunkCode
-    }
+    chunkCode = list(codes10_selection)
+    plotCode = chunkCode
     
 } else if (doc_chunk == "region") {
     letter = factor(substr(CodeALL10, 1, 1))
@@ -150,10 +156,10 @@ if (doc_chunk == "") {
     plotCode = chunkCode
     
 } else if (doc_chunk == "model") {
-    chunkCode = replicate(length(models_to_use),
+    chunkCode = replicate(length(group_of_models_to_use),
                          codes10_selection,
                          simplify=FALSE)
-    names(chunkCode) = models_to_use
+    names(chunkCode) = names(group_of_models_to_use)
     plotCode = chunkCode
 
 } else if (doc_chunk == "critere") {
@@ -253,14 +259,14 @@ for (i in 1:nChunk) {
         }
 
 
-        if (sheet %in% c('carte_critere',
-                         'carte_critere_secteur')) {
+        if (grepl('carte[_]critere', sheet)) {
             post("### Plotting map")
             one_colorbar = FALSE
             if (doc_chunk == "model") {
-                ModelSelection = chunkname
+                ModelSelection = group_of_models_to_use[chunkname]
+                names(ModelSelection) = chunkname
             } else {
-                ModelSelection = NULL
+                ModelSelection = group_of_models_to_use
             }
 
             if (doc_chunk == "critere") {
@@ -271,10 +277,16 @@ for (i in 1:nChunk) {
                 metaEXind_chunk = metaEXind_chunk
             }
 
-            if (sheet == 'carte_critere') {
-                is_secteur = FALSE
-            } else if (sheet == 'carte_critere_secteur') {
+            if (grepl('secteur', sheet)) {
                 is_secteur = TRUE
+            } else {
+                is_secteur = FALSE
+            }
+
+            if (grepl('avertissement', sheet)) {
+                is_warning = TRUE
+            } else {
+                is_warning = FALSE
             }
 
             df_page = sheet_criteria_map(
@@ -289,6 +301,7 @@ for (i in 1:nChunk) {
                 logo_path=logo_path,
                 is_foot=FALSE,
                 is_secteur=is_secteur,
+                is_warning=is_warning,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
                 Shapefiles=Shapefiles,
