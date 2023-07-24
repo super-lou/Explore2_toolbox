@@ -38,6 +38,9 @@ CARD_extract_data = function () {
         
         extract = extract_data[[i]]
 
+        print(CARD_path)
+        print(tmppath)
+        
         CARD_management(CARD=CARD_path,
                         tmp=tmppath,
                         layout=c(paste0(extract$name, "_", rank), "[",

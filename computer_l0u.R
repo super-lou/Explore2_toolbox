@@ -66,8 +66,7 @@ codes_piezo_selection_file = "piezometres_references_hubeau.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
-CARD_path = file.path(dev_lib_path,
-                      "CARD")
+CARD_path = file.path(dev_lib_path, "CARD")
 # Name of the tool directory that includes all the functions needed to
 # calculate a variable
 init_tools_dir = '__tools__'
