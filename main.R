@@ -897,19 +897,8 @@ if (any(file.exists(dev_path))) {
 # Import other library
 print("Importing library")
 library(dplyr)
-library(ggplot2)
-library(qpdf)
-library(gridExtra)
-library(gridtext)
-library(ggh4x)
-require(rgdal)
-library(shadowtext)
-library(png)
-library(ggrepel)
-library(latex2exp)
-require(sf) #nope
 library(stringr)
-library(ggtext)
+
 # already ::
 # library(tidyr)
 # library(grid)
@@ -919,6 +908,21 @@ library(ggtext)
 # library(sp)
 # library(fst)
 
+
+if (any(grepl("plot", to_do))) {
+    library(ggplot2)
+    library(qpdf)
+    library(gridExtra)
+    library(gridtext)
+    library(ggh4x)
+    require(rgdal)
+    library(shadowtext)
+    library(png)
+    library(ggrepel)
+    library(latex2exp)
+    require(sf) #nope
+    library(ggtext)
+}
 
 if (MPI != "") {
     library(Rmpi)
