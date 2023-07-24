@@ -143,8 +143,8 @@ lib_path =
 #       directory.
 
 type =
-    "hydrologie"
-    # "piezometrie"
+    # "hydrologie"
+    "piezometrie"
 
 mode =
     "diagnostic"
@@ -162,7 +162,7 @@ to_do =
         # 'save_extract'
         # 'read_tmp'
         'read_saving',
-        'selection',
+        # 'selection',
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -175,12 +175,12 @@ extract_data =
     c(
         # 'WIP'
         'Explore2_criteria_diag_performance',
-        'Explore2_criteria_diag_sensibilite',
-        'Explore2_criteria_diag_sensibilite_RAT',
-        'Explore2_criteria_diag_HE',
-        'Explore2_criteria_diag_ME',
-        'Explore2_criteria_diag_BE',
-        'Explore2_criteria_diag_BF',
+        # 'Explore2_criteria_diag_sensibilite',
+        # 'Explore2_criteria_diag_sensibilite_RAT',
+        # 'Explore2_criteria_diag_HE',
+        # 'Explore2_criteria_diag_ME',
+        # 'Explore2_criteria_diag_BE',
+        # 'Explore2_criteria_diag_BF',
         'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
@@ -253,9 +253,9 @@ plot_doc =
         # "carte_critere_critere_ungauged_secteur"
 
         # "carte_critere_model_avertissement_secteur"
-        "carte_critere_critere_avertissement_secteur"
+        # "carte_critere_critere_avertissement_secteur"
         
-        # "carte_piezo_critere_model"
+        "carte_piezo_critere_model"
         # "carte_piezo_critere_critere"
         
     )
@@ -294,7 +294,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 14
+nCode4RAM = 25
 
 projs_to_use =
     c(
@@ -318,19 +318,19 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE", 
-        "SMASH"
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE", 
+        # "SMASH"
 
-        # "AquiFR",
-        # "EROS Bretagne",
-        # "MONA"
+        "AquiFR",
+        "EROS Bretagne",
+        "MONA"
         
     )
 complete_by = c("MORDOR-SD",
@@ -341,9 +341,11 @@ codes_to_use =
     c(
         'all'
         # 'K2981910' #ref
-        # "O038401001"
-        # "00241X0012/P1"
+        # "^G",
+        # "^H",
+        # "^I",
         # "^K"
+        
         
         ## échange code
         # "K2240820",
@@ -358,8 +360,13 @@ codes_to_use =
         ## pourri
         # "H640201001", #SIM2
         # "B413201001", #CTRIP
-        # "D020601001" #CTRIP
-        # "K649*" #ORCHIDEE
+    )
+
+diag_station_2_remove =
+    c(
+        "ORCHIDEE"="K649*",
+        "CTRIP"="O038401001",
+        "CTRIP"="D020601001"
     )
 
 # existant :
@@ -370,19 +377,14 @@ codes_to_use =
 # K2240820 -> K2240810
 
 
-# print(extract_data[[i]])
-# print(
-#     tidyr::pivot_longer(dplyr::tibble(!!!sapply(ls(), function (x) {
-#         format(object.size(get(x)),
-#                units="MB",
-#                standard="legacy",
-#                digits=3)})),
-#         dplyr::everything(),
-#         names_to="object", values_to="size"),
-#     n=Inf, digits=10)
 
-# print("")
-# print("")
+
+
+# dataEX_criteria_normal = dataEX_criteria
+# dataEX_criteria_ungauged = dataEX_criteria
+# dataEX_criteria = dplyr::filter(dataEX_criteria_normal, !(Model %in% c("GRSD", "SMASH")))
+# dataEX_criteria = dplyr::bind_rows(dataEX_criteria, dataEX_criteria_ungauged)
+# dataEX_criteria = dplyr::filter(dataEX_criteria, Model != "MORDOR-SD")
 
 
 ## 2. EXTRACT_DATA ___________________________________________________
@@ -601,7 +603,9 @@ diag_period_selection =
 
 diag_station_selection =
     c(
-        "ORCHIDEE"="K649*"
+        "ORCHIDEE"="K649*",
+        "CTRIP"="O038401001",
+        "CTRIP"="D020601001"
     )
 
 
@@ -801,7 +805,7 @@ doc_carte_piezo_critere_model =
         subtitle="Piézomètre",
         chunk='model',
         sheet=c('sommaire',
-                'carte_critere')
+                'carte_critere_piezo_shape')
     )
 doc_carte_piezo_critere_critere =
     list(
@@ -809,7 +813,7 @@ doc_carte_piezo_critere_critere =
         subtitle="Piézomètre",
         chunk='critere',
         sheet=c('sommaire',
-                'carte_critere')
+                'carte_critere_piezo_shape')
     )
 
 
@@ -1349,6 +1353,14 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                 subset = Subsets[[ss]]
                 subset_name = names(Subsets)[ss]
 
+                if (ss < nSubsets) {
+                    subset_next = Subsets[[ss+1]]
+                    subset_next_name = names(Subsets)[ss+1]
+                } else {
+                    subset_next = "!"
+                    subset_next_name = "!"
+                }
+
                 post(paste0("For subset ", files_name_opt.,
                             subset_name, ": ",
                             paste0(subset, collapse=" -> ")))
@@ -1358,7 +1370,7 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                     file_test = c(file_test,
                                   paste0("data", sep,
                                          files_name_opt.,
-                                         subset_name, ".fst"))
+                                         subset_next_name, ".fst"))
                 }
                 if ('extract_data' %in% to_do) {
                     for (aa in 1:length(extract_data)) {
@@ -1369,13 +1381,13 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                                           paste0("dataEX_",
                                                  extract$name,
                                                  sep, files_name_opt.,
-                                                 subset_name, ".fst"))
+                                                 subset_next_name, ".fst"))
                         } else {
                             file_test = c(file_test,
                                           paste0("dataEX_",
                                                  extract$name,
                                                  sep, files_name_opt.,
-                                                 subset_name))
+                                                 subset_next_name))
                         }
                     }
                 }

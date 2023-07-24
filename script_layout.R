@@ -289,6 +289,19 @@ for (i in 1:nChunk) {
                 is_warning = FALSE
             }
 
+            if (grepl('shape', sheet)) {
+                model_by_shape = TRUE
+            } else {
+                model_by_shape = FALSE
+            }
+
+            if (grepl('piezo', sheet)) {
+                remove_warning_lim = TRUE
+            } else {
+                remove_warning_lim = FALSE
+            }
+            
+
             df_page = sheet_criteria_map(
                 dataEXind_chunk,
                 metaEXind_chunk,
@@ -302,6 +315,8 @@ for (i in 1:nChunk) {
                 is_foot=FALSE,
                 is_secteur=is_secteur,
                 is_warning=is_warning,
+                model_by_shape=model_by_shape,
+                remove_warning_lim=remove_warning_lim,
                 figdir=today_figdir_leaf,
                 df_page=df_page,
                 Shapefiles=Shapefiles,

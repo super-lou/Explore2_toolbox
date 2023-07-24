@@ -270,6 +270,23 @@ create_data = function () {
             rm ("data_sim")
             gc()
         }
+
+
+        if (grepl("diagnostic", mode)) {
+            for (i in 1:length(diag_station_2_remove)) {
+                data = dplyr::filter(
+                                  data,
+                                  !(Model ==
+                                    names(diag_station_2_remove)[i] &
+                                    grepl(diag_station_2_remove[i],
+                                          Code)))
+                meta[[paste0("Surface_",
+                             names(diag_station_2_remove)[i],
+                             "_km2")]][
+                    grepl(diag_station_2_remove[i], meta$Code)
+                ] = NA
+            }
+        }
         
         write_tibble(data,
                      filedir=tmppath,

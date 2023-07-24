@@ -80,7 +80,6 @@ manage_data = function () {
                 dataEX_tmp = read_tibble(filedir=tmppath,
                                          filename=filename)
 
-
                 
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
@@ -561,37 +560,6 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                                                 meta$Code)] = NA
             }
 
-            # check_for_data = function (path, code, model) {
-            #     data = read_tibble(filepath=path)
-            #     Code_tmp = levels(factor(data$Code))
-            #     if (any(grepl(code, Code_tmp))) {
-            #         data = dplyr::filter(data,
-            #                              !(Model == model &
-            #                                grepl(code, Code)))
-            #         write_tibble(data,
-            #                      filedir=dirname(path),
-            #                      filename=basename(path))
-            #     }
-            # }
-
-            # for (j in 1:length(diag_station_selection)) {
-            #     if (length(diag_station_selection) == 0) {
-            #         break
-            #     }
-            #     model = names(diag_station_selection)[j]
-            #     code = diag_station_selection[j]
-
-            #     Paths = list.files(file.path(resdir, read_saving),
-            #                        pattern="^data[_].*[.]fst$",
-            #                        include.dirs=TRUE,
-            #                        full.names=TRUE)
-            #     letterPaths = gsub("(.*[_])|([[:digit:]]+[.]fst)", "", Paths)
-            #     Paths = Paths[letterPaths %in% substr(code, 1, 1)]
-            #     for (path in Paths) {
-            #         check_for_data(path, code, model)
-            #     }
-            # }
-            
             for (i in 1:length(extract_data)) {
                 extract = extract_data[[i]]
 
