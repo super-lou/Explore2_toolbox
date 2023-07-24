@@ -143,8 +143,8 @@ lib_path =
 #       directory.
 
 type =
-    # "hydrologie"
-    "piezometrie"
+    "hydrologie"
+    # "piezometrie"
 
 mode =
     "diagnostic"
