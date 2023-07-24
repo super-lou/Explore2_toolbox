@@ -157,31 +157,31 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data'
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
-        'read_saving',
+        # 'read_saving',
         # 'selection',
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        'plot_doc'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
 extract_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_performance'
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
         # 'Explore2_criteria_diag_HE',
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot'
+        # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -318,19 +318,19 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE", 
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE", 
+        "SMASH"
 
-        "AquiFR",
-        "EROS Bretagne",
-        "MONA"
+        # "AquiFR",
+        # "EROS Bretagne",
+        # "MONA"
         
     )
 complete_by = c("MORDOR-SD",
