@@ -43,7 +43,7 @@ CARD_extract_data = function () {
                         layout=c(paste0(extract$name, "_", rank), "[",
                                  extract$variables, "]"),
                         overwrite=TRUE,
-                        verbose=TRUE)
+                        verbose=subverbose)
 
         res = CARD_extraction(data,
                               CARD_path=CARD_path,
