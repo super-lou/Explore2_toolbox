@@ -164,10 +164,10 @@ to_do =
         'read_saving',
         'selection',
         # 'write_warnings'
-        'add_regime_hydro'
+        # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        # 'plot_doc'
+        'plot_doc'
         # 'create_data_proj'
     )
 
@@ -238,7 +238,7 @@ plot_doc =
     c(
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
-        # 'fiche_diagnostic_region'
+        'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
         
@@ -255,7 +255,7 @@ plot_doc =
         # "carte_critere_model_avertissement_secteur"
         # "carte_critere_critere_avertissement_secteur"
         
-        "carte_piezo_critere_model"
+        # "carte_piezo_critere_model"
         # "carte_piezo_critere_critere"
         
     )
