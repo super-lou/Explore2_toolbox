@@ -166,8 +166,8 @@ to_do =
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
-        # 'plot_sheet'
-        'plot_doc'
+        'plot_sheet'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
