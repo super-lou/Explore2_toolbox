@@ -666,6 +666,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             if (!extract$simplify) {
                 dataEX = get(paste0("dataEX_", extract$name))
                 meta = get("meta")
+                meta =
+                    dplyr::select(meta,
+                                  !dplyr::starts_with("Regime_hydro_"))
 
                 Code = levels(factor(dataEX$Code))
                 nCode = length(Code)
@@ -675,16 +678,15 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                                      Code, Date),
                                      QM=select_good(QM_obs),
                                      .groups="drop")
-                dataEXseriePA_med =
-                    dplyr::summarise(dplyr::group_by(dataEX$PA,
-                                                     Code, Date),
-                                     PAs=median(PAs_obs, na.rm=TRUE),
-                                     PAl=median(PAl_obs, na.rm=TRUE),
-                                     PA=median(PA_obs, na.rm=TRUE),
+                dataEXserieP_r =
+                    dplyr::summarise(dplyr::group_by(dataEX$P_r,
+                                                     Code),
+                                     Ps_r=median(Ps_r_obs, na.rm=TRUE),
+                                     Pl_r=median(Pl_r_obs, na.rm=TRUE),
                                      .groups="drop")
                 regimeHydro = find_regimeHydro(dataEXserieQM_obs,
-                                               lim_number=2,
-                                               dataEXseriePA_med)
+                                               lim_number=NULL,
+                                               dataEXserieP_r)
 
                 ok = names(regimeHydro) != "Code"
                 names(regimeHydro)[ok] =

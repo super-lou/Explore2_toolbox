@@ -174,14 +174,14 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT',
-        # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME',
+        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT',
+        'Explore2_criteria_diag_HE',
+        'Explore2_criteria_diag_ME'
         # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot'
+        # 'Explore2_criteria_diag_BF'
+        # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -239,8 +239,8 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        'fiche_diagnostic_region'
-        # 'fiche_diagnostic_regime'
+        # 'fiche_diagnostic_region'
+        'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
         ## normal
@@ -277,9 +277,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -299,7 +299,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 9
 
 projs_to_use =
     c(
