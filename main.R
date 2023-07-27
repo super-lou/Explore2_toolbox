@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -174,13 +174,13 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diag_performance',
-        'Explore2_criteria_diag_sensibilite',
-        'Explore2_criteria_diag_sensibilite_RAT',
-        'Explore2_criteria_diag_HE',
-        'Explore2_criteria_diag_ME',
-        'Explore2_criteria_diag_BE',
-        'Explore2_criteria_diag_BF',
+        # 'Explore2_criteria_diag_performance',
+        # 'Explore2_criteria_diag_sensibilite',
+        # 'Explore2_criteria_diag_sensibilite_RAT',
+        # 'Explore2_criteria_diag_HE',
+        # 'Explore2_criteria_diag_ME',
+        # 'Explore2_criteria_diag_BE',
+        # 'Explore2_criteria_diag_BF',
         'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran'
         # 'Explore2_serie_more_proj_safran'
@@ -226,9 +226,9 @@ plot_sheet =
     c(
         # 'sommaire'
         # 'correlation_matrix'
-        'fiche_diagnostic_station'
-        # 'diagnostic_region'
-        # 'fiche_diagnostic_regime'
+        # 'fiche_diagnostic_station'
+        # 'fiche_diagnostic_region'
+        'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
         # 'carte_critere'
     )
@@ -238,23 +238,28 @@ plot_doc =
     c(
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
-        # 'fiche_diagnostic_region'
+        
+        'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
-        
+
+        ## normal
         # "carte_critere_model"
         # "carte_critere_model_secteur"
         # "carte_critere_critere"
         # "carte_critere_critere_secteur"
 
+        ## ungauged
         # "carte_critere_model_ungauged"
         # "carte_critere_model_ungauged_secteur"
         # "carte_critere_critere_ungauged"
         # "carte_critere_critere_ungauged_secteur"
 
+        ## avertissement
         # "carte_critere_model_avertissement_secteur"
         # "carte_critere_critere_avertissement_secteur"
-        
+
+        ## piezo
         # "carte_piezo_critere_model"
         # "carte_piezo_critere_critere"
         
@@ -318,14 +323,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE", 
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE", 
         "SMASH"
 
         # "AquiFR",
@@ -333,16 +338,15 @@ models_to_use =
         # "MONA"
         
     )
-complete_by = c("MORDOR-SD",
-                "SMASH")
+complete_by = "SMASH"
 
 codes_to_use =
     # ''
     c(
         'all'
         # 'K2981910' #ref
-        # "^J"
-        # "^H",
+        # "^A"
+        # "^H64"
         # "^I",
         # "^K"
         
@@ -406,13 +410,13 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("alphaQA"),
+         variables=c("PA_all", "P_r_all"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
          expand=FALSE,
          cancel_lim=TRUE,
-         simplify=TRUE)
+         simplify=FALSE)
 
 # diag
 Explore2_criteria_diag_performance = 
@@ -485,7 +489,7 @@ Explore2_criteria_diag_BF =
 
 Explore2_serie_diag_plot = 
     list(name='Explore2_serie_diag_plot',
-         variables=c("QM", "QA", "PA_all",
+         variables=c("QM", "QA", "PA_all", "P_r_all",
                      "medQJC5", "CDC"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,

@@ -808,17 +808,18 @@ find_Warnings = function (dataEXind, metaEXind,
     return (list(Warnings=Warnings, frq=frq))
 }
 
-# W = find_Warnings(dataEX_Explore2_diag_criteria_select,
+# res_Warnings = find_Warnings(dataEX_Explore2_diag_criteria_select,
                   # metaEX_Explore2_diag_criteria_select,
                   # codeLight="K298191001",
                   # codeLight="V232000000",
                   # save=FALSE)
-# Warnings = W$Warnings
-# Warnings
-# frq = Warnings$frq
-# frq_short=select(frq, c(var, niveau, npv_pct))
-# frq_short = arrange(group_by(frq_short, var), desc(niveau), .by_group=TRUE)
-# frq_short$npv_pct = round(frq_short$npv_pct)
+# Warnings_frequency_short =
+    # select(Warnings_frequency, c(var, niveau, npv_pct))
+# Warnings_frequency_short =
+    # arrange(group_by(Warnings_frequency_short, var),
+            # desc(niveau), .by_group=TRUE)
+# Warnings_frequency_short$npv_pct =
+    # round(Warnings_frequency_short$npv_pct)
 
 
 
