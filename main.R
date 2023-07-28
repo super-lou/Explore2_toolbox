@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -157,9 +157,9 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data'
-        'create_data',
+        # 'create_data',
         # 'extract_data',
-        'save_extract'
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection',
@@ -167,7 +167,7 @@ to_do =
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        # 'plot_doc'
+        'plot_doc'
         # 'create_data_proj'
     )
 
@@ -277,9 +277,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -323,14 +323,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE", 
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE", 
         "SMASH"
 
         # "AquiFR",
