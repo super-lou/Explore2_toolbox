@@ -158,7 +158,7 @@ to_do =
         # 'merge_nc'
         # 'reshape_data'
         'create_data',
-        'extract_data',
+        # 'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
