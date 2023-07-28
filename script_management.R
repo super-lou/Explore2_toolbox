@@ -290,16 +290,16 @@ save_data = function () {
         if ("meta" %in% var2save) {
             write_tibble(meta,
                          filedir=today_resdir_tmp,
-                         filename=paste0("meta.fst"))
+                         filename="meta.fst")
             if ("Rdata" %in% saving_format) {
                 write_tibble(meta,
                              filedir=today_resdir_tmp,
-                             filename=paste0("meta.Rdata"))
+                             filename="meta.Rdata")
             }
             if ("txt" %in% saving_format) {
                 write_tibble(meta,
                              filedir=today_resdir_tmp,
-                             filename=paste0("meta.txt"))
+                             filename="meta.txt")
             }
             if (!is.null(wait)) {
                 post("Waiting for saving of meta data")

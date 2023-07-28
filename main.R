@@ -158,7 +158,7 @@ to_do =
         # 'merge_nc'
         # 'reshape_data'
         'create_data',
-        # 'extract_data',
+        'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -173,7 +173,7 @@ to_do =
 
 extract_data =
     c(
-        # 'WIP'
+        'WIP'
         # 'Explore2_criteria_diag_performance',
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
@@ -181,9 +181,9 @@ extract_data =
         # 'Explore2_criteria_diag_ME'
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF'
-        'Explore2_serie_diag_plot',
-        'Explore2_serie_proj_safran',
-        'Explore2_serie_more_proj_safran'
+        # 'Explore2_serie_diag_plot',
+        # 'Explore2_serie_proj_safran',
+        # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
@@ -410,7 +410,7 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("PA_all", "P_r_all"),
+         variables=c("QA"),
          suffix=c("_obs", "_sim"),
          # suffix=c("_obs"),
          suffix=NULL,
