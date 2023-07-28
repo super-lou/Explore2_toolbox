@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    "diagnostic"
-    # "diagnostic_ungauged"
+    # "diagnostic"
+    "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -161,7 +161,7 @@ to_do =
         # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
-        # 'read_saving',
+        'read_saving',
         # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
@@ -237,7 +237,7 @@ plot_sheet =
 plot_doc =
     c(
         # "correlation_matrix"
-        # "correlation_matrix_ungauged"
+        "correlation_matrix_ungauged"
         
         # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
@@ -245,7 +245,7 @@ plot_doc =
 
         ## normal
         # "carte_critere_model"
-        "carte_critere_model_secteur"
+        # "carte_critere_model_secteur"
         # "carte_critere_critere"
         # "carte_critere_critere_secteur"
 
@@ -257,7 +257,6 @@ plot_doc =
 
         ## avertissement
         # "carte_critere_model_avertissement_secteur"
-        # "carte_critere_critere_avertissement_secteur"
 
         ## piezo
         # "carte_piezo_critere_model"
@@ -323,14 +322,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
+        # "CTRIP",
+        # "EROS",
         "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE", 
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE", 
         "SMASH"
 
         # "AquiFR",
@@ -788,14 +787,6 @@ doc_carte_critere_model_avertissement_secteur =
         title="Carte des avertissements par modèle (secteur)",
         subtitle="Avertissements",
         chunk='model',
-        sheet=c('sommaire',
-                'carte_critere_avertissement_secteur')
-    )
-doc_carte_critere_critere_avertissement_secteur =
-    list(
-        title="Carte des avertissements par critère (secteur)",
-        subtitle="Avertissements",
-        chunk='critere',
         sheet=c('sommaire',
                 'carte_critere_avertissement_secteur')
     )
