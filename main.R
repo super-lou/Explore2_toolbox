@@ -158,7 +158,7 @@ to_do =
         # 'merge_nc'
         # 'reshape_data'
         'create_data',
-        'extract_data',
+        # 'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -240,12 +240,12 @@ plot_doc =
         # "correlation_matrix_ungauged"
         
         # 'fiche_diagnostic_region'
-        'fiche_diagnostic_regime'
+        # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
         ## normal
         # "carte_critere_model"
-        # "carte_critere_model_secteur"
+        "carte_critere_model_secteur"
         # "carte_critere_critere"
         # "carte_critere_critere_secteur"
 
@@ -299,7 +299,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 9
+nCode4RAM = 100
 
 projs_to_use =
     c(
