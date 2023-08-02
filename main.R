@@ -157,17 +157,17 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data'
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection'
+        # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        'plot_doc'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
@@ -378,6 +378,8 @@ diag_station_2_remove =
 # conversion :
 # K0910050 -> K0910010
 # K2240820 -> K2240810
+
+# KLIGNON1 -> K0725302
 
 
 
