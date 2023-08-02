@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -161,8 +161,8 @@ to_do =
         # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
-        'read_saving',
-        # 'selection',
+        # 'read_saving',
+        # 'selection'
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -237,10 +237,10 @@ plot_sheet =
 plot_doc =
     c(
         # "correlation_matrix"
-        "correlation_matrix_ungauged"
+        # "correlation_matrix_ungauged"
         
         # 'fiche_diagnostic_region'
-        # 'fiche_diagnostic_regime'
+        'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
         ## normal
@@ -322,14 +322,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE", 
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE", 
         "SMASH"
 
         # "AquiFR",
@@ -929,34 +929,6 @@ if (MPI != "") {
     size = 1
 }
 
-any_grepl = function (pattern, x, ...) {
-    return (any(grepl(pattern=pattern, x=x, ...)))
-}
-
-apply_grepl = function (x, table, target=NULL) {
-    if (is.null(target)) {
-        target = table
-    }
-    return (target[grepl(x, table)])
-}
-
-apply_match = function (x, table, target=NULL) {
-    if (is.null(target)) {
-        target = table
-    }
-    return (target[match(x, table)])
-}
-
-apply_bra = function (id, target) {
-    return (target[id])
-}
-
-convert2bool = function (X, true) {
-    ok = X == true
-    X[ok] = TRUE
-    X[!ok] = FALSE
-    return (X)
-}
 
 if (grepl("diagnostic", mode)) {
     period_extract = period_extract_diag

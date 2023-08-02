@@ -20,6 +20,35 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
+any_grepl = function (pattern, x, ...) {
+    return (any(grepl(pattern=pattern, x=x, ...)))
+}
+
+apply_grepl = function (x, table, target=NULL) {
+    if (is.null(target)) {
+        target = table
+    }
+    return (target[grepl(x, table)])
+}
+
+apply_match = function (x, table, target=NULL) {
+    if (is.null(target)) {
+        target = table
+    }
+    return (target[match(x, table)])
+}
+
+apply_bra = function (id, target) {
+    return (target[id])
+}
+
+convert2bool = function (X, true) {
+    ok = X == true
+    X[ok] = TRUE
+    X[!ok] = FALSE
+    return (X)
+}
+
 
 get_couche_in_meta = function (meta) {
     Couche = sapply(meta$Couche, strsplit, "|", fixed=TRUE, USE.NAMES=FALSE)
