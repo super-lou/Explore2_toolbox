@@ -147,19 +147,19 @@ type =
     # "piezometrie"
 
 mode =
-    "diagnostic"
+    # "diagnostic"
     # "diagnostic_ungauged"
-    # "projection"
+    "projection"
     # "projection_merge"
 
 to_do =
     c(
         # 'delete_tmp',
-        # 'merge_nc'
+        'merge_nc'
         # 'reshape_data'
-        'create_data',
-        'extract_data',
-        'save_extract'
+        # 'create_data',
+        # 'extract_data',
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection'
@@ -182,8 +182,8 @@ extract_data =
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF'
         # 'Explore2_serie_diag_plot'
-        'Explore2_serie_proj_safran',
-        'Explore2_serie_more_proj_safran'
+        # 'Explore2_serie_proj_safran',
+        # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
@@ -279,8 +279,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    # "file"
-    "code"
+    "file"
+    # "code"
 
 
 #  ___  _                  
@@ -561,8 +561,8 @@ Explore2_serie_more_proj =
 ## 3. SAVE_EXTRACT ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 
 var2save =
     c(
