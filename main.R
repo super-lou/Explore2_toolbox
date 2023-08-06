@@ -147,22 +147,22 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
+    "diagnostic"
     # "diagnostic_ungauged"
-    "projection"
+    # "projection"
     # "projection_merge"
 
 to_do =
     c(
         # 'delete_tmp',
-        'merge_nc'
+        # 'merge_nc'
         # 'reshape_data'
-        # 'create_data',
+        'create_data',
         # 'extract_data',
-        # 'save_extract'
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection'
+        # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -174,14 +174,14 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT'
-        # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME'
-        # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF'
-        # 'Explore2_serie_diag_plot'
+        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT',
+        'Explore2_criteria_diag_HE',
+        'Explore2_criteria_diag_ME',
+        'Explore2_criteria_diag_BE',
+        'Explore2_criteria_diag_BF',
+        'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -228,9 +228,9 @@ plot_sheet =
         # 'correlation_matrix'
         # 'fiche_diagnostic_station'
         # 'fiche_diagnostic_region'
-        # 'fiche_diagnostic_regime'
+        'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
-        'carte_regime'
+        # 'carte_regime'
         # 'carte_critere'
         
     )
@@ -279,8 +279,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "file"
-    # "code"
+    # "file"
+    "code"
 
 
 #  ___  _                  
@@ -300,7 +300,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 9
+nCode4RAM = 100
 
 projs_to_use =
     c(
@@ -561,8 +561,8 @@ Explore2_serie_more_proj =
 ## 3. SAVE_EXTRACT ___________________________________________________
 # If one input file need to give one output file
 by_files =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 var2save =
     c(
