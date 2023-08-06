@@ -181,9 +181,9 @@ extract_data =
         # 'Explore2_criteria_diag_ME'
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF'
-        'Explore2_serie_diag_plot'
-        # 'Explore2_serie_proj_safran',
-        # 'Explore2_serie_more_proj_safran'
+        # 'Explore2_serie_diag_plot'
+        'Explore2_serie_proj_safran',
+        'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
