@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -162,7 +162,7 @@ to_do =
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection',
+        # 'selection'
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -176,12 +176,12 @@ extract_data =
         # 'WIP'
         'Explore2_criteria_diag_performance',
         'Explore2_criteria_diag_sensibilite',
-        'Explore2_criteria_diag_sensibilite_RAT',
-        'Explore2_criteria_diag_HE',
-        'Explore2_criteria_diag_ME',
-        'Explore2_criteria_diag_BE',
-        'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot'
+        'Explore2_criteria_diag_sensibilite_RAT'
+        # 'Explore2_criteria_diag_HE',
+        # 'Explore2_criteria_diag_ME',
+        # 'Explore2_criteria_diag_BE',
+        # 'Explore2_criteria_diag_BF',
+        # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -228,9 +228,11 @@ plot_sheet =
         # 'correlation_matrix'
         # 'fiche_diagnostic_station'
         # 'fiche_diagnostic_region'
-        'fiche_diagnostic_regime'
+        # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
+        'carte_regime'
         # 'carte_critere'
+        
     )
 
 ### 3.2. Document ____________________________________________________
@@ -276,9 +278,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -298,7 +300,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 9
 
 projs_to_use =
     c(
@@ -364,6 +366,8 @@ codes_to_use =
         # "H640201001", #SIM2
         # "B413201001", #CTRIP
     )
+
+# "K072530200" manquante
 
 diag_station_2_remove =
     c(

@@ -259,6 +259,20 @@ for (i in 1:nChunk) {
         }
 
 
+        if (sheet == 'carte_regime') {
+            post("### Plotting regime map")
+            sheet_regime_map(meta,
+                             icon_path=icon_path,
+                             logo_path=logo_path,
+                             is_foot=FALSE,
+                             # is_secteur=is_secteur,
+                             figdir=today_figdir_leaf,
+                             df_page=df_page,
+                             Shapefiles=Shapefiles,
+                             verbose=subverbose)
+        }
+            
+        
         if (grepl('carte[_]critere', sheet)) {
             post("### Plotting map")
             one_colorbar = FALSE
