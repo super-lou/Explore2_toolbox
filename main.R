@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -157,17 +157,17 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data'
-        'create_data',
+        # 'create_data',
         # 'extract_data',
-        'save_extract'
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection',
-        # 'write_warnings',
+        # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        # 'plot_doc'
+        'plot_doc'
         # 'create_data_proj'
     )
 
@@ -226,9 +226,9 @@ plot_sheet =
     c(
         # 'sommaire'
         # 'correlation_matrix'
-        # 'fiche_diagnostic_station'
+        'fiche_diagnostic_station'
         # 'fiche_diagnostic_region'
-        'fiche_diagnostic_regime'
+        # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
         # 'carte_regime'
         # 'carte_critere'
@@ -241,8 +241,8 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        # 'fiche_diagnostic_region'
-        'fiche_diagnostic_regime'
+        'fiche_diagnostic_region'
+        # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
         ## normal
@@ -278,9 +278,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
