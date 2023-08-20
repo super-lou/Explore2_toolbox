@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -157,17 +157,17 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data'
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection',
+        # 'selection'
         # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        'plot_doc'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
@@ -180,8 +180,8 @@ extract_data =
         'Explore2_criteria_diag_HE',
         'Explore2_criteria_diag_ME',
         'Explore2_criteria_diag_BE',
-        'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot'
+        'Explore2_criteria_diag_BF'
+        # 'Explore2_serie_diag_plot'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -241,7 +241,7 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        'fiche_diagnostic_region'
+        # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
@@ -278,9 +278,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -300,7 +300,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 9
 
 projs_to_use =
     c(
@@ -331,7 +331,7 @@ models_to_use =
         "SIM2",
         "MORDOR-SD",
         "MORDOR-TS",
-        "ORCHIDEE", 
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -1083,6 +1083,9 @@ if (type == "hydrologie") {
     codes_selection_data = dplyr::filter(codes_selection_data,
                                          !grepl("Supprimer", X))
 
+    codes_selection_data = dplyr::arrange(codes_selection_data,
+                                          SuggestionCode)
+    
     codes_selection_data$SuggestionNOM =
         gsub(" A ", " à ",
              gsub("L ", "l'",
@@ -1160,6 +1163,7 @@ if (type == "hydrologie") {
         names(Subsets)[length(Subsets)] = paste0(name, n)
     }
     nSubsets = length(Subsets)
+    
 
     if (by_files | MPI == "file") {
         if (MPI == "file") {
