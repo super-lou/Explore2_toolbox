@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    "diagnostic"
-    # "diagnostic_ungauged"
+    # "diagnostic"
+    "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -158,7 +158,7 @@ to_do =
         # 'merge_nc'
         # 'reshape_data'
         'create_data',
-        # 'extract_data',
+        'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -174,16 +174,16 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT',
-        # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME',
-        # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF'
-        # 'Explore2_serie_diag_plot',
-        # 'Explore2_serie_proj_safran',
-        # 'Explore2_serie_more_proj_safran'
+        'Explore2_criteria_diag_performance',
+        'Explore2_criteria_diag_sensibilite',
+        'Explore2_criteria_diag_sensibilite_RAT',
+        'Explore2_criteria_diag_HE',
+        'Explore2_criteria_diag_ME',
+        'Explore2_criteria_diag_BE',
+        'Explore2_criteria_diag_BF',
+        'Explore2_serie_diag_plot',
+        'Explore2_serie_proj_safran',
+        'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
@@ -324,14 +324,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
+        # "CTRIP",
+        # "EROS",
         "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
