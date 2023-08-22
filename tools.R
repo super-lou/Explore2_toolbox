@@ -424,12 +424,12 @@ find_Warnings = function (dataEXind, metaEXind,
             ":produit|produisent: des étiages trop tard dans l'année."),
 
         "RAT_T"=c(
-            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>).",
-            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>)."),
+            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>).",
+            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).",
-            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>)."))
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).",
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>)."))
 
     
     tick_nline = list(
@@ -495,12 +495,12 @@ find_Warnings = function (dataEXind, metaEXind,
             ":simule|simulent: de manière correcte temporalité annuelle des étiages."),
 
         "RAT_T"=c(
-            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>).",
-            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>)."),
+            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>).",
+            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).",
-            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>)."))
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).",
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>)."))
     
     
     line_allOK = "<b>Tous les modèles</b> semblent simuler de manière acceptable le régime."

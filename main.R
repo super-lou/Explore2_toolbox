@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -162,8 +162,8 @@ to_do =
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection'
-        # 'write_warnings'
+        # 'selection',
+        # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
@@ -241,7 +241,7 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        # 'fiche_diagnostic_region'
+        'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
@@ -300,7 +300,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 9
 
 projs_to_use =
     c(
@@ -324,14 +324,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -437,8 +437,7 @@ Explore2_criteria_diag_performance =
 
 Explore2_criteria_diag_sensibilite = 
     list(name='Explore2_criteria_diag_sensibilite',
-         variables=c("Rc",
-                     "epsilon_P", "epsilon_P_season",
+         variables=c("epsilon_P", "epsilon_P_season",
                      "epsilon_T", "epsilon_T_season"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
@@ -465,8 +464,7 @@ Explore2_criteria_diag_HE =
 
 Explore2_criteria_diag_ME = 
     list(name='Explore2_criteria_diag_ME',
-         variables=c("Q50",
-                     "moyQA", "aCDC", "alphaQA"),
+         variables=c("Q50", "aCDC", "alphaQA"),
          suffix=c("_obs", "_sim"),
          expand=FALSE,
          cancel_lim=TRUE,
