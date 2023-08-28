@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -157,9 +157,9 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        'create_data',
-        'extract_data',
-        'save_extract'
+        'create_data'
+        # 'extract_data',
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection',
@@ -324,14 +324,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
