@@ -244,6 +244,7 @@ NetCDF_to_tibble = function (NetCDF_path,
             }
             
             data = dplyr::bind_cols(Model=chain, data)
+            data = dplyr::filter(data, !is.nan(Q_sim))
             
         } else if (grepl("projection", mode)) {
             CodeRaw = ncdf4::ncvar_get(NCdata, "code")
@@ -357,7 +358,7 @@ find_Warnings = function (dataEXind, metaEXind,
         "^Q10$"=c(-0.2, 0.2),
         "^Q90$"=c(-0.8, 0.8),
         "[{]t.*[}]"=c(-1, 1),
-        "^RAT"=c(TRUE, FALSE))
+        "^RAT"=c(FALSE, TRUE))
 
     all_model = "<b>L'ensemble des modèles</b>"
     
@@ -424,12 +425,13 @@ find_Warnings = function (dataEXind, metaEXind,
             ":produit|produisent: des étiages trop tard dans l'année."),
 
         "RAT_T"=c(
-            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>).",
-            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>)."),
+            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>).",
+            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).",
-            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>)."))
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).",
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).")
+    )
 
     
     tick_nline = list(
@@ -495,12 +497,13 @@ find_Warnings = function (dataEXind, metaEXind,
             ":simule|simulent: de manière correcte temporalité annuelle des étiages."),
 
         "RAT_T"=c(
-            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>).",
-            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>)."),
+            ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>).",
+            ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>)."),
 
         "RAT_P"=c(
-            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).",
-            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>)."))
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).",
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).")
+    )
     
     
     line_allOK = "<b>Tous les modèles</b> semblent simuler de manière acceptable le régime."
@@ -843,13 +846,13 @@ find_Warnings = function (dataEXind, metaEXind,
                   # codeLight="V232000000",
                   # save=FALSE)
 # Warnings_frequency_short =
-    # select(Warnings_frequency, c(var, niveau, npv_pct))
+#     select(Warnings_frequency, c(var, niveau, npv_pct))
 # Warnings_frequency_short =
-    # arrange(group_by(Warnings_frequency_short, var),
-            # desc(niveau), .by_group=TRUE)
+#     arrange(group_by(Warnings_frequency_short, var),
+#             desc(niveau), .by_group=TRUE)
 # Warnings_frequency_short$npv_pct =
-    # round(Warnings_frequency_short$npv_pct)
-
+#     round(Warnings_frequency_short$npv_pct)
+# print(Warnings_frequency_short, n=Inf)
 
 
 start_timer = function (timer, rank, process_type, process_name) {

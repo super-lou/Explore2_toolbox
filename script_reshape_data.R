@@ -125,7 +125,7 @@ if (type == "piezometrie") {
                        "Coeffcient d'efficacité de Nash-Sutcliffe entre l’Indicateur Piézomètre Standardisé (IPS) simulé et l’IPS observé",
                        "Corrélation",
                        "Biais des moyennes, différence entre les moyennes des débits journaliers simulés et observés"),
-                   topic="Performance",
+                   topic="Niveau piézométrique|Performance",
                    samplePeriod="")
 
     write_tibble(data,

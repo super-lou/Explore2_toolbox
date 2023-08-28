@@ -147,8 +147,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -156,14 +156,14 @@ to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
-        # 'reshape_data'
+        # 'reshape_data',
         'create_data',
         'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection',
-        # 'write_warnings',
+        # 'write_warnings'
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
@@ -241,7 +241,7 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        'fiche_diagnostic_region'
+        # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
@@ -258,8 +258,8 @@ plot_doc =
         # "carte_critere_critere_ungauged_secteur"
 
         ## avertissement
-        # "carte_critere_model_avertissement_secteur"
-
+        "carte_critere_model_avertissement_secteur"
+        
         ## piezo
         # "carte_piezo_critere_model"
         # "carte_piezo_critere_critere"
@@ -300,7 +300,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 9
 
 projs_to_use =
     c(
@@ -324,14 +324,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -587,7 +587,7 @@ read_saving =
 var2search =
     c(
         'meta[.]',
-        'data[.]fst',
+        # 'data[_]',
         'dataEX',
         'metaEX',
         'Warnings'
