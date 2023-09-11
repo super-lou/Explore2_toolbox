@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -157,17 +157,17 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        'create_data'
+        # 'create_data'
         # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
-        # 'read_saving',
-        # 'selection',
-        # 'write_warnings'
+        'read_saving',
+        'selection',
+        # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        # 'plot_doc'
+        'plot_doc'
         # 'create_data_proj'
     )
 
@@ -181,9 +181,9 @@ extract_data =
         'Explore2_criteria_diag_ME',
         'Explore2_criteria_diag_BE',
         'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot',
-        'Explore2_serie_proj_safran',
-        'Explore2_serie_more_proj_safran'
+        'Explore2_serie_diag_plot'
+        # 'Explore2_serie_proj_safran',
+        # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
@@ -226,8 +226,8 @@ plot_sheet =
     c(
         # 'sommaire'
         # 'correlation_matrix'
-        'fiche_diagnostic_station'
-        # 'fiche_diagnostic_region'
+        # 'fiche_diagnostic_station'
+        'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
         # 'carte_regime'
@@ -241,7 +241,7 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        # 'fiche_diagnostic_region'
+        'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
@@ -258,7 +258,7 @@ plot_doc =
         # "carte_critere_critere_ungauged_secteur"
 
         ## avertissement
-        "carte_critere_model_avertissement_secteur"
+        # "carte_critere_model_avertissement_secteur"
         
         ## piezo
         # "carte_piezo_critere_model"
@@ -278,9 +278,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
