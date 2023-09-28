@@ -157,17 +157,17 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        # 'create_data'
+        # 'create_data',
         # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
-        'read_saving',
-        'selection',
+        # 'read_saving',
+        # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        # 'plot_sheet'
-        'plot_doc'
+        'plot_sheet'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
@@ -227,11 +227,12 @@ plot_sheet =
         # 'sommaire'
         # 'correlation_matrix'
         # 'fiche_diagnostic_station'
-        'fiche_diagnostic_region'
+        # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
         # 'carte_regime'
         # 'carte_critere'
+        'fiche_precip_ratio'
         
     )
 
@@ -241,9 +242,9 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        'fiche_diagnostic_region'
+        # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
-        # 'fiche_diagnostic_piezometre'
+        'fiche_diagnostic_piezometre'
 
         ## normal
         # "carte_critere_model"
@@ -415,9 +416,9 @@ WIP =
     list(name='WIP',
          # variables=c("QA", "QA_season"),
          # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("QA"),
-         suffix=c("_obs", "_sim"),
-         # suffix=c("_obs"),
+         variables=c("dtRA50mm"),
+         # suffix=c("_obs", "_sim"),
+         suffix=c("_obs"),
          suffix=NULL,
          expand=FALSE,
          cancel_lim=TRUE,
@@ -588,6 +589,7 @@ var2search =
     c(
         'meta[.]',
         # 'data[_]',
+        'data[.]',
         'dataEX',
         'metaEX',
         'Warnings'
@@ -657,7 +659,6 @@ Colors_of_models = c(
     "ORCHIDEE"="#EFA59D", #rose
     "SIM2"="#475E6A", #bleu foncé
     "SMASH"="#F6BA62", #mimosa
-    # "Multi-modèle"="",
 
     "AquiFR"="#AF3FA5", #violet
     "EROS Bretagne"="#CECD8D", #vert clair

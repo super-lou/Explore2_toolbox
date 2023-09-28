@@ -54,6 +54,7 @@ CARD_extract_data = function () {
                               suffix=extract$suffix,
                               expand_overwrite=extract$expand,
                               cancel_lim=extract$cancel_lim,
+                              dev=TRUE,
                               verbose=subverbose)
 
         write_tibble(res$dataEX,

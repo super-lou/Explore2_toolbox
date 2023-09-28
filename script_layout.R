@@ -210,7 +210,7 @@ for (i in 1:nChunk) {
 
     if (exists("dataEXind")) {
         dataEXind_chunk = dataEXind[dataEXind$Code %in% chunk,]
-        if (nrow(dataEXind_chunk) == 0) {
+        if (nrow(dataEXind_chunk) == 0 & nrow(dataEXind) != 0) {
             next
         }
     }
@@ -226,7 +226,7 @@ for (i in 1:nChunk) {
     }
     
     for (sheet in sheet_list) {
-
+        
         if (sheet == 'sommaire') {
             post("### Plotting summary")
             df_page = tibble(section='Sommaire', subsection=NA, n=1)
@@ -251,6 +251,7 @@ for (i in 1:nChunk) {
                 ModelGroup=group_of_models_to_use,
                 Colors=Colors_of_models,
                 subtitle=doc_subtitle,
+                criteria_selection=diag_criteria_selection,
                 icon_path=icon_path,
                 logo_path=logo_path,
                 figdir=today_figdir_leaf,
@@ -400,7 +401,23 @@ for (i in 1:nChunk) {
                 df_page=df_page,
                 subverbose=subverbose)
         }
+
+
+
+        if (sheet == 'fiche_precip_ratio') {            
+            ModelGroup = lapply(models_to_use, c, "SAFRAN")       
+            df_page = sheet_precip_ratio(dataEXserie_chunk,
+                                         ModelGroup=ModelGroup,
+                                         Colors=Colors_of_models,
+                                         refCOL=refCOL,
+                                         figdir=today_figdir_leaf,
+                                         df_page=df_page,
+                                         verbose=subverbose)
+        }
+
+        
     }
+    
 
     if ('sommaire' %in% sheet_list) {
         if (is.null(chunkname) & !is.null(doc_subtitle)) {
