@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -147,17 +147,17 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
+    "diagnostic"
     # "diagnostic_ungauged"
-    "projection"
+    # "projection"
     # "projection_merge"
 
 to_do =
     c(
         # 'delete_tmp',
-        'merge_nc'
+        # 'merge_nc'
         # 'reshape_data',
-        # 'create_data',
+        # 'create_data'
         # 'extract_data',
         # 'save_extract'
         # 'read_tmp'
@@ -167,21 +167,22 @@ to_do =
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        # 'plot_doc'
+        'plot_doc'
         # 'create_data_proj'
     )
 
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance',
+        # 'Explore2_criteria_diag_performance'
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
         # 'Explore2_criteria_diag_HE',
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF',
-        # 'Explore2_serie_diag_plot'
+        'Explore2_serie_diag_plot',
+        'Explore2_criteria_P_ratio'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -244,10 +245,10 @@ plot_doc =
         
         # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
-        'fiche_diagnostic_piezometre'
+        # 'fiche_diagnostic_piezometre'
 
         ## normal
-        # "carte_critere_model"
+        "carte_critere_model"
         # "carte_critere_model_secteur"
         # "carte_critere_critere"
         # "carte_critere_critere_secteur"
@@ -279,8 +280,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -325,15 +326,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        "MORDOR-TS"
-        # "ORCHIDEE",
-        # "SMASH"
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -345,8 +346,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "^A"
         # "^H64"
         # "^I",
@@ -499,6 +500,15 @@ Explore2_serie_diag_plot =
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=FALSE)
+
+Explore2_criteria_P_ratio =
+    list(name='Explore2_criteria_P_ratio',
+         variables=c("Pl_ratio", "Ps_ratio"),
+         suffix=NULL,
+         expand=FALSE,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
 
 if (type == "piezometrie") {
     Explore2_serie_diag_plot$variables = "medQJC5"
@@ -816,6 +826,50 @@ doc_carte_piezo_critere_critere =
         sheet=c('sommaire',
                 'carte_critere_piezo_shape')
     )
+
+
+
+
+
+# dataEX_PA_ratio_SAFRAN = dplyr::filter(dataEX_serie$PA_ratio,
+#                                        Model == "SMASH")
+# dataEX_PA_ratio_SAFRAN = dplyr::select(dataEX_PA_ratio_SAFRAN,
+#                                        Code,
+#                                        Pl_ratio_obs,
+#                                        Ps_ratio_obs)
+# dataEX_PA_ratio_SAFRAN = dplyr::rename(dataEX_PA_ratio_SAFRAN,
+#                                        Pl_ratio_SAFRAN=
+#                                            Pl_ratio_obs,
+#                                        Ps_ratio_SAFRAN=
+#                                            Ps_ratio_obs)
+
+# dataEX_criteria_P_ratio = dplyr::inner_join(dataEX_serie$PA_ratio,
+#                                             dataEX_PA_ratio_SAFRAN,
+#                                             by="Code")
+
+# dataEX_criteria_P_ratio$Pl_ratio =
+#     round(dataEX_criteria_P_ratio$Pl_ratio_obs -
+#           dataEX_criteria_P_ratio$Pl_ratio_SAFRAN, 5)
+
+# dataEX_criteria_P_ratio$Ps_ratio =
+#     round(dataEX_criteria_P_ratio$Ps_ratio_obs -
+#           dataEX_criteria_P_ratio$Ps_ratio_SAFRAN, 5)
+
+# dataEX_criteria_P_ratio = dplyr::select(dataEX_criteria_P_ratio,
+#                                          Model, Code,
+#                                          Pl_ratio, Ps_ratio)
+
+# dataEX_criteria_P_ratio$Pl_ratio[!is.finite(dataEX_criteria_P_ratio$Pl_ratio)] = NA
+# dataEX_criteria_P_ratio$Ps_ratio[!is.finite(dataEX_criteria_P_ratio$Ps_ratio)] = NA
+
+# ASHE::write_tibble(dataEX_criteria_P_ratio, filename="dataEX_Explore2_criteria_P_ratio.fst")
+
+# metaEX_P_ratio = tibble(var=c("Pl_ratio", "Ps_ratio"), unit="sans unité", is_date=FALSE, normalize=FALSE, reverse_palette=FALSE, glose="diff SAFRAN", topic="", samplePeriod="")
+
+# ASHE::write_tibble(metaEX_P_ratio, filename="metaEX_Explore2_criteria_P_ratio.fst")
+
+
+
 
 
 #  ___        _  _    _        _  _            _    _            
