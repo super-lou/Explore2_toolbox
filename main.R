@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -147,15 +147,15 @@ type =
     # "piezometrie"
 
 mode =
-    "diagnostic"
+    # "diagnostic"
     # "diagnostic_ungauged"
-    # "projection"
+    "projection"
     # "projection_merge"
 
 to_do =
     c(
         # 'delete_tmp',
-        # 'merge_nc'
+        'merge_nc'
         # 'reshape_data',
         # 'create_data'
         # 'extract_data',
@@ -167,7 +167,7 @@ to_do =
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        'plot_doc'
+        # 'plot_doc'
         # 'create_data_proj'
     )
 
@@ -181,8 +181,8 @@ extract_data =
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF',
-        'Explore2_serie_diag_plot',
-        'Explore2_criteria_P_ratio'
+        # 'Explore2_serie_diag_plot',
+        # 'Explore2_criteria_P_ratio'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -280,8 +280,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -346,8 +346,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "^A"
         # "^H64"
         # "^I",
