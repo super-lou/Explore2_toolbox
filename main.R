@@ -937,26 +937,26 @@ source(computer_path, encoding='UTF-8')
 setwd(computer_work_path)
 source(file.path(lib_path, 'tools.R'), encoding='UTF-8')
 
-# # Import EXstat
-# dev_path = file.path(dev_lib_path,
-#                      c('', 'EXstat_project'), 'EXstat', 'R')
-# if (any(file.exists(dev_path))) {
-#     print('Loading EXstat from local directory')
-#     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
-#     for (path in list_path) {
-#         source(path, encoding='UTF-8')    
-#     }
-# } else {
-#     print('Loading EXstat from package')
-#     library(EXstat)
-# }
-
-
 # Import EXstat
-dev_path = file.path(dev_lib_path, 'EXstat_project', 'EXstat', 'R')
-source(file.path(dev_path, "CARD_management.R"), encoding='UTF-8')    
-print('Loading EXstat from package')
-library(EXstat)
+dev_path = file.path(dev_lib_path,
+                     c('', 'EXstat_project'), 'EXstat', 'R')
+if (any(file.exists(dev_path))) {
+    print('Loading EXstat from local directory')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+    for (path in list_path) {
+        source(path, encoding='UTF-8')    
+    }
+} else {
+    print('Loading EXstat from package')
+    library(EXstat)
+}
+
+
+# # Import EXstat
+# dev_path = file.path(dev_lib_path, 'EXstat_project', 'EXstat', 'R')
+# source(file.path(dev_path, "CARD_management.R"), encoding='UTF-8')    
+# print('Loading EXstat from package')
+# library(EXstat)
 
 
 # Import ASHE
