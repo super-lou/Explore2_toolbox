@@ -24,7 +24,7 @@
 #         data_sim = NetCDF_to_tibble(p,
 #                                     chain=chain,
 #                                     mode=mode)
-        
+
 #     }
 #     if (is.null(data_sim)) {
 #         data_sim = dplyr::tibble()
@@ -38,51 +38,76 @@
 
 create_data = function () {
 
-    post("### Simulated data")
-    Chain = c()
-    data_sim = tibble()
-    
-    for (i in 1:length(files)) {    
-        file = files[[i]]
-        chain = files_name[[i]][1]
-        path = file
+    if (length(extract_data) == 0) {
+        isObs = TRUE
+        isSim = TRUE
         
-        for (p in path) {
-            
-            if (file.exists(path)) {
-                Chain = c(Chain, chain)
-                post(paste0("Get simulated data from ", chain,
-                            " in ", p))
-
-                if (grepl(".*[.]nc", p)) {
-                    data_sim_tmp = NetCDF_to_tibble(p,
-                                                    chain=chain,
-                                                    type=type,
-                                                    mode=mode)
+    } else {
+        isObs = FALSE
+        isSim = FALSE
+        for (i in 1:length(extract_data)) {    
+            extract = extract_data[[i]]
+            if (is.null(extract$suffix)) {
+                isObs = TRUE
+                isSim = TRUE
+            } else {
+                if ("obs" %in% extract$suffix) {
+                    isObs = TRUE
                 }
-                if (is.null(data_sim_tmp)) {
-                    data_sim_tmp = dplyr::tibble()
-                } else {
-                    if (type == "hydrologie") {
-                        data_sim_tmp$Code =
-                            convert_codeNtoM(data_sim_tmp$Code)
-                        data_sim_tmp = data_sim_tmp[data_sim_tmp$Code %in%
-                                                    CodeSUB10,]
-                        data_sim_tmp =
-                            data_sim_tmp[order(data_sim_tmp$Code),]
-                    }
+                if ("sim" %in% extract$suffix) {
+                    isSim = TRUE
                 }
-                data_sim = dplyr::bind_rows(data_sim, data_sim_tmp)
-
-                rm ("data_sim_tmp")
-                gc()
             }
         }
     }
+    
 
-    if (nrow(data_sim) > 0) {        
+    if (isSim) {
+        post("### Simulated data")
+        Chain = c()
+        data_sim = tibble()
+        
+        for (i in 1:length(files)) {    
+            file = files[[i]]
+            chain = files_name[[i]][1]
+            path = file
+            
+            for (p in path) {
+                
+                if (file.exists(path)) {
+                    Chain = c(Chain, chain)
+                    post(paste0("Get simulated data from ", chain,
+                                " in ", p))
+
+                    if (grepl(".*[.]nc", p)) {
+                        data_sim_tmp = NetCDF_to_tibble(p,
+                                                        chain=chain,
+                                                        type=type,
+                                                        mode=mode)
+                    }
+                    if (is.null(data_sim_tmp)) {
+                        data_sim_tmp = dplyr::tibble()
+                    } else {
+                        if (type == "hydrologie") {
+                            data_sim_tmp$Code =
+                                convert_codeNtoM(data_sim_tmp$Code)
+                            data_sim_tmp = data_sim_tmp[data_sim_tmp$Code %in%
+                                                        CodeSUB10,]
+                            data_sim_tmp =
+                                data_sim_tmp[order(data_sim_tmp$Code),]
+                        }
+                    }
+                    data_sim = dplyr::bind_rows(data_sim, data_sim_tmp)
+
+                    rm ("data_sim_tmp")
+                    gc()
+                }
+            }
+        }
+
+        
         id = match(CodeSUB10, CodeALL10)
-        meta =
+        meta_sim =
             dplyr::tibble(
                        Code=CodeSUB10,
                        Nom=codes_selection_data$SuggestionNOM[id],
@@ -97,107 +122,42 @@ create_data = function () {
                            as.numeric(codes_selection_data$YL93[id]),
                        Surface_km2=
                            as.numeric(codes_selection_data$S_HYDRO[id]))
-
-        Code10_available = levels(factor(data_sim$Code))
-        Code10 = Code10_available[Code10_available %in% CodeSUB10]
-        Code8 = CodeALL8[match(Code10, CodeALL10)]
-        Code8_filename = paste0(Code8, obs_hydro_format)
-        nCode = length(Code10)
-
-        if (length(Code8) > 0) {
-            meta_obs = create_meta_HYDRO(computer_data_path,
-                                         file.path(type,
-                                                   obs_hydro_dir),
-                                         Code8_filename,
-                                         verbose=subverbose)
-        } else {
-            meta_obs = dplyr::tibble()
-        }
-
-        if (nrow(meta_obs) > 0) {
-            meta_obs$Code = convert_codeNtoM(meta_obs$Code)
-            meta = dplyr::left_join(meta,
-                                    dplyr::select(meta_obs,
-                                                  Code,
-                                                  Gestionnaire,
-                                                  Altitude_m),
-                                    by="Code")
-        }
-
-        rm ("meta_obs")
-        gc()
         
-        meta = dplyr::arrange(meta, Code)
+        meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
+                                                        Model,
+                                                        Code),
+                                        S=S[1])
+        meta_sim_tmp = tidyr::pivot_wider(meta_sim_tmp,
+                                          names_from=Model,
+                                          values_from=S,
+                                          names_glue="Surface_{Model}_km2")
 
-        meta_S = dplyr::summarise(dplyr::group_by(data_sim,
-                                                  Model,
-                                                  Code),
-                                  S=S[1])
-        meta_S = tidyr::pivot_wider(meta_S,
-                                    names_from=Model,
-                                    values_from=S,
-                                    names_glue="Surface_{Model}_km2")
-        meta = dplyr::left_join(meta, meta_S, by="Code")
-
-        rm ("meta_S")
-        gc()
+        meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp, by="Code")
+        rm ("meta_sim_tmp"); gc()
         
         data_sim = dplyr::select(data_sim, -"S")
 
-        val2check = c("T", "ET0", "P", "Pl", "Ps")
-        
+
         if (grepl("diagnostic", mode)) {
-            post("### Observation data")
+            
+            val2check = c("T", "ET0", "P", "Pl", "Ps")
 
             Model = Chain
-            
-            # Extract data about selected stations
-            data_obs = create_data_HYDRO(computer_data_path,
-                                         file.path(type,
-                                                   obs_hydro_dir),
-                                         Code8_filename,
-                                         val2keep=c(val_E2=0),
-                                         verbose=subverbose)
-            
-            data_obs =
-                dplyr::filter(
-                           data_obs,
-                           dplyr::between(
-                                      Date,
-                                      as.Date(period_extract[1]),
-                                      as.Date(period_extract[2])))
-
-            data_obs$Code = convert_codeNtoM(data_obs$Code)
-            
-            data_obs = dplyr::arrange(data_obs, Code)
-            meta = get_lacune(data_obs, meta)
-            
-            names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
-
-            data = dplyr::inner_join(data_sim,
-                                     data_obs,
-                                     by=c("Code", "Date"))
-
-            rm ("data_sim")
-            gc()
-            rm ("data_obs")
-            gc()
-            
             nModel = length(Model)
 
-            if (!is.null(complete_by) & complete_by != "") {
+            if (!is.null(complete_by)) {
                 model4complete = complete_by[complete_by %in% Model][1]
                 nVal2check = length(val2check)
                 
                 if (!is.na(model4complete)) {
                     data_model4complete =
-                        data[data$Model == model4complete,]
+                        data_sim[data_sim$Model == model4complete,]
                     data_model4complete =
                         dplyr::select(data_model4complete,
                                       -Model)
                     
                     for (model in Model) {
-                        data_model = data[data$Model == model,]
+                        data_model = data_sim[data_sim$Model == model,]
                         data_model = dplyr::select(data_model,
                                                    -Model)
 
@@ -217,92 +177,176 @@ create_data = function () {
                         }
                         data_model = dplyr::bind_cols(Model=model,
                                                       data_model)
-                        data_model = data_model[names(data)]
-                        data[data$Model == model,] = data_model
+                        data_model = data_model[names(data_sim)]
+                        data_sim[data_sim$Model == model,] = data_model
 
                         rm ("data_model")
                         gc()
                     }
                 }
             }
-            if (propagate_NA) {
-                NA_propagation = function (X, Ref) {
-                    X[is.na(Ref)] = NA
-                    return (X)
-                }
-                data = dplyr::mutate(data,
-                                     dplyr::across(where(is.numeric),
-                                                   NA_propagation,
-                                                   Ref=Q_obs))
-                data = dplyr::relocate(data, Q_obs, .before=Q_sim)
-            }
 
-            data = dplyr::relocate(data, "T", .before=ET0)
+            data_sim = dplyr::relocate(data_sim, "T", .before=ET0)            
+            if ("Pl" %in% names(data_sim)) {
+                data_sim$Pl[!is.finite(data_sim$Pl)] = NA
+            }
+            if ("Ps" %in% names(data_sim)) {
+                data_sim$Ps[!is.finite(data_sim$Ps)] = NA
+            }
+            if ("P" %in% names(data_sim)) {
+                data_sim$P[!is.finite(data_sim$P)] = NA
+                data_sim = dplyr::filter(data_sim,
+                                         rep(!all(is.na(P)), length(P)),
+                                         .by="Code")
+            }
             
-            #####
-            if ("Pl" %in% names(data)) {
-                data$Pl[!is.finite(data$Pl)] = NA
-            }
-            if ("Ps" %in% names(data)) {
-                data$Ps[!is.finite(data$Ps)] = NA
-            }
-            if ("P" %in% names(data)) {
-                data$P[!is.finite(data$P)] = NA
-                data = dplyr::filter(data,
-                                     rep(!all(is.na(P)), length(P)),
-                                     .by="Code")
-            }
-            #####
-
-            for (i in 1:nVal2check) {
-                data =
-                    dplyr::mutate(data,
-                                  !!paste0(val2check[i],
-                                           "_obs"):=get(val2check[i]),
-                                  !!paste0(val2check[i],
-                                           "_sim"):=get(val2check[i]))
-                data = dplyr::select(data, -val2check[i])
-            }
-
-        } else if (grepl("projection", mode)) {
-            data = data_sim
-
-            rm ("data_sim")
-            gc()
-        }
-
-
-        if (grepl("diagnostic", mode)) {
             for (i in 1:length(diag_station_2_remove)) {
-                data = dplyr::filter(
-                                  data,
-                                  !(Model ==
-                                    names(diag_station_2_remove)[i] &
-                                    grepl(diag_station_2_remove[i],
-                                          Code)))
-                meta[[paste0("Surface_",
-                             names(diag_station_2_remove)[i],
-                             "_km2")]][
-                    grepl(diag_station_2_remove[i], meta$Code)
+                data_sim = dplyr::filter(
+                                      data_sim,
+                                      !(Model ==
+                                        names(diag_station_2_remove)[i] &
+                                        grepl(diag_station_2_remove[i],
+                                              Code)))
+                meta_sim[[paste0("Surface_",
+                                 names(diag_station_2_remove)[i],
+                                 "_km2")]][
+                    grepl(diag_station_2_remove[i], meta_sim$Code)
                 ] = NA
             }
         }
+    }
+
+    
+    # if (nrow(data_sim) > 0 | isObs & !isSim) {
+    if (isObs) {
+        post("### Observation data")
         
+        if (isSim) {
+            Code10_available = levels(factor(data_sim$Code))
+        } else {
+            Code10_available = CodeSUB10
+        }
+        Code10 = Code10_available[Code10_available %in% CodeSUB10]
+        Code8 = CodeALL8[match(Code10, CodeALL10)]
+        Code8_filename = paste0(Code8, obs_hydro_format)
+        nCode = length(Code10)
+
+        if (length(Code8) > 0) {
+            meta_obs = create_meta_HYDRO(computer_data_path,
+                                         file.path(type,
+                                                   obs_hydro_dir),
+                                         Code8_filename,
+                                         verbose=subverbose)
+            meta_obs$Code = convert_codeNtoM(meta_obs$Code)
+        } else {
+            meta_obs = dplyr::tibble()
+        }
+        
+
+        data_obs = create_data_HYDRO(computer_data_path,
+                                     file.path(type,
+                                               obs_hydro_dir),
+                                     Code8_filename,
+                                     val2keep=c(val_E2=0),
+                                     verbose=subverbose)
+        
+        data_obs =
+            dplyr::filter(
+                       data_obs,
+                       dplyr::between(
+                                  Date,
+                                  as.Date(period_extract[1]),
+                                  as.Date(period_extract[2])))
+
+        data_obs$Code = convert_codeNtoM(data_obs$Code)
+        data_obs = dplyr::arrange(data_obs, Code)
+        names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
+
+        meta_obs = get_lacune(dplyr::rename(data_obs, Q=Q_obs),
+                              meta_obs)
+    }
+
+    if (isSim & isObs) {
+        meta = dplyr::left_join(meta_sim,
+                                dplyr::select(meta_obs,
+                                              Code,
+                                              Gestionnaire,
+                                              Altitude_m),
+                                by="Code")
+        data = dplyr::inner_join(data_sim,
+                                 data_obs,
+                                 by=c("Code", "Date"))
+        
+        rm ("data_sim"); gc()
+        rm ("data_obs"); gc()
+        rm ("meta_obs"); gc()
+        rm ("meta_sim"); gc()
+
+        if (propagate_NA) {
+            NA_propagation = function (X, Ref) {
+                X[is.na(Ref)] = NA
+                return (X)
+            }
+            data =
+                dplyr::mutate(
+                           data,
+                           dplyr::across(
+                                      where(is.numeric),
+                                      \(x) NA_propagation(x,
+                                                          Ref=Q_obs)))
+        }
+        
+        data = dplyr::relocate(data, Q_obs, .before=Q_sim)
+
+        for (i in 1:nVal2check) {
+            data =
+                dplyr::mutate(data,
+                              !!paste0(val2check[i],
+                                       "_obs"):=get(val2check[i]),
+                              !!paste0(val2check[i],
+                                       "_sim"):=get(val2check[i]))
+            data = dplyr::select(data, -val2check[i])
+        }
+
+    } else if (isSim & !isObs) {
+        meta = meta_sim
+        data = data_sim
+        
+        rm ("data_sim"); gc()
+        rm ("meta_sim"); gc()
+
+        for (i in 1:nVal2check) {
+            data =
+                dplyr::mutate(data,
+                              !!paste0(val2check[i],
+                                       "_sim"):=get(val2check[i]))
+            data = dplyr::select(data, -val2check[i])
+        }
+        
+    }  else if (!isSim & isObs) {
+        meta = meta_obs
+        data = data_obs
+        
+        rm ("data_obs"); gc()
+        rm ("meta_obs"); gc()
+    }
+    
+    
+    if (nrow(data) > 0) {
         write_tibble(data,
                      filedir=tmppath,
                      filename=paste0("data_",
                                      files_name_opt.,
                                      subset_name, ".fst"))
-        rm ("data")
-        gc()
-        
+        rm ("data"); gc()
+
+        meta = dplyr::arrange(meta, Code)
         write_tibble(meta,
                      filedir=tmppath,
                      filename=paste0("meta_",
                                      files_name_opt.,
                                      subset_name, ".fst"))
-        rm ("meta")
-        gc()
+        rm ("meta"); gc()
         
         res = TRUE
         

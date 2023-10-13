@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -154,7 +154,7 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
+        # 'delete_tmp'
         # 'merge_nc'
         # 'reshape_data',
         'create_data',
@@ -173,7 +173,7 @@ to_do =
 
 extract_data =
     c(
-        # 'WIP'
+        'WIP'
         # 'Explore2_criteria_diag_performance'
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
@@ -183,9 +183,9 @@ extract_data =
         # 'Explore2_criteria_diag_BF',
         # 'Explore2_serie_diag_plot',
         # 'Explore2_criteria_P_ratio'
-        'Explore2_criteria_SAFRAN'
-        # 'Explore2_serie_proj_safran',
-        # 'Explore2_serie_more_proj_safran'
+        # 'Explore2_criteria_ecart_SAFRAN'
+        # 'Explore2_serie_proj_SAFRAN',
+        # 'Explore2_serie_more_proj_SAFRAN'
         # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
@@ -277,14 +277,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -328,14 +328,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
         "J2000",
-        "SIM2",
+        # "SIM2",
         "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -348,8 +348,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "^A"
         # "^H64"
         # "^I"
@@ -357,8 +357,8 @@ codes_to_use =
         
         
         ## échange code
-        # "K2240820",
-        # "K2240810",
+        # "K2240820"
+        # "K2240810"
         # "K0910010"
 
         ## edf problème
@@ -418,15 +418,19 @@ diag_station_2_remove =
 WIP = 
     list(name='WIP',
          # variables=c("QA", "QA_season"),
-         variables=c("T_chronique", "T_season",
-                     "R_chronique", "R_season"),
+         variables=c(
+             "moyTA",
+             "moyTA_season",
+             "moyRA",
+             "moyRA_season"
+         ),
          # variables=c("T_chronique",
                      # "R_chronique"),
          # variables=c("dtRA50mm"),
-         # suffix=c("_obs", "_sim"),
-         suffix=c("_obs"),
+         # suffix=c("obs", "sim"),
+         suffix=c("sim"),
          # suffix=NULL,
-         expand=TRUE,
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
@@ -446,7 +450,7 @@ Explore2_criteria_diag_sensibilite =
     list(name='Explore2_criteria_diag_sensibilite',
          variables=c("epsilon_P", "epsilon_P_season",
                      "epsilon_T", "epsilon_T_season"),
-         suffix=c("_obs", "_sim"),
+         suffix=c("obs", "sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
@@ -464,7 +468,7 @@ Explore2_criteria_diag_HE =
          variables=c("Q10",
                      "QJXA-10", "alphaQJXA",
                      "med{tQJXA}", "med{dtCrue}"),
-         suffix=c("_obs", "_sim"),
+         suffix=c("obs", "sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
@@ -472,7 +476,7 @@ Explore2_criteria_diag_HE =
 Explore2_criteria_diag_ME = 
     list(name='Explore2_criteria_diag_ME',
          variables=c("Q50", "aCDC", "alphaQA"),
-         suffix=c("_obs", "_sim"),
+         suffix=c("obs", "sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
@@ -482,7 +486,7 @@ Explore2_criteria_diag_BE =
          variables=c("Q90",
                      "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
                      "med{tVCN10}", "med{allBE}"),
-         suffix=c("_obs", "_sim"),
+         suffix=c("obs", "sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
@@ -492,7 +496,7 @@ Explore2_criteria_diag_BF =
          variables=c("BFI", "BFM",
                      "med{debutBF}", "med{centreBF}", "med{finBF}",
                      "med{dtBF}", "med{vBF}", "med{dtRec}"),
-         suffix=c("_obs", "_sim"),
+         suffix=c("obs", "sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
@@ -501,7 +505,7 @@ Explore2_serie_diag_plot =
     list(name='Explore2_serie_diag_plot',
          variables=c("QM", "QA", "PA_all", "PA_ratio",
                      "medQJC5", "CDC"),
-         suffix=c("_obs", "_sim"),
+         suffix=c("obs", "sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=FALSE)
@@ -514,12 +518,12 @@ Explore2_criteria_P_ratio =
          cancel_lim=TRUE,
          simplify=TRUE)
 
-Explore2_criteria_SAFRAN = 
-    list(name='Explore2_criteria_SAFRAN',
-         variables=c("T_chronique", "T_season",
-                     "R_chronique", "R_season"),
-         suffix=c("_obs"),
-         expand=TRUE,
+Explore2_criteria_ecart_SAFRAN = 
+    list(name='Explore2_criteria_ecart_SAFRAN',
+         variables=c("moyTA", "moyTA_season",
+                     "moyRA", "moyRA_season"),
+         suffix=c("sim"),
+         expand=FALSE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
@@ -528,9 +532,9 @@ if (type == "piezometrie") {
     Explore2_serie_diag_plot$variables = "medQJC5"
 }
 
-# proj safran
-Explore2_serie_proj_safran =
-    list(name='Explore2_serie_proj_safran',
+# proj SAFRAN
+Explore2_serie_proj_SAFRAN =
+    list(name='Explore2_serie_proj_SAFRAN',
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
                      "QJXA", "VCX3",
@@ -540,8 +544,8 @@ Explore2_serie_proj_safran =
          cancel_lim=FALSE,
          simplify=FALSE)
 
-Explore2_serie_more_proj_safran =
-    list(name='Explore2_serie_more_proj_safran',
+Explore2_serie_more_proj_SAFRAN =
+    list(name='Explore2_serie_more_proj_SAFRAN',
          variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
                      "tVCN10", "allBE",
                      "debutBF", "centreBF", "finBF",
@@ -611,9 +615,10 @@ read_saving =
 
 var2search =
     c(
-        'meta[.]',
-        # 'data[_]',
+        # 'data[_]', ### /!\ très lourd ###
+        # 'meta[_]',
         'data[.]',
+        'meta[.]',
         'dataEX',
         'metaEX',
         'Warnings'
@@ -893,13 +898,13 @@ doc_carte_piezo_critere_critere =
 #                                   c("Model", "Code"))], "_SAFRAN")
 # dataEX_SAFRAN = dplyr::select(dataEX_SAFRAN, -Model)
 
-# dataEX_MORDOR = dplyr::filter(dataEX_criteria,
-#                               Model == "MORDOR-SD")
-# var = names(dataEX_MORDOR)
+# dataEX_obs = dplyr::filter(dataEX_criteria,
+#                            Model != "SMASH")
+# var = names(dataEX_obs)
 # var = var[!(var %in% c("Model", "Code"))]
 # var = gsub("[_]obs", "", var)
 
-# dataEX = dplyr::inner_join(dataEX_MORDOR, dataEX_SAFRAN,
+# dataEX = dplyr::inner_join(dataEX_obs, dataEX_SAFRAN,
 #                            by="Code")
 
 # for (v in var) {
@@ -937,6 +942,7 @@ source(computer_path, encoding='UTF-8')
 setwd(computer_work_path)
 source(file.path(lib_path, 'tools.R'), encoding='UTF-8')
 
+###############################################
 # Import EXstat
 dev_path = file.path(dev_lib_path,
                      c('', 'EXstat_project'), 'EXstat', 'R')
@@ -950,14 +956,7 @@ if (any(file.exists(dev_path))) {
     print('Loading EXstat from package')
     library(EXstat)
 }
-
-
-# # Import EXstat
-# dev_path = file.path(dev_lib_path, 'EXstat_project', 'EXstat', 'R')
-# source(file.path(dev_path, "CARD_management.R"), encoding='UTF-8')    
-# print('Loading EXstat from package')
-# library(EXstat)
-
+###############################################
 
 # Import ASHE
 dev_path = file.path(dev_lib_path,

@@ -30,6 +30,8 @@ CARD_extract_data = function () {
                                        files_name_opt.,
                                        subset_name, ".fst"))
 
+    print(data)
+    
     if (type == "piezometrie") {
         data = dplyr::rename(data, Q_obs=H_obs, Q_sim=H_sim)
     }
@@ -57,6 +59,8 @@ CARD_extract_data = function () {
                               dev=TRUE,
                               verbose=subverbose)
 
+        print(res$dataEX)
+        
         write_tibble(res$dataEX,
                      filedir=tmppath,
                      filename=paste0("dataEX_", extract$name, sep,
