@@ -100,7 +100,7 @@ manage_data = function () {
                 gc()
             }
         }
-
+        
         regexp_bool = "^HYP.*"
         regexp_time =
             "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
@@ -742,7 +742,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
         Historicals =
             projs_selection_data[projs_selection_data$EXP ==
-                                 "historical",]
+                                 "historical" &
+                                 projs_selection_data$Model %in%
+                                 models_to_use,]
         nHistoricals = nrow(Historicals)
 
         if (MPI == "file") {

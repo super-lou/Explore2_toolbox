@@ -147,18 +147,18 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
+    "diagnostic"
     # "diagnostic_ungauged"
-    "projection"
+    # "projection"
     # "projection_merge"
 
 to_do =
     c(
         # 'delete_tmp',
-        'merge_nc'
+        # 'merge_nc'
         # 'reshape_data',
-        # 'create_data'
-        # 'extract_data',
+        'create_data',
+        'extract_data'
         # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -183,6 +183,7 @@ extract_data =
         # 'Explore2_criteria_diag_BF',
         # 'Explore2_serie_diag_plot',
         # 'Explore2_criteria_P_ratio'
+        'Explore2_criteria_SAFRAN'
         # 'Explore2_serie_proj_safran',
         # 'Explore2_serie_more_proj_safran'
         # 'Explore2_serie_proj'
@@ -233,7 +234,8 @@ plot_sheet =
         # 'fiche_diagnostic_piezometre'
         # 'carte_regime'
         # 'carte_critere'
-        'fiche_precip_ratio'
+        # 'fiche_precip_ratio'
+        # 'fiche_diagnostic_SAFRAN'
         
     )
 
@@ -281,8 +283,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    "file"
-    # "code"
+    # "file"
+    "code"
 
 
 #  ___  _                  
@@ -350,7 +352,7 @@ codes_to_use =
         # 'K2981910' #ref
         # "^A"
         # "^H64"
-        # "^I",
+        # "^I"
         # "^K"
         
         
@@ -416,14 +418,17 @@ diag_station_2_remove =
 WIP = 
     list(name='WIP',
          # variables=c("QA", "QA_season"),
-         # variables=c("epsilon_P_season", "epsilon_T_season"),
-         variables=c("dtRA50mm"),
+         variables=c("T_chronique", "T_season",
+                     "R_chronique", "R_season"),
+         # variables=c("T_chronique",
+                     # "R_chronique"),
+         # variables=c("dtRA50mm"),
          # suffix=c("_obs", "_sim"),
          suffix=c("_obs"),
-         suffix=NULL,
-         expand=FALSE,
+         # suffix=NULL,
+         expand=TRUE,
          cancel_lim=TRUE,
-         simplify=FALSE)
+         simplify=TRUE)
 
 # diag
 Explore2_criteria_diag_performance = 
@@ -506,6 +511,15 @@ Explore2_criteria_P_ratio =
          variables=c("Pl_ratio", "Ps_ratio"),
          suffix=NULL,
          expand=FALSE,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
+Explore2_criteria_SAFRAN = 
+    list(name='Explore2_criteria_SAFRAN',
+         variables=c("T_chronique", "T_season",
+                     "R_chronique", "R_season"),
+         suffix=c("_obs"),
+         expand=TRUE,
          cancel_lim=TRUE,
          simplify=TRUE)
 
@@ -870,6 +884,35 @@ doc_carte_piezo_critere_critere =
 
 
 
+# dataEX_SAFRAN = dplyr::filter(dataEX_criteria,
+#                               Model == "SMASH")
+# names(dataEX_SAFRAN)[!(names(dataEX_SAFRAN) %in%
+#                        c("Model", "Code"))] =
+#     paste0(gsub("[_]obs", "",
+#                 names(dataEX_SAFRAN))[!(names(dataEX_SAFRAN) %in%
+#                                   c("Model", "Code"))], "_SAFRAN")
+# dataEX_SAFRAN = dplyr::select(dataEX_SAFRAN, -Model)
+
+# dataEX_MORDOR = dplyr::filter(dataEX_criteria,
+#                               Model == "MORDOR-SD")
+# var = names(dataEX_MORDOR)
+# var = var[!(var %in% c("Model", "Code"))]
+# var = gsub("[_]obs", "", var)
+
+# dataEX = dplyr::inner_join(dataEX_MORDOR, dataEX_SAFRAN,
+#                            by="Code")
+
+# for (v in var) {
+#     dataEX[[v]] =
+#         round(dataEX[[paste0(v, "_obs")]] -
+#               dataEX[[paste0(v, "_SAFRAN")]], 5)
+#     dataEX = dplyr::select(dataEX,
+#                            -all_of(c(paste0(v, "_obs"), paste0(v, "_SAFRAN"))))
+# }
+
+# ASHE::write_tibble(dataEX,
+#                    filename="dataEX_Explore2_criteria_SAFRAN.fst")
+
 
 
 #  ___        _  _    _        _  _            _    _            
@@ -894,19 +937,27 @@ source(computer_path, encoding='UTF-8')
 setwd(computer_work_path)
 source(file.path(lib_path, 'tools.R'), encoding='UTF-8')
 
+# # Import EXstat
+# dev_path = file.path(dev_lib_path,
+#                      c('', 'EXstat_project'), 'EXstat', 'R')
+# if (any(file.exists(dev_path))) {
+#     print('Loading EXstat from local directory')
+#     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+#     for (path in list_path) {
+#         source(path, encoding='UTF-8')    
+#     }
+# } else {
+#     print('Loading EXstat from package')
+#     library(EXstat)
+# }
+
+
 # Import EXstat
-dev_path = file.path(dev_lib_path,
-                     c('', 'EXstat_project'), 'EXstat', 'R')
-if (any(file.exists(dev_path))) {
-    print('Loading EXstat from local directory')
-    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
-    for (path in list_path) {
-        source(path, encoding='UTF-8')    
-    }
-} else {
-    print('Loading EXstat from package')
-    library(EXstat)
-}
+dev_path = file.path(dev_lib_path, 'EXstat_project', 'EXstat', 'R')
+source(file.path(dev_path, "CARD_management.R"), encoding='UTF-8')    
+print('Loading EXstat from package')
+library(EXstat)
+
 
 # Import ASHE
 dev_path = file.path(dev_lib_path,
