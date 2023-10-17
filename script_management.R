@@ -96,20 +96,21 @@ manage_data = function () {
                         }
                     }
                 }
-                rm ("dataEX_tmp")
-                gc()
+                rm ("dataEX_tmp"); gc()
             }
         }
-        
-        regexp_bool = "^HYP.*"
-        regexp_time =
-            "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
-        regexp_ratio_alpha = "^alpha"
-        regexp_ratio = "(Rc)|(^epsilon)|(^a)|(^STD)"
         
 
         if (exists("dataEX")) {
             if (extract$simplify) {
+
+                regexp_bool = "^HYP.*"
+                regexp_time =
+                    "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
+                regexp_ratio_alpha = "^alpha"
+                regexp_ratio = "(Rc)|(^epsilon)|(^a)|(^STD)"
+                regexp_diff = "(moyTA)|(moyRA)|(R.*[_]ratio)"
+                
                 dataEX = dataEX[order(dataEX$Model),]
                 
                 Vars = colnames(dataEX)
@@ -131,6 +132,10 @@ manage_data = function () {
                                 dataEX[[paste0(varREL,
                                                "_obs")]]
 
+                            metaEX$glose[metaEX$var == varREL] =
+                                paste0(metaEX$glose[metaEX$var == varREL],
+                                       " (Comparaison entre les valeurs simulées et observées)")
+
                         } else if (grepl(regexp_time, varREL)) {
                             dataEX[[varREL]] =
                                 circular_minus(
@@ -140,6 +145,13 @@ manage_data = function () {
                                                    "_obs")]],
                                     period=365.25)/30.4375
 
+                            metaEX$unit[metaEX$var == varREL] = "mois"
+                            metaEX$isDate[metaEX$var == varREL] = FALSE
+                            metaEX$glose[metaEX$var == varREL] =
+                                paste0(metaEX$glose[metaEX$var == varREL],
+                                       " (Écart normalisé entre les valeurs simulées et observées)")
+                            
+
                         } else if (grepl(regexp_ratio_alpha,
                                          varREL)) {
                             
@@ -148,15 +160,35 @@ manage_data = function () {
                                 dataEX[[paste0(varREL, "_obs")]]
 
                             dataEX[[varREL]][
-                                !dataEX[[paste0("HYP", varREL, "_obs")]]
+                                !dataEX[[paste0("HYP",
+                                                varREL,
+                                                "_obs")]]
                             ] = NA
                             
+                            metaEX$unit[metaEX$var == varREL] = "sans unité"
+                            metaEX$glose[metaEX$var == varREL] =
+                                paste0(metaEX$glose[metaEX$var == varREL],
+                                       " (Ratio entre les valeurs simulées et observées)")
                             
                         } else if (grepl(regexp_ratio, varREL)) {
                             dataEX[[varREL]] =
                                 dataEX[[paste0(varREL, "_sim")]] /
                                 dataEX[[paste0(varREL, "_obs")]]
 
+                            metaEX$unit[metaEX$var == varREL] = "sans unité"
+                            metaEX$glose[metaEX$var == varREL] =
+                                paste0(metaEX$glose[metaEX$var == varREL],
+                                       " (Ratio entre les valeurs simulées et observées)")
+
+                        } else if (grepl(regexp_diff, varREL)) {
+                            dataEX[[varREL]] =
+                                round(dataEX[[paste0(varREL, "_sim")]] -
+                                      dataEX[[paste0(varREL, "_obs")]], 5)
+
+                            metaEX$glose[metaEX$var == varREL] =
+                                paste0(metaEX$glose[metaEX$var == varREL],
+                                       " (Écart entre les valeurs simulées et observées)")
+                            
                         } else {
                             dataEX[[varREL]] =
                                 (dataEX[[paste0(varREL,
@@ -165,6 +197,11 @@ manage_data = function () {
                                                 "_obs")]]) /
                                 dataEX[[paste0(varREL,
                                                "_obs")]]
+                            
+                            metaEX$unit[metaEX$var == varREL] = "sans unité"
+                            metaEX$glose[metaEX$var == varREL] =
+                                paste0(metaEX$glose[metaEX$var == varREL],
+                                       " (Ratio relatif entre les valeurs simulées et observées)")
                         }
 
                         dataEX =
@@ -174,6 +211,7 @@ manage_data = function () {
                                                             "_sim"))
                     }
                 }
+
             } else {
                 for (j in 1:length(dataEX)) {
                     dataEX[[j]] =
@@ -201,16 +239,13 @@ manage_data = function () {
                                      ".fst"))
         
         if (exists("meta")) {
-            rm ("meta")
-            gc()
+            rm ("meta"); gc()
         }
         if (exists("metaEX")) {
-            rm ("metaEX")
-            gc()
+            rm ("metaEX"); gc()
         }
         if (exists("dataEX")) {
-            rm ("dataEX")
-            gc()
+            rm ("dataEX"); gc()
         }
     }
 }

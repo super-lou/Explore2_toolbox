@@ -140,7 +140,9 @@ create_data = function () {
 
         if (grepl("diagnostic", mode)) {
             
-            val2check = c("T", "ET0", "P", "Pl", "Ps")
+            val2check = names(data_sim)[!(names(data_sim) %in%
+                                          c("Model", "Code",
+                                            "Date", "Q_sim"))]
 
             Model = Chain
             nModel = length(Model)
@@ -187,16 +189,16 @@ create_data = function () {
             }
 
             data_sim = dplyr::relocate(data_sim, "T", .before=ET0)            
-            if ("Pl" %in% names(data_sim)) {
-                data_sim$Pl[!is.finite(data_sim$Pl)] = NA
+            if ("Rl" %in% names(data_sim)) {
+                data_sim$Rl[!is.finite(data_sim$Rl)] = NA
             }
-            if ("Ps" %in% names(data_sim)) {
-                data_sim$Ps[!is.finite(data_sim$Ps)] = NA
+            if ("rs" %in% names(data_sim)) {
+                data_sim$Rs[!is.finite(data_sim$Rs)] = NA
             }
-            if ("P" %in% names(data_sim)) {
-                data_sim$P[!is.finite(data_sim$P)] = NA
+            if ("R" %in% names(data_sim)) {
+                data_sim$R[!is.finite(data_sim$R)] = NA
                 data_sim = dplyr::filter(data_sim,
-                                         rep(!all(is.na(P)), length(P)),
+                                         rep(!all(is.na(R)), length(R)),
                                          .by="Code")
             }
             
@@ -266,6 +268,7 @@ create_data = function () {
                               meta_obs)
     }
 
+    
     if (isSim & isObs) {
         meta = dplyr::left_join(meta_sim,
                                 dplyr::select(meta_obs,
@@ -295,18 +298,16 @@ create_data = function () {
                                       \(x) NA_propagation(x,
                                                           Ref=Q_obs)))
         }
-        
         data = dplyr::relocate(data, Q_obs, .before=Q_sim)
-
+        
         for (i in 1:nVal2check) {
             data =
                 dplyr::mutate(data,
                               !!paste0(val2check[i],
-                                       "_obs"):=get(val2check[i]),
-                              !!paste0(val2check[i],
                                        "_sim"):=get(val2check[i]))
             data = dplyr::select(data, -val2check[i])
         }
+        
 
     } else if (isSim & !isObs) {
         meta = meta_sim
@@ -329,6 +330,25 @@ create_data = function () {
         
         rm ("data_obs"); gc()
         rm ("meta_obs"); gc()
+    }
+
+    
+    if (isSim & !is.null(complete_by)) {
+        data_val_obs = dplyr::filter(data, Model == complete_by)
+        data_val_obs = dplyr::select(data_val_obs,
+                                     all_of(c("Code", "Date",
+                                              paste0(val2check, "_sim"))))
+        names(data_val_obs) = gsub("[_]sim", "_obs", names(data_val_obs))
+        
+        print(data)
+        print(data_val_obs)
+        
+        data = dplyr::left_join(data, data_val_obs, by=c("Code",
+                                                         "Date"))
+
+
+        print(data)
+        print("")
     }
     
     

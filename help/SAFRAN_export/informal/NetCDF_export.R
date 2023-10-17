@@ -119,40 +119,40 @@ NCf$ET0.02.units = "mm"
 NCf$ET0.03.missing_value = NaN
 
 ### 5.5. Précipitations liquides _____________________________________
-NCf$Pl.name = "Pl"
-NCf$Pl.dimension = "station, time"
-NCf$Pl.precision = "float"
-NCf$Pl.value = matrix(
+NCf$Rl.name = "Rl"
+NCf$Rl.dimension = "station, time"
+NCf$Rl.precision = "float"
+NCf$Rl.value = matrix(
     data=round(x=runif(length(NCf$time.value)*length(NCf$station.value)),
                    digits=2),
     ncol=length(NCf$time.value))
-NCf$Pl.01.standard_name = "Précipitations liquides"
-NCf$Pl.02.units = "mm"
-NCf$Pl.03.missing_value = NaN
+NCf$Rl.01.standard_name = "Précipitations liquides"
+NCf$Rl.02.units = "mm"
+NCf$Rl.03.missing_value = NaN
 
 ### 5.6. Précipitations solides ______________________________________
-NCf$Ps.name = "Ps"
-NCf$Ps.dimension = "station, time"
-NCf$Ps.precision = "float"
-NCf$Ps.value = matrix(
+NCf$Rs.name = "Rs"
+NCf$Rs.dimension = "station, time"
+NCf$Rs.precision = "float"
+NCf$Rs.value = matrix(
     data=round(x=runif(length(NCf$time.value)*length(NCf$station.value)),
                digits=2),
     ncol=length(NCf$time.value))
-NCf$Pl.01.standard_name = "Précipitations solides"
-NCf$Pl.02.units = "mm"
-NCf$Pl.03.missing_value = NaN
+NCf$Rl.01.standard_name = "Précipitations solides"
+NCf$Rl.02.units = "mm"
+NCf$Rl.03.missing_value = NaN
 
 ### 5.7. Précipitations totales ______________________________________
-NCf$P.name = "P"
-NCf$P.dimension = "station, time"
-NCf$P.precision = "float"
-NCf$P.value = matrix(
+NCf$R.name = "R"
+NCf$R.dimension = "station, time"
+NCf$R.precision = "float"
+NCf$R.value = matrix(
     data=round(x=runif(length(NCf$time.value)*length(NCf$station.value)),
                digits=2),
     ncol=length(NCf$time.value))
-NCf$P.01.standard_name = "Précipitations totales"
-NCf$P.02.units = "mm"
-NCf$P.03.missing_value = NaN
+NCf$R.01.standard_name = "Précipitations totales"
+NCf$R.02.units = "mm"
+NCf$R.03.missing_value = NaN
 
 
 ## 6. SAVING _________________________________________________________

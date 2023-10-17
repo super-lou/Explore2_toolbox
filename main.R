@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/herautl/library/Explore2_toolbox'
+    # "./"
+    '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -158,8 +158,8 @@ to_do =
         # 'merge_nc'
         # 'reshape_data',
         'create_data',
-        'extract_data'
-        # 'save_extract'
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'selection',
@@ -173,7 +173,7 @@ to_do =
 
 extract_data =
     c(
-        'WIP'
+        # 'WIP'
         # 'Explore2_criteria_diag_performance'
         # 'Explore2_criteria_diag_sensibilite',
         # 'Explore2_criteria_diag_sensibilite_RAT',
@@ -181,9 +181,8 @@ extract_data =
         # 'Explore2_criteria_diag_ME',
         # 'Explore2_criteria_diag_BE',
         # 'Explore2_criteria_diag_BF',
+        'Explore2_criteria_ecart_SAFRAN'
         # 'Explore2_serie_diag_plot',
-        # 'Explore2_criteria_P_ratio'
-        # 'Explore2_criteria_ecart_SAFRAN'
         # 'Explore2_serie_proj_SAFRAN',
         # 'Explore2_serie_more_proj_SAFRAN'
         # 'Explore2_serie_proj'
@@ -282,9 +281,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -328,14 +327,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
+        "CTRIP",
+        "EROS",
+        "GRSD",
         "J2000",
-        # "SIM2",
-        "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "SIM2",
+        "MORDOR-SD"
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -348,8 +347,8 @@ complete_by = "SMASH"
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "^A"
         # "^H64"
         # "^I"
@@ -448,7 +447,7 @@ Explore2_criteria_diag_performance =
 
 Explore2_criteria_diag_sensibilite = 
     list(name='Explore2_criteria_diag_sensibilite',
-         variables=c("epsilon_P", "epsilon_P_season",
+         variables=c("epsilon_R", "epsilon_R_season",
                      "epsilon_T", "epsilon_T_season"),
          suffix=c("obs", "sim"),
          expand=FALSE,
@@ -457,7 +456,7 @@ Explore2_criteria_diag_sensibilite =
 
 Explore2_criteria_diag_sensibilite_RAT = 
     list(name='Explore2_criteria_diag_sensibilite_RAT',
-         variables=c("RAT_T", "RAT_P", "RAT_ET0"),
+         variables=c("RAT_T", "RAT_R", "RAT_ET0"),
          suffix=NULL,
          expand=FALSE,
          cancel_lim=TRUE,
@@ -501,31 +500,29 @@ Explore2_criteria_diag_BF =
          cancel_lim=TRUE,
          simplify=TRUE)
 
+Explore2_criteria_ecart_SAFRAN = 
+    list(name='Explore2_criteria_ecart_SAFRAN',
+         variables=c(
+             "moyTA",
+             "moyTA_season",
+             "moyRA",
+             "moyRA_season",
+             "Rl_ratio",
+             "Rs_ratio"
+         ),
+         suffix=c("obs", "sim"),
+         expand=FALSE,
+         cancel_lim=TRUE,
+         simplify=TRUE)
+
 Explore2_serie_diag_plot = 
     list(name='Explore2_serie_diag_plot',
-         variables=c("QM", "QA", "PA_all", "PA_ratio",
+         variables=c("QM", "QA", "RA_all", "RA_ratio",
                      "medQJC5", "CDC"),
          suffix=c("obs", "sim"),
          expand=FALSE,
          cancel_lim=TRUE,
          simplify=FALSE)
-
-Explore2_criteria_P_ratio =
-    list(name='Explore2_criteria_P_ratio',
-         variables=c("Pl_ratio", "Ps_ratio"),
-         suffix=NULL,
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
-
-Explore2_criteria_ecart_SAFRAN = 
-    list(name='Explore2_criteria_ecart_SAFRAN',
-         variables=c("moyTA", "moyTA_season",
-                     "moyRA", "moyRA_season"),
-         suffix=c("sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
 
 
 if (type == "piezometrie") {
@@ -849,74 +846,18 @@ doc_carte_piezo_critere_critere =
 
 
 
-
-# dataEX_PA_ratio_SAFRAN = dplyr::filter(dataEX_serie$PA_ratio,
-#                                        Model == "SMASH")
-# dataEX_PA_ratio_SAFRAN = dplyr::select(dataEX_PA_ratio_SAFRAN,
-#                                        Code,
-#                                        Pl_ratio_obs,
-#                                        Ps_ratio_obs)
-# dataEX_PA_ratio_SAFRAN = dplyr::rename(dataEX_PA_ratio_SAFRAN,
-#                                        Pl_ratio_SAFRAN=
-#                                            Pl_ratio_obs,
-#                                        Ps_ratio_SAFRAN=
-#                                            Ps_ratio_obs)
-
-# dataEX_criteria_P_ratio = dplyr::inner_join(dataEX_serie$PA_ratio,
-#                                             dataEX_PA_ratio_SAFRAN,
-#                                             by="Code")
-
-# dataEX_criteria_P_ratio$Pl_ratio =
-#     round(dataEX_criteria_P_ratio$Pl_ratio_obs -
-#           dataEX_criteria_P_ratio$Pl_ratio_SAFRAN, 5)
-
-# dataEX_criteria_P_ratio$Ps_ratio =
-#     round(dataEX_criteria_P_ratio$Ps_ratio_obs -
-#           dataEX_criteria_P_ratio$Ps_ratio_SAFRAN, 5)
-
-# dataEX_criteria_P_ratio = dplyr::select(dataEX_criteria_P_ratio,
-#                                          Model, Code,
-#                                          Pl_ratio, Ps_ratio)
-
-# dataEX_criteria_P_ratio$Pl_ratio[!is.finite(dataEX_criteria_P_ratio$Pl_ratio)] = NA
-# dataEX_criteria_P_ratio$Ps_ratio[!is.finite(dataEX_criteria_P_ratio$Ps_ratio)] = NA
-
-# ASHE::write_tibble(dataEX_criteria_P_ratio, filename="dataEX_Explore2_criteria_P_ratio.fst")
-
-# metaEX_P_ratio = tibble(var=c("Pl_ratio", "Ps_ratio"), unit="sans unité", is_date=FALSE, normalize=FALSE, reverse_palette=FALSE, glose="diff SAFRAN", topic="", samplePeriod="")
-
-# ASHE::write_tibble(metaEX_P_ratio, filename="metaEX_Explore2_criteria_P_ratio.fst")
+# Message d'avis :
+# Values from `RA_obs` and `RA_sim` are not uniquely identified; output will
+# contain list-cols.
+# • Use `values_fn = list` to suppress this warning.
+# • Use `values_fn = {summary_fun}` to summarise duplicates.
+# • Use the following dplyr code to identify duplicates.
+#   {data} %>%
+#   dplyr::group_by(ID, Date, Ref) %>%
+#   dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
+#   dplyr::filter(n > 1L) 
 
 
-
-# dataEX_SAFRAN = dplyr::filter(dataEX_criteria,
-#                               Model == "SMASH")
-# names(dataEX_SAFRAN)[!(names(dataEX_SAFRAN) %in%
-#                        c("Model", "Code"))] =
-#     paste0(gsub("[_]obs", "",
-#                 names(dataEX_SAFRAN))[!(names(dataEX_SAFRAN) %in%
-#                                   c("Model", "Code"))], "_SAFRAN")
-# dataEX_SAFRAN = dplyr::select(dataEX_SAFRAN, -Model)
-
-# dataEX_obs = dplyr::filter(dataEX_criteria,
-#                            Model != "SMASH")
-# var = names(dataEX_obs)
-# var = var[!(var %in% c("Model", "Code"))]
-# var = gsub("[_]obs", "", var)
-
-# dataEX = dplyr::inner_join(dataEX_obs, dataEX_SAFRAN,
-#                            by="Code")
-
-# for (v in var) {
-#     dataEX[[v]] =
-#         round(dataEX[[paste0(v, "_obs")]] -
-#               dataEX[[paste0(v, "_SAFRAN")]], 5)
-#     dataEX = dplyr::select(dataEX,
-#                            -all_of(c(paste0(v, "_obs"), paste0(v, "_SAFRAN"))))
-# }
-
-# ASHE::write_tibble(dataEX,
-#                    filename="dataEX_Explore2_criteria_SAFRAN.fst")
 
 
 
@@ -942,7 +883,7 @@ source(computer_path, encoding='UTF-8')
 setwd(computer_work_path)
 source(file.path(lib_path, 'tools.R'), encoding='UTF-8')
 
-###############################################
+
 # Import EXstat
 dev_path = file.path(dev_lib_path,
                      c('', 'EXstat_project'), 'EXstat', 'R')
@@ -956,7 +897,6 @@ if (any(file.exists(dev_path))) {
     print('Loading EXstat from package')
     library(EXstat)
 }
-###############################################
 
 # Import ASHE
 dev_path = file.path(dev_lib_path,
