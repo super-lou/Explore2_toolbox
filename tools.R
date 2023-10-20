@@ -188,7 +188,7 @@ NetCDF_to_tibble = function (NetCDF_path,
             S = S[CodeOrder]
             data = dplyr::bind_cols(data, S=rep(S, each=nDate))
             
-            if (!(chain %in% c("CTRIP", "EROS", "GRSD", "SIM2"))) {
+            if (!(chain %in% c("CTRIP", "EROS", "SIM2"))) {
                 R = ncdf4::ncvar_get(NCdata, "R",
                                      start=c(start, 1),
                                      count=c(count, -1))
@@ -197,24 +197,26 @@ NetCDF_to_tibble = function (NetCDF_path,
                 R = R[CodeOrder,,drop=FALSE]
                 R = c(t(R))
                 data = dplyr::bind_cols(data, R=R)
-                
-                Rl = ncdf4::ncvar_get(NCdata, "Rl",
-                                      start=c(start, 1),
-                                      count=c(count, -1))
-                Rl = matrix(Rl, nrow=count)
-                Rl = Rl[station,,drop=FALSE]
-                Rl = Rl[CodeOrder,,drop=FALSE]
-                Rl = c(t(Rl))
-                data = dplyr::bind_cols(data, Rl=Rl)
-                
-                Rs = ncdf4::ncvar_get(NCdata, "Rs",
-                                      start=c(start, 1),
-                                      count=c(count, -1))
-                Rs = matrix(Rs, nrow=count)
-                Rs = Rs[station,,drop=FALSE]
-                Rs = Rs[CodeOrder,,drop=FALSE]
-                Rs = c(t(Rs))
-                data = dplyr::bind_cols(data, Rs=Rs)
+
+                if (!(chain %in% c("GRSD"))) {
+                    Rl = ncdf4::ncvar_get(NCdata, "Rl",
+                                          start=c(start, 1),
+                                          count=c(count, -1))
+                    Rl = matrix(Rl, nrow=count)
+                    Rl = Rl[station,,drop=FALSE]
+                    Rl = Rl[CodeOrder,,drop=FALSE]
+                    Rl = c(t(Rl))
+                    data = dplyr::bind_cols(data, Rl=Rl)
+                    
+                    Rs = ncdf4::ncvar_get(NCdata, "Rs",
+                                          start=c(start, 1),
+                                          count=c(count, -1))
+                    Rs = matrix(Rs, nrow=count)
+                    Rs = Rs[station,,drop=FALSE]
+                    Rs = Rs[CodeOrder,,drop=FALSE]
+                    Rs = c(t(Rs))
+                    data = dplyr::bind_cols(data, Rs=Rs)
+                }
             }
             
             if (!(chain %in% c("CTRIP", "SIM2"))) {

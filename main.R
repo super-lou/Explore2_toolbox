@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/herautl/library/Explore2_toolbox'
+    "./"
+    # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -154,13 +154,13 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp'
+        'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
         'create_data',
-        'extract_data',
-        'save_extract'
-        # 'read_tmp'
+        # 'extract_data',
+        # 'save_extract'
+        'read_tmp'
         # 'read_saving',
         # 'selection',
         # 'write_warnings',
@@ -168,25 +168,25 @@ to_do =
         # 'analyse_data'
         # 'plot_sheet'
         # 'plot_doc'
-        # 'create_data_proj'
     )
 
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diag_performance'
-        # 'Explore2_criteria_diag_sensibilite',
-        # 'Explore2_criteria_diag_sensibilite_RAT',
-        # 'Explore2_criteria_diag_HE',
-        # 'Explore2_criteria_diag_ME',
-        # 'Explore2_criteria_diag_BE',
-        # 'Explore2_criteria_diag_BF',
-        'Explore2_criteria_ecart_SAFRAN'
-        # 'Explore2_serie_diag_plot',
-        # 'Explore2_serie_proj_SAFRAN',
-        # 'Explore2_serie_more_proj_SAFRAN'
-        # 'Explore2_serie_proj'
-        # 'Explore2_serie_more_proj'
+        # 'Explore2_criteria_diagnostic_performance'
+        # 'Explore2_criteria_diagnostic_sensibilite',
+        # 'Explore2_criteria_diagnostic_sensibilite_RAT',
+        # 'Explore2_criteria_diagnostic_HE'
+        # 'Explore2_criteria_diagnostic_ME',
+        # 'Explore2_criteria_diagnostic_BE',
+        # 'Explore2_criteria_diagnostic_BF',
+        'Explore2_criteria_diagnostic_SAFRAN',
+        'Explore2_criteria_more_diagnostic_SAFRAN'
+        # 'Explore2_serie_diagnostic_plot'
+        # 'Explore2_serie_projection_SAFRAN',
+        # 'Explore2_serie_more_projection_SAFRAN'
+        # 'Explore2_serie_projection'
+        # 'Explore2_serie_more_projection'
     )
 
 
@@ -233,8 +233,6 @@ plot_sheet =
         # 'fiche_diagnostic_piezometre'
         # 'carte_regime'
         # 'carte_critere'
-        # 'fiche_precip_ratio'
-        # 'fiche_diagnostic_SAFRAN'
         
     )
 
@@ -249,9 +247,9 @@ plot_doc =
         # 'fiche_diagnostic_piezometre'
 
         ## normal
-        "carte_critere_model"
+        # "carte_critere_model"
         # "carte_critere_model_secteur"
-        # "carte_critere_critere"
+        "carte_critere_critere"
         # "carte_critere_critere_secteur"
 
         ## ungauged
@@ -276,14 +274,14 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -292,7 +290,7 @@ MPI =
 # |___/ \__|\___|| .__//__/ __________________________________________
 ## 1. CREATE_DATA|_| _________________________________________________ 
 period_extract_diag = c('1976-01-01', '2019-12-31')
-period_extract_proj = c('1975-09-01', '2100-08-31')
+period_extract_projection = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 14 |  9 |  6
@@ -327,14 +325,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
+        # "CTRIP",
         "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD"
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -342,18 +340,17 @@ models_to_use =
         # "MONA"
         
     )
-complete_by = "SMASH"
+complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     # ''
     c(
-        'all'
+        # 'all'
         # 'K2981910' #ref
-        # "^A"
-        # "^H64"
-        # "^I"
+        # "O0362510"
+        # "^H"
+        "K268081001"
         # "^K"
-        
         
         ## échange code
         # "K2240820"
@@ -379,6 +376,11 @@ diag_station_2_remove =
         "CTRIP"="D020601001"
     )
 
+MORDOR_code_warning =
+    # ""
+    c("K002000101", "K222302001", "K225401001", "O023402001", "O038401001", "O074404001", "O312102002", "O319401001", "O701151001", "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201", "W030000201", "W103000301", "W273050001", "W211401000", "W271000101", "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
+
+
 # existant :
 # K0910010
 # K2240810
@@ -388,8 +390,7 @@ diag_station_2_remove =
 
 # KLIGNON1 -> K0725302
 
-
-
+# "H602321001", "K072530200", "K271401001", "K326401002", "O036251001", "Q010001001", "V123561001", "V615502002"
 
 
 # dataEX_criteria_normal = dataEX_criteria
@@ -416,92 +417,79 @@ diag_station_2_remove =
 
 WIP = 
     list(name='WIP',
+         type="criteria",
          # variables=c("QA", "QA_season"),
          variables=c(
-             "moyTA",
-             "moyTA_season",
-             "moyRA",
-             "moyRA_season"
+             # "moyTA",
+             # "moyTA_season",
+             # "moyRA",
+             # "moyRA_season"
+             "CR",
+             "CR_season"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),
          # variables=c("dtRA50mm"),
-         # suffix=c("obs", "sim"),
-         suffix=c("sim"),
-         # suffix=NULL,
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=c("obs", "sim"))
+         # suffix=c("sim"),
+         # suffix=NULL)
 
 # diag
-Explore2_criteria_diag_performance = 
-    list(name='Explore2_criteria_diag_performance',
+Explore2_criteria_diagnostic_performance = 
+    list(name='Explore2_criteria_diagnostic_performance',
+         type="criteria",
          variables=c("KGE", "KGEracine",
                      "NSE", "NSEracine", "NSElog", "NSEinv",
                      "Biais", "Biais_season",
                      "STD"),
-         suffix=NULL,
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=NULL)
 
-Explore2_criteria_diag_sensibilite = 
-    list(name='Explore2_criteria_diag_sensibilite',
+Explore2_criteria_diagnostic_sensibilite = 
+    list(name='Explore2_criteria_diagnostic_sensibilite',
+         type="criteria",
          variables=c("epsilon_R", "epsilon_R_season",
                      "epsilon_T", "epsilon_T_season"),
-         suffix=c("obs", "sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=c("obs", "sim"))
 
-Explore2_criteria_diag_sensibilite_RAT = 
-    list(name='Explore2_criteria_diag_sensibilite_RAT',
+Explore2_criteria_diagnostic_sensibilite_RAT = 
+    list(name='Explore2_criteria_diagnostic_sensibilite_RAT',
+         type="criteria",
          variables=c("RAT_T", "RAT_R", "RAT_ET0"),
-         suffix=NULL,
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=NULL)
 
-Explore2_criteria_diag_HE = 
-    list(name='Explore2_criteria_diag_HE',
+Explore2_criteria_diagnostic_HE = 
+    list(name='Explore2_criteria_diagnostic_HE',
+         type="criteria",
          variables=c("Q10",
                      "QJXA-10", "alphaQJXA",
                      "med{tQJXA}", "med{dtCrue}"),
-         suffix=c("obs", "sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=c("obs", "sim"))
 
-Explore2_criteria_diag_ME = 
-    list(name='Explore2_criteria_diag_ME',
+Explore2_criteria_diagnostic_ME = 
+    list(name='Explore2_criteria_diagnostic_ME',
+         type="criteria",
          variables=c("Q50", "aCDC", "alphaQA"),
-         suffix=c("obs", "sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=c("obs", "sim"))
 
-Explore2_criteria_diag_BE = 
-    list(name='Explore2_criteria_diag_BE',
+Explore2_criteria_diagnostic_BE = 
+    list(name='Explore2_criteria_diagnostic_BE',
+         type="criteria",
          variables=c("Q90",
                      "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
                      "med{tVCN10}", "med{allBE}"),
-         suffix=c("obs", "sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=c("obs", "sim"))
 
-Explore2_criteria_diag_BF = 
-    list(name='Explore2_criteria_diag_BF',
+Explore2_criteria_diagnostic_BF = 
+    list(name='Explore2_criteria_diagnostic_BF',
+         type="criteria",
          variables=c("BFI", "BFM",
                      "med{debutBF}", "med{centreBF}", "med{finBF}",
                      "med{dtBF}", "med{vBF}", "med{dtRec}"),
-         suffix=c("obs", "sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=c("obs", "sim"))
 
-Explore2_criteria_ecart_SAFRAN = 
-    list(name='Explore2_criteria_ecart_SAFRAN',
+Explore2_criteria_diagnostic_SAFRAN = 
+    list(name='Explore2_criteria_diagnostic_SAFRAN',
+         type="criteria",
          variables=c(
              "moyTA",
              "moyTA_season",
@@ -510,73 +498,70 @@ Explore2_criteria_ecart_SAFRAN =
              "Rl_ratio",
              "Rs_ratio"
          ),
-         suffix=c("obs", "sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=TRUE)
+         suffix=c("obs", "sim"))
 
-Explore2_serie_diag_plot = 
-    list(name='Explore2_serie_diag_plot',
+
+Explore2_criteria_more_diagnostic_SAFRAN = 
+    list(name='Explore2_criteria_more_diagnostic_SAFRAN',
+         type="criteria",
+         variables=c(
+             "CR",
+             "CR_season"
+         ),
+         suffix=NULL)
+
+Explore2_serie_diagnostic_plot = 
+    list(name='Explore2_serie_diagnostic_plot',
+         type="serie",
          variables=c("QM", "QA", "RA_all", "RA_ratio",
                      "medQJC5", "CDC"),
-         suffix=c("obs", "sim"),
-         expand=FALSE,
-         cancel_lim=TRUE,
-         simplify=FALSE)
+         suffix=c("obs", "sim"))
 
 
 if (type == "piezometrie") {
-    Explore2_serie_diag_plot$variables = "medQJC5"
+    Explore2_serie_diagnostic_plot$variables = "medQJC5"
 }
 
 # proj SAFRAN
-Explore2_serie_proj_SAFRAN =
-    list(name='Explore2_serie_proj_SAFRAN',
+Explore2_serie_projection_SAFRAN =
+    list(name='Explore2_serie_projection_SAFRAN',
+         type="serie",
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
                      "QJXA", "VCX3",
                      "QMNA", "VCN10", "VCN3"),
-         suffix="_obs",
-         expand=TRUE,
-         cancel_lim=FALSE,
-         simplify=FALSE)
+         suffix="obs")
 
-Explore2_serie_more_proj_SAFRAN =
-    list(name='Explore2_serie_more_proj_SAFRAN',
+Explore2_serie_more_projection_SAFRAN =
+    list(name='Explore2_serie_more_projection_SAFRAN',
+         type="serie",
          variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
                      "tVCN10", "allBE",
                      "debutBF", "centreBF", "finBF",
                      "dtBF", "vBF", "dtRec"),
-         suffix="_obs",
-         expand=TRUE,
-         cancel_lim=FALSE,
-         simplify=FALSE)
+         suffix="obs")
 
 # proj
-Explore2_serie_proj =
-    list(name='Explore2_serie_proj',
+Explore2_serie_projection =
+    list(name='Explore2_serie_projection',
+         type="serie",
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
                      "QJXA", "VCX3",
                      "QMNA", "VCN10", "VCN3"),
-         suffix="_sim",
-         expand=TRUE,
-         cancel_lim=FALSE,
-         simplify=FALSE)
+         suffix="sim")
 
-Explore2_serie_more_proj =
-    list(name='Explore2_serie_more_proj',
+Explore2_serie_more_projection =
+    list(name='Explore2_serie_more_projection',
+         type="serie",
          variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
                      "tVCN10", "allBE",
                      "debutBF", "centreBF", "finBF",
                      "dtBF", "vBF", "dtRec"),
-         suffix="_sim",
-         expand=TRUE,
-         cancel_lim=FALSE,
-         simplify=FALSE)
+         suffix="sim")
 
-# Explore2_proj_delta =
-#     list(name='Explore2_proj_delta',
+# Explore2_projection_delta =
+#     list(name='Explore2_projection_delta',
 #          variables="deltaQA",
 #          cancel_lim=FALSE,
 #          simplify=TRUE)
@@ -612,7 +597,7 @@ read_saving =
 
 var2search =
     c(
-        # 'data[_]', ### /!\ très lourd ###
+        'data[_]', ### /!\ très lourd ###
         # 'meta[_]',
         'data[.]',
         'meta[.]',
@@ -630,7 +615,14 @@ diag_criteria_selection =
 #     # "all"
     c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$",
       "RAT[_]T$", "RAT[_]P$", "Q10$", "med[{]tQJXA[}]$",
-      "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$")
+      "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$",
+
+      "^moyTA$",
+      "^moyTA[_]DJF$", "^moyTA[_]MAM$", "^moyTA[_]JJA$", "^moyTA[_]SON$",
+      "^moyRA$",
+      "^moyRA[_]DJF$", "^moyRA[_]MAM$", "^moyRA[_]JJA$", "^moyRA[_]SON$",
+      "^CR$",
+      "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$")
 
 diag_period_selection =
     list(
@@ -673,7 +665,9 @@ logo_to_show =
 # colorbar extremes. For example, if set to 0.01, quartile 1 and
 # quantile 99 will be used as the minimum and maximum values to assign
 # to minmimal maximum colors.
-exXprob = 0.01
+prob_of_quantile_for_palette =
+    0.01
+    # 0
 
 Colors_of_models = c(
     "CTRIP"="#A88D72", #marron
@@ -845,22 +839,6 @@ doc_carte_piezo_critere_critere =
 
 
 
-
-# Message d'avis :
-# Values from `RA_obs` and `RA_sim` are not uniquely identified; output will
-# contain list-cols.
-# • Use `values_fn = list` to suppress this warning.
-# • Use `values_fn = {summary_fun}` to summarise duplicates.
-# • Use the following dplyr code to identify duplicates.
-#   {data} %>%
-#   dplyr::group_by(ID, Date, Ref) %>%
-#   dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
-#   dplyr::filter(n > 1L) 
-
-
-
-
-
 #  ___        _  _    _        _  _            _    _            
 # |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
 #  | | | ' \ | ||  _|| |/ _` || || |(_-</ _` ||  _|| |/ _ \| ' \ 
@@ -982,7 +960,7 @@ if (MPI != "") {
 if (grepl("diagnostic", mode)) {
     period_extract = period_extract_diag
 } else if (grepl("projection", mode)) {
-    period_extract = period_extract_proj
+    period_extract = period_extract_projection
     var2save = var2save[var2save != "data"]
 }
 
@@ -1115,7 +1093,7 @@ if (type == "hydrologie") {
         files_to_use = files_to_use[sapply(files_to_use, length) > 0]
 
         complete_by =
-            complete_by[complete_by %in% names(files_to_use)][1]
+            complete_by[complete_by %in% names(files_to_use)]
     }
     
     nFiles_to_use = length(files_to_use)
@@ -1401,13 +1379,13 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                     for (aa in 1:length(extract_data)) {
                         extract = extract_data[[aa]]
                         
-                        if (extract$simplify) {
+                        if (extract$type == "criteria") {
                             file_test = c(file_test,
                                           paste0("dataEX_",
                                                  extract$name,
                                                  sep, files_name_opt.,
                                                  subset_next_name, ".fst"))
-                        } else {
+                        } else if (extract$type == "serie") {
                             file_test = c(file_test,
                                           paste0("dataEX_",
                                                  extract$name,

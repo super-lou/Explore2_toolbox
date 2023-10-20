@@ -20,11 +20,11 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
-plot_sheet_diagnostic_station = function (dataEXind_chunk,
-                                          dataEXserie_chunk,
+plot_sheet_diagnostic_station = function (dataEX_criteria_chunk,
+                                          dataEX_serie_chunk,
                                           Code_to_plot,
                                           today_figdir_leaf,
-                                          df_page=NULL,
+                                          Pages=NULL,
                                           subverbose=FALSE) {
     
     Paths = list.files(file.path(resdir, read_saving),
@@ -39,24 +39,24 @@ plot_sheet_diagnostic_station = function (dataEXind_chunk,
 
         if (any(Code_tmp %in% Code_to_plot)) {
             data = data[data$Code %in% Code_to_plot,]
-            df_page = sheet_diagnostic_station(
+            Pages = sheet_diagnostic_station(
                 data,
                 meta,
-                dataEXind_chunk,
-                metaEXind_chunk,
-                dataEXserie_chunk,
+                dataEX_criteria_chunk,
+                metaEX_criteria_chunk,
+                dataEX_serie_chunk,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
-                df_page=df_page,
+                Pages=Pages,
                 verbose=subverbose)
             break
         }
     }
-    return (df_page)
+    return (Pages)
 }
 
 
@@ -110,14 +110,14 @@ if (add_multi) {
 
 
 if ('plot_sheet' %in% to_do & !('plot_doc' %in% to_do)) {
-    df_page = NULL
+    Pages = NULL
     doc_chunk = ""
     doc_title = default_doc_title
     doc_subtitle = NULL
     sheet_list = plot_sheet
 }
 if ('plot_doc' %in% to_do) {
-    df_page = dplyr::tibble()
+    Pages = dplyr::tibble()
     doc_chunk = plot_doc$chunk
     doc_title = plot_doc$title
     doc_subtitle = plot_doc$subtitle
@@ -204,32 +204,36 @@ for (i in 1:nChunk) {
 
     data_chunk = data[data$Code %in% chunk,]
     meta_chunk = meta[meta$Code %in% chunk,]
-    dataEXind = dataEX_criteria
-    metaEXind_chunk = metaEX_criteria
-    dataEXserie = dataEX_serie
+    dataEX_criteria = dataEX_criteria
+    metaEX_criteria_chunk = metaEX_criteria
+    dataEX_serie = dataEX_serie
 
-    if (exists("dataEXind")) {
-        dataEXind_chunk = dataEXind[dataEXind$Code %in% chunk,]
-        if (nrow(dataEXind_chunk) == 0 & nrow(dataEXind) != 0) {
-            next
+    if (exists("dataEX_criteria")) {
+        if (nrow(dataEX_criteria) > 0) {
+            dataEX_criteria_chunk = dataEX_criteria[dataEX_criteria$Code %in% chunk,]
+            if (nrow(dataEX_criteria_chunk) == 0 & nrow(dataEX_criteria) != 0) {
+                next
+            }
         }
     }
-    if (exists("dataEXserie")) {
-        dataEXserie_chunk = list()
-        for (j in 1:length(dataEXserie)) {
-            dataEXserie_chunk = append(
-                dataEXserie_chunk,
-                list(dataEXserie[[j]][dataEXserie[[j]]$Code %in%
-                                      chunk,]))
+    if (exists("dataEX_serie")) {
+        if (nrow(dataEX_serie) > 0) {
+            dataEX_serie_chunk = list()
+            for (j in 1:length(dataEX_serie)) {
+                dataEX_serie_chunk = append(
+                    dataEX_serie_chunk,
+                    list(dataEX_serie[[j]][dataEX_serie[[j]]$Code %in%
+                                          chunk,]))
+            }
+            names(dataEX_serie_chunk) = names(dataEX_serie)
         }
-        names(dataEXserie_chunk) = names(dataEXserie)
     }
     
     for (sheet in sheet_list) {
         
         if (sheet == 'sommaire') {
             post("### Plotting summary")
-            df_page = tibble(section='Sommaire', subsection=NA, n=1)
+            Pages = tibble(section='Sommaire', subsection=NA, n=1)
         }
 
         if (sheet == 'correlation_matrix') {
@@ -245,9 +249,9 @@ for (i in 1:nChunk) {
                     length(group_of_models_to_use)] = "Multi-modèle"
             }
 
-            df_page = sheet_correlation_matrix(
-                dataEXind_chunk,
-                metaEXind_chunk,
+            Pages = sheet_correlation_matrix(
+                dataEX_criteria_chunk,
+                metaEX_criteria_chunk,
                 ModelGroup=group_of_models_to_use,
                 Colors=Colors_of_models,
                 subtitle=doc_subtitle,
@@ -255,7 +259,7 @@ for (i in 1:nChunk) {
                 icon_path=icon_path,
                 logo_path=logo_path,
                 figdir=today_figdir_leaf,
-                df_page=df_page,
+                Pages=Pages,
                 verbose=subverbose)
         }
 
@@ -268,11 +272,10 @@ for (i in 1:nChunk) {
                              is_foot=FALSE,
                              # is_secteur=is_secteur,
                              figdir=today_figdir_leaf,
-                             df_page=df_page,
+                             Pages=Pages,
                              Shapefiles=Shapefiles,
                              verbose=subverbose)
         }
-            
         
         if (grepl('carte[_]critere', sheet)) {
             post("### Plotting map")
@@ -286,10 +289,10 @@ for (i in 1:nChunk) {
 
             if (doc_chunk == "critere") {
                 one_colorbar = TRUE
-                metaEXind_chunk =
-                    metaEXind_chunk[metaEXind_chunk$var == chunkname,]
+                metaEX_criteria_chunk =
+                    metaEX_criteria_chunk[metaEX_criteria_chunk$var == chunkname,]
             } else {
-                metaEXind_chunk = metaEXind_chunk
+                metaEX_criteria_chunk = metaEX_criteria_chunk
             }
 
             if (grepl('secteur', sheet)) {
@@ -315,12 +318,31 @@ for (i in 1:nChunk) {
             } else {
                 remove_warning_lim = FALSE
             }
-            
 
-            df_page = sheet_criteria_map(
-                dataEXind_chunk,
-                metaEXind_chunk,
+
+            # if (any(sapply(extract_data, '[[', "name") %in%
+            #         c('Explore2_criteria_diagnostic_SAFRAN',
+            #           'Explore2_criteria_more_diagnostic_SAFRAN'))) {
+
+            #     to_NA = function (X, Code, code_warning) {
+            #         X[!(Code %in% code_warning)] = NA
+            #         return (X)
+            #     }
+            #     dataEX_criteria_chunk =
+            #         mutate(group_by(dataEX_criteria_chunk, Model),
+            #                across(names(dataEX_criteria_chunk)[
+            #                    !(names(dataEX_criteria_chunk) %in%
+            #                      c("Code", "Model"))],
+            #                    to_NA,
+            #                    Code=Code, 
+            #                    code_warning=MORDOR_code_warning))
+            # }
+
+            Pages = sheet_criteria_map(
+                dataEX_criteria_chunk,
+                metaEX_criteria_chunk,
                 meta,
+                prob=prob_of_quantile_for_palette,
                 ModelSelection=ModelSelection,
                 Colors=Colors_of_models,
                 subtitle=doc_subtitle,
@@ -333,7 +355,7 @@ for (i in 1:nChunk) {
                 model_by_shape=model_by_shape,
                 remove_warning_lim=remove_warning_lim,
                 figdir=today_figdir_leaf,
-                df_page=df_page,
+                Pages=Pages,
                 Shapefiles=Shapefiles,
                 verbose=subverbose)
         }
@@ -341,64 +363,64 @@ for (i in 1:nChunk) {
 
         if (sheet == 'fiche_diagnostic_regime') {
             post("### Plotting sheet diagnostic regime")
-            df_page = sheet_diagnostic_regime(
+            Pages = sheet_diagnostic_regime(
                 meta,
-                dataEXind_chunk,
-                metaEXind_chunk,
-                dataEXserie_chunk,
+                dataEX_criteria_chunk,
+                metaEX_criteria_chunk,
+                dataEX_serie_chunk,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
-                df_page=df_page,
+                Pages=Pages,
                 verbose=subverbose)
         }
 
         if (sheet == 'fiche_diagnostic_piezometre') {
             post("### Plotting sheet diagnostic couche")
-            df_page = sheet_diagnostic_couche(
+            Pages = sheet_diagnostic_couche(
                 data_chunk,
                 meta_chunk,
-                dataEXind_chunk,
-                metaEXind_chunk,
-                dataEXserie_chunk,
+                dataEX_criteria_chunk,
+                metaEX_criteria_chunk,
+                dataEX_serie_chunk,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
-                df_page=df_page,
+                Pages=Pages,
                 verbose=subverbose)
         }
 
 
         if (sheet == 'fiche_diagnostic_region') {
             post("### Plotting sheet diagnostic region")
-            df_page = sheet_diagnostic_region(
+            Pages = sheet_diagnostic_region(
                 meta,
-                dataEXind_chunk,
-                metaEXind_chunk,
-                dataEXserie_chunk,
+                dataEX_criteria_chunk,
+                metaEX_criteria_chunk,
+                dataEX_serie_chunk,
                 Colors=Colors_of_models,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
-                df_page=df_page,
+                Pages=Pages,
                 verbose=subverbose)
         }
 
         if (sheet == 'fiche_diagnostic_station') {
             post("### Plotting sheet diagnostic station")
-            df_page = plot_sheet_diagnostic_station(
-                dataEXind_chunk,
-                dataEXserie_chunk,
+            Pages = plot_sheet_diagnostic_station(
+                dataEX_criteria_chunk,
+                dataEX_serie_chunk,
                 Code_to_plot,
                 today_figdir_leaf=today_figdir_leaf,
-                df_page=df_page,
+                Pages=Pages,
                 subverbose=subverbose)
         }
 
@@ -406,12 +428,12 @@ for (i in 1:nChunk) {
 
         if (sheet == 'fiche_precip_ratio') {            
             ModelGroup = lapply(models_to_use, c, "SAFRAN")       
-            df_page = sheet_precip_ratio(dataEXserie_chunk,
+            Pages = sheet_precip_ratio(dataEX_serie_chunk,
                                          ModelGroup=ModelGroup,
                                          Colors=Colors_of_models,
                                          refCOL=refCOL,
                                          figdir=today_figdir_leaf,
-                                         df_page=df_page,
+                                         Pages=Pages,
                                          verbose=subverbose)
         }
 
@@ -429,7 +451,7 @@ for (i in 1:nChunk) {
         } else {
             subtitle = ""
         }
-        sheet_summary(df_page,
+        sheet_summary(Pages,
                       title=doc_title,
                       subtitle=subtitle,
                       logo_path=logo_path,

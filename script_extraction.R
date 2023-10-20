@@ -47,19 +47,32 @@ CARD_extract_data = function () {
                         overwrite=TRUE,
                         verbose=subverbose)
 
+        if (extract$type == "criteria") {
+            simplify = TRUE
+            expand = FALSE
+        } else if (extract$type == "serie") {
+            simplify = FALSE
+            expand = TRUE
+        }
+
+        if (grepl("diagnostic", mode)) {
+            cancel_lim = TRUE
+        } else if (grepl("projection", mode)) {
+            cancel_lim = FALSE
+        }
+
         res = CARD_extraction(data,
                               CARD_path=CARD_path,
                               CARD_dir=paste0(extract$name, "_", rank),
                               CARD_tmp=tmppath,
                               period=period_extract,
-                              simplify=extract$simplify,
+                              simplify=simplify,
                               suffix=extract$suffix,
-                              expand_overwrite=extract$expand,
-                              cancel_lim=extract$cancel_lim,
-                              dev=TRUE,
+                              expand_overwrite=expand,
+                              cancel_lim=cancel_lim,
+                              rm_duplicates=TRUE,
+                              dev=FALSE,
                               verbose=subverbose)
-
-        print(res$dataEX)
         
         write_tibble(res$dataEX,
                      filedir=tmppath,

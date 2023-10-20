@@ -148,42 +148,44 @@ create_data = function () {
             nModel = length(Model)
 
             if (!is.null(complete_by)) {
-                model4complete = complete_by[complete_by %in% Model][1]
+                Model4complete = complete_by[complete_by %in% Model]
                 nVal2check = length(val2check)
                 
-                if (!is.na(model4complete)) {
-                    data_model4complete =
-                        data_sim[data_sim$Model == model4complete,]
-                    data_model4complete =
-                        dplyr::select(data_model4complete,
-                                      -Model)
-                    
-                    for (model in Model) {
-                        data_model = data_sim[data_sim$Model == model,]
-                        data_model = dplyr::select(data_model,
-                                                   -Model)
+                if (!all(is.na(Model4complete))) {
+                    for (model4complete in Model4complete) {
+                        data_model4complete =
+                            data_sim[data_sim$Model == model4complete,]
+                        data_model4complete =
+                            dplyr::select(data_model4complete,
+                                          -Model)
+                        
+                        for (model in Model) {
+                            data_model = data_sim[data_sim$Model == model,]
+                            data_model = dplyr::select(data_model,
+                                                       -Model)
 
-                        for (i in 1:nVal2check) {
-                            col = val2check[i]
-                            
-                            if (all(is.na(data_model[[col]]))) {
-                                data_model =
-                                    dplyr::left_join(
-                                               dplyr::select(data_model, -col),
-                                               dplyr::select(data_model4complete,
-                                                             c("Date",
-                                                               "Code",
-                                                               col)),
-                                               by=c("Code", "Date"))
+                            for (i in 1:nVal2check) {
+                                col = val2check[i]
+                                
+                                if (all(is.na(data_model[[col]]))) {
+                                    data_model =
+                                        dplyr::left_join(
+                                                   dplyr::select(data_model, -col),
+                                                   dplyr::select(data_model4complete,
+                                                                 c("Date",
+                                                                   "Code",
+                                                                   col)),
+                                                   by=c("Code", "Date"))
+                                }
                             }
-                        }
-                        data_model = dplyr::bind_cols(Model=model,
-                                                      data_model)
-                        data_model = data_model[names(data_sim)]
-                        data_sim[data_sim$Model == model,] = data_model
+                            data_model = dplyr::bind_cols(Model=model,
+                                                          data_model)
+                            data_model = data_model[names(data_sim)]
+                            data_sim[data_sim$Model == model,] = data_model
 
-                        rm ("data_model")
-                        gc()
+                            rm ("data_model")
+                            gc()
+                        }
                     }
                 }
             }
@@ -192,7 +194,7 @@ create_data = function () {
             if ("Rl" %in% names(data_sim)) {
                 data_sim$Rl[!is.finite(data_sim$Rl)] = NA
             }
-            if ("rs" %in% names(data_sim)) {
+            if ("Rs" %in% names(data_sim)) {
                 data_sim$Rs[!is.finite(data_sim$Rs)] = NA
             }
             if ("R" %in% names(data_sim)) {
@@ -334,21 +336,34 @@ create_data = function () {
 
     
     if (isSim & !is.null(complete_by)) {
-        data_val_obs = dplyr::filter(data, Model == complete_by)
-        data_val_obs = dplyr::select(data_val_obs,
-                                     all_of(c("Code", "Date",
-                                              paste0(val2check, "_sim"))))
-        names(data_val_obs) = gsub("[_]sim", "_obs", names(data_val_obs))
+        Model4complete = complete_by[complete_by %in% Model]
         
-        print(data)
-        print(data_val_obs)
-        
-        data = dplyr::left_join(data, data_val_obs, by=c("Code",
-                                                         "Date"))
+        if (!all(is.na(Model4complete))) {
+            for (model4complete in Model4complete) {
 
-
-        print(data)
-        print("")
+                if (!exists("data_val_obs")) {
+                    data_val_obs = dplyr::filter(data,
+                                                 Model ==
+                                                 model4complete)
+                } else {
+                    data_val_obs =
+                        dplyr::bind_rows(
+                                   data_val_obs,
+                                   dplyr::filter(data,
+                                                 Model ==
+                                                 model4complete &
+                                                 !(Code %in%
+                                                   data_val_obs$Code)))
+                }
+            }
+            
+            data_val_obs = dplyr::select(data_val_obs,
+                                         all_of(c("Code", "Date",
+                                                  paste0(val2check, "_sim"))))
+            names(data_val_obs) = gsub("[_]sim", "_obs", names(data_val_obs))
+            data = dplyr::left_join(data, data_val_obs, by=c("Code",
+                                                             "Date"))
+        }
     }
     
     

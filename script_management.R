@@ -84,10 +84,10 @@ manage_data = function () {
                 if (!exists("dataEX")) {
                     dataEX = dataEX_tmp
                 } else {
-                    if (extract$simplify) {
+                    if (extract$type == "criteria") {
                         dataEX = dplyr::bind_rows(dataEX,
                                                   dataEX_tmp)
-                    } else {
+                    } else if (extract$type == "serie") {
                         for (k in 1:length(dataEX)) {
                             dataEX[[k]] =
                                 dplyr::bind_rows(dataEX[[k]],
@@ -99,17 +99,17 @@ manage_data = function () {
                 rm ("dataEX_tmp"); gc()
             }
         }
-        
 
+        
         if (exists("dataEX")) {
-            if (extract$simplify) {
+            if (extract$type == "criteria") {
 
                 regexp_bool = "^HYP.*"
                 regexp_time =
                     "(^t)|([{]t)|(^debut)|([{]debut)|(^centre)|([{]centre)|(^fin)|([{]fin)"
                 regexp_ratio_alpha = "^alpha"
                 regexp_ratio = "(Rc)|(^epsilon)|(^a)|(^STD)"
-                regexp_diff = "(moyTA)|(moyRA)|(R.*[_]ratio)"
+                regexp_diff = "(R.*[_]ratio)|(moyTA)|(moyRA)"
                 
                 dataEX = dataEX[order(dataEX$Model),]
                 
@@ -184,11 +184,11 @@ manage_data = function () {
                             dataEX[[varREL]] =
                                 round(dataEX[[paste0(varREL, "_sim")]] -
                                       dataEX[[paste0(varREL, "_obs")]], 5)
-
+                            
                             metaEX$glose[metaEX$var == varREL] =
                                 paste0(metaEX$glose[metaEX$var == varREL],
                                        " (Écart entre les valeurs simulées et observées)")
-                            
+
                         } else {
                             dataEX[[varREL]] =
                                 (dataEX[[paste0(varREL,
@@ -212,7 +212,7 @@ manage_data = function () {
                     }
                 }
 
-            } else {
+            } else if (extract$type == "serie") {
                 for (j in 1:length(dataEX)) {
                     dataEX[[j]] =
                         dataEX[[j]][order(dataEX[[j]]$Model),]
@@ -465,6 +465,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         metaEX_serie = dplyr::tibble()
 
         # read_saving_tmp = file.path(read_saving)
+        name_criteria = c()
+        name_serie = c()
         
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
@@ -478,13 +480,15 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             pattern = paste0("(", paste0(pattern,
                                          collapse=")|("), ")")
 
-            if (extract$simplify) {
+            if (extract$type == "criteria") {
+                name_criteria = c(name_criteria, extract$name)
                 pattern = gsub("dataEX", paste0("dataEX[_]",
                                                 gsub("[_]", "[_]",
                                                      extract$name),
                                                 "[.]"),
                                pattern)
-            } else {
+            } else if (extract$type == "serie") {
+                name_serie = c(name_serie, extract$name)
                 pattern = gsub("dataEX", paste0("dataEX[_]",
                                                 gsub("[_]", "[_]",
                                                      extract$name),
@@ -551,22 +555,22 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         }
         if (merge_read_saving) {
             extract_data_tmp = list()
-            if (any(sapply(extract_data, '[[', 'simplify'))) {
+            if (any(sapply(extract_data, '[[', 'type') == "criteria")) {
                 extract_data_tmp =
                     append(extract_data_tmp,
-                           list(list(name='criteria',
+                           list(list(name=name_criteria,
+                                     type="criteria",
                                      variables=
-                                         metaEX_criteria$var,
-                                     simplify=TRUE)))
+                                         metaEX_criteria$var)))
                 names(extract_data_tmp)[length(extract_data_tmp)] =
                     "criteria"
             }
-            if (any(!sapply(extract_data, '[[', 'simplify'))) {
+            if (any(sapply(extract_data, '[[', 'type') == "serie")) {
                 extract_data_tmp =
                     append(extract_data_tmp,
-                           list(list(name='serie',
-                                     variables=metaEX_serie$var,
-                                     simplify=FALSE)))
+                           list(list(name=name_serie,
+                                     type="serie",
+                                     variables=metaEX_serie$var)))
                 names(extract_data_tmp)[length(extract_data_tmp)] =
                     "serie"
             }
@@ -598,12 +602,12 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             for (i in 1:length(extract_data)) {
                 extract = extract_data[[i]]
 
-                dataEXname = paste0("dataEX_", extract$name)
-                metaEXname = paste0("metaEX_", extract$name)
+                dataEXname = paste0("dataEX_", extract$type)
+                metaEXname = paste0("metaEX_", extract$type)
                 dataEXtmp = get(dataEXname)
                 metaEXtmp = get(metaEXname)
                 
-                if (extract$simplify) {
+                if (extract$type == "criteria") {
                     by = names(dataEXtmp)[sapply(dataEXtmp,
                                                  is.character)]
                     pattern = paste0("(",
@@ -630,7 +634,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                                     grepl(code, Code)))  
                     }
 
-                } else {
+                } else if (extract$type == "serie") {
                     for (j in 1:length(diag_period_selection)) {
                         model = names(diag_period_selection)[j]
                         period = diag_period_selection[[j]]
@@ -682,9 +686,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
 
-            if (extract$simplify) {
-                dataEX = get(paste0("dataEX_", extract$name))
-                metaEX = get(paste0("metaEX_", extract$name))
+            if (extract$type == "criteria") {
+                dataEX = get(paste0("dataEX_", extract$type))
+                metaEX = get(paste0("metaEX_", extract$type))
                 Warnings = find_Warnings(dataEX, metaEX,
                                          resdir=today_resdir,
                                          save=TRUE)
@@ -698,8 +702,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
 
-            if (!extract$simplify) {
-                dataEX = get(paste0("dataEX_", extract$name))
+            if (extract$type == "serie") {
+                dataEX = get(paste0("dataEX_", extract$type))
                 meta = get("meta")
                 meta =
                     dplyr::select(meta,
