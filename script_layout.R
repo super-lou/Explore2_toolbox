@@ -320,23 +320,23 @@ for (i in 1:nChunk) {
             }
 
 
-            # if (any(sapply(extract_data, '[[', "name") %in%
-            #         c('Explore2_criteria_diagnostic_SAFRAN',
-            #           'Explore2_criteria_more_diagnostic_SAFRAN'))) {
+            if (any(sapply(extract_data, '[[', "name") %in%
+                    c('Explore2_criteria_diagnostic_SAFRAN',
+                      'Explore2_criteria_more_diagnostic_SAFRAN'))) {
 
-            #     to_NA = function (X, Code, code_warning) {
-            #         X[!(Code %in% code_warning)] = NA
-            #         return (X)
-            #     }
-            #     dataEX_criteria_chunk =
-            #         mutate(group_by(dataEX_criteria_chunk, Model),
-            #                across(names(dataEX_criteria_chunk)[
-            #                    !(names(dataEX_criteria_chunk) %in%
-            #                      c("Code", "Model"))],
-            #                    to_NA,
-            #                    Code=Code, 
-            #                    code_warning=MORDOR_code_warning))
-            # }
+                to_NA = function (X, Code, code_warning) {
+                    X[!(Code %in% code_warning)] = NA
+                    return (X)
+                }
+                dataEX_criteria_chunk =
+                    mutate(group_by(dataEX_criteria_chunk, Model),
+                           across(names(dataEX_criteria_chunk)[
+                               !(names(dataEX_criteria_chunk) %in%
+                                 c("Code", "Model"))],
+                               to_NA,
+                               Code=Code, 
+                               code_warning=MORDOR_code_warning))
+            }
 
             Pages = sheet_criteria_map(
                 dataEX_criteria_chunk,

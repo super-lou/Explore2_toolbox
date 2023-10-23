@@ -154,20 +154,20 @@ mode =
 
 to_do =
     c(
-        'delete_tmp',
+        # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        'create_data',
+        # 'create_data',
         # 'extract_data',
         # 'save_extract'
-        'read_tmp'
-        # 'read_saving',
-        # 'selection',
+        # 'read_tmp'
+        'read_saving',
+        'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        # 'plot_doc'
+        'plot_doc'
     )
 
 extract_data =
@@ -325,14 +325,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
+        "CTRIP",
         "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -345,11 +345,11 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K2981910' #ref
-        # "O0362510"
+        # "O036251010"
         # "^H"
-        "K268081001"
+        # "K268081001"
         # "^K"
         
         ## échange code
@@ -378,7 +378,7 @@ diag_station_2_remove =
 
 MORDOR_code_warning =
     # ""
-    c("K002000101", "K222302001", "K225401001", "O023402001", "O038401001", "O074404001", "O312102002", "O319401001", "O701151001", "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201", "W030000201", "W103000301", "W273050001", "W211401000", "W271000101", "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
+    c("K002000101", "K222302001", "K225401001", "O023402001", "O036251001", "O038401001", "O074404001", "O312102002", "O319401001", "O701151001", "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201", "W030000201", "W103000301", "W273050001", "W211401000", "W271000101", "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
 
 
 # existant :
@@ -597,7 +597,7 @@ read_saving =
 
 var2search =
     c(
-        'data[_]', ### /!\ très lourd ###
+        # 'data[_]', ### /!\ très lourd ###
         # 'meta[_]',
         'data[.]',
         'meta[.]',

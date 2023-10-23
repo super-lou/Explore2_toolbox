@@ -30,8 +30,6 @@ CARD_extract_data = function () {
                                        files_name_opt.,
                                        subset_name, ".fst"))
 
-    print(data)
-    
     if (type == "piezometrie") {
         data = dplyr::rename(data, Q_obs=H_obs, Q_sim=H_sim)
     }
