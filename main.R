@@ -45,8 +45,8 @@
 # Explore2_toolbox path
 lib_path =
     # "./"
-    '/home/lheraut/library/Explore2_toolbox'
-    # '/home/herautl/library/Explore2_toolbox'
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -294,16 +294,15 @@ period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 ## diag ##
-# nCode4RAM | 12 |  9 |  6
-# nSubsets  | 62 |  9 |  6
+# nCode4RAM | 14 |  9 |  6
 # nodes     |  2 |  3 |  4
-# tasks     | 38 | 28 | 28
+# tasks     | 28 | 28 | 28
 ## proj per model ##
 # nProj     | 82 | 41
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 12
+nCode4RAM = 14
 
 projs_to_use =
     c(
