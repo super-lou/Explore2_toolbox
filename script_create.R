@@ -199,9 +199,8 @@ create_data = function () {
             }
             if ("R" %in% names(data_sim)) {
                 data_sim$R[!is.finite(data_sim$R)] = NA
-                data_sim = dplyr::filter(data_sim,
-                                         rep(!all(is.na(R)), length(R)),
-                                         .by="Code")
+                data_sim = dplyr::filter(dplyr::group_by(data_sim, Code),
+                                         rep(!all(is.na(R)), length(R)))
             }
             
             for (i in 1:length(diag_station_2_remove)) {
