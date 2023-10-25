@@ -44,7 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./"
+    '/home/lheraut/library/Explore2_toolbox'
     # '/home/herautl/library/Explore2_toolbox'
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -279,9 +280,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -293,15 +294,16 @@ period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 propagate_NA = TRUE
 ## diag ##
-# nCode4RAM | 14 |  9 |  6
+# nCode4RAM | 12 |  9 |  6
+# nSubsets  | 62 |  9 |  6
 # nodes     |  2 |  3 |  4
-# tasks     | 28 | 28 | 28
+# tasks     | 38 | 28 | 28
 ## proj per model ##
 # nProj     | 82 | 41
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 12
 
 projs_to_use =
     c(
@@ -325,14 +327,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -345,8 +347,8 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K2981910' #ref
         # "O036251010"
         # "^H"
         # "K268081001"
