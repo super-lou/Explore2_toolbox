@@ -45,8 +45,8 @@
 # Explore2_toolbox path
 lib_path =
     # "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -849,11 +849,9 @@ doc_carte_piezo_critere_critere =
 # Computer
 computer = Sys.info()["nodename"]
 print(paste0("Computer ", computer))
-computer_file_list = list.files(path=lib_path,
-                                pattern="computer[_].*[.]R")
+computer_file_list = list.files(path=lib_path, pattern="computer[_].*[.]R")
 computer_list = gsub("(computer[_])|([.]R)", "", computer_file_list)
-computer_file = computer_file_list[sapply(computer_list,
-                                          grepl, computer)]
+computer_file = computer_file_list[sapply(computer_list, grepl, computer)]
 computer_path = file.path(lib_path, computer_file)
 print(paste0("So reading file ", computer_path))
 source(computer_path, encoding='UTF-8')
