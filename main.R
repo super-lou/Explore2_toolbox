@@ -157,31 +157,31 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
-        'read_saving',
-        'selection',
+        # 'read_saving',
+        # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
         # 'plot_sheet'
-        'plot_doc'
+        # 'plot_doc'
     )
 
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diagnostic_performance'
+        'Explore2_criteria_diagnostic_performance'
         # 'Explore2_criteria_diagnostic_sensibilite',
         # 'Explore2_criteria_diagnostic_sensibilite_RAT',
         # 'Explore2_criteria_diagnostic_HE'
         # 'Explore2_criteria_diagnostic_ME',
         # 'Explore2_criteria_diagnostic_BE',
         # 'Explore2_criteria_diagnostic_BF',
-        'Explore2_criteria_diagnostic_SAFRAN',
-        'Explore2_criteria_more_diagnostic_SAFRAN'
+        # 'Explore2_criteria_diagnostic_SAFRAN',
+        # 'Explore2_criteria_more_diagnostic_SAFRAN'
         # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_serie_projection_SAFRAN',
         # 'Explore2_serie_more_projection_SAFRAN'
@@ -325,14 +325,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -345,8 +345,8 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "O036251010"
         # "^H"
         # "K268081001"
