@@ -55,7 +55,7 @@ cdo_cmd_path = "cdo"
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
-computer_data_path = '/home/herautl/scratch/data/Explore2'
+computer_data_path = '/scratchx/lheraut/data/Explore2'
 projs_selection_file = "ensembleProjectionClimatExplore2.txt"
 #### 2.1.1 Hydro _____________________________________________________
 obs_hydro_dir = "Explore2 HYDRO QJM critiques 2023"
