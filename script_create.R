@@ -297,8 +297,8 @@ create_data = function () {
                            data,
                            dplyr::across(
                                       where(is.numeric),
-                                      \(x) NA_propagation(x,
-                                                          Ref=Q_obs)))
+                                      ~NA_propagation(.x,
+                                                      Ref=Q_obs)))
         }
         data = dplyr::relocate(data, Q_obs, .before=Q_sim)
         
