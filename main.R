@@ -148,8 +148,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -159,7 +159,7 @@ to_do =
         # 'merge_nc'
         # 'reshape_data',
         'create_data',
-        # 'extract_data',
+        'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -174,13 +174,13 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diagnostic_performance',
-        'Explore2_criteria_diagnostic_sensibilite',
-        'Explore2_criteria_diagnostic_sensibilite_RAT',
-        'Explore2_criteria_diagnostic_HE',
-        'Explore2_criteria_diagnostic_ME',
-        'Explore2_criteria_diagnostic_BE',
-        'Explore2_criteria_diagnostic_BF',
+        # 'Explore2_criteria_diagnostic_performance',
+        # 'Explore2_criteria_diagnostic_sensibilite',
+        # 'Explore2_criteria_diagnostic_sensibilite_RAT',
+        # 'Explore2_criteria_diagnostic_HE',
+        # 'Explore2_criteria_diagnostic_ME',
+        # 'Explore2_criteria_diagnostic_BE',
+        # 'Explore2_criteria_diagnostic_BF',
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN',
         'Explore2_serie_diagnostic_plot'
@@ -240,11 +240,11 @@ plot_sheet =
 ### 3.2. Document ____________________________________________________
 plot_doc =
     c(
-        "correlation_matrix"
+        # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
         # 'fiche_diagnostic_region'
-        # 'fiche_diagnostic_regime'
+        'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
         ## normal
@@ -302,7 +302,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 14
 
 projs_to_use =
     c(
@@ -326,14 +326,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -350,7 +350,7 @@ codes_to_use =
         # 'K2981910' #ref
         # "O036251010"
         # "^H"
-        # "K268081001"
+        # "^E"
         # "^D"
         
 
@@ -419,11 +419,11 @@ MORDOR_code_warning =
 
 WIP = 
     list(name='WIP',
-         type="criteria",
+         type="serie",
          # variables=c("QA", "QA_season"),
          variables=c(
              # "moyRA_season"
-             "epsilon_T_season"
+             "medQJC5"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),

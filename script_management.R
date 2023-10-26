@@ -717,9 +717,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 dataEXserieQM_obs =
                     dplyr::summarise(dplyr::group_by(dataEX$QM,
                                                      Code, Date),
-                                     QM=select_good(QM_obs),
+                                     QM=median(QM_obs,
+                                               na.rm=TRUE),
                                      .groups="drop")
-
 
                 dataEXserieR_ratio =
                     dplyr::full_join(dataEX$Rl_ratio,
