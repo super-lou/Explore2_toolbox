@@ -517,12 +517,14 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                         if (nrow(dataEX_criteria) == 0) {
                             dataEX_criteria = read_tibble(filepath=Paths[i])
                         } else {
-                            by = names(dataEX_criteria)[sapply(dataEX_criteria,
+                            character_cols = names(dataEX_criteria)[sapply(dataEX_criteria,
                                                                is.character)]
+                            
                             dataEX_criteria =
-                                dplyr::full_join(dataEX_criteria,
-                                                 read_tibble(filepath=Paths[i]),
-                                                 by=by)
+                                dplyr::full_join(
+                                           dataEX_criteria,
+                                           read_tibble(filepath=Paths[i]),
+                                           by=character_cols)
                         }
                     } else if (grepl("dataEX.*serie", Filenames[i])) {
                         dataEX_serie =
