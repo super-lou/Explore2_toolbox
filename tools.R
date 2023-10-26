@@ -386,12 +386,12 @@ find_Warnings = function (dataEXind, metaEXind,
             ":a|ont: une sensibilité acceptable aux variations de température en été.",
             ":est|sont: trop :sensible|sensibles: aux variations de température en été."),
 
-        "^epsilon.*P.*DJF"=c(
+        "^epsilon.*R.*DJF"=c(
             ":n'est|ne sont: pas assez :sensible|sensibles: aux variations de précipitations hivernales.",
             ":a|ont: une sensibilité acceptable aux variations de précipitations hivernales.",
             ":est|sont: trop :sensible|sensibles: aux variations de précipitations hivernales."),
 
-        "^epsilon.*P.*JJA"=c(
+        "^epsilon.*R.*JJA"=c(
             ":n'est|ne sont: pas assez :sensible|sensibles: aux variations de précipitations estivales.",
             ":a|ont: une sensibilité acceptable aux variations de précipitations estivales.",
             ":est|sont: trop :sensible|sensibles: aux variations de précipitations estivales."),
@@ -430,9 +430,9 @@ find_Warnings = function (dataEXind, metaEXind,
             ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>).",
             ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>)."),
 
-        "RAT_P"=c(
-            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).",
-            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).")
+        "RAT_R"=c(
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>R</sub>).",
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>R</sub>).")
     )
 
     
@@ -458,12 +458,12 @@ find_Warnings = function (dataEXind, metaEXind,
             ":n'est|ne sont: pas correctement :sensible|sensibles: aux variations de température en été.",
             ":a|ont: une sensibilité acceptable aux variations de température en été."),
 
-        "^epsilon.*P.*DJF"=c(
+        "^epsilon.*R.*DJF"=c(
             ":a|ont: une sensibilité acceptable aux variations de précipitations hivernales.",
             ":n'est|ne sont: pas correctement :sensible|sensibles: aux variations de précipitations hivernales.",
             ":a|ont: une sensibilité acceptable aux variations de précipitations hivernales."),
 
-        "^epsilon.*P.*JJA"=c(
+        "^epsilon.*R.*JJA"=c(
             ":a|ont: une sensibilité acceptable aux variations de précipitations estivales.",
             ":n'est|ne sont: pas correctement :sensible|sensibles: aux variations de précipitations estivales.",
             ":a|ont: une sensibilité acceptable aux variations de précipitations estivales."),
@@ -502,9 +502,9 @@ find_Warnings = function (dataEXind, metaEXind,
             ":montre|montrent: une faible robustesse temporelle à la température (RAT<sub>T</sub>).",
             ":montre|montrent: une robustesse temporelle satisfaisante à la température (RAT<sub>T</sub>)."),
 
-        "RAT_P"=c(
-            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>P</sub>).",
-            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>P</sub>).")
+        "RAT_R"=c(
+            ":montre|montrent: une faible robustesse temporelle aux précipitations (RAT<sub>R</sub>).",
+            ":montre|montrent: une robustesse temporelle satisfaisante aux précipitations (RAT<sub>R</sub>).")
     )
     
     
@@ -513,7 +513,7 @@ find_Warnings = function (dataEXind, metaEXind,
     line_NOK = "Les modèles ont des difficultés à reproduire le régime sauf "
     line_allNOK = "<b>Aucun modèle</b> ne semble simuler de manière acceptable le régime."
 
-    orderVar = c("Général", "^RAT.*T$",  "^RAT.*P$", "^KGE",
+    orderVar = c("Général", "^RAT.*T$",  "^RAT.*R$", "^KGE",
                  "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}]",
                  "^alpha", "^epsilon.*")
 

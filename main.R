@@ -148,8 +148,8 @@ type =
     # "piezometrie"
 
 mode =
-    "diagnostic"
-    # "diagnostic_ungauged"
+    # "diagnostic"
+    "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -162,7 +162,7 @@ to_do =
         'extract_data',
         'save_extract'
         # 'read_tmp'
-        # 'read_saving'
+        # 'read_saving',
         # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
@@ -174,16 +174,16 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diagnostic_performance',
-        # 'Explore2_criteria_diagnostic_sensibilite',
-        # 'Explore2_criteria_diagnostic_sensibilite_RAT',
-        'Explore2_criteria_diagnostic_HE'
-        # 'Explore2_criteria_diagnostic_ME'
-        # 'Explore2_criteria_diagnostic_BE',
-        # 'Explore2_criteria_diagnostic_BF',
+        'Explore2_criteria_diagnostic_performance',
+        'Explore2_criteria_diagnostic_sensibilite',
+        'Explore2_criteria_diagnostic_sensibilite_RAT',
+        'Explore2_criteria_diagnostic_HE',
+        'Explore2_criteria_diagnostic_ME',
+        'Explore2_criteria_diagnostic_BE',
+        'Explore2_criteria_diagnostic_BF',
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN',
-        # 'Explore2_serie_diagnostic_plot'
+        'Explore2_serie_diagnostic_plot'
         # 'Explore2_serie_projection_SAFRAN',
         # 'Explore2_serie_more_projection_SAFRAN'
         # 'Explore2_serie_projection'
@@ -240,7 +240,7 @@ plot_sheet =
 ### 3.2. Document ____________________________________________________
 plot_doc =
     c(
-        # "correlation_matrix"
+        "correlation_matrix"
         # "correlation_matrix_ungauged"
         
         # 'fiche_diagnostic_region'
@@ -250,7 +250,7 @@ plot_doc =
         ## normal
         # "carte_critere_model"
         # "carte_critere_model_secteur"
-        "carte_critere_critere"
+        # "carte_critere_critere"
         # "carte_critere_critere_secteur"
 
         ## ungauged
@@ -326,14 +326,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
+        # "CTRIP",
+        # "EROS",
         "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",

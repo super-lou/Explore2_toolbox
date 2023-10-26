@@ -719,15 +719,26 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                                      Code, Date),
                                      QM=select_good(QM_obs),
                                      .groups="drop")
-                dataEXseriePA_ratio =
-                    dplyr::summarise(dplyr::group_by(dataEX$PA_ratio,
-                                                     Code),
-                                     Ps_ratio=median(Ps_ratio_obs, na.rm=TRUE),
-                                     Pl_ratio=median(Pl_ratio_obs, na.rm=TRUE),
-                                     .groups="drop")
+
+
+                dataEXserieR_ratio =
+                    dplyr::full_join(dataEX$Rl_ratio,
+                                     dataEX$Rs_ratio,
+                                     by=c("Code", "Model"))
+                
+                dataEXserieR_ratio =
+                    dplyr::summarise(
+                               dplyr::group_by(dataEXserieR_ratio,
+                                               Code),
+                               Rs_ratio=median(Rs_ratio_obs,
+                                               na.rm=TRUE),
+                               Rl_ratio=median(Rl_ratio_obs,
+                                               na.rm=TRUE),
+                               .groups="drop")
+
                 regimeHydro = find_regimeHydro(dataEXserieQM_obs,
                                                lim_number=NULL,
-                                               dataEXseriePA_ratio)
+                                               dataEXserieR_ratio)
 
                 ok = names(regimeHydro) != "Code"
                 names(regimeHydro)[ok] =

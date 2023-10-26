@@ -217,7 +217,7 @@ for (i in 1:nChunk) {
         }
     }
     if (exists("dataEX_serie")) {
-        if (nrow(dataEX_serie) > 0) {
+        if (length(dataEX_serie) > 0) {
             dataEX_serie_chunk = list()
             for (j in 1:length(dataEX_serie)) {
                 dataEX_serie_chunk = append(
