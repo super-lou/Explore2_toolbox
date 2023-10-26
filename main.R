@@ -351,7 +351,7 @@ codes_to_use =
         # "O036251010"
         # "^H"
         # "K268081001"
-        # "^D"
+        # "^W"
         
         ## échange code
         # "K2240820"
@@ -418,11 +418,11 @@ MORDOR_code_warning =
 
 WIP = 
     list(name='WIP',
-         type="serie",
+         type="criteria",
          # variables=c("QA", "QA_season"),
          variables=c(
              # "moyRA_season"
-             "CDC"
+             "epsilon_T_season"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),
