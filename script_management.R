@@ -725,7 +725,6 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                     dplyr::full_join(dataEX$Rl_ratio,
                                      dataEX$Rs_ratio,
                                      by=c("Code", "Model"))
-                
                 dataEXserieR_ratio =
                     dplyr::summarise(
                                dplyr::group_by(dataEXserieR_ratio,
