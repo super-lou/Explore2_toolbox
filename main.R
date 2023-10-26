@@ -159,10 +159,10 @@ to_do =
         # 'merge_nc'
         # 'reshape_data',
         'create_data',
-        # 'extract_data',
+        'extract_data',
         'save_extract'
         # 'read_tmp'
-        # 'read_saving',
+        # 'read_saving'
         # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
@@ -174,8 +174,8 @@ to_do =
 extract_data =
     c(
         # 'WIP'
-        # 'Explore2_criteria_diagnostic_performance'
-        # 'Explore2_criteria_diagnostic_sensibilite',
+        # 'Explore2_criteria_diagnostic_performance',
+        'Explore2_criteria_diagnostic_sensibilite'
         # 'Explore2_criteria_diagnostic_sensibilite_RAT',
         # 'Explore2_criteria_diagnostic_HE',
         # 'Explore2_criteria_diagnostic_ME',
@@ -302,7 +302,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 14
 
 projs_to_use =
     c(
