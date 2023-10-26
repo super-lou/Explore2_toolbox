@@ -175,15 +175,15 @@ extract_data =
     c(
         # 'WIP'
         # 'Explore2_criteria_diagnostic_performance'
-        'Explore2_criteria_diagnostic_sensibilite',
-        'Explore2_criteria_diagnostic_sensibilite_RAT',
-        'Explore2_criteria_diagnostic_HE',
-        'Explore2_criteria_diagnostic_ME',
-        'Explore2_criteria_diagnostic_BE',
-        'Explore2_criteria_diagnostic_BF'
+        # 'Explore2_criteria_diagnostic_sensibilite',
+        # 'Explore2_criteria_diagnostic_sensibilite_RAT',
+        # 'Explore2_criteria_diagnostic_HE',
+        # 'Explore2_criteria_diagnostic_ME',
+        # 'Explore2_criteria_diagnostic_BE',
+        # 'Explore2_criteria_diagnostic_BF'
         # 'Explore2_criteria_diagnostic_SAFRAN',
-        # 'Explore2_criteria_more_diagnostic_SAFRAN'
-        # 'Explore2_serie_diagnostic_plot'
+        # 'Explore2_criteria_more_diagnostic_SAFRAN',
+        'Explore2_serie_diagnostic_plot'
         # 'Explore2_serie_projection_SAFRAN',
         # 'Explore2_serie_more_projection_SAFRAN'
         # 'Explore2_serie_projection'
