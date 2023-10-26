@@ -351,7 +351,7 @@ codes_to_use =
         # "O036251010"
         # "^H"
         # "K268081001"
-        # "^I"
+        # "^K"
         
         ## échange code
         # "K2240820"
@@ -422,7 +422,7 @@ WIP =
          # variables=c("QA", "QA_season"),
          variables=c(
              # "moyRA_season"
-             "med{dtCrue}"
+             "Q10"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),
@@ -1393,6 +1393,9 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                 post(paste0(ss, "/", nSubsets,
                             " chunks of stations in extract so ",
                             round(ss/nSubsets*100, 1), "% done"))
+
+                post(file_test)
+                post(list.files(tmppath, include.dirs=TRUE))
                 
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
