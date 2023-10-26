@@ -159,7 +159,7 @@ to_do =
         # 'merge_nc'
         # 'reshape_data',
         'create_data',
-        'extract_data',
+        # 'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -183,7 +183,7 @@ extract_data =
         # 'Explore2_criteria_diagnostic_BF'
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN',
-        'Explore2_serie_diagnostic_plot'
+        # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_serie_projection_SAFRAN',
         # 'Explore2_serie_more_projection_SAFRAN'
         # 'Explore2_serie_projection'
@@ -302,7 +302,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 14
+nCode4RAM = 100
 
 projs_to_use =
     c(
