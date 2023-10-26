@@ -351,7 +351,7 @@ codes_to_use =
         # "O036251010"
         # "^H"
         # "K268081001"
-        # "^K"
+        # "^D"
         
         ## échange code
         # "K2240820"
@@ -421,12 +421,8 @@ WIP =
          type="criteria",
          # variables=c("QA", "QA_season"),
          variables=c(
-             # "moyTA",
-             # "moyTA_season",
-             # "moyRA",
              # "moyRA_season"
-             "CR",
-             "CR_season"
+             "med{dtCrue}"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),

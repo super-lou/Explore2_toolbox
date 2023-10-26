@@ -34,6 +34,7 @@ CARD_extract_data = function () {
         data = dplyr::rename(data, Q_obs=H_obs, Q_sim=H_sim)
     }
 
+
     for (i in 1:length(extract_data)) {
         
         extract = extract_data[[i]]
