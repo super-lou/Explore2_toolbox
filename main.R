@@ -148,8 +148,8 @@ type =
     # "piezometrie"
 
 mode =
-    "diagnostic"
-    # "diagnostic_ungauged"
+    # "diagnostic"
+    "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -163,7 +163,7 @@ to_do =
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection'
+        # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
@@ -327,14 +327,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
+        # "CTRIP",
+        # "EROS",
         "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -348,7 +348,7 @@ codes_to_use =
     # ''
     c(
         'all'
-        # 'K298191001', #ref
+        # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
