@@ -148,8 +148,8 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
-    "diagnostic_ungauged"
+    "diagnostic"
+    # "diagnostic_ungauged"
     # "projection"
     # "projection_merge"
 
@@ -159,7 +159,7 @@ to_do =
         # 'merge_nc'
         # 'reshape_data',
         'create_data',
-        'extract_data',
+        # 'extract_data',
         'save_extract'
         # 'read_tmp'
         # 'read_saving',
@@ -228,7 +228,7 @@ plot_sheet =
     c(
         # 'sommaire'
         # 'correlation_matrix'
-        # 'fiche_diagnostic_station'
+        'fiche_diagnostic_station'
         # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
@@ -244,12 +244,12 @@ plot_doc =
         # "correlation_matrix_ungauged"
         
         # 'fiche_diagnostic_region'
-        'fiche_diagnostic_regime'
+        # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
         ## normal
         # "carte_critere_model"
-        # "carte_critere_model_secteur"
+        "carte_critere_model_secteur"
         # "carte_critere_critere"
         # "carte_critere_critere_secteur"
 
@@ -303,7 +303,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 32
+nCode4RAM = 100
 
 projs_to_use =
     c(
@@ -327,14 +327,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -352,7 +352,7 @@ codes_to_use =
         # "O036251010"
         # "^H"
         # "^E"
-        # "^D"
+        # "^K"
         
 
         ## échange code
@@ -613,7 +613,7 @@ merge_read_saving =
 diag_criteria_selection =
 #     # "all"
     c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$",
-      "RAT[_]T$", "RAT[_]P$", "Q10$", "med[{]tQJXA[}]$",
+      "RAT[_]T$", "RAT[_]R$", "Q10$", "med[{]tQJXA[}]$",
       "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$",
 
       "^moyTA$",
