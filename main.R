@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # "./"
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -158,16 +158,16 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
-        'read_saving',
-        'selection',
+        # 'read_saving',
+        # 'selection'
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
     )
 
@@ -280,9 +280,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -303,7 +303,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 32
 
 projs_to_use =
     c(
@@ -347,8 +347,9 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K2981910' #ref
+        'all'
+        # 'K298191001', #ref
+        # 'K294401001'
         # "O036251010"
         # "^H"
         # "^E"
@@ -420,17 +421,17 @@ MORDOR_code_warning =
 
 WIP = 
     list(name='WIP',
-         type="criteria",
+         type="serie",
          # variables=c("QA", "QA_season"),
          variables=c(
-             "Biais"
+             "QA"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),
          # variables=c("dtRA50mm"),
-         # suffix=c("obs", "sim"))
+         suffix=c("obs", "sim"))
          # suffix=c("sim"),
-         suffix=NULL)
+         # suffix=NULL)
 
 # diag
 Explore2_criteria_diagnostic_performance = 
