@@ -275,7 +275,9 @@ create_data = function () {
                                 dplyr::select(meta_obs,
                                               Code,
                                               Gestionnaire,
-                                              Altitude_m),
+                                              Altitude_m,
+                                              tLac_pct,
+                                              meanLac),
                                 by="Code")
         data = dplyr::inner_join(data_sim,
                                  data_obs,

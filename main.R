@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    "./"
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -158,16 +158,16 @@ to_do =
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        'create_data',
+        # 'create_data',
         # 'extract_data',
-        'save_extract'
+        # 'save_extract'
         # 'read_tmp'
-        # 'read_saving',
-        # 'selection',
+        'read_saving',
+        'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
     )
 
@@ -181,9 +181,9 @@ extract_data =
         'Explore2_criteria_diagnostic_ME',
         'Explore2_criteria_diagnostic_BE',
         'Explore2_criteria_diagnostic_BF',
+        'Explore2_serie_diagnostic_plot'
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN',
-        'Explore2_serie_diagnostic_plot'
         # 'Explore2_serie_projection_SAFRAN',
         # 'Explore2_serie_more_projection_SAFRAN'
         # 'Explore2_serie_projection'
@@ -249,7 +249,7 @@ plot_doc =
 
         ## normal
         # "carte_critere_model"
-        "carte_critere_model_secteur"
+        # "carte_critere_model_secteur"
         # "carte_critere_critere"
         # "carte_critere_critere_secteur"
 
@@ -260,7 +260,7 @@ plot_doc =
         # "carte_critere_critere_ungauged_secteur"
 
         ## avertissement
-        # "carte_critere_model_avertissement_secteur"
+        "carte_critere_model_avertissement_secteur"
         
         ## piezo
         # "carte_piezo_critere_model"
@@ -280,9 +280,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -347,8 +347,8 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        'all'
-        # 'K2981910' #ref
+        # 'all'
+        'K2981910' #ref
         # "O036251010"
         # "^H"
         # "^E"
@@ -420,18 +420,17 @@ MORDOR_code_warning =
 
 WIP = 
     list(name='WIP',
-         type="serie",
+         type="criteria",
          # variables=c("QA", "QA_season"),
          variables=c(
-             # "moyRA_season"
-             "medQJC5"
+             "Biais"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),
          # variables=c("dtRA50mm"),
-         suffix=c("obs", "sim"))
+         # suffix=c("obs", "sim"))
          # suffix=c("sim"),
-         # suffix=NULL)
+         suffix=NULL)
 
 # diag
 Explore2_criteria_diagnostic_performance = 
