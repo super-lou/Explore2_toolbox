@@ -182,8 +182,8 @@ extract_data =
         # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN'
-        'Explore2_serie_proj_SAFRAN',
-        'Explore2_serie_more_proj_SAFRAN'
+        'Explore2_serie_projection_SAFRAN',
+        'Explore2_serie_more_projection_SAFRAN'
         # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
@@ -342,7 +342,7 @@ codes_to_use =
     # ''
     c(
         'all'
-        # 'K298191001' #ref
+        # 'K298191001', #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
@@ -537,23 +537,23 @@ if (type == "piezometrie") {
 }
 
 # proj SAFRAN
-Explore2_serie_proj_SAFRAN =
-    list(name='Explore2_serie_proj_SAFRAN',
+Explore2_serie_projection_SAFRAN =
+    list(name='Explore2_serie_projection_SAFRAN',
          type="serie",
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
                      "QJXA", "VCX3",
                      "QMNA", "VCN10", "VCN3"),
-         suffix="obs")
+         suffix="sim")
 
-Explore2_serie_more_proj_SAFRAN =
-    list(name='Explore2_serie_more_proj_SAFRAN',
+Explore2_serie_more_projection_SAFRAN =
+    list(name='Explore2_serie_more_projection_SAFRAN',
          type="serie",
          variables=c("tQJXA", "tVCX3", "fQA01", "fQA05", "fQA10", "dtCrue",
                      "QNA", "tVCN10", "allBE",
                      "debutBF", "centreBF", "finBF",
                      "dtBF", "vBF", "dtRec"),
-         suffix="obs")
+         suffix="sim")
 
 # proj
 Explore2_serie_proj =

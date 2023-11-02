@@ -213,10 +213,11 @@ manage_data = function () {
                 }
 
             } else if (extract$type == "serie") {
-                for (j in 1:length(dataEX)) {
-                    dataEX[[j]] =
-                        dataEX[[j]][order(dataEX[[j]]$Model),]
-                    
+                if ("Model" %in% names(dataEX[[1]])) {
+                    for (j in 1:length(dataEX)) {
+                        dataEX[[j]] =
+                            dataEX[[j]][order(dataEX[[j]]$Model),]       
+                    }
                 }
             }
         }
