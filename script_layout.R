@@ -125,7 +125,7 @@ if ('plot_doc' %in% to_do) {
 }
 
 
-if (doc_chunk == "") {    
+if (doc_chunk == "") {  
     chunkCode = list(codes10_selection)#list(CodeALL10)
     plotCode = list(CodeALL10)
     
@@ -207,6 +207,7 @@ for (i in 1:nChunk) {
     dataEX_criteria = dataEX_criteria
     metaEX_criteria_chunk = metaEX_criteria
     dataEX_serie = dataEX_serie
+    metaEX_serie_chunk = metaEX_serie
 
     if (exists("dataEX_criteria")) {
         if (nrow(dataEX_criteria) > 0) {
@@ -424,8 +425,6 @@ for (i in 1:nChunk) {
                 subverbose=subverbose)
         }
 
-
-
         if (sheet == 'fiche_precip_ratio') {            
             ModelGroup = lapply(models_to_use, c, "SAFRAN")       
             Pages = sheet_precip_ratio(dataEX_serie_chunk,
@@ -435,6 +434,17 @@ for (i in 1:nChunk) {
                                          figdir=today_figdir_leaf,
                                          Pages=Pages,
                                          verbose=subverbose)
+        }
+
+        if (sheet == 'stripes') {
+            Pages = sheet_stripes(dataEX_serie_chunk,
+                                  metaEX_serie_chunk,
+                                  Projections,
+                                  prob=0.1,
+                                  period_reference=period_reference,
+                                  figdir=today_figdir_leaf,
+                                  Pages=Pages,
+                                  verbose=subverbose)
         }
 
         

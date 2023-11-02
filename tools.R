@@ -302,11 +302,11 @@ NetCDF_to_tibble = function (NetCDF_path,
                                  Q_sim=Q_sim,
                                  S=rep(S, each=nDate))
             data = dplyr::filter(data, !is.nan(Q_sim))
-            IDvalue = unlist(strsplit(chain, "[|]"))
-            IDname = c("GCM", "EXP", "RCM", "BC", "Model")
-            ID = dplyr::tibble(!!!IDvalue)
-            names(ID) = IDname
-            data = dplyr::bind_cols(ID, data)
+            chainValue = unlist(strsplit(chain, "[|]"))
+            chainName = c("GCM", "EXP", "RCM", "BC", "Model")
+            Chain = dplyr::tibble(!!!chainValue)
+            names(Chain) = chainName
+            data = dplyr::bind_cols(Chain, data)
         }
 
     }
@@ -848,12 +848,12 @@ find_Warnings = function (dataEXind, metaEXind,
                   # codeLight="V232000000",
                   # save=FALSE)
 # Warnings_frequency_short =
-#     select(Warnings_frequency, c(var, niveau, npv_pct))
+    # select(Warnings_frequency, c(var, niveau, npv_pct))
 # Warnings_frequency_short =
-#     arrange(group_by(Warnings_frequency_short, var),
-#             desc(niveau), .by_group=TRUE)
+    # arrange(group_by(Warnings_frequency_short, var),
+            # desc(niveau), .by_group=TRUE)
 # Warnings_frequency_short$npv_pct =
-#     round(Warnings_frequency_short$npv_pct)
+    # round(Warnings_frequency_short$npv_pct)
 # print(Warnings_frequency_short, n=Inf)
 
 

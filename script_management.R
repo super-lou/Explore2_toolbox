@@ -464,15 +464,20 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         metaEX_criteria = dplyr::tibble()
         metaEX_serie = dplyr::tibble()
 
-        # read_saving_tmp = file.path(read_saving)
         name_criteria = c()
         name_serie = c()
         
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
 
-            Paths = list.files(file.path(resdir,
-                                         read_saving),
+            if (grepl("diagnostic", mode)) {
+                path2search = file.path(resdir, read_saving)
+            } else if (grepl("projection", mode)) {
+                path2search = file.path(resdir, read_saving,
+                                        Projections$dir)
+            }
+            
+            Paths = list.files(path2search,
                                include.dirs=TRUE,
                                full.names=TRUE)
 
@@ -509,52 +514,223 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             Filenames = gsub("[.].*$", "", Filenames)
             nFile = length(Filenames)
             for (i in 1:nFile) {
-                post(paste0(Filenames[i], " reads in ", Paths[i]))
+                post(paste0(gsub("([_].*)|([.].*)",
+                                 "", Filenames[i]), " reads in ", Paths[i]))
+
+                tmp = read_tibble(filepath=Paths[i])
+
+                if (grepl("dataEX.*criteria", Filenames[i])) {
+                    tmp = dplyr::filter(tmp, Code %in% CodeALL10)
+                    
+                } else if (grepl("dataEX.*serie", Filenames[i])) {
+                    for (k in 1:length(tmp)) {
+                        tmp[[k]] =
+                            dplyr::filter(tmp[[k]], Code %in% CodeALL10)
+                    }
+                }
+                
+                if (selection) {
+                    if (grepl("diagnostic", mode)) {
+                        if (grepl("criteria", Filenames[i])) {
+                            by = names(tmp)[sapply(tmp, is.character)]
+                            pattern = paste0("(",
+                                             paste0(by, collapse=")|("),
+                                             ")|(",
+                                             paste0(diag_variable_selection,
+                                                    collapse=")|("),
+                                             ")")
+                        } else if (grepl("serie", Filenames[i])) {
+                            pattern = paste0("(",
+                                             paste0(diag_variable_selection,
+                                                    collapse=")|("),
+                                             ")")
+                        }
+
+                    } else if (grepl("projection", mode)) {
+                        pattern = paste0("(",
+                                         paste0(proj_variable_selection,
+                                                collapse=")|("),
+                                         ")")
+                    }
+
+                    if (grepl("dataEX.*criteria", Filenames[i])) {
+                        col2keep = sapply(names(tmp), any_grepl,
+                                        pattern=pattern)
+                        tmp = tmp[col2keep]
+
+                        if (grepl("diagnostic", mode)) {
+                            for (j in 1:length(diag_station_selection)) {
+                                if (length(diag_station_selection) == 0) {
+                                    break
+                                }
+                                model = names(diag_station_selection)[j]
+                                code = diag_station_selection[j]
+                                tmp = dplyr::filter(tmp,
+                                                    !(Model == model &
+                                                      grepl(code, Code)))  
+                            }
+                        }
+
+                    } else if (grepl("metaEX.*criteria", Filenames[i])) {
+                        row2keep = sapply(tmp$var, any_grepl,
+                                        pattern=pattern)
+                        tmp = tmp[row2keep,]
+
+                        
+                    } else if (grepl("dataEX.*serie", Filenames[i])) {
+                        if (grepl("diagnostic", mode)) {
+                            for (j in 1:length(diag_period_selection)) {
+                                model = names(diag_period_selection)[j]
+                                period = diag_period_selection[[j]]
+                                start = period[1]
+                                if (is.na(start)) {
+                                    start = min(as.Date(period_extract_diag))
+                                }
+                                end = period[2]
+                                if (is.na(end)) {
+                                    end = max(as.Date(period_extract_diag))
+                                }                        
+                                for (k in 1:length(tmp)) {
+                                    if (!("Date" %in% names(tmp[[k]])) |
+                                        !any(sapply(tmp[[k]],
+                                                    lubridate::is.Date))) {
+                                        next
+                                    }
+                                    tmp[[k]] =
+                                        dplyr::filter(tmp[[k]],
+                                                      Model != model |
+                                                      (Model == model & 
+                                                       start < Date &
+                                                       Date < end))
+                                }
+
+                            }
+                            for (j in 1:length(diag_station_selection)) {
+                                if (length(diag_station_selection) == 0) {
+                                    break
+                                }
+                                model = names(diag_station_selection)[j]
+                                code = diag_station_selection[j]
+                                for (k in 1:length(tmp)) {
+                                    tmp[[k]] =
+                                        dplyr::filter(tmp[[k]],
+                                                      !(Model == model &
+                                                        grepl(code, Code)))
+                                }
+                            }
+                        }
+
+                        row2keep = sapply(names(tmp), any_grepl,
+                                          pattern=pattern)
+                        tmp = tmp[row2keep]
+
+                    } else if (grepl("metaEX.*serie", Filenames[i])) {
+                        row2keep = sapply(tmp$var, any_grepl,
+                                        pattern=pattern)
+                        tmp = tmp[row2keep,]
+                        
+                    } else if (grepl("meta", Filenames[i]) &
+                               grepl("diagnostic", mode)) {
+                        for (j in 1:length(diag_station_selection)) {
+                            if (length(diag_station_selection) == 0) {
+                                break
+                            }
+                            model = names(diag_station_selection)[j]
+                            code = diag_station_selection[j]
+                            tmp[[paste0("Surface_",
+                                        model, "_km2")]][grepl(code,
+                                                               tmp$Code)] = NA
+                        }
+                    }
+                }
+
+                        
                 
                 if (merge_read_saving) {
 
+                    ### /!\ pour proj ###
                     if (grepl("dataEX.*criteria", Filenames[i])) {
                         if (nrow(dataEX_criteria) == 0) {
-                            dataEX_criteria = read_tibble(filepath=Paths[i])
+                            dataEX_criteria = tmp
                         } else {
-                            character_cols = names(dataEX_criteria)[sapply(dataEX_criteria,
-                                                               is.character)]
-                            
+                            character_cols =
+                                names(dataEX_criteria)[sapply(dataEX_criteria,
+                                                              is.character)]
                             dataEX_criteria =
                                 dplyr::full_join(
                                            dataEX_criteria,
-                                           read_tibble(filepath=Paths[i]),
+                                           tmp,
                                            by=character_cols)
                         }
+                    ### /!\ pour proj ###
+
+                        
                     } else if (grepl("dataEX.*serie", Filenames[i])) {
-                        dataEX_serie =
-                            append(dataEX_serie,
-                                   read_tibble(filepath=Paths[i]))
+
+                        
+                        for (k in 1:length(tmp)) {
+                            tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                    "climateChain",
+                                                    "GCM", "EXP",
+                                                    "RCM", "BC",
+                                                    sep="|",
+                                                    remove=FALSE)
+                            tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                    "Chain",
+                                                    "GCM", "EXP",
+                                                    "RCM", "BC",
+                                                    "Model",
+                                                    sep="|",
+                                                    remove=FALSE)
+                        }
+                        
+                        if (grepl("projection", mode)) {
+                            names_in = names(tmp)[names(tmp) %in% names(dataEX_serie)]
+                            names_out = names(tmp)[!(names(tmp) %in% names(dataEX_serie))]
+                            if (length(names_in) > 0) {
+                                for (name in names_in) {
+                                    dataEX_serie[[name]] =
+                                        dplyr::bind_rows(dataEX_serie[[name]],
+                                                         tmp[[name]])
+                                }
+                            }
+                            if (length(names_out) > 0) {
+                                dataEX_serie =
+                                    append(dataEX_serie, tmp[names_out])
+                            }
+
+                        } else if (grepl("diagnostic", mode)) {   
+                            dataEX_serie =
+                                append(dataEX_serie, tmp)
+                        }
+    
                     } else if (grepl("metaEX.*criteria", Filenames[i])) {
                         metaEX_criteria =
                             dplyr::bind_rows(metaEX_criteria,
-                                             read_tibble(filepath=Paths[i]))
-
+                                             tmp[!(tmp$var %in% metaEX_criteria$var),])
+                        
                     } else if (grepl("metaEX.*serie", Filenames[i])) {
                         metaEX_serie =
                             dplyr::bind_rows(metaEX_serie,
-                                             read_tibble(filepath=Paths[i]))
+                                             tmp[!(tmp$var %in% metaEX_serie$var),])
                         
                     } else if (grepl("data[_]", Filenames[i])) {
-                        data =
-                            dplyr::bind_rows(data,
-                                             read_tibble(filepath=Paths[i]))
+                        data = dplyr::bind_rows(data, tmp)
                     } else {
-                        assign(Filenames[i],
-                               read_tibble(filepath=Paths[i]))
+                        assign(Filenames[i], tmp)
                     }
                     
                 } else {
-                    assign(Filenames[i],
-                           read_tibble(filepath=Paths[i]))
+                    assign(Filenames[i], tmp)
                 }
             }
         }
+
+
+
+
+
+        
         if (merge_read_saving) {
             extract_data_tmp = list()
             if (any(sapply(extract_data, '[[', 'type') == "criteria")) {
@@ -586,102 +762,112 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         
     }
 
-    if ('selection' %in% to_do) {
-        post("### Selecting variables")
 
-        if (grepl("diagnostic", mode)) {
 
-            for (j in 1:length(diag_station_selection)) {
-                if (length(diag_station_selection) == 0) {
-                    break
-                }
-                model = names(diag_station_selection)[j]
-                code = diag_station_selection[j]
-                meta[[paste0("Surface_", model, "_km2")]][grepl(code,
-                                                                meta$Code)] = NA
-            }
 
-            for (i in 1:length(extract_data)) {
-                extract = extract_data[[i]]
 
-                dataEXname = paste0("dataEX_", extract$type)
-                metaEXname = paste0("metaEX_", extract$type)
-                dataEXtmp = get(dataEXname)
-                metaEXtmp = get(metaEXname)
+    
+    # if ('selection' %in% to_do) {
+    #     post("### Selecting variables")
+
+    #     if (grepl("diagnostic", mode)) {
+
+            # for (j in 1:length(diag_station_selection)) {
+            #     if (length(diag_station_selection) == 0) {
+            #         break
+            #     }
+            #     model = names(diag_station_selection)[j]
+            #     code = diag_station_selection[j]
+            #     meta[[paste0("Surface_", model, "_km2")]][grepl(code,
+            #                                                     meta$Code)] = NA
+            # }
+
+            # for (i in 1:length(extract_data)) {
+            #     extract = extract_data[[i]]
+
+            #     dataEXname = paste0("dataEX_", extract$type)
+            #     metaEXname = paste0("metaEX_", extract$type)
+            #     dataEXtmp = get(dataEXname)
+            #     metaEXtmp = get(metaEXname)
                 
-                if (extract$type == "criteria") {
-                    by = names(dataEXtmp)[sapply(dataEXtmp,
-                                                 is.character)]
-                    pattern = paste0("(",
-                                     paste0(by, collapse=")|("),
-                                     ")|(",
-                                     paste0(diag_criteria_selection,
-                                            collapse=")|("),
-                                     ")")
-                    col2rm = sapply(names(dataEXtmp), any_grepl,
-                                    pattern=pattern)
-                    row2rm = sapply(metaEXtmp$var, any_grepl,
-                                    pattern=pattern)
-                    dataEXtmp = dataEXtmp[col2rm]
-                    metaEXtmp = metaEXtmp[row2rm,]
+                # if (extract$type == "criteria") {
+                #     by = names(dataEXtmp)[sapply(dataEXtmp,
+                #                                  is.character)]
+                #     pattern = paste0("(",
+                #                      paste0(by, collapse=")|("),
+                #                      ")|(",
+                #                      paste0(diag_criteria_selection,
+                #                             collapse=")|("),
+                #                      ")")
+                #     col2rm = sapply(names(dataEXtmp), any_grepl,
+                #                     pattern=pattern)
+                #     row2rm = sapply(metaEXtmp$var, any_grepl,
+                #                     pattern=pattern)
+                #     dataEXtmp = dataEXtmp[col2rm]
+                #     metaEXtmp = metaEXtmp[row2rm,]
                     
-                    for (j in 1:length(diag_station_selection)) {
-                        if (length(diag_station_selection) == 0) {
-                            break
-                        }
-                        model = names(diag_station_selection)[j]
-                        code = diag_station_selection[j]
-                        dataEXtmp = dplyr::filter(dataEXtmp,
-                                                  !(Model == model &
-                                                    grepl(code, Code)))  
-                    }
+                #     for (j in 1:length(diag_station_selection)) {
+                #         if (length(diag_station_selection) == 0) {
+                #             break
+                #         }
+                #         model = names(diag_station_selection)[j]
+                #         code = diag_station_selection[j]
+                #         dataEXtmp = dplyr::filter(dataEXtmp,
+                #                                   !(Model == model &
+                #                                     grepl(code, Code)))  
+                #     }
 
-                } else if (extract$type == "serie") {
-                    for (j in 1:length(diag_period_selection)) {
-                        model = names(diag_period_selection)[j]
-                        period = diag_period_selection[[j]]
-                        start = period[1]
-                        if (is.na(start)) {
-                            start = min(as.Date(period_extract_diag))
-                        }
-                        end = period[2]
-                        if (is.na(end)) {
-                            end = max(as.Date(period_extract_diag))
-                        }                        
-                        for (k in 1:length(dataEXtmp)) {
-                            if (!("Date" %in% names(dataEXtmp[[k]])) |
-                                !any(sapply(dataEXtmp[[k]],
-                                           lubridate::is.Date))) {
-                                next
-                            }
-                            dataEXtmp[[k]] =
-                                dplyr::filter(dataEXtmp[[k]],
-                                              Model != model |
-                                              (Model == model & 
-                                               start < Date &
-                                               Date < end))
-                        }
+    #             } else if (extract$type == "serie") {
+    #                 for (j in 1:length(diag_period_selection)) {
+    #                     model = names(diag_period_selection)[j]
+    #                     period = diag_period_selection[[j]]
+    #                     start = period[1]
+    #                     if (is.na(start)) {
+    #                         start = min(as.Date(period_extract_diag))
+    #                     }
+    #                     end = period[2]
+    #                     if (is.na(end)) {
+    #                         end = max(as.Date(period_extract_diag))
+    #                     }                        
+    #                     for (k in 1:length(dataEXtmp)) {
+    #                         if (!("Date" %in% names(dataEXtmp[[k]])) |
+    #                             !any(sapply(dataEXtmp[[k]],
+    #                                        lubridate::is.Date))) {
+    #                             next
+    #                         }
+    #                         dataEXtmp[[k]] =
+    #                             dplyr::filter(dataEXtmp[[k]],
+    #                                           Model != model |
+    #                                           (Model == model & 
+    #                                            start < Date &
+    #                                            Date < end))
+    #                     }
 
-                    }
-                    for (j in 1:length(diag_station_selection)) {
-                        if (length(diag_station_selection) == 0) {
-                            break
-                        }
-                        model = names(diag_station_selection)[j]
-                        code = diag_station_selection[j]
-                        for (k in 1:length(dataEXtmp)) {
-                            dataEXtmp[[k]] =
-                                dplyr::filter(dataEXtmp[[k]],
-                                              !(Model == model &
-                                                grepl(code, Code)))
-                        }
-                    }
-                }
-                assign(dataEXname, dataEXtmp)
-                assign(metaEXname, metaEXtmp)
-            }
-        }
-    }
+    #                 }
+    #                 for (j in 1:length(diag_station_selection)) {
+    #                     if (length(diag_station_selection) == 0) {
+    #                         break
+    #                     }
+    #                     model = names(diag_station_selection)[j]
+    #                     code = diag_station_selection[j]
+    #                     for (k in 1:length(dataEXtmp)) {
+    #                         dataEXtmp[[k]] =
+    #                             dplyr::filter(dataEXtmp[[k]],
+    #                                           !(Model == model &
+    #                                             grepl(code, Code)))
+    #                     }
+    #                 }
+    #             }
+    #             assign(dataEXname, dataEXtmp)
+    #             assign(metaEXname, metaEXtmp)
+    #         }
+    #     }
+    # }
+
+
+
+
+    
 
     if ('write_warnings' %in% to_do) {
         post("### Writing warnings")
@@ -792,9 +978,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         }
 
         Historicals =
-            projs_selection_data[projs_selection_data$EXP ==
+            Projections[Projections$EXP ==
                                  "historical" &
-                                 projs_selection_data$Model %in%
+                                 Projections$Model %in%
                                  models_to_use,]
         nHistoricals = nrow(Historicals)
 
@@ -832,15 +1018,15 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 maxDate_historical = max(Date)
 
                 projs =
-                    projs_selection_data[projs_selection_data$GCM ==
+                    Projections[Projections$GCM ==
                                          historical$GCM &
-                                         projs_selection_data$RCM ==
+                                         Projections$RCM ==
                                          historical$RCM &
-                                         projs_selection_data$EXP !=
+                                         Projections$EXP !=
                                          "historical" &
-                                         projs_selection_data$BC ==
+                                         Projections$BC ==
                                          historical$BC &
-                                         projs_selection_data$Model ==
+                                         Projections$Model ==
                                          historical$Model,]
 
                 # jehfezoifjezoifjezoifjezoiji EROS
@@ -895,7 +1081,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
                     flag = dplyr::bind_rows(
                                       flag,
-                                      dplyr::tibble(ID=proj$ID,
+                                      dplyr::tibble(Chain=proj$chain,
                                                     start_historical=
                                                         minDate_historical,
                                                     end_historical=
@@ -910,7 +1096,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             }
         }
         if (nrow(flag) > 0) {
-            flag = tidyr::separate(flag, col="ID",
+            flag = tidyr::separate(flag, col="Chain",
                                    into=c("GCM", "EXP", "RCM",
                                           "BC", "Model"), sep="[|]")
             write_tibble(flag, tmppath,

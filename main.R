@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    "./"
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -149,45 +149,43 @@ type =
 
 mode =
     # "diagnostic"
-    "diagnostic_ungauged"
-    # "projection"
-    # "projection_merge"
+    # "diagnostic_ungauged"
+    "projection"
 
 to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        'create_data',
-        'extract_data',
-        'save_extract'
+        # 'create_data',
+        # 'extract_data',
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
-        # 'selection',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
     )
 
 extract_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diagnostic_performance',
-        'Explore2_criteria_diagnostic_sensibilite',
-        'Explore2_criteria_diagnostic_sensibilite_RAT',
-        'Explore2_criteria_diagnostic_HE',
-        'Explore2_criteria_diagnostic_ME',
-        'Explore2_criteria_diagnostic_BE',
-        'Explore2_criteria_diagnostic_BF',
-        'Explore2_serie_diagnostic_plot'
+        # 'Explore2_criteria_diagnostic_performance',
+        # 'Explore2_criteria_diagnostic_sensibilite',
+        # 'Explore2_criteria_diagnostic_sensibilite_RAT',
+        # 'Explore2_criteria_diagnostic_HE',
+        # 'Explore2_criteria_diagnostic_ME',
+        # 'Explore2_criteria_diagnostic_BE',
+        # 'Explore2_criteria_diagnostic_BF',
+        # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_criteria_diagnostic_SAFRAN',
-        # 'Explore2_criteria_more_diagnostic_SAFRAN',
-        # 'Explore2_serie_projection_SAFRAN',
-        # 'Explore2_serie_more_projection_SAFRAN'
-        # 'Explore2_serie_projection'
-        # 'Explore2_serie_more_projection'
+        # 'Explore2_criteria_more_diagnostic_SAFRAN'
+        # 'Explore2_serie_proj_SAFRAN',
+        # 'Explore2_serie_more_proj_SAFRAN'
+        'Explore2_serie_proj'
+        # 'Explore2_serie_more_proj'
     )
 
 
@@ -228,12 +226,13 @@ plot_sheet =
     c(
         # 'sommaire'
         # 'correlation_matrix'
-        'fiche_diagnostic_station'
+        # 'fiche_diagnostic_station'
         # 'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
         # 'carte_regime'
         # 'carte_critere'
+        'stripes'
         
     )
 
@@ -243,7 +242,7 @@ plot_doc =
         # "correlation_matrix"
         # "correlation_matrix_ungauged"
         
-        # 'fiche_diagnostic_region'
+        'fiche_diagnostic_region'
         # 'fiche_diagnostic_regime'
         # 'fiche_diagnostic_piezometre'
 
@@ -260,7 +259,7 @@ plot_doc =
         # "carte_critere_critere_ungauged_secteur"
 
         ## avertissement
-        "carte_critere_model_avertissement_secteur"
+        # "carte_critere_model_avertissement_secteur"
         
         ## piezo
         # "carte_piezo_critere_model"
@@ -280,9 +279,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -292,6 +291,8 @@ MPI =
 ## 1. CREATE_DATA|_| _________________________________________________ 
 period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
+period_reference = c("1976-01-01", "2005-12-31")
+is_projection_merge = TRUE
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 32 |
@@ -303,38 +304,31 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 32
+nCode4RAM = 100
 
 projs_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
-        # "MPI.*rcp85.*RegCM4.*CDFt"
-        # "EARTH.*HadREM3.*ADAMONT.*CTRIP"
-        # "HadGEM2.*rcp45.*CCLM.*ADAMONT.*SIM2"
-        # "MPI.*rcp26.*RegCM4.*ADAMONT"
         # "ALADIN.*ADAMONT"
-        # "rcp26"
-        # "EC-EARTH.*rcp26.*HadREM3.*ADAMONT.*CTRIP"
-        # "NorESM1-M.*rcp26.*REMO.*ADAMONT"
-        # "HadGEM2.*histo.*RegCM4.*CDFt"
-        # "MPI.*rcp45.*CCLM.*ADAMONT"
-        # "MPI.*rcp85.*RegCM4.*ADAMONT"
-        # "EC.*rcp45.*RACMO22E.*ADAMONT"
 
-        # "CNRM.*rcp45.*ALADIN63.*ADAMONT"
+        ## story lines ##
+        "HadGEM2.*rcp85.*CCLM4.*CDFt",
+        "EARTH.*rcp85.*HadREM3.*CDFt",
+        "CNRM.*rcp85.*ALADIN63.*ADAMONT",
+        "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 
 models_to_use =
     c(
-        # "CTRIP",
-        # "EROS",
+        "CTRIP",
+        "EROS",
         "GRSD",
-        # "J2000",
-        # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
+        "J2000",
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
@@ -347,14 +341,19 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        'all'
+        # 'all'
         # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
         # "^E"
         # "^K"
-        
+
+        "Seine"="H700011001",
+        "Rhone"="V720001002",
+        "Garonne"="O972001000",
+        "Loire"="M842001000",
+        "Moselle"="A886006000"
 
         ## échange code
         # "K2240820"
@@ -371,6 +370,9 @@ codes_to_use =
         # "B413201001", #CTRIP
     )
 
+
+
+
 # "K072530200" manquante
 
 diag_station_2_remove =
@@ -383,6 +385,19 @@ diag_station_2_remove =
 MORDOR_code_warning =
     # ""
     c("K002000101", "K222302001", "K225401001", "O023402001", "O036251001", "O038401001", "O074404001", "O312102002", "O319401001", "O701151001", "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201", "W030000201", "W103000301", "W273050001", "W211401000", "W271000101", "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
+
+
+
+storyLines = c(
+    "HadGEM2-ES|rcp85|CCLM4-8-17|CDFt"=
+        "Fort réchauffement et fort assèchement en été", #Goron #feu
+    "EC-EARTH|rcp85|HadREM3-GA7|CDFt"=
+        "Sec toute l’année, recharge moindre en hiver", #Gerudo #soleil
+    "CNRM-CM5|rcp85|ALADIN63|ADAMONT"=
+        "Scénario modéré en réchauffement et changement de précipitations", #Piaf #nuage 
+    "HadGEM2-ES|rcp85|ALADIN63|ADAMONT"=
+        "Scénario chaud et humide à toutes les saisons" #Zora #parapluie
+)
 
 
 # existant :
@@ -522,8 +537,8 @@ if (type == "piezometrie") {
 }
 
 # proj SAFRAN
-Explore2_serie_projection_SAFRAN =
-    list(name='Explore2_serie_projection_SAFRAN',
+Explore2_serie_proj_SAFRAN =
+    list(name='Explore2_serie_proj_SAFRAN',
          type="serie",
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
@@ -531,8 +546,8 @@ Explore2_serie_projection_SAFRAN =
                      "QMNA", "VCN10", "VCN3"),
          suffix="obs")
 
-Explore2_serie_more_projection_SAFRAN =
-    list(name='Explore2_serie_more_projection_SAFRAN',
+Explore2_serie_more_proj_SAFRAN =
+    list(name='Explore2_serie_more_proj_SAFRAN',
          type="serie",
          variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
                      "tVCN10", "allBE",
@@ -541,8 +556,8 @@ Explore2_serie_more_projection_SAFRAN =
          suffix="obs")
 
 # proj
-Explore2_serie_projection =
-    list(name='Explore2_serie_projection',
+Explore2_serie_proj =
+    list(name='Explore2_serie_proj',
          type="serie",
          variables=c("QA", "QA_month", "QA_season",
                      "QA05", "QA10", "QA50", "QA90", "QA95",
@@ -550,17 +565,17 @@ Explore2_serie_projection =
                      "QMNA", "VCN10", "VCN3"),
          suffix="sim")
 
-Explore2_serie_more_projection =
-    list(name='Explore2_serie_more_projection',
+Explore2_serie_more_proj =
+    list(name='Explore2_serie_more_proj',
          type="serie",
-         variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
-                     "tVCN10", "allBE",
+         variables=c("tQJXA", "tVCX3", "fQA01", "fQA05", "fQA10", "dtCrue",
+                     "QNA", "tVCN10", "allBE",
                      "debutBF", "centreBF", "finBF",
                      "dtBF", "vBF", "dtRec"),
          suffix="sim")
 
-# Explore2_projection_delta =
-#     list(name='Explore2_projection_delta',
+# Explore2_proj_delta =
+#     list(name='Explore2_proj_delta',
 #          variables="deltaQA",
 #          cancel_lim=FALSE,
 #          simplify=TRUE)
@@ -610,7 +625,11 @@ merge_read_saving =
     # FALSE
 
 # ## 5. SELECTION _____________________________________________
-diag_criteria_selection =
+selection =
+    TRUE
+    # FALSE
+
+diag_variable_selection =
 #     # "all"
     c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$",
       "RAT[_]T$", "RAT[_]R$", "Q10$", "med[{]tQJXA[}]$",
@@ -634,6 +653,11 @@ diag_station_selection =
         "CTRIP"="O038401001",
         "CTRIP"="D020601001"
     )
+
+
+proj_variable_selection =
+#     # "all"
+    c("^QA$", "VCN10")
 
 
 ## 6. PLOT_SHEET _____________________________________________________
@@ -984,46 +1008,54 @@ if ('plot_doc' %in% to_do) {
 if (type == "hydrologie") {
 
     if (grepl("projection", mode)) {
-        projs_selection_data = read_tibble(file.path(
+        Projections = read_tibble(file.path(
             computer_data_path,
-            projs_selection_file))  
+            projs_selection_file))
         EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
-        names(projs_selection_data)[3:6] = EXP
-        projs_selection_data =
-            dplyr::mutate(projs_selection_data,
+        names(Projections)[3:6] = EXP
+        Projections =
+            dplyr::mutate(Projections,
                           dplyr::across(.cols=EXP,
                                         .fns=convert2bool, true="x"))
-        projs_selection_data =
-            tidyr::pivot_longer(data=projs_selection_data,
+        Projections =
+            tidyr::pivot_longer(data=Projections,
                                 cols=EXP,
                                 names_to="EXP")
-        projs_selection_data$value = as.logical(projs_selection_data$value)
-        projs_selection_data = dplyr::filter(projs_selection_data, value)
-        projs_selection_data = dplyr::select(projs_selection_data, -"value")
+        Projections$value = as.logical(Projections$value)
+        Projections = dplyr::filter(Projections, value)
+        Projections = dplyr::select(Projections, -"value")
 
         BC = c("ADAMONT", "CDFt")
-        projs_selection_data = tidyr::crossing(projs_selection_data,
+        Projections = tidyr::crossing(Projections,
                                                BC, Model=models_to_use)
-        projs_selection_data$ID =
-            paste0(projs_selection_data$GCM, "|",
-                   projs_selection_data$EXP, "|",
-                   projs_selection_data$RCM, "|",
-                   projs_selection_data$BC, "|",
-                   projs_selection_data$Model)
+
+        Projections$climateChain =
+            paste0(Projections$GCM, "|",
+                   Projections$EXP, "|",
+                   Projections$RCM, "|",
+                   Projections$BC)
         
-        projs_selection_data$regexp =
+        Projections$Chain =
+            paste0(Projections$GCM, "|",
+                   Projections$EXP, "|",
+                   Projections$RCM, "|",
+                   Projections$BC, "|",
+                   Projections$Model)
+        
+        Projections$regexp =
             paste0(".*", 
-                   gsub("[|]", ".*", projs_selection_data$ID),
+                   gsub("[|]", ".*", Projections$Chain),
                    ".*")
-        projs_selection_data$regexp = gsub("[-]", "[-]",
-                                           projs_selection_data$regexp)
-        projs_selection_data$regexp = gsub("[_]", "[_]",
-                                           projs_selection_data$regexp)
+        Projections$regexp = gsub("[-]", "[-]",
+                                           Projections$regexp)
+        Projections$regexp = gsub("[_]", "[_]",
+                                           Projections$regexp)
         
-        if (mode == "projection_merge") {
-            projs_selection_data =
-                projs_selection_data[projs_selection_data$EXP !=
+        if (is_projection_merge) {
+            Projections =
+                Projections[Projections$EXP !=
                                      "historical",]
+            # mode = "projection_merge"
         }
         
         proj_path = file.path(computer_data_path, type, mode)
@@ -1038,39 +1070,46 @@ if (type == "hydrologie") {
         any_grepl = function (pattern, x) {
             any(grepl(pattern, x))
         }
-        projs_selection_data =
-            projs_selection_data[sapply(projs_selection_data$regexp,
+        Projections =
+            Projections[sapply(Projections$regexp,
                                         any_grepl,
                                         x=Files),]
-        projs_selection_data$file =
-            lapply(projs_selection_data$regexp, apply_grepl, table=Files)
-        projs_selection_data$path =
-            lapply(projs_selection_data$file,
+        Projections$file =
+            lapply(Projections$regexp,
+                   apply_grepl, table=Files)
+        Projections$path =
+            lapply(Projections$file,
                    apply_match, table=Files, target=Paths)
         
-        projs_selection_data_nest = projs_selection_data
-        projs_selection_data = tidyr::unnest(projs_selection_data,
+        Projections_nest = Projections
+        Projections = tidyr::unnest(Projections,
                                              c(file, path))
 
         if (all(projs_to_use != "all")) {
-
-            
             OK = apply(as.matrix(
                 sapply(projs_to_use, grepl,
-                       x=projs_selection_data$file)),
+                       x=Projections$file)),
                 1, any)
-            projs_selection_data = projs_selection_data[OK,]
+            Projections = Projections[OK,]
             OK_nest = apply(as.matrix(
                 sapply(projs_to_use, grepl,
-                       x=projs_selection_data_nest$regexp)),
+                       x=Projections_nest$regexp)),
                 1, any)
-            projs_selection_data_nest = projs_selection_data_nest[OK_nest,]
+            Projections_nest = Projections_nest[OK_nest,]
         }
 
-        files_to_use = projs_selection_data_nest$path
-        names(files_to_use) = projs_selection_data_nest$ID
+        Projections$dir =
+            file.path(Projections$Model, 
+                      paste(Projections$GCM,
+                            Projections$EXP,
+                            Projections$RCM,
+                            Projections$BC,
+                            Projections$Model, sep="_"))
+                  
+        files_to_use = Projections_nest$path
+        names(files_to_use) = Projections_nest$Chain
 
-        write_tibble(dplyr::select(projs_selection_data,
+        write_tibble(dplyr::select(Projections,
                                    -"path"),
                      filedir=today_resdir,
                      filename="projs_selection.txt")
@@ -1136,26 +1175,34 @@ if (type == "hydrologie") {
         CodeALL8 = codes8_selection
         CodeALL10 = convert_codeNtoM(codes8_selection)
     } else {
-        # codes_to_use[nchar(codes_to_use) == 10] =
-        # codes8_selection[codes10_selection %in%
-        # codes_to_use[nchar(codes_to_use) == 10]]
-        codes_to_use = convert_codeNtoM(codes_to_use, 10,
-                                        8, top=NULL)
-        codes_to_use = convert_regexp(computer_data_path,
-                                      file.path(type,
-                                                obs_hydro_dir),
-                                      codes_to_use,
-                                      obs_hydro_format)
+        # codes_to_use = convert_codeNtoM(codes_to_use, 10,
+                                        # 8, top=NULL)
+        # codes_to_use = convert_regexp(computer_data_path,
+        #                               file.path(type,
+        #                                         obs_hydro_dir),
+        #                               codes_to_use,
+        #                               obs_hydro_format)
+        # okCode = codes_to_use %in% codes8_selection
+
+        # names(codes_to_use)
         
-        okCode = codes_to_use %in% codes8_selection
-        CodeALL8 = codes_to_use[okCode]
-        # CodeALL10 = codes10_selection[codes8_selection %in% CodeALL8]
-        CodeALL10 = convert_codeNtoM(CodeALL8)
+        codes_to_use_regexp = convert_codeNtoM(codes_to_use, 8,
+                                               10, crop=FALSE, top=NULL)
+        CodeALL10 = c(sapply(paste0("(" ,
+                                    paste0(codes_to_use_regexp,
+                                           collapse=")|("),
+                               ")"),
+                        apply_grepl,
+                        table=codes10_selection))
+        CodeALL8 = convert_codeNtoM(CodeALL10, 10, 8)
     }
+    
     CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
     CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
     nCodeALL = length(CodeALL10)
 
+    
+    
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
 
@@ -1396,9 +1443,6 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                             " chunks of stations in extract so ",
                             round(ss/nSubsets*100, 1), "% done"))
 
-                post(file_test)
-                post(list.files(tmppath, include.dirs=TRUE))
-                
                 if (all(file_test %in% list.files(tmppath,
                                                   include.dirs=TRUE))) {
                     Create_ok = c(Create_ok, TRUE)
