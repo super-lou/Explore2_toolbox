@@ -481,6 +481,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
             Paths = list.files(path2search,
                                include.dirs=TRUE,
                                full.names=TRUE)
+            Paths = Paths[!duplicated(Paths)]
 
             pattern = var2search
             pattern = paste0("(", paste0(pattern,
@@ -519,7 +520,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                  "", Filenames[i]), " reads in ", Paths[i]))
 
                 tmp = read_tibble(filepath=Paths[i])
-
+                
                 if (grepl("dataEX.*criteria", Filenames[i])) {
                     tmp = dplyr::filter(tmp, Code %in% CodeALL10)
                     
@@ -624,7 +625,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                         row2keep = sapply(names(tmp), any_grepl,
                                           pattern=pattern)
                         tmp = tmp[row2keep]
-
+                        
                     } else if (grepl("metaEX.*serie", Filenames[i])) {
                         row2keep = sapply(tmp$var, any_grepl,
                                         pattern=pattern)
@@ -645,7 +646,6 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                     }
                 }
 
-                        
                 
                 if (merge_read_saving) {
 
@@ -667,22 +667,36 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
                         
                     } else if (grepl("dataEX.*serie", Filenames[i])) {
-
                         
-                        for (k in 1:length(tmp)) {
-                            tmp[[k]] = tidyr::unite(tmp[[k]],
-                                                    "climateChain",
-                                                    "GCM", "EXP",
-                                                    "RCM", "BC",
-                                                    sep="|",
-                                                    remove=FALSE)
-                            tmp[[k]] = tidyr::unite(tmp[[k]],
-                                                    "Chain",
-                                                    "GCM", "EXP",
-                                                    "RCM", "BC",
-                                                    "Model",
-                                                    sep="|",
-                                                    remove=FALSE)
+                        if ("GCM" %in% names(tmp[[1]])) {
+                            for (k in 1:length(tmp)) {
+                                tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                        "climateChain",
+                                                        "GCM", "EXP",
+                                                        "RCM", "BC",
+                                                        sep="|",
+                                                        remove=FALSE)
+                                tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                        "Chain",
+                                                        "GCM", "EXP",
+                                                        "RCM", "BC",
+                                                        "Model",
+                                                        sep="|",
+                                                        remove=FALSE)
+                            }
+                        } else {
+                            for (k in 1:length(tmp)) {
+                                tmp[[k]]$climateChain = "SAFRAN"
+                                tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                        "Chain",
+                                                        "climateChain",
+                                                        "Model",
+                                                        sep="|",
+                                                        remove=FALSE)
+                                tmp[[k]] = dplyr::relocate(tmp[[k]],
+                                                           climateChain,
+                                                           .after=Chain)
+                            }
                         }
                         
                         if (grepl("projection", mode)) {
@@ -717,6 +731,7 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                         
                     } else if (grepl("data[_]", Filenames[i])) {
                         data = dplyr::bind_rows(data, tmp)
+                        
                     } else {
                         assign(Filenames[i], tmp)
                     }
@@ -754,6 +769,13 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                     "serie"
             }
             extract_data = extract_data_tmp
+        }
+
+        
+        if (!is.null(names(codes_to_use)) & exists("meta")) {
+            info = dplyr::tibble(Code=codes_to_use,
+                                 info=names(codes_to_use))
+            meta = dplyr::left_join(meta, info, by="Code")
         }
 
 

@@ -439,9 +439,11 @@ for (i in 1:nChunk) {
         if (sheet == 'stripes') {
             Pages = sheet_stripes(dataEX_serie_chunk,
                                   metaEX_serie_chunk,
+                                  meta,
                                   Projections,
-                                  prob=0.1,
+                                  prob=prob_of_quantile_for_palette,
                                   period_reference=period_reference,
+                                  icon_path=icon_path,
                                   figdir=today_figdir_leaf,
                                   Pages=Pages,
                                   verbose=subverbose)

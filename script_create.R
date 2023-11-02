@@ -319,12 +319,14 @@ create_data = function () {
         rm ("data_sim"); gc()
         rm ("meta_sim"); gc()
 
-        for (i in 1:nVal2check) {
-            data =
-                dplyr::mutate(data,
-                              !!paste0(val2check[i],
-                                       "_sim"):=get(val2check[i]))
-            data = dplyr::select(data, -val2check[i])
+        if (grepl("diagnostic", mode)) {
+            for (i in 1:nVal2check) {
+                data =
+                    dplyr::mutate(data,
+                                  !!paste0(val2check[i],
+                                           "_sim"):=get(val2check[i]))
+                data = dplyr::select(data, -val2check[i])
+            }
         }
         
     }  else if (!isSim & isObs) {
@@ -336,7 +338,7 @@ create_data = function () {
     }
 
     
-    if (isSim & !is.null(complete_by)) {
+    if (isSim & !is.null(complete_by) & grepl("diagnostic", mode)) {
         Model4complete = complete_by[complete_by %in% Model]
         
         if (!all(is.na(Model4complete))) {
@@ -377,6 +379,7 @@ create_data = function () {
         rm ("data"); gc()
 
         meta = dplyr::arrange(meta, Code)
+        
         write_tibble(meta,
                      filedir=tmppath,
                      filename=paste0("meta_",

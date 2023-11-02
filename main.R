@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    "./"
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -148,24 +148,24 @@ type =
     # "piezometrie"
 
 mode =
-    "diagnostic"
+    # "diagnostic"
     # "diagnostic_ungauged"
-    # "projection"
+    "projection"
 
 to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        'create_data',
-        'extract_data',
-        'save_extract'
+        # 'create_data',
+        # 'extract_data',
+        # 'save_extract'
         # 'read_tmp'
-        # 'read_saving',
+        # 'read_saving'
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        # 'plot_sheet'
+        'plot_sheet'
         # 'plot_doc'
     )
 
@@ -183,8 +183,8 @@ extract_data =
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN'
         'Explore2_serie_projection_SAFRAN',
-        'Explore2_serie_more_projection_SAFRAN'
-        # 'Explore2_serie_proj'
+        # 'Explore2_serie_more_projection_SAFRAN'
+        'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
 
@@ -279,9 +279,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -312,9 +312,16 @@ projs_to_use =
         # "(rcp26)|(rcp45)|(rcp85")
         # "ALADIN.*ADAMONT"
 
+        # "HadGEM2.*historical.*CCLM4.*ADAMONT",
+        # "EARTH.*historical.*HadREM3.*ADAMONT",
+        # "CNRM.*historical.*ALADIN63.*ADAMONT",
+        # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
+        
+        "^SAFRAN",
+        
         ## story lines ##
-        "HadGEM2.*rcp85.*CCLM4.*CDFt",
-        "EARTH.*rcp85.*HadREM3.*CDFt",
+        "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
+        "EARTH.*rcp85.*HadREM3.*ADAMONT",
         "CNRM.*rcp85.*ALADIN63.*ADAMONT",
         "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
@@ -341,13 +348,16 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        'all'
+        # 'all'
         # 'K298191001', #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
         # "^E"
         # "^K"
+
+        "O6140010",
+        "M6240010"
 
         # "Seine"="H700011001",
         # "Rhone"="V720001002",
@@ -389,14 +399,14 @@ MORDOR_code_warning =
 
 
 storyLines = c(
-    "HadGEM2-ES|rcp85|CCLM4-8-17|CDFt"=
+    "HadGEM2-ES|rcp85|CCLM4-8-17|ADAMONT"=
         "Fort réchauffement et fort assèchement en été", #Goron #feu
-    "EC-EARTH|rcp85|HadREM3-GA7|CDFt"=
+    "EC-EARTH|rcp85|HadREM3-GA7|ADAMONT"=
         "Sec toute l’année, recharge moindre en hiver", #Gerudo #soleil
     "CNRM-CM5|rcp85|ALADIN63|ADAMONT"=
-        "Scénario modéré en réchauffement et changement de précipitations", #Piaf #nuage 
+        "Modéré en réchauffement et changement de précipitations", #Piaf #nuage 
     "HadGEM2-ES|rcp85|ALADIN63|ADAMONT"=
-        "Scénario chaud et humide à toutes les saisons" #Zora #parapluie
+        "Chaud et humide à toutes les saisons" #Zora #parapluie
 )
 
 
@@ -540,10 +550,14 @@ if (type == "piezometrie") {
 Explore2_serie_projection_SAFRAN =
     list(name='Explore2_serie_projection_SAFRAN',
          type="serie",
-         variables=c("QA", "QA_month", "QA_season",
-                     "QA05", "QA10", "QA50", "QA90", "QA95",
-                     "QJXA", "VCX3",
-                     "QMNA", "VCN10", "VCN3"),
+         variables=c(
+             "QA",
+             # "QA_month", "QA_season",
+             # "QA05", "QA10", "QA50", "QA90", "QA95",
+             # "QJXA", "VCX3",
+             # "QMNA",
+             "VCN10"),
+             # "VCN3"),
          suffix="sim")
 
 Explore2_serie_more_projection_SAFRAN =
@@ -559,10 +573,14 @@ Explore2_serie_more_projection_SAFRAN =
 Explore2_serie_proj =
     list(name='Explore2_serie_proj',
          type="serie",
-         variables=c("QA", "QA_month", "QA_season",
-                     "QA05", "QA10", "QA50", "QA90", "QA95",
-                     "QJXA", "VCX3",
-                     "QMNA", "VCN10", "VCN3"),
+         variables=c(
+             "QA",
+             # "QA_month", "QA_season",
+             # "QA05", "QA10", "QA50", "QA90", "QA95",
+             # "QJXA", "VCX3",
+             # "QMNA",
+             "VCN10"),
+             # "VCN3"),
          suffix="sim")
 
 Explore2_serie_more_proj =
@@ -657,7 +675,7 @@ diag_station_selection =
 
 proj_variable_selection =
 #     # "all"
-    c("^QA$", "VCN10")
+    c("^QA$", "^VCN10$")
 
 
 ## 6. PLOT_SHEET _____________________________________________________
@@ -1028,7 +1046,7 @@ if (type == "hydrologie") {
         BC = c("ADAMONT", "CDFt")
         Projections = tidyr::crossing(Projections,
                                                BC, Model=models_to_use)
-
+        
         Projections$climateChain =
             paste0(Projections$GCM, "|",
                    Projections$EXP, "|",
@@ -1036,29 +1054,54 @@ if (type == "hydrologie") {
                    Projections$BC)
         
         Projections$Chain =
-            paste0(Projections$GCM, "|",
-                   Projections$EXP, "|",
-                   Projections$RCM, "|",
-                   Projections$BC, "|",
+            paste0(Projections$climateChain, "|",
                    Projections$Model)
         
         Projections$regexp =
             paste0(".*", 
                    gsub("[|]", ".*", Projections$Chain),
                    ".*")
+
+        Projections$dir = paste(Projections$GCM,
+                                Projections$EXP,
+                                Projections$RCM,
+                                Projections$BC,
+                                Projections$Model, sep="_")
+        
+        Projections =
+            dplyr::bind_rows(
+                       Projections,
+                       dplyr::tibble(Model=models_to_use,
+                                     GCM=NA,
+                                     RCM=NA,
+                                     EXP=NA,
+                                     BC=NA,  
+                                     climateChain="SAFRAN",
+                                     Chain=paste0("SAFRAN",
+                                                  "|",
+                                                  models_to_use),
+                                     regexp=paste0("^SAFRAN.*",
+                                                   ".*",
+                                                   models_to_use,
+                                                   ".*"),
+                                     dir="SAFRAN"))
+        
         Projections$regexp = gsub("[-]", "[-]",
                                            Projections$regexp)
         Projections$regexp = gsub("[_]", "[_]",
                                            Projections$regexp)
         
-        if (is_projection_merge) {
+        if (is_projection_merge & !("merge_nc" %in% to_do)) {
             Projections =
                 Projections[Projections$EXP !=
-                                     "historical",]
-            # mode = "projection_merge"
+                            "historical" |
+                           is.na(Projections$EXP),]
         }
         
         proj_path = file.path(computer_data_path, type, mode)
+        proj_path = c(proj_path,
+                      file.path(computer_data_path,
+                                type, "diagnostic"))
 
         Paths = list.files(proj_path,
                            pattern=".*[.]nc",
@@ -1098,13 +1141,19 @@ if (type == "hydrologie") {
             Projections_nest = Projections_nest[OK_nest,]
         }
 
-        Projections$dir =
-            file.path(Projections$Model, 
-                      paste(Projections$GCM,
-                            Projections$EXP,
-                            Projections$RCM,
-                            Projections$BC,
-                            Projections$Model, sep="_"))
+
+        climateChain = unique(Projections$climateChain)
+        projs_to_use = sapply(projs_to_use, apply_grepl,
+                              climateChain)
+        Projections =
+            dplyr::arrange(Projections,
+                           factor(climateChain,
+                                  levels=projs_to_use))
+
+        Projections$storyLines = ""
+        Projections$storyLines[match(names(storyLines),
+                                     Projections$climateChain)] = storyLines
+        
                   
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
@@ -1165,8 +1214,9 @@ if (type == "hydrologie") {
                              ref,]
     codes8_selection = codes_selection_data$CODE
     codes10_selection = codes_selection_data$SuggestionCode
-    codes8_selection = codes8_selection[!is.na(codes8_selection)]
-    codes10_selection = codes10_selection[!is.na(codes10_selection)]
+    ok = !is.na(codes10_selection) & !is.na(codes8_selection)
+    codes8_selection = codes8_selection[ok]
+    codes10_selection = codes10_selection[ok]
 
     if (all(codes_to_use == "")) {
         stop ("No station selected")
