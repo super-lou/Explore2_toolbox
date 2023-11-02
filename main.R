@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # "./"
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -148,24 +148,24 @@ type =
     # "piezometrie"
 
 mode =
-    # "diagnostic"
+    "diagnostic"
     # "diagnostic_ungauged"
-    "projection"
+    # "projection"
 
 to_do =
     c(
         # 'delete_tmp',
         # 'merge_nc'
         # 'reshape_data',
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
     )
 
@@ -182,9 +182,9 @@ extract_data =
         # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN'
-        # 'Explore2_serie_proj_SAFRAN',
-        # 'Explore2_serie_more_proj_SAFRAN'
-        'Explore2_serie_proj'
+        'Explore2_serie_proj_SAFRAN',
+        'Explore2_serie_more_proj_SAFRAN'
+        # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
 
@@ -279,9 +279,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -304,7 +304,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 32
 
 projs_to_use =
     c(
@@ -341,7 +341,7 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
@@ -349,11 +349,11 @@ codes_to_use =
         # "^E"
         # "^K"
 
-        "Seine"="H700011001",
-        "Rhone"="V720001002",
-        "Garonne"="O972001000",
-        "Loire"="M842001000",
-        "Moselle"="A886006000"
+        # "Seine"="H700011001",
+        # "Rhone"="V720001002",
+        # "Garonne"="O972001000",
+        # "Loire"="M842001000",
+        # "Moselle"="A886006000"
 
         ## échange code
         # "K2240820"
@@ -549,8 +549,8 @@ Explore2_serie_proj_SAFRAN =
 Explore2_serie_more_proj_SAFRAN =
     list(name='Explore2_serie_more_proj_SAFRAN',
          type="serie",
-         variables=c("tQJXA", "fQA01", "fQA05", "fQA10", "dtCrue",
-                     "tVCN10", "allBE",
+         variables=c("tQJXA", "tVCX3", "fQA01", "fQA05", "fQA10", "dtCrue",
+                     "QNA", "tVCN10", "allBE",
                      "debutBF", "centreBF", "finBF",
                      "dtBF", "vBF", "dtRec"),
          suffix="obs")
