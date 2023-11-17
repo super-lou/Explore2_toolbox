@@ -1002,9 +1002,9 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
         Historicals =
             Projections[Projections$EXP ==
-                                 "historical" &
-                                 Projections$Model %in%
-                                 models_to_use,]
+                        "historical" &
+                        Projections$Model %in%
+                        models_to_use,]
         nHistoricals = nrow(Historicals)
 
         if (MPI == "file") {
@@ -1042,15 +1042,15 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
 
                 projs =
                     Projections[Projections$GCM ==
-                                         historical$GCM &
-                                         Projections$RCM ==
-                                         historical$RCM &
-                                         Projections$EXP !=
-                                         "historical" &
-                                         Projections$BC ==
-                                         historical$BC &
-                                         Projections$Model ==
-                                         historical$Model,]
+                                historical$GCM &
+                                Projections$RCM ==
+                                historical$RCM &
+                                Projections$EXP !=
+                                "historical" &
+                                Projections$BC ==
+                                historical$BC &
+                                Projections$Model ==
+                                historical$Model,]
 
                 # jehfezoifjezoifjezoifjezoiji EROS
                 projs = projs[substr(projs$file, "1", "15") ==
@@ -1071,40 +1071,50 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                 proj$file, " in ",
                                 proj_merge_file))
 
-                    cdoCmd = paste0(cdo_cmd_path,
-                                    " --sortname --history -O mergetime ",
+                    cdoCmd = paste0("cdo", " ",
+                                    " --sortname --history -O mergetime", " ",
                                     historical_path, " ",
                                     proj_path, " ", 
                                     proj_merge_path)
                     system(cdoCmd)
-
+              
+                    ncoCmd = paste0("ncks -h -A -v code,code_type,L93,LII,name,network_origin", " ",
+                                    historical_path, " ",
+                                    proj_merge_path)
+                    system(ncoCmd)
+                    
                     NC_proj = ncdf4::nc_open(proj_path)
                     Date = NetCDF_extrat_time(NC_proj)
                     minDate_proj = min(Date)
                     maxDate_proj = max(Date)
-                    
-                    NC_proj_merge = ncdf4::nc_open(proj_merge_path,
-                                                   write=TRUE)
-                    code_value = ncdf4::ncvar_get(NC_proj, "code")
-                    station_dim = NC_proj_merge$dim[['station']]
-                    nchar_dim = ncdf4::ncdim_def("code_strlen",
-                                                 "",
-                                                 1:max(nchar(code_value)))
-                    code_var = ncdf4::ncvar_def(name="code",
-                                                units="",
-                                                dim=list(nchar_dim,
-                                                         station_dim),
-                                                prec="char")
-                    NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
-                                                     code_var)
-                    ncdf4::ncvar_put(NC_proj_merge,
-                                     "code", code_value)
                     ncdf4::nc_close(NC_proj)
-                    ncdf4::nc_close(NC_proj_merge)
+
+
+
+
+                    # NC_proj_merge = ncdf4::nc_open(proj_merge_path,
+                                                   # write=TRUE)
+                    # code_value = ncdf4::ncvar_get(NC_proj, "code")
+                    # station_dim = NC_proj_merge$dim[['station']]
+                    # nchar_dim = ncdf4::ncdim_def("code_strlen",
+                                                 # "",
+                                                 # 1:max(nchar(code_value)))
+                    # code_var = ncdf4::ncvar_def(name="code",
+                                                # units="",
+                                                # dim=list(nchar_dim,
+                                                         # station_dim),
+                                                # prec="char")
+                    # NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
+                                                     # code_var)
+                    # ncdf4::ncvar_put(NC_proj_merge,
+                                     # "code", code_value)
+                    
+
+                    
 
                     flag = dplyr::bind_rows(
                                       flag,
-                                      dplyr::tibble(Chain=proj$chain,
+                                      dplyr::tibble(Chain=proj$Chain,
                                                     start_historical=
                                                         minDate_historical,
                                                     end_historical=
@@ -1118,15 +1128,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 }
             }
         }
-
-
-
         
-        if (nrow(flag) > 0) {
-
-            post("flag")
-            print(flag)
-            
+        if (nrow(flag) > 0) {            
             flag = tidyr::separate(flag, col="Chain",
                                    into=c("GCM", "EXP", "RCM",
                                           "BC", "Model"), sep="[|]")
