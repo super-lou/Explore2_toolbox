@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # "./"
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -146,6 +146,7 @@ lib_path =
 type =
     "hydrologie"
     # "piezometrie"
+    # "climat"
 
 mode =
     # "diagnostic"
@@ -155,7 +156,7 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        # 'merge_nc'
+        'merge_nc'
         # 'reshape_data',
         # 'create_data',
         # 'extract_data',
@@ -165,7 +166,7 @@ to_do =
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
     )
 
@@ -182,9 +183,9 @@ extract_data =
         # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN'
-        'Explore2_serie_projection_SAFRAN',
+        # 'Explore2_serie_projection_SAFRAN',
         # 'Explore2_serie_more_projection_SAFRAN'
-        'Explore2_serie_proj'
+        # 'Explore2_serie_proj'
         # 'Explore2_serie_more_proj'
     )
 
@@ -279,8 +280,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -292,7 +293,7 @@ MPI =
 period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 period_reference = c("1976-01-01", "2005-12-31")
-is_projection_merge = TRUE
+is_projection_merge = FALSE
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 32 |
@@ -308,7 +309,7 @@ nCode4RAM = 32
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ALADIN.*ADAMONT"
 
@@ -317,13 +318,13 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
-        "^SAFRAN",
+        # "^SAFRAN",
         
         ## story lines ##
-        "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
-        "EARTH.*rcp85.*HadREM3.*ADAMONT",
-        "CNRM.*rcp85.*ALADIN63.*ADAMONT",
-        "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
+        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
+        # "EARTH.*rcp85.*HadREM3.*ADAMONT",
+        # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
+        # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 
 models_to_use =
@@ -348,7 +349,7 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        # 'all'
+        'all'
         # 'K298191001', #ref
         # 'K294401001'
         # "O036251010"
@@ -356,8 +357,8 @@ codes_to_use =
         # "^E"
         # "^K"
 
-        "O6140010",
-        "M6240010"
+        # "O6140010",
+        # "M6240010"
 
         # "Seine"="H700011001",
         # "Rhone"="V720001002",
