@@ -1118,7 +1118,15 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                 }
             }
         }
+
+
+
+        
         if (nrow(flag) > 0) {
+
+            post("flag")
+            print(flag)
+            
             flag = tidyr::separate(flag, col="Chain",
                                    into=c("GCM", "EXP", "RCM",
                                           "BC", "Model"), sep="[|]")
