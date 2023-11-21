@@ -333,12 +333,12 @@ models_to_use =
     c(
         # "CTRIP"
         # "EROS",
-        # "GRSD",
-        "J2000"
+        "GRSD",
+        "J2000",
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
-        # "ORCHIDEE",
+        "ORCHIDEE"
         # "SMASH"
 
         # "AquiFR",
@@ -400,6 +400,10 @@ MORDOR_code_warning =
     c("K002000101", "K222302001", "K225401001", "O023402001", "O036251001", "O038401001", "O074404001", "O312102002", "O319401001", "O701151001", "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201", "W030000201", "W103000301", "W273050001", "W211401000", "W271000101", "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
 
 
+projection_to_remove = c(
+    "CNRM[-]CERFACS[-]CNRM[-]CM5.*KNMI[-]RACMO22E",
+    "IPSL[-]IPSL[-]CM5A[-]MR.*IPSL[-]WRF381P"
+)
 
 storyLines = c(
     "HadGEM2-ES|rcp85|CCLM4-8-17|ADAMONT"=
@@ -1049,7 +1053,7 @@ if (type == "hydrologie") {
 
         BC = c("ADAMONT", "CDFt")
         Projections = tidyr::crossing(Projections,
-                                               BC, Model=models_to_use)
+                                      BC, Model=models_to_use)
         
         Projections$climateChain =
             paste0(Projections$GCM, "|",
@@ -1102,6 +1106,8 @@ if (type == "hydrologie") {
         #                    is.na(Projections$EXP),]
         # }
 
+        
+
         if (is_projection_merge) {
             proj_path = file.path(computer_data_path, type, "projection_merge")
         } else if (is_projection_clean) {
@@ -1137,7 +1143,13 @@ if (type == "hydrologie") {
         Projections_nest = Projections
         Projections = tidyr::unnest(Projections,
                                              c(file, path))
-
+        
+        OK = !apply(as.matrix(
+            sapply(projection_to_remove, grepl,
+                   x=Projections$file)),
+            1, any)
+        Projections = Projections[OK,]
+        
         if (all(projs_to_use != "all")) {
             OK = apply(as.matrix(
                 sapply(projs_to_use, grepl,
