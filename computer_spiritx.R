@@ -49,9 +49,6 @@
 computer_work_path = '/scratchx/lheraut'
 # Library path for package dev
 dev_lib_path = '/home/lheraut/library'
-# cdo path if install from source
-# cdo_cmd_path = "/home/herautl/work_inrae-infra/cdo/bin/cdo"
-cdo_cmd_path = "cdo"
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
@@ -60,7 +57,8 @@ projs_selection_file = "ensembleProjectionClimatExplore2.txt"
 #### 2.1.1 Hydro _____________________________________________________
 obs_hydro_dir = "Explore2 HYDRO QJM critiques 2023"
 obs_hydro_format = "_HYDRO_QJM.txt"
-codes_hydro_selection_file = "Selection_points_simulation_V20230510.txt"
+codes_hydro_selection_file = "Selection_points_simulation.csv"
+code_correction_dir = "code_correction"
 #### 2.1.2. Piezo ____________________________________________________
 raw_data_piezo_file = "diagnostic_piezos_ref_explore2_v1.nc"
 codes_piezo_selection_file = "piezometres_references_hubeau.txt"

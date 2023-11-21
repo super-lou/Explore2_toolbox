@@ -410,7 +410,7 @@ save_data = function () {
 
 
 ## 1. MANAGEMENT OF DATA ______________________________________________
-if (!read_tmp & !merge_nc & !delete_tmp) {
+if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
     if (MPI == "code") {
         if (rank == 0) {
@@ -786,112 +786,6 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
     }
 
 
-
-
-
-    
-    # if ('selection' %in% to_do) {
-    #     post("### Selecting variables")
-
-    #     if (grepl("diagnostic", mode)) {
-
-            # for (j in 1:length(diag_station_selection)) {
-            #     if (length(diag_station_selection) == 0) {
-            #         break
-            #     }
-            #     model = names(diag_station_selection)[j]
-            #     code = diag_station_selection[j]
-            #     meta[[paste0("Surface_", model, "_km2")]][grepl(code,
-            #                                                     meta$Code)] = NA
-            # }
-
-            # for (i in 1:length(extract_data)) {
-            #     extract = extract_data[[i]]
-
-            #     dataEXname = paste0("dataEX_", extract$type)
-            #     metaEXname = paste0("metaEX_", extract$type)
-            #     dataEXtmp = get(dataEXname)
-            #     metaEXtmp = get(metaEXname)
-                
-                # if (extract$type == "criteria") {
-                #     by = names(dataEXtmp)[sapply(dataEXtmp,
-                #                                  is.character)]
-                #     pattern = paste0("(",
-                #                      paste0(by, collapse=")|("),
-                #                      ")|(",
-                #                      paste0(diag_criteria_selection,
-                #                             collapse=")|("),
-                #                      ")")
-                #     col2rm = sapply(names(dataEXtmp), any_grepl,
-                #                     pattern=pattern)
-                #     row2rm = sapply(metaEXtmp$var, any_grepl,
-                #                     pattern=pattern)
-                #     dataEXtmp = dataEXtmp[col2rm]
-                #     metaEXtmp = metaEXtmp[row2rm,]
-                    
-                #     for (j in 1:length(diag_station_selection)) {
-                #         if (length(diag_station_selection) == 0) {
-                #             break
-                #         }
-                #         model = names(diag_station_selection)[j]
-                #         code = diag_station_selection[j]
-                #         dataEXtmp = dplyr::filter(dataEXtmp,
-                #                                   !(Model == model &
-                #                                     grepl(code, Code)))  
-                #     }
-
-    #             } else if (extract$type == "serie") {
-    #                 for (j in 1:length(diag_period_selection)) {
-    #                     model = names(diag_period_selection)[j]
-    #                     period = diag_period_selection[[j]]
-    #                     start = period[1]
-    #                     if (is.na(start)) {
-    #                         start = min(as.Date(period_extract_diag))
-    #                     }
-    #                     end = period[2]
-    #                     if (is.na(end)) {
-    #                         end = max(as.Date(period_extract_diag))
-    #                     }                        
-    #                     for (k in 1:length(dataEXtmp)) {
-    #                         if (!("Date" %in% names(dataEXtmp[[k]])) |
-    #                             !any(sapply(dataEXtmp[[k]],
-    #                                        lubridate::is.Date))) {
-    #                             next
-    #                         }
-    #                         dataEXtmp[[k]] =
-    #                             dplyr::filter(dataEXtmp[[k]],
-    #                                           Model != model |
-    #                                           (Model == model & 
-    #                                            start < Date &
-    #                                            Date < end))
-    #                     }
-
-    #                 }
-    #                 for (j in 1:length(diag_station_selection)) {
-    #                     if (length(diag_station_selection) == 0) {
-    #                         break
-    #                     }
-    #                     model = names(diag_station_selection)[j]
-    #                     code = diag_station_selection[j]
-    #                     for (k in 1:length(dataEXtmp)) {
-    #                         dataEXtmp[[k]] =
-    #                             dplyr::filter(dataEXtmp[[k]],
-    #                                           !(Model == model &
-    #                                             grepl(code, Code)))
-    #                     }
-    #                 }
-    #             }
-    #             assign(dataEXname, dataEXtmp)
-    #             assign(metaEXname, metaEXtmp)
-    #         }
-    #     }
-    # }
-
-
-
-
-    
-
     if ('write_warnings' %in% to_do) {
         post("### Writing warnings")
         for (i in 1:length(extract_data)) {
@@ -986,6 +880,185 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
         read_tmp = FALSE
     }
 
+
+    if (clean_nc) {
+        post("### Cleaning NetCDF file")
+
+        nProjections = nrow(Projections)
+
+        if (MPI == "file") {
+            start = ceiling(seq(1, nProjections,
+                                by=(nProjections/size)))
+            if (any(diff(start) == 0)) {
+                start = 1:nProjections
+                end = start
+            } else {
+                end = c(start[-1]-1, nProjections)
+            }
+            
+            if (rank+1 > nProjections) {
+                Projections = dplyr::tibble()
+            } else {
+                Projections = Projections[start[rank+1]:end[rank+1],]
+            }
+        } 
+        
+        nProjections = nrow(Projections)
+
+        if (nProjections > 0) {
+        
+            for (i in 1:nProjections) {
+                proj = Projections[i,]
+                proj_path = proj$path
+                proj_file = proj$file
+                
+                post(paste0("#### Cleaning ", proj_file))
+
+                code_rm_data_path = file.path(computer_data_path, type,
+                                         code_correction_dir,
+                                         paste0(proj$Model, "_rm.csv"))
+                code_mv_data_path = file.path(computer_data_path, type,
+                                         code_correction_dir,
+                                         paste0(proj$Model, "_mv.csv"))
+                
+                if (file.exists(code_rm_data_path) &
+                    file.exists(code_mv_data_path)) {
+                    
+                    NC = ncdf4::nc_open(proj_path,
+                                        write=TRUE)
+
+                    dim = ncdf4::ncdim_def("code_strlen_new",
+                                           "", 1:10,
+                                           create_dimvar=FALSE,
+                                           longname=NULL)
+                    var = ncdf4::ncvar_def("code_new", "",
+                                           list(dim,
+                                             NC$dim$station),
+                                           longname="code of stations",
+                                           prec="char")
+                    NC = ncdf4::ncvar_add(NC, var)
+                    ncdf4::ncvar_put(NC, "code_new",
+                                     substr(ncdf4::ncvar_get(NC, "code"),
+                                            1, 10))
+                    ncdf4::nc_close(NC)
+
+
+                    stop()
+                    
+                    cdoCmd = paste0("cdo -O --history", " ",
+                                    "delete,name=code,code_strlen", " ",
+                                    proj_path, " ",
+                                    proj_path, "_tmp")
+                    system(cdoCmd)
+                    system(paste0("rm ", proj_path))
+                    system(paste0("mv ", proj_path, "_tmp ",
+                                  proj_path))
+
+
+                    
+                    
+                    NC = ncdf4::nc_open(proj_path,
+                                        write=TRUE)
+                    
+                    Code = ncdf4::ncvar_get(NC, "code")
+                    nCode = length(Code)
+                    XL93 = ncdf4::ncvar_get(NC, "L93_X")
+                    YL93 = ncdf4::ncvar_get(NC, "L93_Y")
+
+                    code_rm_data = ASHE::read_tibble(code_rm_data_path)
+                    code_mv_data = ASHE::read_tibble(code_mv_data_path)
+                    
+                    if (nrow(code_mv_data) > 0) {
+                        Code_mv_input = code_mv_data$AncienNom
+                        XL93_mv = code_mv_data$AncienX
+                        YL93_mv = code_mv_data$AncienY
+                        Code_mv_output = code_mv_data$NouveauNom
+
+                        Id_mv = c()
+                        for (j in 1:length(Code_mv_input)) {
+                            if (!is.na(XL93_mv[j]) & !is.na(YL93_mv[j])) {
+                                id_mv = which(Code_mv_input[j] == Code &
+                                              XL93_mv[j] == XL93 &
+                                              YL93_mv[j] == YL93)
+                            } else {
+                                id_mv = which(Code_mv_input[j] == Code)
+                            }
+                            if (identical(id_mv, integer(0))) {
+                                id_mv = NA
+                            }
+                            Id_mv = c(Id_mv, id_mv)
+                        }
+
+                        Code[Id_mv[!is.na(Id_mv)]] =
+                            Code_mv_output[!is.na(Id_mv)]
+                        ncdf4::ncvar_put(NC, "code", Code)
+                    }
+
+                    if (nrow(code_rm_data) > 0) {
+                        Code_rm = code_rm_data$AncienNom
+                        XL93_rm = code_rm_data$AncienX
+                        YL93_rm = code_rm_data$AncienY
+
+                        Id_rm = c()
+                        for (j in 1:length(Code_rm)) {
+                            if (!is.na(XL93_rm[j]) &
+                                !is.na(YL93_rm[j])) {
+                                id_rm = which(Code_rm[j] == Code &
+                                              XL93_rm[j] == XL93 &
+                                              YL93_rm[j] == YL93)
+                            } else {
+                                id_rm = which(Code_rm[j] == Code)
+                            }
+                            Id_rm = c(Id_rm, max(id_rm))
+                        }
+                        
+                        nDate = length(ncdf4::ncvar_get(NC, "time"))
+                        Var = c("topologicalSurface",
+                                "topologicalSurface_model",
+                                "WGS84_lon", "WGS84_lat",
+                                "WGS84_lon_model", "WGS84_lat_model",
+                                "LII_Y", "LII_X",
+                                "LII_Y_model", "LII_X_model",
+                                "L93_Y", "L93_X",
+                                "L93_Y_model", "L93_X_model")
+                        Var_chr = c("name",  "network_origin",
+                                    "code_type", "code")
+
+                        for (var in Var) {
+                            value = ncdf4::ncvar_get(NC, var)
+                            value[Id_rm] = NaN
+                            ncdf4::ncvar_put(NC, var, value)
+                            ncdf4::ncvar_change_missval(NC,
+                                                        var,
+                                                        NaN)
+                        }
+
+                        for (var in Var_chr) {
+                            value = ncdf4::ncvar_get(NC, var)
+                            n = max(nchar(value))
+                            value[Id_rm] = strrep("X", n)
+                            ncdf4::ncvar_put(NC, var, value)
+                            ncdf4::ncvar_change_missval(NC,
+                                                        var,
+                                                        strrep("X", n))
+                        }
+                        
+                        for (id_rm in Id_rm) {
+                            ncdf4::ncvar_put(NC, "debit",
+                                             start=c(id_rm, 1),
+                                             count=c(1, -1),
+                                             rep(NaN, nDate))
+                        }
+                    }
+                    
+                    ncdf4::nc_close(NC)
+                }
+            }
+        }
+        
+        clean_nc = FALSE
+    }
+
     
     if (merge_nc) {
         post("### Merging NetCDF file by time for projection")
@@ -1078,7 +1151,8 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                                     proj_merge_path)
                     system(cdoCmd)
               
-                    ncoCmd = paste0("ncks -h -A -v code,code_type,L93,LII,name,network_origin", " ",
+                    ncoCmd = paste0("ncks -h -A -O -v", " ",
+                                    "code,code_type,L93,LII,name,network_origin", " ",
                                     historical_path, " ",
                                     proj_merge_path)
                     system(ncoCmd)
@@ -1088,29 +1162,6 @@ if (!read_tmp & !merge_nc & !delete_tmp) {
                     minDate_proj = min(Date)
                     maxDate_proj = max(Date)
                     ncdf4::nc_close(NC_proj)
-
-
-
-
-                    # NC_proj_merge = ncdf4::nc_open(proj_merge_path,
-                                                   # write=TRUE)
-                    # code_value = ncdf4::ncvar_get(NC_proj, "code")
-                    # station_dim = NC_proj_merge$dim[['station']]
-                    # nchar_dim = ncdf4::ncdim_def("code_strlen",
-                                                 # "",
-                                                 # 1:max(nchar(code_value)))
-                    # code_var = ncdf4::ncvar_def(name="code",
-                                                # units="",
-                                                # dim=list(nchar_dim,
-                                                         # station_dim),
-                                                # prec="char")
-                    # NC_proj_merge = ncdf4::ncvar_add(NC_proj_merge,
-                                                     # code_var)
-                    # ncdf4::ncvar_put(NC_proj_merge,
-                                     # "code", code_value)
-                    
-
-                    
 
                     flag = dplyr::bind_rows(
                                       flag,
