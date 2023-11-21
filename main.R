@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # "./"
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -281,8 +281,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -310,14 +310,14 @@ nCode4RAM = 32
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ALADIN.*ADAMONT"
 
         # "HadGEM2.*historical.*CCLM4.*ADAMONT",
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
-        "HadGEM2.*historical.*ALADIN63.*ADAMONT",
+        # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
         # "^SAFRAN",
         
@@ -325,20 +325,20 @@ projs_to_use =
         # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
         # "EARTH.*rcp85.*HadREM3.*ADAMONT",
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT"
-        "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
+        # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 
 models_to_use =
     c(
         # "CTRIP"
         # "EROS",
-        # "GRSD",
-        # "J2000"
+        "GRSD",
+        "J2000",
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
-        "ORCHIDEE"
-        # "SMASH"
+        "ORCHIDEE",
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
