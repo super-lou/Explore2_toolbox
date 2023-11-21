@@ -940,26 +940,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     ncdf4::ncvar_put(NC, "code_new",
                                      substr(ncdf4::ncvar_get(NC, "code"),
                                             1, 10))
-                    ncdf4::nc_close(NC)
 
 
-                    stop()
-                    
-                    cdoCmd = paste0("cdo -O --history", " ",
-                                    "delete,name=code,code_strlen", " ",
-                                    proj_path, " ",
-                                    proj_path, "_tmp")
-                    system(cdoCmd)
-                    system(paste0("rm ", proj_path))
-                    system(paste0("mv ", proj_path, "_tmp ",
-                                  proj_path))
-
-
-                    
-                    
-                    NC = ncdf4::nc_open(proj_path,
-                                        write=TRUE)
-                    
                     Code = ncdf4::ncvar_get(NC, "code")
                     nCode = length(Code)
                     XL93 = ncdf4::ncvar_get(NC, "L93_X")
@@ -992,6 +974,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         Code[Id_mv[!is.na(Id_mv)]] =
                             Code_mv_output[!is.na(Id_mv)]
                         ncdf4::ncvar_put(NC, "code", Code)
+                        ncdf4::ncvar_put(NC, "code_new", Code)
                     }
 
                     if (nrow(code_rm_data) > 0) {
@@ -1022,9 +1005,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 "L93_Y", "L93_X",
                                 "L93_Y_model", "L93_X_model")
                         Var_chr = c("name",  "network_origin",
-                                    "code_type", "code")
+                                    "code_type", "code", "code_new")
 
                         for (var in Var) {
+                            if (!(var %in% names(NC$var))) {
+                                next
+                            }
                             value = ncdf4::ncvar_get(NC, var)
                             value[Id_rm] = NaN
                             ncdf4::ncvar_put(NC, var, value)
@@ -1034,6 +1020,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         }
 
                         for (var in Var_chr) {
+                            if (!(var %in% names(NC$var))) {
+                                next
+                            }
                             value = ncdf4::ncvar_get(NC, var)
                             n = max(nchar(value))
                             value[Id_rm] = strrep("X", n)
@@ -1050,8 +1039,27 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                              rep(NaN, nDate))
                         }
                     }
-                    
+
                     ncdf4::nc_close(NC)
+
+                    ncoCmd = paste0("ncks -h -x -C -v", " ",
+                                    "code", " ",
+                                    proj_path, " ",
+                                    proj_path, "_tmp")
+                    system(ncoCmd)
+                    system(paste0("rm ", proj_path))
+                    system(paste0("mv ", proj_path, "_tmp ",
+                                  proj_path))
+
+                    ncoCmd = paste0("ncrename -h -d", " ",
+                                    "code_strlen_new,code_strlen", " ",
+                                    "-v code_new,code", " ",
+                                    proj_path, " ",
+                                    proj_path, "_tmp")
+                    system(ncoCmd)
+                    system(paste0("rm ", proj_path))
+                    system(paste0("mv ", proj_path, "_tmp ",
+                                  proj_path))
                 }
             }
         }
@@ -1144,19 +1152,25 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 proj$file, " in ",
                                 proj_merge_file))
 
-                    cdoCmd = paste0("cdo", " ",
-                                    " --sortname --history -O mergetime", " ",
+                    # cdoCmd = paste0("cdo", " ",
+                                    # "--sortname --history -O mergetime", " ",
+                                    # historical_path, " ",
+                                    # proj_path, " ", 
+                                    # proj_merge_path)
+                    # system(cdoCmd)
+
+                    # ncoCmd = paste0("ncks -h -A -O -v", " ",
+                    # "code,code_type,L93,LII,name,network_origin", " ",
+                    # historical_path, " ",
+                    # proj_merge_path)
+                    # system(ncoCmd)
+
+                    ncoCmd = paste0("ncrcat -h", " ",
                                     historical_path, " ",
-                                    proj_path, " ", 
-                                    proj_merge_path)
-                    system(cdoCmd)
-              
-                    ncoCmd = paste0("ncks -h -A -O -v", " ",
-                                    "code,code_type,L93,LII,name,network_origin", " ",
-                                    historical_path, " ",
-                                    proj_merge_path)
+                                    proj_path, " ",
+                                    "-O ", proj_merge_path)
                     system(ncoCmd)
-                    
+
                     NC_proj = ncdf4::nc_open(proj_path)
                     Date = NetCDF_extrat_time(NC_proj)
                     minDate_proj = min(Date)

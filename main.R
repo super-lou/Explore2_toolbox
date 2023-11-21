@@ -156,8 +156,8 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'clean_nc'
-        # 'merge_nc'
+        'clean_nc',
+        'merge_nc'
         # 'reshape_data',
         # 'create_data',
         # 'extract_data',
@@ -310,14 +310,14 @@ nCode4RAM = 32
 
 projs_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ALADIN.*ADAMONT"
 
         # "HadGEM2.*historical.*CCLM4.*ADAMONT",
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
-        # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
+        "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
         # "^SAFRAN",
         
@@ -325,7 +325,7 @@ projs_to_use =
         # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
         # "EARTH.*rcp85.*HadREM3.*ADAMONT",
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT"
-        # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
+        "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 
 models_to_use =
@@ -333,7 +333,7 @@ models_to_use =
         # "CTRIP"
         # "EROS",
         # "GRSD",
-        # "J2000",
+        # "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
