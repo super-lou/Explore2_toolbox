@@ -927,16 +927,19 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     NC = ncdf4::nc_open(proj_path,
                                         write=TRUE)
 
-                    dim = ncdf4::ncdim_def("code_strlen_new",
-                                           "", 1:10,
-                                           create_dimvar=FALSE,
-                                           longname=NULL)
-                    var = ncdf4::ncvar_def("code_new", "",
-                                           list(dim,
-                                             NC$dim$station),
-                                           longname="code of stations",
-                                           prec="char")
-                    NC = ncdf4::ncvar_add(NC, var)
+                    if (!("code_new" %in% names(NC$var))) {
+                        dim = ncdf4::ncdim_def("code_strlen_new",
+                                               "", 1:10,
+                                               create_dimvar=FALSE,
+                                               longname=NULL)
+                        var = ncdf4::ncvar_def("code_new", "",
+                                               list(dim,
+                                                    NC$dim$station),
+                                               longname="code of stations",
+                                               prec="char")
+                        NC = ncdf4::ncvar_add(NC, var)
+                    }
+                    
                     ncdf4::ncvar_put(NC, "code_new",
                                      substr(ncdf4::ncvar_get(NC, "code"),
                                             1, 10))
