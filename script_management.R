@@ -883,7 +883,18 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
     if (clean_nc) {
         post("### Cleaning NetCDF file")
-
+        proj_clean_dirpath = file.path(computer_data_path,
+                                       type,
+                                       "projection_clean")
+        
+        if (!dir.exists(proj_clean_dirpath)) {
+            if (rank == 0) {
+                dir.create(proj_clean_dirpath)
+            } else {
+                Sys.sleep(10)  
+            }
+        }
+        
         nProjections = nrow(Projections)
 
         if (MPI == "file") {
@@ -911,6 +922,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 proj = Projections[i,]
                 proj_path = proj$path
                 proj_file = proj$file
+                proj_clean_path = file.path(proj_clean_dirpath, proj_file)
                 
                 post(paste0("#### Cleaning ", proj_file))
 
@@ -923,8 +935,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 
                 if (file.exists(code_rm_data_path) &
                     file.exists(code_mv_data_path)) {
+
+                    system(paste0("cp ", proj_path, " ", proj_clean_path))
                     
-                    NC = ncdf4::nc_open(proj_path,
+                    NC = ncdf4::nc_open(proj_clean_path,
                                         write=TRUE)
 
                     if (!("code_new" %in% names(NC$var))) {
@@ -1047,22 +1061,22 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                     ncoCmd = paste0("ncks -h -x -C -v", " ",
                                     "code", " ",
-                                    proj_path, " ",
-                                    proj_path, "_tmp")
+                                    proj_clean_path, " ",
+                                    proj_clean_path, "_tmp")
                     system(ncoCmd)
-                    system(paste0("rm ", proj_path))
-                    system(paste0("mv ", proj_path, "_tmp ",
-                                  proj_path))
+                    system(paste0("rm ", proj_clean_path))
+                    system(paste0("mv ", proj_clean_path, "_tmp ",
+                                  proj_clean_path))
 
                     ncoCmd = paste0("ncrename -h -d", " ",
                                     "code_strlen_new,code_strlen", " ",
                                     "-v code_new,code", " ",
-                                    proj_path, " ",
-                                    proj_path, "_tmp")
+                                    proj_clean_path, " ",
+                                    proj_clean_path, "_tmp")
                     system(ncoCmd)
-                    system(paste0("rm ", proj_path))
-                    system(paste0("mv ", proj_path, "_tmp ",
-                                  proj_path))
+                    system(paste0("rm ", proj_clean_path))
+                    system(paste0("mv ", proj_clean_path, "_tmp ",
+                                  proj_clean_path))
                 }
             }
         }

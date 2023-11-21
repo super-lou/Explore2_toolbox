@@ -294,6 +294,7 @@ MPI =
 period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 period_reference = c("1976-01-01", "2005-12-31")
+is_projection_clean = FALSE
 is_projection_merge = FALSE
 propagate_NA = TRUE
 ## diag ##
@@ -332,13 +333,13 @@ models_to_use =
     c(
         # "CTRIP"
         # "EROS",
-        "GRSD",
-        "J2000",
+        # "GRSD",
+        "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
-        "ORCHIDEE",
-        "SMASH"
+        # "ORCHIDEE",
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -1094,14 +1095,20 @@ if (type == "hydrologie") {
         Projections$regexp = gsub("[_]", "[_]",
                                            Projections$regexp)
         
-        if (is_projection_merge & !("merge_nc" %in% to_do)) {
-            Projections =
-                Projections[Projections$EXP !=
-                            "historical" |
-                           is.na(Projections$EXP),]
+        # if (is_projection_merge & !("merge_nc" %in% to_do)) {
+        #     Projections =
+        #         Projections[Projections$EXP !=
+        #                     "historical" |
+        #                    is.na(Projections$EXP),]
+        # }
+
+        if (is_projection_merge) {
+            proj_path = file.path(computer_data_path, type, "projection_merge")
+        } else if (is_projection_clean) {
+            proj_path = file.path(computer_data_path, type, "projection_clean")
+        } else {
+            proj_path = file.path(computer_data_path, type, "projection")
         }
-        
-        proj_path = file.path(computer_data_path, type, mode)
         proj_path = c(proj_path,
                       file.path(computer_data_path,
                                 type, "diagnostic"))
