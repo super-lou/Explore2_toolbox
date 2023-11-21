@@ -1062,20 +1062,20 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     ncoCmd = paste0("ncks -h -x -C -v", " ",
                                     "code", " ",
                                     proj_clean_path, " ",
-                                    proj_clean_path, "_tmp")
+                                    "tmp_", proj_clean_path)
                     system(ncoCmd)
-                    system(paste0("rm ", proj_clean_path))
-                    system(paste0("mv ", proj_clean_path, "_tmp ",
+                    system(paste0("rm -f ", proj_clean_path))
+                    system(paste0("mv ", "tmp_", proj_clean_path, " ",
                                   proj_clean_path))
 
                     ncoCmd = paste0("ncrename -h -d", " ",
                                     "code_strlen_new,code_strlen", " ",
                                     "-v code_new,code", " ",
                                     proj_clean_path, " ",
-                                    proj_clean_path, "_tmp")
+                                    "tmp_", proj_clean_path)
                     system(ncoCmd)
-                    system(paste0("rm ", proj_clean_path))
-                    system(paste0("mv ", proj_clean_path, "_tmp ",
+                    system(paste0("rm -f ", proj_clean_path))
+                    system(paste0("mv ", "tmp_", proj_clean_path, " ",
                                   proj_clean_path))
                 }
             }
