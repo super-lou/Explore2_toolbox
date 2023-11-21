@@ -1041,9 +1041,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 next
                             }
                             value = ncdf4::ncvar_get(NC, var)
-
-                            print(value)
-                            
                             n = max(nchar(value, allowNA=TRUE), na.rm=TRUE)
                             value[Id_rm] = strrep("X", n)
                             ncdf4::ncvar_put(NC, var, value)
