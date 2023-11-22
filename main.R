@@ -156,8 +156,8 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        # 'clean_nc'
-        'merge_nc'
+        'clean_nc'
+        # 'merge_nc'
         # 'reshape_data',
         # 'create_data',
         # 'extract_data',
@@ -343,8 +343,8 @@ models_to_use =
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
-        # "ORCHIDEE" ok merge
-        "SMASH"
+        "ORCHIDEE"
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
