@@ -156,8 +156,8 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'clean_nc'
-        # 'merge_nc'
+        # 'clean_nc'
+        'merge_nc'
         # 'reshape_data',
         # 'create_data',
         # 'extract_data',
@@ -295,8 +295,8 @@ period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 period_reference = c("1976-01-01", "2005-12-31")
 is_projection_clean =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 is_projection_merge =
     # TRUE
     FALSE
