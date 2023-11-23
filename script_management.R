@@ -965,7 +965,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     }
                     
                     ncdf4::ncvar_put(NC, "code_new",
-                                     substr(ncdf4::ncvar_get(NC, "code"),
+                                     substr(ncdf4::ncvar_get(NC,
+                                                             "code"),
                                             1, 10))
 
 
@@ -1051,7 +1052,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 "L93_Y", "L93_X",
                                 "L93_Y_model", "L93_X_model")
                         Var_chr = c("name",  "network_origin",
-                                    "code_type", "code", "code_new")
+                                    "code_type", "code",
+                                    "code_new")
 
                         for (var in Var) {
                             if (!(var %in% names(NC$var))) {
@@ -1066,11 +1068,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         }
 
                         for (var in Var_chr) {
-                            if (!(var %in% names(NC$var))) {
+                            if (!(var %in% names(NC$var)) &
+                                var != "code_new") {
                                 next
                             }
+                            
                             value = ncdf4::ncvar_get(NC, var)
-                            n = max(nchar(value, allowNA=TRUE), na.rm=TRUE)
+                            n = max(nchar(value, allowNA=TRUE),
+                                    na.rm=TRUE)
                             value[Id_rm] = strrep("-", n)
                             ncdf4::ncvar_put(NC, var, value)
                             ncdf4::ncvar_change_missval(NC,
@@ -1113,7 +1118,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     system(paste0("mv ", proj_clean_path_tmp, " ",
                                   proj_clean_path))
                     Sys.sleep(1)
-
+                    
                     ncoCmd = paste0("ncrename -h -O -d", " ",
                                     "code_strlen_new,code_strlen", " ",
                                     "-v code_new,code", " ",

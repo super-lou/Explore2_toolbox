@@ -343,7 +343,7 @@ models_to_use =
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
-        # "ORCHIDEE"
+        "ORCHIDEE",
         "SMASH"
 
         # "AquiFR",
