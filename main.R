@@ -323,6 +323,8 @@ projs_to_use =
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
+
+        # "IPSL.*rcp85.*HIRHAM5.*CDFt.*GRSD"
         
         # "SAFRAN[-]France[-]20"
 
@@ -338,13 +340,13 @@ models_to_use =
     c(
         # "CTRIP"
         # "EROS",
-        "GRSD",
-        "J2000",
+        "GRSD"
+        # "J2000",
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
-        "ORCHIDEE",
-        "SMASH"
+        # "ORCHIDEE"
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
