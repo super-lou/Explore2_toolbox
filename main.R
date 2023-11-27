@@ -1187,7 +1187,10 @@ if (type == "hydrologie") {
         ok = match(names(storyLines),
                    Projections$climateChain)
         Projections$storyLines[ok[!is.na(ok)]] =
-            storyLines[!is.na(ok)]        
+            storyLines[!is.na(ok)]
+
+        Projections = dplyr::distinct(Projections,
+                                      Chain, .keep_all=TRUE)
                   
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
