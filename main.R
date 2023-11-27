@@ -325,6 +325,7 @@ projs_to_use =
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
 
         # "IPSL.*rcp85.*HIRHAM5.*CDFt.*GRSD"
+        # "HadGEM2.*rcp85.*CCLM4.*CDFt.*GRSD"
         
         # "SAFRAN[-]France[-]20"
 

@@ -963,12 +963,15 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                "", 1:10,
                                                create_dimvar=FALSE,
                                                longname=NULL)
+                        Sys.sleep(2)
                         var = ncdf4::ncvar_def("code_new", "",
                                                list(dim,
                                                     NC$dim$station),
                                                longname="code of stations",
                                                prec="char")
+                        Sys.sleep(2)
                         NC = ncdf4::ncvar_add(NC, var)
+                        Sys.sleep(2)
                         ncdf4::nc_close(NC)
                         Sys.sleep(2)
 
