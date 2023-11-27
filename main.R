@@ -324,7 +324,7 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
-        # "^SAFRAN",
+        # "SAFRAN[-]France[-]20"
 
         
         ## story lines ##
@@ -1093,11 +1093,12 @@ if (type == "hydrologie") {
                                      Chain=paste0("SAFRAN",
                                                   "|",
                                                   models_to_use),
-                                     regexp=paste0("^SAFRAN.*",
-                                                   ".*",
-                                                   models_to_use,
-                                                   ".*"),
-                                     dir="SAFRAN"))
+                                     regexp=paste0(
+                                         ".*SAFRAN-France-20",
+                                         ".*",
+                                         models_to_use,
+                                         ".*"),
+                                     dir=""))
         
         Projections$regexp = gsub("[-]", "[-]",
                                            Projections$regexp)
@@ -1114,15 +1115,18 @@ if (type == "hydrologie") {
         
 
         if (is_projection_merge) {
-            proj_path = file.path(computer_data_path, type, "projection_merge")
+            proj_path = file.path(computer_data_path,
+                                  type, "projection_merge")
         } else if (is_projection_clean) {
-            proj_path = file.path(computer_data_path, type, "projection_clean")
+            proj_path = file.path(computer_data_path,
+                                  type, "projection_clean")
         } else {
-            proj_path = file.path(computer_data_path, type, "projection")
+            proj_path = file.path(computer_data_path,
+                                  type, "projection")
         }
-        proj_path = c(proj_path,
-                      file.path(computer_data_path,
-                                type, "diagnostic"))
+        # proj_path = c(proj_path,
+                      # file.path(computer_data_path,
+                                # type, "diagnostic"))
 
         Paths = list.files(proj_path,
                            pattern=".*[.]nc",
@@ -1167,7 +1171,6 @@ if (type == "hydrologie") {
                 1, any)
             Projections_nest = Projections_nest[OK_nest,]
         }
-
 
         climateChain = unique(Projections$climateChain)
         projs_to_use = sapply(projs_to_use, apply_grepl,
@@ -1653,5 +1656,6 @@ if (any(c('analyse_data') %in% to_do)) {
 
 
 if (MPI != "") {
+     Sys.sleep(10)
     mpi.finalize()
 }
