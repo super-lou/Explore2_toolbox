@@ -1150,8 +1150,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 var != "code_new") {
                                 next
                             }
-                            
                             value = ncdf4::ncvar_get(NC, var)
+                            if (is.matrix(value)) {
+                                next
+                            }
                             n = max(nchar(value, allowNA=TRUE),
                                     na.rm=TRUE)
                             value[Id_rm] = strrep("-", n)
