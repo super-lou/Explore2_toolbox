@@ -892,7 +892,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             if (rank == 0) {
                 dir.create(proj_clean_dirpath)
             } else {
-                Sys.sleep(10+rank) 
+                Sys.sleep(10+rank*5) 
             }
         }
         
