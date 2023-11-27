@@ -957,6 +957,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     
                     NC = ncdf4::nc_open(proj_clean_path,
                                         write=TRUE)
+                    Sys.sleep(5)
 
                     if (!("code_new" %in% names(NC$var))) {
                         dim = ncdf4::ncdim_def("code_strlen_new",
@@ -977,6 +978,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                         NC = ncdf4::nc_open(proj_clean_path,
                                             write=TRUE)
+                        Sys.sleep(5)
                     }
 
                     ncdf4::ncvar_put(NC, "code_new",
@@ -986,6 +988,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     Sys.sleep(5)
 
                     Code = ncdf4::ncvar_get(NC, "code")
+                    
 
                     
 
@@ -999,8 +1002,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         Sys.sleep(5)
                         Code = ncdf4::ncvar_get(NC, "code_new")
                     }
-
-                    Code_save=Code
                    
                     nCode = length(Code)
                     XL93 = ncdf4::ncvar_get(NC, "L93_X")
