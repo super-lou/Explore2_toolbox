@@ -1050,7 +1050,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             Id_mv = c(Id_mv, id_mv)
                         }
 
-                        post(paste0("to move ", Id_mv, collapse=" "))
+                        post(paste0("to move ",
+                                    paste0(Id_mv, collapse=" ")))
                         
                         Code[Id_mv[!is.na(Id_mv)]] =
                             Code_mv_output[!is.na(Id_mv)]
@@ -1109,7 +1110,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         }
 
                         Id_rm = Id_rm[!is.na(Id_rm)]
-                        post(paste0("to remove ", Id_rm, collapse=" "))
+                        post(paste0("to remove ",
+                                    paste0(Id_rm, collapse=" ")))
 
                         # stop()
 
