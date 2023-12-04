@@ -531,7 +531,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             dplyr::filter(tmp[[k]], Code %in% CodeALL10)
                     }
                 }
-                
+              
                 if (selection) {
                     if (grepl("diagnostic", mode)) {
                         if (grepl("criteria", Filenames[i])) {
@@ -539,12 +539,13 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             pattern = paste0("(",
                                              paste0(by, collapse=")|("),
                                              ")|(",
-                                             paste0(diag_variable_selection,
+                                             paste0(
+                                                 diag_variable_criteria_selection,
                                                     collapse=")|("),
                                              ")")
                         } else if (grepl("serie", Filenames[i])) {
                             pattern = paste0("(",
-                                             paste0(diag_variable_selection,
+                                             paste0(diag_variable_serie_selection,
                                                     collapse=")|("),
                                              ")")
                         }
@@ -582,6 +583,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         
                     } else if (grepl("dataEX.*serie", Filenames[i])) {
                         if (grepl("diagnostic", mode)) {
+
                             for (j in 1:length(diag_period_selection)) {
                                 model = names(diag_period_selection)[j]
                                 period = diag_period_selection[[j]]
@@ -668,41 +670,43 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                         
                     } else if (grepl("dataEX.*serie", Filenames[i])) {
-                        
-                        if ("GCM" %in% names(tmp[[1]])) {
-                            for (k in 1:length(tmp)) {
-                                tmp[[k]] = tidyr::unite(tmp[[k]],
-                                                        "climateChain",
-                                                        "GCM", "EXP",
-                                                        "RCM", "BC",
-                                                        sep="|",
-                                                        remove=FALSE)
-                                tmp[[k]] = tidyr::unite(tmp[[k]],
-                                                        "Chain",
-                                                        "GCM", "EXP",
-                                                        "RCM", "BC",
-                                                        "Model",
-                                                        sep="|",
-                                                        remove=FALSE)
-                            }
-                        } else {
-                            for (k in 1:length(tmp)) {
-                                tmp[[k]]$climateChain = "SAFRAN"
-                                tmp[[k]] = tidyr::unite(tmp[[k]],
-                                                        "Chain",
-                                                        "climateChain",
-                                                        "Model",
-                                                        sep="|",
-                                                        remove=FALSE)
-                                tmp[[k]] = dplyr::relocate(tmp[[k]],
-                                                           climateChain,
-                                                           .after=Chain)
-                            }
-                        }
-                        
+
                         if (grepl("projection", mode)) {
-                            names_in = names(tmp)[names(tmp) %in% names(dataEX_serie)]
-                            names_out = names(tmp)[!(names(tmp) %in% names(dataEX_serie))]
+                            if ("GCM" %in% names(tmp[[1]])) {
+                                for (k in 1:length(tmp)) {
+                                    tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                            "climateChain",
+                                                            "GCM", "EXP",
+                                                            "RCM", "BC",
+                                                            sep="|",
+                                                            remove=FALSE)
+                                    tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                            "Chain",
+                                                            "GCM", "EXP",
+                                                            "RCM", "BC",
+                                                            "Model",
+                                                            sep="|",
+                                                            remove=FALSE)
+                                }
+                            } else {
+                                for (k in 1:length(tmp)) {
+                                    tmp[[k]]$climateChain = "SAFRAN"
+                                    tmp[[k]] = tidyr::unite(tmp[[k]],
+                                                            "Chain",
+                                                            "climateChain",
+                                                            "Model",
+                                                            sep="|",
+                                                            remove=FALSE)
+                                    tmp[[k]] = dplyr::relocate(tmp[[k]],
+                                                               climateChain,
+                                                               .after=Chain)
+                                }
+                            }
+                        
+                            names_in = names(tmp)[names(tmp) %in%
+                                                  names(dataEX_serie)]
+                            names_out = names(tmp)[!(names(tmp) %in%
+                                                     names(dataEX_serie))]
                             if (length(names_in) > 0) {
                                 for (name in names_in) {
                                     dataEX_serie[[name]] =

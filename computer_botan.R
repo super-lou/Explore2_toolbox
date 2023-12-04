@@ -77,7 +77,7 @@ init_var_file = '__default__.R'
 ### 2.3. Resources ___________________________________________________
 resources_path = file.path(computer_work_path, 'resources')
 logo_dir = 'logo'
-icon_dir = 'icon'
+icon_dir = 'icon/SVG'
 
 ### 2.4. Shapefile ________________________________________________
 computer_shp_path =
