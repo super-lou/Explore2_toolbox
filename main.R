@@ -149,14 +149,14 @@ type =
     # "climat"
 
 mode =
-    "diagnostic"
+    # "diagnostic"
     # "diagnostic_ungauged"
-    # "projection"
+    "projection"
 
 to_do =
     c(
         # 'delete_tmp',
-        # 'clean_nc'
+        'clean_nc'
         # 'merge_nc'
         # 'reshape_data',
         # 'create_data',
@@ -167,21 +167,21 @@ to_do =
         # 'write_warnings',
         # 'add_regime_hydro'
         # 'analyse_data'
-        'plot_sheet'
+        # 'plot_sheet'
         # 'plot_doc'
     )
 
 extract_data =
     c(
         # 'WIP'
-        'Explore2_criteria_diagnostic_performance',
-        'Explore2_criteria_diagnostic_sensibilite',
-        'Explore2_criteria_diagnostic_sensibilite_RAT',
-        'Explore2_criteria_diagnostic_HE',
-        'Explore2_criteria_diagnostic_ME',
-        'Explore2_criteria_diagnostic_BE',
-        'Explore2_criteria_diagnostic_BF',
-        'Explore2_serie_diagnostic_plot'
+        # 'Explore2_criteria_diagnostic_performance',
+        # 'Explore2_criteria_diagnostic_sensibilite',
+        # 'Explore2_criteria_diagnostic_sensibilite_RAT',
+        # 'Explore2_criteria_diagnostic_HE',
+        # 'Explore2_criteria_diagnostic_ME',
+        # 'Explore2_criteria_diagnostic_BE',
+        # 'Explore2_criteria_diagnostic_BF',
+        # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN'
         # 'Explore2_serie_projection_SAFRAN',
@@ -276,8 +276,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
@@ -324,10 +324,15 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
 
-        # "IPSL.*rcp85.*HIRHAM5.*CDFt.*GRSD"
-        # "HadGEM2.*rcp85.*CCLM4.*CDFt.*GRSD"
+# "EARTH.*rcp45.*RACMO22E.*ADAMONT",
+# "HadGEM2.*rcp85.*ALADIN63.*ADAMONT",
+# "HadGEM2.*rcp85.*HadREM3.*ADAMONT"
+"MPI.*rcp85.*RegCM4.*ADAMONT"
+
+
         
-        "SAFRAN[-]France[-]20"
+        
+        # "SAFRAN[-]France[-]20"
 
         
         ## story lines ##
@@ -339,15 +344,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SMASH"
+        # "CTRIP"
+        # "EROS",
+        "GRSD"
+        # "J2000",
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE"
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -359,13 +364,15 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     # ''
     c(
-        # 'all'
-        'K298191001' #ref
+        'all'
+        # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
         # "^E"
         # "^K"
+
+        # LETTERS[11:26]
 
         # "O6140010",
         # "M6240010"

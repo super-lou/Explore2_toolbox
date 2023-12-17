@@ -896,7 +896,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             if (rank == 0) {
                 dir.create(proj_clean_dirpath)
             } else {
-                Sys.sleep(10+rank*2) 
+                Sys.sleep(10+rank) 
             }
         }
         
@@ -939,15 +939,18 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 
                 post(paste0("#### Cleaning ", proj_file))
 
-                code_rm_data_path = file.path(computer_data_path, type,
+                code_rm_data_path = file.path(computer_data_path,
+                                              type,
                                               code_correction_dir,
                                               paste0(proj$Model,
                                                      "_rm.csv"))
-                code_mv_data_path = file.path(computer_data_path, type,
+                code_mv_data_path = file.path(computer_data_path,
+                                              type,
                                               code_correction_dir,
                                               paste0(proj$Model,
                                                      "_mv.csv"))
-                code_o_data_path = file.path(computer_data_path, type,
+                code_o_data_path = file.path(computer_data_path,
+                                             type,
                                              code_correction_dir,
                                              paste0(proj$Model,
                                                     "_o.csv"))
@@ -957,53 +960,37 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                     system(paste0("cp ", proj_path, " ",
                                   proj_clean_path))
-                    Sys.sleep(2)
-                    
                     NC = ncdf4::nc_open(proj_clean_path,
                                         write=TRUE)
-                    Sys.sleep(2)
 
                     if (!("code_new" %in% names(NC$var))) {
                         dim = ncdf4::ncdim_def("code_strlen_new",
                                                "", 1:10,
                                                create_dimvar=FALSE,
                                                longname=NULL)
-                        Sys.sleep(2)
                         var = ncdf4::ncvar_def("code_new", "",
                                                list(dim,
                                                     NC$dim$station),
                                                longname="code of stations",
                                                prec="char")
-                        Sys.sleep(2)
                         NC = ncdf4::ncvar_add(NC, var)
-                        Sys.sleep(2)
                         ncdf4::nc_close(NC)
-                        Sys.sleep(2)
-
                         NC = ncdf4::nc_open(proj_clean_path,
                                             write=TRUE)
-                        Sys.sleep(2)
                     }
 
                     ncdf4::ncvar_put(NC, "code_new",
                                      substr(ncdf4::ncvar_get(NC,
                                                              "code"),
                                             1, 10))
-                    Sys.sleep(2)
-
                     Code = ncdf4::ncvar_get(NC, "code")
-                    
-
-                    
 
                     if (file.exists(code_o_data_path)) {
                         code_o_data = read_tibble(code_o_data_path)
                         code_o = code_o_data$NouveauNom
                         code_o[is.na(code_o)] = Code[is.na(code_o)]
                         ncdf4::ncvar_put(NC, "code", code_o)
-                        Sys.sleep(2)
                         ncdf4::ncvar_put(NC, "code_new", code_o)
-                        Sys.sleep(2)
                         Code = ncdf4::ncvar_get(NC, "code_new")
                     }
                    
@@ -1019,7 +1006,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         if (!ncdf4::ncatt_get(NC, 0,
                                               "history")$hasatt) {
                             ncdf4::ncatt_put(NC, 0, "history", "")
-                            Sys.sleep(2)
                         }
                     }
                     
@@ -1064,10 +1050,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         Code[Id_mv[!is.na(Id_mv)]] =
                             Code_mv_output[!is.na(Id_mv)]
                         ncdf4::ncvar_put(NC, "code", Code)
-                        Sys.sleep(2)
                         ncdf4::ncvar_put(NC, "code_new", Code)
-                        Sys.sleep(2)
-
                         history = ncdf4::ncatt_get(NC, 0,
                                                    "history")$value
                         if (nchar(history) > 0) {
@@ -1078,7 +1061,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             Sys.time(), " -> ",
                             "Some stations have changed their code to ensure their correct identification in the Explore2 selection.")
                         ncdf4::ncatt_put(NC, 0, "history", history)
-                        Sys.sleep(2)
                     }
                     
                     if (nrow(code_rm_data) > 0) {
@@ -1143,7 +1125,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             value = ncdf4::ncvar_get(NC, var)
                             value[Id_rm] = NaN
                             ncdf4::ncvar_put(NC, var, value)
-                            Sys.sleep(2)
                             ncdf4::ncvar_change_missval(NC,
                                                         var,
                                                         NaN)
@@ -1162,7 +1143,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     na.rm=TRUE)
                             value[Id_rm] = strrep("-", n)
                             ncdf4::ncvar_put(NC, var, value)
-                            Sys.sleep(2)
                             ncdf4::ncvar_change_missval(NC,
                                                         var,
                                                         strrep("-", n))
@@ -1173,7 +1153,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                              start=c(id_rm, 1),
                                              count=c(1, -1),
                                              rep(NaN, nDate))
-                            Sys.sleep(2)
                         }
 
                         history = ncdf4::ncatt_get(NC, 0,
@@ -1186,11 +1165,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             Sys.time(), " -> ",
                             "Some stations have been set aside either because they are no longer part of the Explore2 selection or their code does not guarantee their identification with certainty in the Explore2 selection. Refer to the 'missing_value' attribute of each variable to learn how to identify them.")
                         ncdf4::ncatt_put(NC, 0, "history", history)
-                        Sys.sleep(2)
                     }
 
                     ncdf4::nc_close(NC)
-                    Sys.sleep(2)
 
                     proj_clean_path_tmp = gsub("[.]nc", "_tmp.nc",
                                                proj_clean_path)
@@ -1200,12 +1177,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     proj_clean_path, " ",
                                     proj_clean_path_tmp)
                     system(ncoCmd)
-                    Sys.sleep(2)
                     system(paste0("rm -f ", proj_clean_path))
-                    Sys.sleep(2)
                     system(paste0("mv ", proj_clean_path_tmp, " ",
                                   proj_clean_path))
-                    Sys.sleep(2)
                     
                     ncoCmd = paste0("ncrename -h -O -d", " ",
                                     "code_strlen_new,code_strlen", " ",
@@ -1213,12 +1187,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     proj_clean_path, " ",
                                     proj_clean_path_tmp)
                     system(ncoCmd)
-                    Sys.sleep(2)
                     system(paste0("rm -f ", proj_clean_path))
-                    Sys.sleep(2)
                     system(paste0("mv ", proj_clean_path_tmp, " ",
                                   proj_clean_path))
-                    Sys.sleep(2)
                 }
             }
         }
@@ -1277,7 +1248,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 NC_historical = ncdf4::nc_open(historical_path)
                 Date = NetCDF_extrat_time(NC_historical)
                 ncdf4::nc_close(NC_historical)
-                Sys.sleep(2)
                 minDate_historical = min(Date)
                 maxDate_historical = max(Date)
 
@@ -1319,7 +1289,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     minDate_proj = min(Date)
                     maxDate_proj = max(Date)
                     ncdf4::nc_close(NC_proj)
-                    Sys.sleep(2)
 
                     flag = dplyr::bind_rows(
                                       flag,
@@ -1358,14 +1327,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     proj_path, " ",
                                     "-O ", proj_merge_path)
                     system(ncoCmd)
-                    Sys.sleep(2)
 
                     NC = ncdf4::nc_open(proj_merge_path,
                                         write=TRUE)
                     if (!ncdf4::ncatt_get(NC, 0,
                                           "history")$hasatt) {
                         ncdf4::ncatt_put(NC, 0, "history", "")
-                        Sys.sleep(2)
                     }
                     history = ncdf4::ncatt_get(NC, 0,
                                                "history")$value
@@ -1377,9 +1344,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         Sys.time(), " -> ",
                         "The scenario part of the projection chain has been concatenated with the associated historical part.")
                     ncdf4::ncatt_put(NC, 0, "history", history)
-                    Sys.sleep(2)
                     ncdf4::nc_close(NC)
-                    Sys.sleep(2)
                 }
             }
         }
