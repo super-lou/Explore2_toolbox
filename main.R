@@ -295,8 +295,8 @@ period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 period_reference = c("1976-01-01", "2005-12-31")
 is_projection_clean =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 is_projection_merge =
     # TRUE
     FALSE
@@ -337,10 +337,10 @@ projs_to_use =
 models_to_use =
     c(
         # "CTRIP"
-        "EROS"
+        "EROS",
         # "GRSD",
         # "J2000",
-        # "SIM2"
+        "SIM2"
         # "MORDOR-SD",
         # "MORDOR-TS"
         # "ORCHIDEE",
