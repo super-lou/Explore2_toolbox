@@ -1211,6 +1211,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             }
         }
 
+        Projections = Projections[Projections$climateChain !=
+                                  "SAFRAN",]
+
         Historicals =
             Projections[Projections$EXP ==
                         "historical" &
