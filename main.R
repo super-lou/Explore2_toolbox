@@ -156,8 +156,8 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'clean_nc'
-        # 'merge_nc'
+        # 'clean_nc'
+        'merge_nc'
         # 'reshape_data',
         # 'create_data',
         # 'extract_data',
@@ -295,8 +295,8 @@ period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 period_reference = c("1976-01-01", "2005-12-31")
 is_projection_clean =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 is_projection_merge =
     # TRUE
     FALSE
@@ -337,12 +337,12 @@ projs_to_use =
 models_to_use =
     c(
         # "CTRIP"
-        # "EROS",
+        "EROS"
         # "GRSD"
         # "J2000",
         # "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS"
+        # "MORDOR-SD",
+        # "MORDOR-TS"
         # "ORCHIDEE"
         # "SMASH"
 
@@ -904,10 +904,6 @@ print(paste0("Computer ", computer))
 computer_file_list = list.files(path=lib_path,
                                 pattern="computer[_].*[.]R")
 computer_list = gsub("(computer[_])|([.]R)", "", computer_file_list)
-
-print(computer_file_list)
-print(computer_list)
-
 computer_file = computer_file_list[sapply(computer_list,
                                           grepl, computer)]
 computer_path = file.path(lib_path, computer_file)
