@@ -337,12 +337,12 @@ projs_to_use =
 models_to_use =
     c(
         # "CTRIP"
-        # "EROS"
+        "EROS",
         # "GRSD",
         # "J2000",
-        # "SIM2",
-        "MORDOR-SD",
-        "MORDOR-TS"
+        "SIM2"
+        # "MORDOR-SD",
+        # "MORDOR-TS"
         # "ORCHIDEE",
         # "SMASH"
 
