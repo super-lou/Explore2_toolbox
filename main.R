@@ -337,7 +337,7 @@ projs_to_use =
 models_to_use =
     c(
         # "CTRIP"
-        "EROS",
+        # "EROS",
         # "GRSD",
         # "J2000",
         "SIM2"
