@@ -1245,6 +1245,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             for (i in 1:nHistoricals) {
                 historical = Historicals[i,]
                 historical_path = historical$path
+
+                post(historical_path)
                 NC_historical = ncdf4::nc_open(historical_path)
                 Date = NetCDF_extrat_time(NC_historical)
                 ncdf4::nc_close(NC_historical)
@@ -1284,6 +1286,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         file.path(proj_merge_dirpath,
                                   proj_merge_file)
 
+                    post(proj_path)
                     NC_proj = ncdf4::nc_open(proj_path)
                     Date = NetCDF_extrat_time(NC_proj)
                     minDate_proj = min(Date)
@@ -1328,6 +1331,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     "-O ", proj_merge_path)
                     system(ncoCmd)
 
+                    post(proj_merge_path)
                     NC = ncdf4::nc_open(proj_merge_path,
                                         write=TRUE)
                     if (!ncdf4::ncatt_get(NC, 0,
