@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # "./"
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -281,8 +281,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -315,7 +315,7 @@ nCode4RAM = 32
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ALADIN.*ADAMONT"
 
@@ -324,14 +324,6 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
 
-# "EARTH.*rcp45.*RACMO22E.*ADAMONT",
-# "HadGEM2.*rcp85.*ALADIN63.*ADAMONT",
-# "HadGEM2.*rcp85.*HadREM3.*ADAMONT"
-"MPI.*rcp85.*RegCM4.*ADAMONT"
-
-
-        
-        
         # "SAFRAN[-]France[-]20"
 
         
@@ -346,11 +338,11 @@ models_to_use =
     c(
         # "CTRIP"
         # "EROS",
-        "GRSD"
+        # "GRSD"
         # "J2000",
         # "SIM2",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
+        "MORDOR-SD",
+        "MORDOR-TS"
         # "ORCHIDEE"
         # "SMASH"
 
@@ -568,51 +560,46 @@ if (type == "piezometrie") {
     Explore2_serie_diagnostic_plot$variables = "medQJC5"
 }
 
-# proj SAFRAN
-Explore2_serie_projection_SAFRAN =
-    list(name='Explore2_serie_projection_SAFRAN',
+# projection
+Explore2_serie_projection_HE =
+    list(name='Explore2_serie_projection_HE',
          type="serie",
          variables=c(
-             "QA",
-             # "QA_month", "QA_season",
-             # "QA05", "QA10", "QA50", "QA90", "QA95",
-             # "QJXA", "VCX3",
-             # "QMNA",
-             "VCN10"),
-             # "VCN3"),
+             "QA05", "QA10",
+             "QJXA", "tQJXA",
+             "VCX3", "tVCX3",
+             "fQA01", "fQA05", "fQA10",
+             "dtCrue"),
          suffix="sim")
 
-Explore2_serie_more_projection_SAFRAN =
-    list(name='Explore2_serie_more_projection_SAFRAN',
-         type="serie",
-         variables=c("tQJXA", "tVCX3", "fQA01", "fQA05", "fQA10", "dtCrue",
-                     "QNA", "tVCN10", "allBE",
-                     "debutBF", "centreBF", "finBF",
-                     "dtBF", "vBF", "dtRec"),
-         suffix="sim")
-
-# proj
-Explore2_serie_proj =
-    list(name='Explore2_serie_proj',
+Explore2_serie_projection_ME =
+    list(name='Explore2_serie_projection_ME',
          type="serie",
          variables=c(
-             "QA",
-             # "QA_month", "QA_season",
-             # "QA05", "QA10", "QA50", "QA90", "QA95",
-             # "QJXA", "VCX3",
-             # "QMNA",
-             "VCN10"),
-             # "VCN3"),
+             "QA25", "QA50", "QA75",
+             "QA", "QA_month", "QA_season"),
          suffix="sim")
 
-Explore2_serie_more_proj =
-    list(name='Explore2_serie_more_proj',
+Explore2_serie_projection_BE =
+    list(name='Explore2_serie_projection_BE',
          type="serie",
-         variables=c("tQJXA", "tVCX3", "fQA01", "fQA05", "fQA10", "dtCrue",
-                     "QNA", "tVCN10", "allBE",
-                     "debutBF", "centreBF", "finBF",
-                     "dtBF", "vBF", "dtRec"),
+         variables=c(
+             "QA90", "QA95",
+             "QNA", "QMNA",
+             "VCN10", "VCN10_estival", "tVCN10",
+             "VCN3", "VCN3_estival",
+             "allBE"),
          suffix="sim")
+
+Explore2_serie_projection_BF =
+    list(name='Explore2_serie_projection_BF',
+         type="serie",
+         variables=c(
+             "debutBF", "centreBF", "finBF",
+             "dtBF", "vBF",
+             "dtRec"),
+         suffix="sim")
+
 
 # Explore2_proj_delta =
 #     list(name='Explore2_proj_delta',
@@ -914,9 +901,15 @@ doc_carte_piezo_critere_critere =
 # Computer
 computer = Sys.info()["nodename"]
 print(paste0("Computer ", computer))
-computer_file_list = list.files(path=lib_path, pattern="computer[_].*[.]R")
+computer_file_list = list.files(path=lib_path,
+                                pattern="computer[_].*[.]R")
 computer_list = gsub("(computer[_])|([.]R)", "", computer_file_list)
-computer_file = computer_file_list[sapply(computer_list, grepl, computer)]
+
+print(computer_file_list)
+print(computer_list)
+
+computer_file = computer_file_list[sapply(computer_list,
+                                          grepl, computer)]
 computer_path = file.path(lib_path, computer_file)
 print(paste0("So reading file ", computer_path))
 source(computer_path, encoding='UTF-8')

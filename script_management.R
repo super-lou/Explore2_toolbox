@@ -1077,11 +1077,11 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     id_rm[which.min(abs(XL93_rm[j]-
                                                         XL93[id_rm]) + 
                                                     abs(YL93_rm[j]-
-                                                        YL93[id_rm]))]
+                                                        YL93[id_rm]))[1]]
 
 
                             } else {
-                                id_rm = which(Code_rm[j] == Code)
+                                id_rm = which(Code_rm[j] == Code)[1]
                             }
                             if (identical(id_rm, integer(0))) {
                                 id_rm = NA
