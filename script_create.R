@@ -125,7 +125,7 @@ create_data = function () {
 
 
         post(names(data_sim))
-        post(data_sim[1])
+        post(nrow(data_sim))
         
         meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
                                                         Model,
