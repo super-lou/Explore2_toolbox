@@ -122,6 +122,10 @@ create_data = function () {
                            as.numeric(codes_selection_data$YL93[id]),
                        Surface_km2=
                            as.numeric(codes_selection_data$S_HYDRO[id]))
+
+
+        post(names(data_sim))
+        post(data_sim[1])
         
         meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
                                                         Model,
