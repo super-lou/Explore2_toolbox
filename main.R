@@ -157,11 +157,11 @@ to_do =
     c(
         # 'delete_tmp',
         # 'clean_nc'
-        'merge_nc'
+        # 'merge_nc'
         # 'reshape_data',
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'write_warnings',
@@ -184,10 +184,13 @@ extract_data =
         # 'Explore2_serie_diagnostic_plot'
         # 'Explore2_criteria_diagnostic_SAFRAN',
         # 'Explore2_criteria_more_diagnostic_SAFRAN'
-        # 'Explore2_serie_projection_SAFRAN',
-        # 'Explore2_serie_more_projection_SAFRAN'
-        # 'Explore2_serie_proj'
-        # 'Explore2_serie_more_proj'
+        
+        'Explore2_serie_projection_HE',
+        'Explore2_serie_projection_ME',
+        'Explore2_serie_projection_BE',
+        'Explore2_serie_projection_BE_estival',
+        'Explore2_serie_projection_BE_hivernal',
+        'Explore2_serie_projection_BF'
     )
 
 
@@ -298,8 +301,8 @@ is_projection_clean =
     # TRUE
     FALSE
 is_projection_merge =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 32 |
@@ -324,7 +327,7 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
 
-        # "SAFRAN[-]France[-]20"
+        # "SAFRAN-France-20"
 
         
         ## story lines ##
@@ -337,10 +340,10 @@ projs_to_use =
 models_to_use =
     c(
         # "CTRIP"
-        "EROS",
+        "EROS"
         # "GRSD",
         # "J2000",
-        "SIM2"
+        # "SIM2"
         # "MORDOR-SD",
         # "MORDOR-TS"
         # "ORCHIDEE",
@@ -418,7 +421,7 @@ storyLines = c(
     "EC-EARTH|rcp85|HadREM3-GA7|ADAMONT"=
         "Sec toute l’année, recharge moindre en hiver", #Gerudo #soleil
     "CNRM-CM5|rcp85|ALADIN63|ADAMONT"=
-        "Modéré en réchauffement et changement de précipitations", #Piaf #nuage 
+    "Modéré en réchauffement et changement de précipitations", #Piaf #nuage
     "HadGEM2-ES|rcp85|ALADIN63|ADAMONT"=
         "Chaud et humide à toutes les saisons" #Zora #parapluie
 )
@@ -565,9 +568,10 @@ Explore2_serie_projection_HE =
     list(name='Explore2_serie_projection_HE',
          type="serie",
          variables=c(
-             "QA05", "QA10",
+             "QA01", "QA05", "QA10", "QA25", 
              "QJXA", "tQJXA",
              "VCX3", "tVCX3",
+             "VCX10", "tVCX10",
              "fQA01", "fQA05", "fQA10",
              "dtCrue"),
          suffix="sim")
@@ -576,7 +580,7 @@ Explore2_serie_projection_ME =
     list(name='Explore2_serie_projection_ME',
          type="serie",
          variables=c(
-             "QA25", "QA50", "QA75",
+             "QA50",
              "QA", "QA_month", "QA_season"),
          suffix="sim")
 
@@ -584,11 +588,31 @@ Explore2_serie_projection_BE =
     list(name='Explore2_serie_projection_BE',
          type="serie",
          variables=c(
-             "QA90", "QA95",
+             "QA75", "QA90", "QA95", "QA99",
              "QNA", "QMNA",
-             "VCN10", "VCN10_estival", "tVCN10",
-             "VCN3", "VCN3_estival",
+             "VCN10", "tVCN10",
+             "VCN3", "VCN30",
              "allBE"),
+         suffix="sim")
+
+Explore2_serie_projection_BE_estival =
+    list(name='Explore2_serie_projection_BE_estival',
+         type="serie",
+         variables=c(
+             "QNA_estival", "QMNA_estival",
+             "VCN10_estival", "tVCN10_estival",
+             "VCN3_estival", "VCN30_estival",
+             "allBE_estival"),
+         suffix="sim")
+
+Explore2_serie_projection_BE_hivernal =
+    list(name='Explore2_serie_projection_BE_hivernal',
+         type="serie",
+         variables=c(
+             "QNA_hivernal", "QMNA_hivernal",
+             "VCN10_hivernal", "tVCN10_hivernal",
+             "VCN3_hivernal", "VCN30_hivernal",
+             "allBE_hivernal"),
          suffix="sim")
 
 Explore2_serie_projection_BF =
@@ -599,6 +623,25 @@ Explore2_serie_projection_BF =
              "dtBF", "vBF",
              "dtRec"),
          suffix="sim")
+
+Explore2_serie_projection_CDC =
+    list(name='Explore2_serie_projection_CDC',
+         type="serie",
+         variables="CDC",
+         horizons=c(),
+         suffix="sim")
+
+Explore2_serie_projection_BFI =
+    list(name='Explore2_serie_projection_BFI',
+         type="serie",
+         variables="BFI",
+         horizons=c(),
+         suffix="sim")
+
+
+# estival 05-01 -> 11-30
+# hivernal 11-01 -> 04-30
+
 
 
 # Explore2_proj_delta =
@@ -1092,9 +1135,11 @@ if (type == "hydrologie") {
                                      EXP=NA,
                                      BC=NA,  
                                      climateChain="SAFRAN",
-                                     Chain=paste0("SAFRAN",
-                                                  "|",
-                                                  models_to_use),
+                                     Chain=paste0(
+                                         "||",
+                                         "SAFRAN",
+                                         "||",
+                                         models_to_use),
                                      regexp=paste0(
                                          ".*SAFRAN-France-20",
                                          ".*",
@@ -1113,8 +1158,6 @@ if (type == "hydrologie") {
         #                     "historical" |
         #                    is.na(Projections$EXP),]
         # }
-
-        
 
         if (is_projection_merge) {
             proj_path = file.path(computer_data_path,
@@ -1136,6 +1179,8 @@ if (type == "hydrologie") {
                            full.names=TRUE,
                            recursive=TRUE)
         Files = basename(Paths)
+        Paths = Paths[!duplicated(Files)]
+        Files = Files[!duplicated(Files)]
         
         any_grepl = function (pattern, x) {
             any(grepl(pattern, x))
@@ -1150,7 +1195,8 @@ if (type == "hydrologie") {
         Projections$path =
             lapply(Projections$file,
                    apply_match, table=Files, target=Paths)
-        
+
+
         Projections_nest = Projections
         Projections = tidyr::unnest(Projections,
                                              c(file, path))
@@ -1169,7 +1215,7 @@ if (type == "hydrologie") {
             Projections = Projections[OK,]
             OK_nest = apply(as.matrix(
                 sapply(projs_to_use, grepl,
-                       x=Projections_nest$regexp)),
+                       x=Projections_nest$file)),
                 1, any)
             Projections_nest = Projections_nest[OK_nest,]
         }
@@ -1188,9 +1234,9 @@ if (type == "hydrologie") {
         Projections$storyLines[ok[!is.na(ok)]] =
             storyLines[!is.na(ok)]
 
-        Projections = dplyr::distinct(Projections,
-                                      Chain, .keep_all=TRUE)
-                  
+        # Projections = dplyr::distinct(Projections,
+                                      # file, .keep_all=TRUE)
+        
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
 
@@ -1261,17 +1307,6 @@ if (type == "hydrologie") {
         CodeALL8 = codes8_selection
         CodeALL10 = convert_codeNtoM(codes8_selection)
     } else {
-        # codes_to_use = convert_codeNtoM(codes_to_use, 10,
-                                        # 8, top=NULL)
-        # codes_to_use = convert_regexp(computer_data_path,
-        #                               file.path(type,
-        #                                         obs_hydro_dir),
-        #                               codes_to_use,
-        #                               obs_hydro_format)
-        # okCode = codes_to_use %in% codes8_selection
-
-        # names(codes_to_use)
-        
         codes_to_use_regexp = convert_codeNtoM(codes_to_use, 8,
                                                10, crop=FALSE, top=NULL)
         CodeALL10 = c(sapply(paste0("(" ,
@@ -1472,6 +1507,9 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
             files_name = Files_name[[ff]]
             if (by_files | MPI == "file") {
                 files_name_opt = gsub("[|]", "_", files_name[1]) #####
+                files_name_opt = gsub("[_][_]", "_", files_name_opt)
+                files_name_opt = gsub("(^[_])|([_]$)", "",
+                                      files_name_opt)
                 files_name_opt. = paste0(files_name_opt, "_")
                 .files_name_opt. = paste0("_", files_name_opt, "_")
                 .files_name_opt = paste0("_", files_name_opt)

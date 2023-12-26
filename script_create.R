@@ -127,10 +127,11 @@ create_data = function () {
                                                         Model,
                                                         Code),
                                         S=S[1])
-        meta_sim_tmp = tidyr::pivot_wider(meta_sim_tmp,
-                                          names_from=Model,
-                                          values_from=S,
-                                          names_glue="Surface_{Model}_km2")
+        meta_sim_tmp = tidyr::pivot_wider(
+                                  meta_sim_tmp,
+                                  names_from=Model,
+                                  values_from=S,
+                                  names_glue="Surface_{Model}_km2")
 
         meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp, by="Code")
         rm ("meta_sim_tmp"); gc()

@@ -301,11 +301,15 @@ NetCDF_to_tibble = function (NetCDF_path,
                                  Date=rep(Date, times=nCode),
                                  Q_sim=Q_sim,
                                  S=rep(S, each=nDate))
+            
             data = dplyr::filter(data, !is.nan(Q_sim))
             chainValue = unlist(strsplit(chain, "[|]"))
             chainName = c("GCM", "EXP", "RCM", "BC", "Model")
+            chainName = chainName[nchar(chainValue) > 0]
+            chainValue = chainValue[nchar(chainValue) > 0]
             Chain = dplyr::tibble(!!!chainValue)
             names(Chain) = chainName
+            
             data = dplyr::bind_cols(Chain, data)
         }
 
