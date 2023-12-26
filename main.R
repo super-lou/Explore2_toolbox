@@ -322,6 +322,8 @@ projs_to_use =
         # "(rcp26)|(rcp45)|(rcp85")
         # "ALADIN.*ADAMONT"
 
+        # "IPSL-CM5A-MR.*rcp85.*RCA4.*ADAMONT"
+        
         # "HadGEM2.*historical.*CCLM4.*ADAMONT",
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",

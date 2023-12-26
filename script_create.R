@@ -60,7 +60,8 @@ create_data = function () {
             }
         }
     }
-    
+
+    data = dplyr::tibble()
 
     if (isSim) {
         post("### Simulated data")
@@ -105,121 +106,121 @@ create_data = function () {
             }
         }
 
-        
-        id = match(CodeSUB10, CodeALL10)
-        meta_sim =
-            dplyr::tibble(
-                       Code=CodeSUB10,
-                       Nom=codes_selection_data$SuggestionNOM[id],
-                       Region_Hydro=
-                           iRegHydro()[substr(CodeSUB10, 1, 1)],
-                       Source=codes_selection_data$SOURCE[id],
-                       Référence=
-                           codes_selection_data$Référence[id],
-                       XL93_m=
-                           as.numeric(codes_selection_data$XL93[id]),
-                       YL93_m=
-                           as.numeric(codes_selection_data$YL93[id]),
-                       Surface_km2=
-                           as.numeric(codes_selection_data$S_HYDRO[id]))
+        if (nrow(data_sim) == 0) {
+            isSim = FALSE
+        } else {
+            id = match(CodeSUB10, CodeALL10)
+            meta_sim =
+                dplyr::tibble(
+                           Code=CodeSUB10,
+                           Nom=codes_selection_data$SuggestionNOM[id],
+                           Region_Hydro=
+                               iRegHydro()[substr(CodeSUB10, 1, 1)],
+                           Source=codes_selection_data$SOURCE[id],
+                           Référence=
+                               codes_selection_data$Référence[id],
+                           XL93_m=
+                               as.numeric(codes_selection_data$XL93[id]),
+                           YL93_m=
+                               as.numeric(codes_selection_data$YL93[id]),
+                           Surface_km2=
+                               as.numeric(codes_selection_data$S_HYDRO[id]))
 
+            meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
+                                                            Model,
+                                                            Code),
+                                            S=S[1])
+            meta_sim_tmp = tidyr::pivot_wider(
+                                      meta_sim_tmp,
+                                      names_from=Model,
+                                      values_from=S,
+                                      names_glue="Surface_{Model}_km2")
 
-        post(names(data_sim))
-        post(nrow(data_sim))
-        
-        meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
-                                                        Model,
-                                                        Code),
-                                        S=S[1])
-        meta_sim_tmp = tidyr::pivot_wider(
-                                  meta_sim_tmp,
-                                  names_from=Model,
-                                  values_from=S,
-                                  names_glue="Surface_{Model}_km2")
-
-        meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp, by="Code")
-        rm ("meta_sim_tmp"); gc()
-        
-        data_sim = dplyr::select(data_sim, -"S")
-
-
-        if (grepl("diagnostic", mode)) {
+            meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp, by="Code")
+            rm ("meta_sim_tmp"); gc()
             
-            val2check = names(data_sim)[!(names(data_sim) %in%
-                                          c("Model", "Code",
-                                            "Date", "Q_sim"))]
+            data_sim = dplyr::select(data_sim, -"S")
 
-            Model = Chain
-            nModel = length(Model)
 
-            if (!is.null(complete_by)) {
-                Model4complete = complete_by[complete_by %in% Model]
-                nVal2check = length(val2check)
+            if (grepl("diagnostic", mode)) {
                 
-                if (!all(is.na(Model4complete))) {
-                    for (model4complete in Model4complete) {
-                        data_model4complete =
-                            data_sim[data_sim$Model == model4complete,]
-                        data_model4complete =
-                            dplyr::select(data_model4complete,
-                                          -Model)
-                        
-                        for (model in Model) {
-                            data_model = data_sim[data_sim$Model == model,]
-                            data_model = dplyr::select(data_model,
-                                                       -Model)
+                val2check = names(data_sim)[!(names(data_sim) %in%
+                                              c("Model", "Code",
+                                                "Date", "Q_sim"))]
 
-                            for (i in 1:nVal2check) {
-                                col = val2check[i]
-                                
-                                if (all(is.na(data_model[[col]]))) {
-                                    data_model =
-                                        dplyr::left_join(
-                                                   dplyr::select(data_model, -col),
-                                                   dplyr::select(data_model4complete,
-                                                                 c("Date",
-                                                                   "Code",
-                                                                   col)),
-                                                   by=c("Code", "Date"))
+                Model = Chain
+                nModel = length(Model)
+
+                if (!is.null(complete_by)) {
+                    Model4complete = complete_by[complete_by %in% Model]
+                    nVal2check = length(val2check)
+                    
+                    if (!all(is.na(Model4complete))) {
+                        for (model4complete in Model4complete) {
+                            data_model4complete =
+                                data_sim[data_sim$Model == model4complete,]
+                            data_model4complete =
+                                dplyr::select(data_model4complete,
+                                              -Model)
+                            
+                            for (model in Model) {
+                                data_model = data_sim[data_sim$Model == model,]
+                                data_model = dplyr::select(data_model,
+                                                           -Model)
+
+                                for (i in 1:nVal2check) {
+                                    col = val2check[i]
+                                    
+                                    if (all(is.na(data_model[[col]]))) {
+                                        data_model =
+                                            dplyr::left_join(
+                                                       dplyr::select(data_model, -col),
+                                                       dplyr::select(data_model4complete,
+                                                                     c("Date",
+                                                                       "Code",
+                                                                       col)),
+                                                       by=c("Code", "Date"))
+                                    }
                                 }
-                            }
-                            data_model = dplyr::bind_cols(Model=model,
-                                                          data_model)
-                            data_model = data_model[names(data_sim)]
-                            data_sim[data_sim$Model == model,] = data_model
+                                data_model = dplyr::bind_cols(Model=model,
+                                                              data_model)
+                                data_model = data_model[names(data_sim)]
+                                data_sim[data_sim$Model == model,] = data_model
 
-                            rm ("data_model")
-                            gc()
+                                rm ("data_model")
+                                gc()
+                            }
                         }
                     }
                 }
-            }
 
-            data_sim = dplyr::relocate(data_sim, "T", .before=ET0)            
-            if ("Rl" %in% names(data_sim)) {
-                data_sim$Rl[!is.finite(data_sim$Rl)] = NA
-            }
-            if ("Rs" %in% names(data_sim)) {
-                data_sim$Rs[!is.finite(data_sim$Rs)] = NA
-            }
-            if ("R" %in% names(data_sim)) {
-                data_sim$R[!is.finite(data_sim$R)] = NA
-                data_sim = dplyr::filter(dplyr::group_by(data_sim, Code),
-                                         rep(!all(is.na(R)), length(R)))
-            }
-            
-            for (i in 1:length(diag_station_2_remove)) {
-                data_sim = dplyr::filter(
-                                      data_sim,
-                                      !(Model ==
-                                        names(diag_station_2_remove)[i] &
-                                        grepl(diag_station_2_remove[i],
-                                              Code)))
-                meta_sim[[paste0("Surface_",
-                                 names(diag_station_2_remove)[i],
-                                 "_km2")]][
-                    grepl(diag_station_2_remove[i], meta_sim$Code)
-                ] = NA
+                data_sim = dplyr::relocate(data_sim, "T",
+                                           .before=ET0)            
+                if ("Rl" %in% names(data_sim)) {
+                    data_sim$Rl[!is.finite(data_sim$Rl)] = NA
+                }
+                if ("Rs" %in% names(data_sim)) {
+                    data_sim$Rs[!is.finite(data_sim$Rs)] = NA
+                }
+                if ("R" %in% names(data_sim)) {
+                    data_sim$R[!is.finite(data_sim$R)] = NA
+                    data_sim = dplyr::filter(dplyr::group_by(data_sim, Code),
+                                             rep(!all(is.na(R)), length(R)))
+                }
+                
+                for (i in 1:length(diag_station_2_remove)) {
+                    data_sim = dplyr::filter(
+                                          data_sim,
+                                          !(Model ==
+                                            names(diag_station_2_remove)[i] &
+                                            grepl(diag_station_2_remove[i],
+                                                  Code)))
+                    meta_sim[[paste0("Surface_",
+                                     names(diag_station_2_remove)[i],
+                                     "_km2")]][
+                        grepl(diag_station_2_remove[i], meta_sim$Code)
+                    ] = NA
+                }
             }
         }
     }
