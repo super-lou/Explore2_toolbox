@@ -314,15 +314,13 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 10
+nCode4RAM = 15
 
 projs_to_use =
     c(
         'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ALADIN.*ADAMONT"
-
-        # "IPSL-CM5A-MR.*rcp85.*RCA4.*ADAMONT"
         
         # "HadGEM2.*historical.*CCLM4.*ADAMONT",
         # "EARTH.*historical.*HadREM3.*ADAMONT",
@@ -341,14 +339,14 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP"
+        "CTRIP"
         # "EROS"
         # "GRSD"
         # "J2000",
         # "SIM2"
         # "MORDOR-SD"
         # "MORDOR-TS"
-        "ORCHIDEE"
+        # "ORCHIDEE"
         # "SMASH"
 
         # "AquiFR",
@@ -368,7 +366,9 @@ codes_to_use =
         # "^H"
         # "^E"
         # "^K"
-
+        
+        # "A882000101"
+        
         # LETTERS[11:26]
 
         # "O6140010",
