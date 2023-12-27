@@ -346,10 +346,10 @@ models_to_use =
         # "GRSD"
         # "J2000",
         # "SIM2"
-        "MORDOR-SD"
+        # "MORDOR-SD"
         # "MORDOR-TS"
         # "ORCHIDEE"
-        # "SMASH"
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
