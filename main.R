@@ -343,10 +343,10 @@ models_to_use =
     c(
         # "CTRIP"
         # "EROS"
-        "GRSD"
+        # "GRSD"
         # "J2000",
         # "SIM2"
-        # "MORDOR-SD",
+        "MORDOR-SD"
         # "MORDOR-TS"
         # "ORCHIDEE"
         # "SMASH"
