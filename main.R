@@ -314,7 +314,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 20
+nCode4RAM = 10
 
 projs_to_use =
     c(
@@ -348,8 +348,8 @@ models_to_use =
         # "SIM2"
         # "MORDOR-SD"
         # "MORDOR-TS"
-        # "ORCHIDEE"
-        "SMASH"
+        "ORCHIDEE"
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
