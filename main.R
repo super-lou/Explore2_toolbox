@@ -314,7 +314,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 32
+nCode4RAM = 20
 
 projs_to_use =
     c(
@@ -341,8 +341,8 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP"
-        "EROS"
+        "CTRIP"
+        # "EROS"
         # "GRSD",
         # "J2000",
         # "SIM2"
