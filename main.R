@@ -45,8 +45,8 @@
 # Explore2_toolbox path
 lib_path =
     # "./"
-    '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -341,15 +341,15 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP"
-        "EROS"
-        # "GRSD"
+        "CTRIP",
+        "EROS",
+        "GRSD",
         # "J2000",
-        # "SIM2"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        # "SMASH"
+        "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
