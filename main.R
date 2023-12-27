@@ -345,8 +345,8 @@ models_to_use =
         # "EROS"
         # "GRSD"
         # "J2000",
-        "SIM2"
-        # "MORDOR-SD",
+        # "SIM2"
+        "MORDOR-SD"
         # "MORDOR-TS"
         # "ORCHIDEE",
         # "SMASH"
