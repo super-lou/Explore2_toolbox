@@ -45,8 +45,8 @@
 # Explore2_toolbox path
 lib_path =
     # "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -157,11 +157,11 @@ to_do =
     c(
         # 'delete_tmp',
         # 'clean_nc'
-        # 'merge_nc'
+        'merge_nc'
         # 'reshape_data',
-        'create_data',
-        'extract_data',
-        'save_extract'
+        # 'create_data',
+        # 'extract_data',
+        # 'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'write_warnings',
@@ -301,8 +301,8 @@ is_projection_clean =
     # TRUE
     FALSE
 is_projection_merge =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 32 |
@@ -340,14 +340,14 @@ projs_to_use =
 models_to_use =
     c(
         # "CTRIP"
-        # "EROS"
+        "EROS"
         # "GRSD"
-        # "J2000",
+        # "J2000"
         # "SIM2"
         # "MORDOR-SD"
         # "MORDOR-TS"
         # "ORCHIDEE"
-        "SMASH"
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -1154,16 +1154,11 @@ if (type == "hydrologie") {
         Projections$regexp = gsub("[_]", "[_]",
                                            Projections$regexp)
         
-        # if (is_projection_merge & !("merge_nc" %in% to_do)) {
-        #     Projections =
-        #         Projections[Projections$EXP !=
-        #                     "historical" |
-        #                    is.na(Projections$EXP),]
-        # }
 
         if (is_projection_merge) {
             proj_path = file.path(computer_data_path,
                                   type, "projection_merge")
+            # Projections$Chain
         } else if (is_projection_clean) {
             proj_path = file.path(computer_data_path,
                                   type, "projection_clean")
@@ -1171,9 +1166,6 @@ if (type == "hydrologie") {
             proj_path = file.path(computer_data_path,
                                   type, "projection")
         }
-        # proj_path = c(proj_path,
-                      # file.path(computer_data_path,
-                                # type, "diagnostic"))
 
         Paths = list.files(proj_path,
                            pattern=".*[.]nc",

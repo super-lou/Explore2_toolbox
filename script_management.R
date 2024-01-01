@@ -1211,9 +1211,15 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             }
         }
 
-        Projections = Projections[Projections$climateChain !=
-                                  "SAFRAN",]
 
+        OK_SAFRAN = Projections$climateChain == "SAFRAN"
+        if (any(OK_SAFRAN)) {
+            file.copy(Projections$path[OK_SAFRAN],
+                      file.path(proj_merge_dirpath,
+                                Projections$file[OK_SAFRAN]))
+            Projections = Projections[!OK_SAFRAN,]   
+        }
+        
         Historicals =
             Projections[Projections$EXP ==
                         "historical" &
@@ -1268,9 +1274,11 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 Projections$Model ==
                                 historical$Model,]
 
+# stop()
+                
                 # jehfezoifjezoifjezoifjezoiji EROS
-                projs = projs[substr(projs$file, "1", "15") ==
-                              substr(historical$file, "1", "15"),]
+                # projs = projs[substr(projs$file, "1", "15") ==
+                              # substr(historical$file, "1", "15"),]
                 
                 for (j in 1:nrow(projs)) {
                     proj = projs[j,]
