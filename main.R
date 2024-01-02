@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -314,7 +314,7 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 15
+nCode4RAM = 20
 
 projs_to_use =
     c(
@@ -339,8 +339,8 @@ projs_to_use =
 
 models_to_use =
     c(
-        # "CTRIP"
-        "EROS"
+        "CTRIP"
+        # "EROS"
         # "GRSD"
         # "J2000"
         # "SIM2"
