@@ -345,9 +345,9 @@ models_to_use =
         # "J2000"
         # "SIM2"
         # "MORDOR-SD"
-        "MORDOR-TS"
+        # "MORDOR-TS"
         # "ORCHIDEE"
-        # "SMASH"
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
