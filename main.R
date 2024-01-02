@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
-    '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    "./"
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -157,11 +157,11 @@ to_do =
     c(
         # 'delete_tmp',
         # 'clean_nc'
-        'merge_nc'
+        # 'merge_nc'
         # 'reshape_data',
-        # 'create_data',
-        # 'extract_data',
-        # 'save_extract'
+        'create_data',
+        'extract_data',
+        'save_extract'
         # 'read_tmp'
         # 'read_saving',
         # 'write_warnings',
@@ -301,8 +301,8 @@ is_projection_clean =
     # TRUE
     FALSE
 is_projection_merge =
-    # TRUE
-    FALSE
+    TRUE
+    # FALSE
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 32 |
@@ -1106,6 +1106,11 @@ if (type == "hydrologie") {
         BC = c("ADAMONT", "CDFt")
         Projections = tidyr::crossing(Projections,
                                       BC, Model=models_to_use)
+
+        if (is_projection_merge) {
+            Projections = Projections[Projections$EXP != "historical",]
+            Projections$EXP = paste0("historical-", Projections$EXP)
+        }
         
         Projections$climateChain =
             paste0(Projections$GCM, "|",
@@ -1158,7 +1163,6 @@ if (type == "hydrologie") {
         if (is_projection_merge) {
             proj_path = file.path(computer_data_path,
                                   type, "projection_merge")
-            # Projections$Chain
         } else if (is_projection_clean) {
             proj_path = file.path(computer_data_path,
                                   type, "projection_clean")
@@ -1189,7 +1193,6 @@ if (type == "hydrologie") {
         Projections$path =
             lapply(Projections$file,
                    apply_match, table=Files, target=Paths)
-
 
         Projections_nest = Projections
         Projections = tidyr::unnest(Projections,

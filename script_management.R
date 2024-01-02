@@ -1273,16 +1273,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 historical$BC &
                                 Projections$Model ==
                                 historical$Model,]
-
-# stop()
                 
                 # jehfezoifjezoifjezoifjezoiji EROS
                 projs = projs[substr(projs$file, "1", "15") ==
                               substr(historical$file, "1", "15"),]
-                
-                # print(historical$file)
-                # print(projs$file)
-                # print("")
                 
                 for (j in 1:nrow(projs)) {
                     proj = projs[j,]
