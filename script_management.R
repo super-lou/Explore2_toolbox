@@ -1217,6 +1217,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             file.copy(Projections$path[OK_SAFRAN],
                       file.path(proj_merge_dirpath,
                                 Projections$file[OK_SAFRAN]))
+            Sys.sleep(10)
             Projections = Projections[!OK_SAFRAN,]   
         }
         
