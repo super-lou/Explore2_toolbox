@@ -856,16 +856,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
     
     if ('create_database' %in% to_do) {
         
-        install.packages("DBI")
-        install.packages("RPostgreSQL")
         library(DBI)
         library(RPostgreSQL)
         
         db_host = "127.0.0.1"
         db_port = 5432
-        db_name = "Explore2"
-        db_user = "user"
-        db_password = ""
+        db_name = "explore2"
+        db_user = "dora"
+        db_password = "Chipeur_arrete_2_chiper"
 
         con = dbConnect(
             RPostgreSQL::PostgreSQL(),
@@ -875,6 +873,59 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             user=db_user,
             password=db_password
         )
+
+
+
+# -- Table for time series data
+# CREATE TABLE IF NOT EXISTS data (
+#     ID SERIAL PRIMARY KEY,
+#     code VARCHAR(255) REFERENCES Stations(code),
+#     date DATE NOT NULL,
+#     value DOUBLE PRECISION NOT NULL,
+#     variable VARCHAR(255) REFERENCES Variables(variable),
+#     projection INT REFERENCES Projections(projection)
+# );
+
+# -- Table for stations
+# CREATE TABLE IF NOT EXISTS Stations (
+#     code VARCHAR(255) PRIMARY KEY,
+#     name VARCHAR(255) NOT NULL,
+#     hydro_region VARCHAR(255) NOT NULL,
+#     source VARCHAR(255) NOT NULL,
+#     is_reference BOOLEAN NOT NULL,
+#     XL93_m DOUBLE PRECISION NOT NULL,
+#     YL93_m DOUBLE PRECISION NOT NULL,
+#     surface_km2 DOUBLE PRECISION NOT NULL
+# );
+
+# -- Table for variables
+# CREATE TABLE IF NOT EXISTS Variables (
+#     variable VARCHAR(255) PRIMARY KEY,
+#     unit VARCHAR(255) NOT NULL,
+#     is_date BOOLEAN NOT NULL,
+#     is_normalize BOOLEAN NOT NULL,
+#     palette VARCHAR(255) NOT NULL,
+#     glose VARCHAR(255) NOT NULL,
+#     topic VARCHAR(255) NOT NULL,
+#     sampling_period VARCHAR(255) NOT NULL
+# );
+
+# -- Table for projections
+# CREATE TABLE IF NOT EXISTS Projections (
+#     projection SERIAL PRIMARY KEY,
+#     EXP VARCHAR(255) NOT NULL,
+#     GCM VARCHAR(255) NOT NULL,
+#     RCM VARCHAR(255) NOT NULL,
+#     BC VARCHAR(255) NOT NULL,
+#     HM VARCHAR(255) NOT NULL,
+#     storylines VARCHAR(255) NOT NULL
+# );
+
+
+
+
+
+        
 
         query_models = "
   CREATE TABLE IF NOT EXISTS meta (
