@@ -208,17 +208,17 @@ create_data = function () {
                                              rep(!all(is.na(R)), length(R)))
                 }
                 
-                for (i in 1:length(diag_station_2_remove)) {
+                for (i in 1:length(diag_station_to_remove)) {
                     data_sim = dplyr::filter(
                                           data_sim,
                                           !(Model ==
-                                            names(diag_station_2_remove)[i] &
-                                            grepl(diag_station_2_remove[i],
+                                            names(diag_station_to_remove)[i] &
+                                            grepl(diag_station_to_remove[i],
                                                   Code)))
                     meta_sim[[paste0("Surface_",
-                                     names(diag_station_2_remove)[i],
+                                     names(diag_station_to_remove)[i],
                                      "_km2")]][
-                        grepl(diag_station_2_remove[i], meta_sim$Code)
+                        grepl(diag_station_to_remove[i], meta_sim$Code)
                     ] = NA
                 }
             }

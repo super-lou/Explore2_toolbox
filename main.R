@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -153,45 +153,50 @@ mode =
     # "diagnostic_ungauged"
     "projection"
 
-to_do =
-    c(
-        # 'delete_tmp',
-        # 'clean_nc'
-        # 'merge_nc'
-        # 'reshape_data',
-        'create_data',
-        'extract_data',
-        'save_extract'
-        # 'read_tmp'
-        # 'read_saving',
-        # 'write_warnings',
-        # 'add_regime_hydro'
-        # 'analyse_data'
-        # 'plot_sheet'
-        # 'plot_doc'
-    )
+to_do = c(
+    # 'delete_tmp',
+    # 'clean_nc'
+    # 'merge_nc'
+    # 'reshape_data',
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
+    # 'read_tmp'
+    'read_saving'
+    # "create_database"
+    # 'write_warnings',
+    # 'add_regime_hydro'
+    # 'analyse_data'
+    # 'plot_sheet'
+    # 'plot_doc'
+)
 
-extract_data =
-    c(
-        # 'WIP'
-        # 'Explore2_criteria_diagnostic_performance',
-        # 'Explore2_criteria_diagnostic_sensibilite',
-        # 'Explore2_criteria_diagnostic_sensibilite_RAT',
-        # 'Explore2_criteria_diagnostic_HE',
-        # 'Explore2_criteria_diagnostic_ME',
-        # 'Explore2_criteria_diagnostic_BE',
-        # 'Explore2_criteria_diagnostic_BF',
-        # 'Explore2_serie_diagnostic_plot'
-        # 'Explore2_criteria_diagnostic_SAFRAN',
-        # 'Explore2_criteria_more_diagnostic_SAFRAN'
-        
-        'Explore2_serie_projection_HE',
-        'Explore2_serie_projection_ME',
-        'Explore2_serie_projection_BE',
-        'Explore2_serie_projection_BE_estival',
-        'Explore2_serie_projection_BE_hivernal',
-        'Explore2_serie_projection_BF'
-    )
+extract_data = c(
+    # 'WIP'
+    # 'Explore2_criteria_diagnostic_performance',
+    # 'Explore2_criteria_diagnostic_sensibilite',
+    # 'Explore2_criteria_diagnostic_sensibilite_RAT',
+    # 'Explore2_criteria_diagnostic_HE',
+    # 'Explore2_criteria_diagnostic_ME',
+    # 'Explore2_criteria_diagnostic_BE',
+    # 'Explore2_criteria_diagnostic_BF',
+    # 'Explore2_serie_diagnostic_plot'
+    # 'Explore2_criteria_diagnostic_SAFRAN',
+    # 'Explore2_criteria_more_diagnostic_SAFRAN'
+    
+    # 'Explore2_serie_projection_HE',
+    'Explore2_serie_projection_ME',
+    'Explore2_serie_projection_BE'
+    # 'Explore2_serie_projection_BE_estival',
+    # 'Explore2_serie_projection_BE_hivernal',
+    # 'Explore2_serie_projection_BF'
+)
+
+# dataEX_criteria_normal = dataEX_criteria
+# dataEX_criteria_ungauged = dataEX_criteria
+# dataEX_criteria = dplyr::filter(dataEX_criteria_normal, !(Model %in% c("GRSD", "SMASH")))
+# dataEX_criteria = dplyr::bind_rows(dataEX_criteria, dataEX_criteria_ungauged)
+# dataEX_criteria = dplyr::filter(dataEX_criteria, Model != "MORDOR-SD")
 
 
 ## 3. PLOTTING PROCESSES _____________________________________________
@@ -227,50 +232,46 @@ extract_data =
 #     available stations.
 #     > figdir/Pluvial_modérément_contrasté_diagnostic_datasheet.pdf
 
-plot_sheet =
-    c(
-        # 'sommaire'
-        # 'correlation_matrix'
-        'fiche_diagnostic_station'
-        # 'fiche_diagnostic_region'
-        # 'fiche_diagnostic_regime'
-        # 'fiche_diagnostic_piezometre'
-        # 'carte_regime'
-        # 'carte_critere'
-        # 'stripes'
-        
-    )
+plot_sheet = c(
+    # 'sommaire'
+    # 'correlation_matrix'
+    'fiche_diagnostic_station'
+    # 'fiche_diagnostic_region'
+    # 'fiche_diagnostic_regime'
+    # 'fiche_diagnostic_piezometre'
+    # 'carte_regime'
+    # 'carte_critere'
+    # 'stripes'
+)
 
 ### 3.2. Document ____________________________________________________
-plot_doc =
-    c(
-        # "correlation_matrix"
-        # "correlation_matrix_ungauged"
-        
-        'fiche_diagnostic_region'
-        # 'fiche_diagnostic_regime'
-        # 'fiche_diagnostic_piezometre'
+plot_doc = c(
+    # "correlation_matrix"
+    # "correlation_matrix_ungauged"
+    
+    'fiche_diagnostic_region'
+    # 'fiche_diagnostic_regime'
+    # 'fiche_diagnostic_piezometre'
 
-        ## normal
-        # "carte_critere_model"
-        # "carte_critere_model_secteur"
-        # "carte_critere_critere"
-        # "carte_critere_critere_secteur"
+    ## normal
+    # "carte_critere_model"
+    # "carte_critere_model_secteur"
+    # "carte_critere_critere"
+    # "carte_critere_critere_secteur"
 
-        ## ungauged
-        # "carte_critere_model_ungauged"
-        # "carte_critere_model_ungauged_secteur"
-        # "carte_critere_critere_ungauged"
-        # "carte_critere_critere_ungauged_secteur"
+    ## ungauged
+    # "carte_critere_model_ungauged"
+    # "carte_critere_model_ungauged_secteur"
+    # "carte_critere_critere_ungauged"
+    # "carte_critere_critere_ungauged_secteur"
 
-        ## avertissement
-        # "carte_critere_model_avertissement_secteur"
-        
-        ## piezo
-        # "carte_piezo_critere_model"
-        # "carte_piezo_critere_critere"
-        
-    )
+    ## avertissement
+    # "carte_critere_model_avertissement_secteur"
+    
+    ## piezo
+    # "carte_piezo_critere_model"
+    # "carte_piezo_critere_critere"
+)
 
 
 ## 4. OTHER __________________________________________________________
@@ -284,8 +285,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -297,12 +298,6 @@ MPI =
 period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 period_reference = c("1976-01-01", "2005-12-31")
-is_projection_clean =
-    # TRUE
-    FALSE
-is_projection_merge =
-    TRUE
-    # FALSE
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 32 |
@@ -316,48 +311,61 @@ propagate_NA = TRUE
 # tasks     | 28 | 28
 nCode4RAM = 20
 
+projs_type =
+    # "raw"
+    # "cleaned"
+    # "merged"
+    "extracted"
+
 projs_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
-        # "ALADIN.*ADAMONT"
+        # "ADAMONT"
         
-        # "HadGEM2.*historical.*CCLM4.*ADAMONT",
+        # "SAFRAN-France-20"
+        
+        ## story lines ##
+        "HadGEM2.*historical.*CCLM4.*ADAMONT"
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
-
-        # "SAFRAN-France-20"
-
-        
-        ## story lines ##
-        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
+        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT"
         # "EARTH.*rcp85.*HadREM3.*ADAMONT",
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT"
         # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 
-models_to_use =
+projection_to_remove =
+    c("CNRM[-]CERFACS[-]CNRM[-]CM5.*KNMI[-]RACMO22E",
+      "IPSL[-]IPSL[-]CM5A[-]MR.*IPSL[-]WRF381P")
+
+storyLines =
+    c("HadGEM2-ES|rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été", #feu
+      "EC-EARTH|rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, recharge moindre en hiver", #soleil
+      "CNRM-CM5|rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et changement de précipitations", #nuage
+      "HadGEM2-ES|rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #parapluie
+
+
+models_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
         # "J2000"
-        # "SIM2"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        "ORCHIDEE"
-        # "SMASH"
+        # "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
         # "MONA"
-        
     )
 complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
-    # ''
     c(
         'all'
         # 'K298191001' #ref
@@ -368,84 +376,41 @@ codes_to_use =
         # "^K"
         
         # "A882000101"
-        
         # LETTERS[11:26]
-
-        # "O6140010",
-        # "M6240010"
 
         # "Seine"="H700011001",
         # "Rhone"="V720001002",
         # "Garonne"="O972001000",
         # "Loire"="M842001000",
         # "Moselle"="A886006000"
-
-        ## échange code
-        # "K2240820"
-        # "K2240810"
-        # "K0910010"
-
-        ## edf problème
-        # "K0100020",
-        # "K1930010",
-        # "K2680810"
-
-        ## pourri
-        # "H640201001", #SIM2
-        # "B413201001", #CTRIP
     )
-
-
-
-
-# "K072530200" manquante
-
-diag_station_2_remove =
-    c(
-        "ORCHIDEE"="K649*",
-        "CTRIP"="O038401001",
-        "CTRIP"="D020601001"
-    )
-
+diag_station_to_remove =
+    c("ORCHIDEE"="K649*",
+      "CTRIP"="O038401001",
+      "CTRIP"="D020601001")
 MORDOR_code_warning =
-    # ""
-    c("K002000101", "K222302001", "K225401001", "O023402001", "O036251001", "O038401001", "O074404001", "O312102002", "O319401001", "O701151001", "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201", "W030000201", "W103000301", "W273050001", "W211401000", "W271000101", "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
+    c("K002000101", "K222302001", "K225401001", "O023402001", "O036251001",
+      "O038401001", "O074404001", "O312102002", "O319401001", "O701151001",
+      "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201",
+      "W030000201", "W103000301", "W273050001", "W211401000", "W271000101",
+      "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
 
 
-projection_to_remove = c(
-    "CNRM[-]CERFACS[-]CNRM[-]CM5.*KNMI[-]RACMO22E",
-    "IPSL[-]IPSL[-]CM5A[-]MR.*IPSL[-]WRF381P"
-)
+variables_to_use =
+    c(
+        # ".*"
+        
+        # "KGEracine", "Biais$",
+        # "epsilon.*JJA$", "epsilon.*DJF$",
+        # "RAT[_]T$", "RAT[_]R$",
+        # "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$",
+        # "^moyTA$", "^moyTA[_]DJF$", "^moyTA[_]MAM$", "^moyTA[_]JJA$", "^moyTA[_]SON$",
+        # "^moyRA$", "^moyRA[_]DJF$", "^moyRA[_]MAM$", "^moyRA[_]JJA$", "^moyRA[_]SON$",
+        # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-storyLines = c(
-    "HadGEM2-ES|rcp85|CCLM4-8-17|ADAMONT"=
-        "Fort réchauffement et fort assèchement en été", #Goron #feu
-    "EC-EARTH|rcp85|HadREM3-GA7|ADAMONT"=
-        "Sec toute l’année, recharge moindre en hiver", #Gerudo #soleil
-    "CNRM-CM5|rcp85|ALADIN63|ADAMONT"=
-    "Modéré en réchauffement et changement de précipitations", #Piaf #nuage
-    "HadGEM2-ES|rcp85|ALADIN63|ADAMONT"=
-        "Chaud et humide à toutes les saisons" #Zora #parapluie
-)
+        "^QA$", "^VCN10$"
+    )
 
-
-# existant :
-# K0910010
-# K2240810
-# conversion :
-# K0910050 -> K0910010
-# K2240820 -> K2240810
-
-# KLIGNON1 -> K0725302
-
-# "H602321001", "K072530200", "K271401001", "K326401002", "O036251001", "Q010001001", "V123561001", "V615502002"
-
-
-# dataEX_criteria_normal = dataEX_criteria
-# dataEX_criteria_ungauged = dataEX_criteria
-# dataEX_criteria = dplyr::filter(dataEX_criteria_normal, !(Model %in% c("GRSD", "SMASH")))
-# dataEX_criteria = dplyr::bind_rows(dataEX_criteria, dataEX_criteria_ungauged)
-# dataEX_criteria = dplyr::filter(dataEX_criteria, Model != "MORDOR-SD")
 
 
 
@@ -672,9 +637,6 @@ saving_format =
     ""
     # c('Rdata', 'txt')
 
-wait =
-    NULL
-    # 1
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving =
@@ -700,22 +662,9 @@ merge_read_saving =
 selection =
     TRUE
     # FALSE
-
-diag_variable_criteria_selection =
-#     # "all"
-    c("KGEracine", "Biais$", "epsilon.*JJA$", "epsilon.*DJF$",
-      "RAT[_]T$", "RAT[_]R$", "Q10$", "med[{]tQJXA[}]$",
-      "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$",
-
-      "^moyTA$",
-      "^moyTA[_]DJF$", "^moyTA[_]MAM$", "^moyTA[_]JJA$", "^moyTA[_]SON$",
-      "^moyRA$",
-      "^moyRA[_]DJF$", "^moyRA[_]MAM$", "^moyRA[_]JJA$", "^moyRA[_]SON$",
-      "^CR$",
-      "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$")
-
-diag_variable_serie_selection =
-    ".*"
+selection_before_reading_for_projection =
+    TRUE
+    # FALSE
 
 diag_period_selection =
     list(
@@ -728,11 +677,6 @@ diag_station_selection =
         "CTRIP"="O038401001",
         "CTRIP"="D020601001"
     )
-
-
-proj_variable_selection =
-#     # "all"
-    c("^QA$", "^VCN10$")
 
 
 ## 6. PLOT_SHEET _____________________________________________________
@@ -1129,11 +1073,11 @@ if (type == "hydrologie") {
         Projections = tidyr::crossing(Projections,
                                       BC, Model=models_to_use)
 
-        if (is_projection_merge) {
+        if (projs_type %in% c("merged", "extracted")) {
             Projections = Projections[Projections$EXP != "historical",]
             Projections$EXP = paste0("historical-", Projections$EXP)
         }
-        
+
         Projections$climateChain =
             paste0(Projections$GCM, "|",
                    Projections$EXP, "|",
@@ -1182,20 +1126,30 @@ if (type == "hydrologie") {
                                            Projections$regexp)
         
 
-        if (is_projection_merge) {
-            proj_path = file.path(computer_data_path,
-                                  type, "projection_merge")
-        } else if (is_projection_clean) {
-            proj_path = file.path(computer_data_path,
-                                  type, "projection_clean")
-        } else {
+        if (projs_type == "raw") {
             proj_path = file.path(computer_data_path,
                                   type, "projection")
+            pattern = ".*[.]nc"
+            include.dirs = FALSE
+        } else if (projs_type == "cleaned") {
+            proj_path = file.path(computer_data_path,
+                                  type, "projection_clean")
+            pattern = ".*[.]nc"
+            include.dirs = FALSE
+        } else if (projs_type == "merged") {
+            proj_path = file.path(computer_data_path,
+                                  type, "projection_merge")
+            pattern = ".*[.]nc"
+            include.dirs = FALSE
+        } else if (projs_type == "extracted") {
+            proj_path = file.path(resdir, read_saving)
+            pattern = NULL
+            include.dirs = TRUE
         }
-
+        
         Paths = list.files(proj_path,
-                           pattern=".*[.]nc",
-                           include.dirs=FALSE,
+                           pattern=pattern,
+                           include.dirs=include.dirs,
                            full.names=TRUE,
                            recursive=TRUE)
         Files = basename(Paths)
@@ -1216,6 +1170,7 @@ if (type == "hydrologie") {
             lapply(Projections$file,
                    apply_match, table=Files, target=Paths)
 
+        
         Projections_nest = Projections
         Projections = tidyr::unnest(Projections,
                                              c(file, path))
@@ -1253,9 +1208,6 @@ if (type == "hydrologie") {
         Projections$storyLines[ok[!is.na(ok)]] =
             storyLines[!is.na(ok)]
 
-        # Projections = dplyr::distinct(Projections,
-                                      # file, .keep_all=TRUE)
-        
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
 
@@ -1664,8 +1616,8 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                  paste0("timer_", rank, ".txt"))
 }
 
-if (any(c('selection', 'write_warnings', 'add_regime_hydro',
-          'read_saving') %in% to_do)) {
+if (any(c('selection', 'create_database', 'write_warnings',
+          'add_regime_hydro', 'read_saving') %in% to_do)) {
     post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
