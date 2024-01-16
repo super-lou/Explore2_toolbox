@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -159,7 +159,7 @@ to_do = c(
     # 'merge_nc'
     # 'reshape_data',
     'create_data',
-    # 'extract_data'
+    'extract_data',
     'save_extract'
     # 'read_tmp'
     # 'read_saving'
@@ -172,7 +172,7 @@ to_do = c(
 )
 
 extract_data = c(
-    'WIP'
+    # 'WIP'
     # 'Explore2_criteria_diagnostic_performance',
     # 'Explore2_criteria_diagnostic_sensibilite',
     # 'Explore2_criteria_diagnostic_sensibilite_RAT',
@@ -184,13 +184,13 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    # 'Explore2_serie_projection_HE',
-    # 'Explore2_serie_projection_ME'
-    # 'Explore2_serie_projection_BE'
-    # 'Explore2_serie_projection_BE_estival',
-    # 'Explore2_serie_projection_BE_hivernal',
-    # 'Explore2_serie_projection_BF'
-)
+    'Explore2_serie_projection_HE',
+    'Explore2_serie_projection_ME',
+    'Explore2_serie_projection_BE',
+    'Explore2_serie_projection_BE_estival',
+    'Explore2_serie_projection_BE_hivernal',
+    'Explore2_serie_projection_BF'
+# )
 
 # dataEX_criteria_normal = dataEX_criteria
 # dataEX_criteria_ungauged = dataEX_criteria
@@ -280,8 +280,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
@@ -309,24 +309,24 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 20
 
 projs_type =
-    "raw"
+    # "raw"
     # "cleaned"
-    # "merged"
+    "merged"
     # "extracted"
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
         
         # "SAFRAN-France-20"
         
         ## story lines ##
-        "HadGEM2.*historical.*CCLM4.*ADAMONT"
+        # "HadGEM2.*historical.*CCLM4.*ADAMONT"
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
@@ -349,9 +349,9 @@ storyLines =
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD"
+        "CTRIP"
+        # "EROS",
+        # "GRSD"
         # "J2000"
         # "SIM2",
         # "MORDOR-SD",
@@ -367,12 +367,12 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # 'all'
+        'all'
         # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
-        "^D"
+        # "^D"
         # "^K"
         
         # "A882000101"
@@ -1266,9 +1266,9 @@ if (type == "hydrologie") {
                                     gsub("L'", "L ",
                                          codes_selection_data$SuggestionNOM
                                          )))))
-    # write_tibble(codes_selection_data,
-                 # filedir=today_resdir,
-                 # filename="codes_selection_data.txt")
+    write_tibble(codes_selection_data,
+                 filedir=today_resdir,
+                 filename="selection.csv")
 
     if (grepl("diagnostic", mode)) {
         ref = 1

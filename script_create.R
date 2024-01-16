@@ -136,9 +136,17 @@ create_data = function () {
                                       values_from=S,
                                       names_glue="surface_{HM}_km2")
 
-            meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp, by="code")
+            meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp,
+                                        by="code")
             rm ("meta_sim_tmp"); gc()
 
+
+            cols = names(meta_sim)[grepl("surface", names(meta_sim))]
+            cols = cols[cols != "surface_km2"]
+            meta_sim =
+                dplyr::filter(meta_sim,
+                              !if_all(.cols=all_of(cols),
+                                      .fns=is.na))
 
             data_sim = dplyr::select(data_sim, -"S")
 

@@ -67,7 +67,6 @@ manage_data = function () {
                 if (file.exists(file.path(tmppath, filename))) {
                     metaEX = read_tibble(filedir=tmppath,
                                          filename=filename)
-                    
                 }
             }
             
@@ -223,10 +222,6 @@ manage_data = function () {
         
         if (exists("meta")) {
             meta = meta[order(meta$code),]
-
-            print("aaaaaa")
-            print(meta)
-            
             write_tibble(meta,
                          filedir=tmppath,
                          filename=paste0("meta_", extract$name,
