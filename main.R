@@ -350,8 +350,8 @@ storyLines =
 HM_to_use = 
     c(
         # "CTRIP" ok
-        "EROS"
-        # "GRSD"
+        # "EROS"
+        "GRSD"
         # "J2000"
         # "SIM2" ok
         # "MORDOR-SD",
