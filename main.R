@@ -349,11 +349,11 @@ storyLines =
 
 HM_to_use = 
     c(
-        # "CTRIP" ok
+        # "CTRIP"
         # "EROS"
         # "GRSD"
         # "J2000"
-        # "SIM2" ok
+        # "SIM2"
         # "MORDOR-SD"
         # "MORDOR-TS"
         # "ORCHIDEE"
