@@ -190,7 +190,7 @@ extract_data = c(
     'Explore2_serie_projection_BE_estival',
     'Explore2_serie_projection_BE_hivernal',
     'Explore2_serie_projection_BF'
-# )
+)
 
 # dataEX_criteria_normal = dataEX_criteria
 # dataEX_criteria_ungauged = dataEX_criteria
@@ -350,7 +350,7 @@ storyLines =
 HM_to_use = 
     c(
         "CTRIP"
-        # "EROS",
+        # "EROS"
         # "GRSD"
         # "J2000"
         # "SIM2",
