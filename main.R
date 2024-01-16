@@ -75,8 +75,8 @@ lib_path =
 #     different file is created with a digit in its name to specify
 #     it. The selection of station code is done in the
 #     codes_to_use variable of the ## 1. CREATE_DATA section of the
-#     STEPS part below and the model used are selected in the
-#     variable models_to_diag of that same previous section.
+#     STEPS part below and the hm used are selected in the
+#     variable HM_to_diag of that same previous section.
 #     > tmpdir/data_K1.fst :
 #        A fst file that contain the tibble of created data.
 #     > tmpdir/meta_K1.fst :
@@ -158,11 +158,11 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'create_data',
+    # 'extract_data'
+    'save_extract'
     # 'read_tmp'
-    'read_saving'
+    # 'read_saving'
     # "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
@@ -172,7 +172,7 @@ to_do = c(
 )
 
 extract_data = c(
-    # 'WIP'
+    'WIP'
     # 'Explore2_criteria_diagnostic_performance',
     # 'Explore2_criteria_diagnostic_sensibilite',
     # 'Explore2_criteria_diagnostic_sensibilite_RAT',
@@ -185,8 +185,8 @@ extract_data = c(
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
     # 'Explore2_serie_projection_HE',
-    'Explore2_serie_projection_ME',
-    'Explore2_serie_projection_BE'
+    # 'Explore2_serie_projection_ME'
+    # 'Explore2_serie_projection_BE'
     # 'Explore2_serie_projection_BE_estival',
     # 'Explore2_serie_projection_BE_hivernal',
     # 'Explore2_serie_projection_BF'
@@ -194,9 +194,9 @@ extract_data = c(
 
 # dataEX_criteria_normal = dataEX_criteria
 # dataEX_criteria_ungauged = dataEX_criteria
-# dataEX_criteria = dplyr::filter(dataEX_criteria_normal, !(Model %in% c("GRSD", "SMASH")))
+# dataEX_criteria = dplyr::filter(dataEX_criteria_normal, !(HM %in% c("GRSD", "SMASH")))
 # dataEX_criteria = dplyr::bind_rows(dataEX_criteria, dataEX_criteria_ungauged)
-# dataEX_criteria = dplyr::filter(dataEX_criteria, Model != "MORDOR-SD")
+# dataEX_criteria = dplyr::filter(dataEX_criteria, HM != "MORDOR-SD")
 
 
 ## 3. PLOTTING PROCESSES _____________________________________________
@@ -215,7 +215,7 @@ extract_data = c(
 #
 # - 'diagnostic_matrix' :
 #     Plots diagnostic correlation matrix of every criteria for each
-#     model.
+#     hm.
 #     > figdir/matrice_correlation_J2000.pdf
 #
 # - 'diagnostic_station' :
@@ -254,22 +254,22 @@ plot_doc = c(
     # 'fiche_diagnostic_piezometre'
 
     ## normal
-    # "carte_critere_model"
-    # "carte_critere_model_secteur"
+    # "carte_critere_hm"
+    # "carte_critere_hm_secteur"
     # "carte_critere_critere"
     # "carte_critere_critere_secteur"
 
     ## ungauged
-    # "carte_critere_model_ungauged"
-    # "carte_critere_model_ungauged_secteur"
+    # "carte_critere_hm_ungauged"
+    # "carte_critere_hm_ungauged_secteur"
     # "carte_critere_critere_ungauged"
     # "carte_critere_critere_ungauged_secteur"
 
     ## avertissement
-    # "carte_critere_model_avertissement_secteur"
+    # "carte_critere_hm_avertissement_secteur"
     
     ## piezo
-    # "carte_piezo_critere_model"
+    # "carte_piezo_critere_hm"
     # "carte_piezo_critere_critere"
 )
 
@@ -280,13 +280,13 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -304,18 +304,18 @@ propagate_NA = TRUE
 # nSubsets  | 31 |
 # nodes     |  1 |
 # tasks     | 31 |
-## proj per model ##
+## proj per hm ##
 # nProj     | 82 | 41
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 20
+nCode4RAM = 100
 
 projs_type =
-    # "raw"
+    "raw"
     # "cleaned"
     # "merged"
-    "extracted"
+    # "extracted"
 
 projs_to_use =
     c(
@@ -347,17 +347,17 @@ storyLines =
       "HadGEM2-ES|rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #parapluie
 
 
-models_to_use = 
+HM_to_use = 
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
+        "CTRIP",
+        "EROS",
+        "GRSD"
         # "J2000"
         # "SIM2",
         # "MORDOR-SD",
         # "MORDOR-TS",
         # "ORCHIDEE",
-        "SMASH"
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -367,12 +367,12 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        'all'
+        # 'all'
         # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
-        # "^E"
+        "^D"
         # "^K"
         
         # "A882000101"
@@ -438,8 +438,8 @@ WIP =
          # variables=c("T_chronique",
                      # "R_chronique"),
          # variables=c("dtRA50mm"),
-         suffix=c("obs", "sim"))
-         # suffix=c("sim"),
+         # suffix=c("obs", "sim"))
+         suffix=c("sim"))
          # suffix=NULL)
 
 # diag
@@ -624,7 +624,7 @@ by_files =
     # TRUE
     FALSE
 
-var2save =
+variable2save =
     c(
         'meta',
         'data',
@@ -643,7 +643,7 @@ read_saving =
     file.path(mode, type)
     # "proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
 
-var2search =
+variable2search =
     c(
         # 'data[_]', ### /!\ très lourd ###
         # 'meta[_]',
@@ -711,7 +711,7 @@ prob_of_quantile_for_palette =
     0.01
     # 0
 
-Colors_of_models = c(
+Colors_of_HM = c(
     "CTRIP"="#A88D72", #marron
     "EROS"="#CECD8D", #vert clair
     "GRSD"="#619C6C", #vert foncé
@@ -778,11 +778,11 @@ doc_fiche_diagnostic_piezometre =
 
 ## Carte
 ### Station
-doc_carte_critere_model =
+doc_carte_critere_hm =
     list(
         title="Carte des critères d'évaluation par modèle",
         subtitle=NULL,
-        chunk='model',
+        chunk='hm',
         sheet=c('sommaire',
                 'carte_critere')
     )
@@ -795,11 +795,11 @@ doc_carte_critere_critere =
                 'carte_critere')
     )
 ### Secteur
-doc_carte_critere_model_secteur =
+doc_carte_critere_hm_secteur =
     list(
         title="Carte des critères d'évaluation par modèle (secteur)",
         subtitle=NULL,
-        chunk='model',
+        chunk='hm',
         sheet=c('sommaire',
                 'carte_critere_secteur')
     )
@@ -814,11 +814,11 @@ doc_carte_critere_critere_secteur =
 
 ## Carte en validation croisée
 ### Station
-doc_carte_critere_model_ungauged =
+doc_carte_critere_hm_ungauged =
     list(
         title="Carte des critères d'évaluation par modèle",
         subtitle="Validation croisée par bloc",
-        chunk='model',
+        chunk='hm',
         sheet=c('sommaire',
                 'carte_critere')
     )
@@ -831,11 +831,11 @@ doc_carte_critere_critere_ungauged =
                 'carte_critere')
     )
 ### Secteur
-doc_carte_critere_model_ungauged_secteur =
+doc_carte_critere_hm_ungauged_secteur =
     list(
         title="Carte des critères d'évaluation par modèle (secteur)",
         subtitle="Validation croisée par bloc",
-        chunk='model',
+        chunk='hm',
         sheet=c('sommaire',
                 'carte_critere_secteur')
     )
@@ -849,11 +849,11 @@ doc_carte_critere_critere_ungauged_secteur =
     )
 
 ### Warning
-doc_carte_critere_model_avertissement_secteur =
+doc_carte_critere_hm_avertissement_secteur =
     list(
         title="Carte des avertissements par modèle (secteur)",
         subtitle="Avertissements",
-        chunk='model',
+        chunk='hm',
         sheet=c('sommaire',
                 'carte_critere_avertissement_secteur')
     )
@@ -862,11 +862,11 @@ doc_carte_critere_model_avertissement_secteur =
 
 ## Carte piezo
 ### Station
-doc_carte_piezo_critere_model =
+doc_carte_piezo_critere_hm =
     list(
         title="Carte des critères d'évaluation par modèle",
         subtitle="Piézomètre",
-        chunk='model',
+        chunk='hm',
         sheet=c('sommaire',
                 'carte_critere_piezo_shape')
     )
@@ -1025,7 +1025,7 @@ if (grepl("diagnostic", mode)) {
     period_extract = period_extract_diag
 } else if (grepl("projection", mode)) {
     period_extract = period_extract_projection
-    var2save = var2save[var2save != "data"]
+    variable2save = variable2save[variable2save != "data"]
 }
 
 # if (!(file.exists(resources_path)) & rank == 0) {
@@ -1071,7 +1071,7 @@ if (type == "hydrologie") {
 
         BC = c("ADAMONT", "CDFt")
         Projections = tidyr::crossing(Projections,
-                                      BC, Model=models_to_use)
+                                      BC, HM=HM_to_use)
 
         if (projs_type %in% c("merged", "extracted")) {
             Projections = Projections[Projections$EXP != "historical",]
@@ -1086,7 +1086,7 @@ if (type == "hydrologie") {
         
         Projections$Chain =
             paste0(Projections$climateChain, "|",
-                   Projections$Model)
+                   Projections$HM)
         
         Projections$regexp =
             paste0(".*", 
@@ -1097,12 +1097,12 @@ if (type == "hydrologie") {
                                 Projections$EXP,
                                 Projections$RCM,
                                 Projections$BC,
-                                Projections$Model, sep="_")
+                                Projections$HM, sep="_")
         
         Projections =
             dplyr::bind_rows(
                        Projections,
-                       dplyr::tibble(Model=models_to_use,
+                       dplyr::tibble(HM=HM_to_use,
                                      GCM=NA,
                                      RCM=NA,
                                      EXP=NA,
@@ -1112,11 +1112,11 @@ if (type == "hydrologie") {
                                          "||",
                                          "SAFRAN",
                                          "||",
-                                         models_to_use),
+                                         HM_to_use),
                                      regexp=paste0(
                                          ".*SAFRAN-France-20",
                                          ".*",
-                                         models_to_use,
+                                         HM_to_use,
                                          ".*"),
                                      dir=""))
         
@@ -1174,12 +1174,25 @@ if (type == "hydrologie") {
         Projections_nest = Projections
         Projections = tidyr::unnest(Projections,
                                              c(file, path))
+
+
+        if (nrow(Projections) == 1) { #### MOCHE ####
+            nOK = apply(as.matrix(
+                sapply(projection_to_remove, grepl,
+                       x=Projections$file)),
+                1, any)
+            if (any(nOK)) {
+                Projections = dplyr::tibble()
+            }
+        } else {
+            OK = !apply(as.matrix(
+                      sapply(projection_to_remove, grepl,
+                             x=Projections$file)),
+                      1, any)
+            Projections = Projections[OK,]
+        }
+
         
-        OK = !apply(as.matrix(
-            sapply(projection_to_remove, grepl,
-                   x=Projections$file)),
-            1, any)
-        Projections = Projections[OK,]
         
         if (all(projs_to_use != "all")) {
             OK = apply(as.matrix(
@@ -1216,31 +1229,31 @@ if (type == "hydrologie") {
                      filedir=today_resdir,
                      filename="projs_selection.txt")
 
-        
     } else if (grepl("diagnostic", mode)) { #####
         diag_path = file.path(computer_data_path, type, mode)
-        models_to_use_name = models_to_use
-        models_path = list.files(file.path(computer_data_path,
+        HM_to_use_name = HM_to_use
+        HM_path = list.files(file.path(computer_data_path,
                                            type,
                                            mode),
                                  full.names=TRUE)
-        models_file = basename(models_path)
-        files_to_use = lapply(models_to_use, apply_grepl,
-                              table=models_file, target=models_path)
-        names(files_to_use) = models_to_use_name
+        HM_file = basename(HM_path)
+        files_to_use = lapply(HM_to_use, apply_grepl,
+                              table=HM_file, target=HM_path)
+        names(files_to_use) = HM_to_use_name
         files_to_use = files_to_use[sapply(files_to_use, length) > 0]
 
         complete_by =
             complete_by[complete_by %in% names(files_to_use)]
     }
-    
+
     nFiles_to_use = length(files_to_use)
 
     codes_selection_data = read_tibble(file.path(
         computer_data_path, type,
         codes_hydro_selection_file))
     codes_selection_data = dplyr::filter(codes_selection_data,
-                                         !grepl("Supprimer", X))
+                                         !grepl("Supprimer",
+                                                PointsSupprimes))
 
     codes_selection_data = dplyr::arrange(codes_selection_data,
                                           SuggestionCode)
@@ -1253,15 +1266,16 @@ if (type == "hydrologie") {
                                     gsub("L'", "L ",
                                          codes_selection_data$SuggestionNOM
                                          )))))
-    write_tibble(codes_selection_data,
-                 filedir=today_resdir,
-                 filename="codes_selection_data.txt")
+    # write_tibble(codes_selection_data,
+                 # filedir=today_resdir,
+                 # filename="codes_selection_data.txt")
 
     if (grepl("diagnostic", mode)) {
         ref = 1
     } else if (grepl("projection", mode)) {
         ref = c(0, 1)
     }
+
     codes_selection_data =
         codes_selection_data[codes_selection_data$Référence %in%
                              ref,]
@@ -1276,12 +1290,12 @@ if (type == "hydrologie") {
     }
     if (all(codes_to_use == "all")) {
         CodeALL8 = codes8_selection
-        CodeALL10 = convert_codeNtoM(codes8_selection)
+        CodeALL10 = codes10_selection
     } else {
-        codes_to_use_regexp = convert_codeNtoM(codes_to_use, 8,
-                                               10, crop=FALSE, top=NULL)
+        # codes_to_use_regexp = convert_codeNtoM(codes_to_use, 8,
+                                               # 10, crop=FALSE, top=NULL)
         CodeALL10 = c(sapply(paste0("(" ,
-                                    paste0(codes_to_use_regexp,
+                                    paste0(codes_to_use,
                                            collapse=")|("),
                                ")"),
                         apply_grepl,
@@ -1292,8 +1306,6 @@ if (type == "hydrologie") {
     CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
     CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
     nCodeALL = length(CodeALL10)
-
-    
     
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
@@ -1418,7 +1430,7 @@ if (MPI != "") {
     tmppath = file.path(computer_work_path,
                         paste0(tmpdir,
                                "_",
-                               paste0(models_to_use,
+                               paste0(HM_to_use,
                                       collapse="_"))) #########################################################
 } else {
     tmppath = file.path(computer_work_path, tmpdir)
@@ -1517,7 +1529,7 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                             paste0(subset, collapse=" -> ")))
                 
                 file_test = c()
-                if ('create_data' %in% to_do & "data" %in% var2save) {
+                if ('create_data' %in% to_do) {
                     file_test = c(file_test,
                                   paste0("data", sep,
                                          files_name_opt.,

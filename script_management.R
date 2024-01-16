@@ -41,7 +41,7 @@ manage_data = function () {
             rm ("dataEX")
             gc()
         }
-        
+
         for (j in 1:nSubsets_save) {
             subset_name = names(Subsets_save)[j]
 
@@ -100,7 +100,6 @@ manage_data = function () {
             }
         }
 
-        
         if (exists("dataEX")) {
             if (extract$type == "criteria") {
 
@@ -111,142 +110,145 @@ manage_data = function () {
                 regexp_ratio = "(Rc)|(^epsilon)|(^a)|(^STD)"
                 regexp_diff = "(R.*[_]ratio)|(moyTA)|(moyRA)"
                 
-                dataEX = dataEX[order(dataEX$Model),]
+                dataEX = dataEX[order(dataEX$HM),]
                 
-                Vars = colnames(dataEX)
+                Variables = colnames(dataEX)
                 
                 containSO = "([_]obs$)|([_]sim$)"
-                Vars = Vars[grepl(containSO, Vars)]
-                if (length(Vars) > 0) {
-                    VarsREL = gsub(containSO, "", Vars)
-                    VarsREL = VarsREL[!duplicated(VarsREL)]
-                    nVarsREL = length(VarsREL)
+                Variables = Variables[grepl(containSO, Variables)]
+                if (length(Variables) > 0) {
+                    VariablesREL = gsub(containSO, "", Variables)
+                    VariablesREL = VariablesREL[!duplicated(VariablesREL)]
+                    nVariablesREL = length(VariablesREL)
                     
-                    for (j in 1:nVarsREL) {
-                        varREL = VarsREL[j]
+                    for (j in 1:nVariablesREL) {
+                        variableREL = VariablesREL[j]
                         
-                        if (grepl(regexp_bool, varREL)) {
-                            dataEX[[varREL]] =
-                                dataEX[[paste0(varREL,
+                        if (grepl(regexp_bool, variableREL)) {
+                            dataEX[[variableREL]] =
+                                dataEX[[paste0(variableREL,
                                                "_sim")]] &
-                                dataEX[[paste0(varREL,
+                                dataEX[[paste0(variableREL,
                                                "_obs")]]
 
-                            metaEX$glose[metaEX$var == varREL] =
-                                paste0(metaEX$glose[metaEX$var == varREL],
+                            metaEX$glose[metaEX$variable == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable == variableREL],
                                        " (Comparaison entre les valeurs simulées et observées)")
 
-                        } else if (grepl(regexp_time, varREL)) {
-                            dataEX[[varREL]] =
+                        } else if (grepl(regexp_time, variableREL)) {
+                            dataEX[[variableREL]] =
                                 circular_minus(
-                                    dataEX[[paste0(varREL,
+                                    dataEX[[paste0(variableREL,
                                                    "_sim")]],
-                                    dataEX[[paste0(varREL,
+                                    dataEX[[paste0(variableREL,
                                                    "_obs")]],
                                     period=365.25)/30.4375
 
-                            metaEX$unit[metaEX$var == varREL] = "mois"
-                            metaEX$isDate[metaEX$var == varREL] = FALSE
-                            metaEX$glose[metaEX$var == varREL] =
-                                paste0(metaEX$glose[metaEX$var == varREL],
+                            metaEX$unit[metaEX$variable == variableREL] = "mois"
+                            metaEX$isDate[metaEX$variable == variableREL] = FALSE
+                            metaEX$glose[metaEX$variable == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable == variableREL],
                                        " (Écart normalisé entre les valeurs simulées et observées)")
                             
 
                         } else if (grepl(regexp_ratio_alpha,
-                                         varREL)) {
+                                         variableREL)) {
                             
-                            dataEX[[varREL]] =
-                                dataEX[[paste0(varREL, "_sim")]] /
-                                dataEX[[paste0(varREL, "_obs")]]
+                            dataEX[[variableREL]] =
+                                dataEX[[paste0(variableREL, "_sim")]] /
+                                dataEX[[paste0(variableREL, "_obs")]]
 
-                            dataEX[[varREL]][
+                            dataEX[[variableREL]][
                                 !dataEX[[paste0("HYP",
-                                                varREL,
+                                                variableREL,
                                                 "_obs")]]
                             ] = NA
                             
-                            metaEX$unit[metaEX$var == varREL] = "sans unité"
-                            metaEX$glose[metaEX$var == varREL] =
-                                paste0(metaEX$glose[metaEX$var == varREL],
+                            metaEX$unit[metaEX$variable == variableREL] = "sans unité"
+                            metaEX$glose[metaEX$variable == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable == variableREL],
                                        " (Ratio entre les valeurs simulées et observées)")
                             
-                        } else if (grepl(regexp_ratio, varREL)) {
-                            dataEX[[varREL]] =
-                                dataEX[[paste0(varREL, "_sim")]] /
-                                dataEX[[paste0(varREL, "_obs")]]
+                        } else if (grepl(regexp_ratio, variableREL)) {
+                            dataEX[[variableREL]] =
+                                dataEX[[paste0(variableREL, "_sim")]] /
+                                dataEX[[paste0(variableREL, "_obs")]]
 
-                            metaEX$unit[metaEX$var == varREL] = "sans unité"
-                            metaEX$glose[metaEX$var == varREL] =
-                                paste0(metaEX$glose[metaEX$var == varREL],
+                            metaEX$unit[metaEX$variable == variableREL] = "sans unité"
+                            metaEX$glose[metaEX$variable == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable == variableREL],
                                        " (Ratio entre les valeurs simulées et observées)")
 
-                        } else if (grepl(regexp_diff, varREL)) {
-                            dataEX[[varREL]] =
-                                round(dataEX[[paste0(varREL, "_sim")]] -
-                                      dataEX[[paste0(varREL, "_obs")]], 5)
+                        } else if (grepl(regexp_diff, variableREL)) {
+                            dataEX[[variableREL]] =
+                                round(dataEX[[paste0(variableREL, "_sim")]] -
+                                      dataEX[[paste0(variableREL, "_obs")]], 5)
                             
-                            metaEX$glose[metaEX$var == varREL] =
-                                paste0(metaEX$glose[metaEX$var == varREL],
+                            metaEX$glose[metaEX$variable == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable == variableREL],
                                        " (Écart entre les valeurs simulées et observées)")
 
                         } else {
-                            dataEX[[varREL]] =
-                                (dataEX[[paste0(varREL,
+                            dataEX[[variableREL]] =
+                                (dataEX[[paste0(variableREL,
                                                 "_sim")]] -
-                                 dataEX[[paste0(varREL,
+                                 dataEX[[paste0(variableREL,
                                                 "_obs")]]) /
-                                dataEX[[paste0(varREL,
+                                dataEX[[paste0(variableREL,
                                                "_obs")]]
                             
-                            metaEX$unit[metaEX$var == varREL] = "sans unité"
-                            metaEX$glose[metaEX$var == varREL] =
-                                paste0(metaEX$glose[metaEX$var == varREL],
+                            metaEX$unit[metaEX$variable == variableREL] = "sans unité"
+                            metaEX$glose[metaEX$variable == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable == variableREL],
                                        " (Ratio relatif entre les valeurs simulées et observées)")
                         }
 
                         dataEX =
                             dplyr::relocate(dataEX,
-                                            !!varREL,
-                                            .after=!!paste0(varREL,
+                                            !!variableREL,
+                                            .after=!!paste0(variableREL,
                                                             "_sim"))
                     }
                 }
 
             } else if (extract$type == "serie") {
-                if ("Model" %in% names(dataEX[[1]])) {
+                if ("HM" %in% names(dataEX[[1]])) {
                     for (j in 1:length(dataEX)) {
                         dataEX[[j]] =
-                            dataEX[[j]][order(dataEX[[j]]$Model),]       
+                            dataEX[[j]][order(dataEX[[j]]$HM),]       
                     }
                 }
             }
         }
-
-        meta = meta[order(meta$Code),]
-        write_tibble(meta,
-                     filedir=tmppath,
-                     filename=paste0("meta_", extract$name,
-                                     .files_name_opt,
-                                     ".fst"))
-        write_tibble(dataEX,
-                     filedir=tmppath,
-                     filename=paste0("dataEX_", extract$name,
-                                     .files_name_opt,
-                                     ".fst"))
-        write_tibble(metaEX,
-                     filedir=tmppath,
-                     filename=paste0("metaEX_", extract$name,
-                                     .files_name_opt,
-                                     ".fst"))
         
         if (exists("meta")) {
+            meta = meta[order(meta$code),]
+
+            print("aaaaaa")
+            print(meta)
+            
+            write_tibble(meta,
+                         filedir=tmppath,
+                         filename=paste0("meta_", extract$name,
+                                         .files_name_opt,
+                                         ".fst"))
             rm ("meta"); gc()
         }
-        if (exists("metaEX")) {
-            rm ("metaEX"); gc()
-        }
         if (exists("dataEX")) {
+            write_tibble(dataEX,
+                         filedir=tmppath,
+                         filename=paste0("dataEX_", extract$name,
+                                         .files_name_opt,
+                                         ".fst"))
             rm ("dataEX"); gc()
+        }
+        if (exists("metaEX")) {
+            write_tibble(metaEX,
+                         filedir=tmppath,
+                         filename=paste0("metaEX_", extract$name,
+                                         .files_name_opt,
+                                         ".fst"))
+            rm ("metaEX"); gc()
         }
     }
 }
@@ -278,7 +280,7 @@ save_data = function () {
                       gsub(files_name_regexp, "",
                            basename(data_paths)))
 
-    if ("data" %in% var2save) {
+    if ("data" %in% variable2save) {
         file.copy(data_paths,
                   file.path(today_resdir_tmp, data_files))
     }
@@ -292,7 +294,7 @@ save_data = function () {
         if (file.exists(file.path(tmppath, dirname)) |
             file.exists(file.path(tmppath, filename))) {
 
-            if ("meta" %in% var2save) {
+            if ("meta" %in% variable2save) {
                 meta = read_tibble(filedir=tmppath,
                                    filename=paste0(
                                        "meta_",
@@ -302,7 +304,7 @@ save_data = function () {
                 
             }
             
-            if ("metaEX" %in% var2save) {
+            if ("metaEX" %in% variable2save) {
                 metaEX = read_tibble(filedir=tmppath,
                                      filename=paste0(
                                          "metaEX_",
@@ -311,7 +313,7 @@ save_data = function () {
                                          ".fst"))
                 
             }
-            if ("dataEX" %in% var2save) {
+            if ("dataEX" %in% variable2save) {
                 dataEX = read_tibble(filedir=tmppath,
                                      filename=paste0(
                                          "dataEX_",
@@ -323,7 +325,7 @@ save_data = function () {
             next
         }
 
-        if ("meta" %in% var2save) {
+        if ("meta" %in% variable2save) {
             write_tibble(meta,
                          filedir=today_resdir_tmp,
                          filename="meta.fst")
@@ -337,13 +339,9 @@ save_data = function () {
                              filedir=today_resdir_tmp,
                              filename="meta.txt")
             }
-            if (!is.null(wait)) {
-                post("Waiting for saving of meta data")
-                Sys.sleep(wait)
-            }
         }
 
-        if ("metaEX" %in% var2save) {
+        if ("metaEX" %in% variable2save) {
             write_tibble(metaEX,
                          filedir=today_resdir_tmp,
                          filename=paste0("metaEX_",
@@ -363,14 +361,10 @@ save_data = function () {
                                              extract$name,
                                              ".txt"))
             }
-            if (!is.null(wait)) {
-                post("Waiting for saving of extracted meta data")
-                Sys.sleep(wait)
-            }
         }
 
 
-        if ("dataEX" %in% var2save) {
+        if ("dataEX" %in% variable2save) {
             write_tibble(dataEX,
                          filedir=today_resdir_tmp,
                          filename=paste0("dataEX_",
@@ -435,7 +429,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         }
     }
         
-    if ('extract_data' %in% to_do) {
+    if ('create_data' %in% to_do | 'extract_data' %in% to_do) {
         if (MPI == "code" & rank == 0 |
             MPI != "code") {
             manage_data()
@@ -483,7 +477,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                full.names=TRUE)
             Paths = Paths[!duplicated(Paths)]
 
-            pattern = var2search
+            pattern = variable2search
             pattern = paste0("(", paste0(pattern,
                                          collapse=")|("), ")")
 
@@ -537,17 +531,17 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                            "metaEX",
                                                            Paths[i]))
                     variables_to_read =
-                        metaEX_tmp$var[sapply(metaEX_tmp$var,
+                        metaEX_tmp$variable[sapply(metaEX_tmp$variable,
                                               any_grepl, pattern=pattern)]
 
                     tmp = list()
                     if (length(variables_to_read) > 0) {
-                        Paths_var = file.path(gsub("[.]fst", "", Paths[i]),
+                        Paths_variable = file.path(gsub("[.]fst", "", Paths[i]),
                                               paste0(variables_to_read, ".fst"))
                         
-                        for (j in 1:length(Paths_var)) {
+                        for (j in 1:length(Paths_variable)) {
                             tmp = append(tmp,
-                                         list(read_tibble(filepath=Paths_var[j])))
+                                         list(read_tibble(filepath=Paths_variable[j])))
                             names(tmp)[length(tmp)] = variables_to_read[j]
                         }
                     }
@@ -559,12 +553,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 
 
                 if (grepl("dataEX.*criteria", Filenames[i])) {
-                    tmp = dplyr::filter(tmp, Code %in% CodeALL10)
+                    tmp = dplyr::filter(tmp, code %in% CodeALL10)
                     
                 } else if (grepl("dataEX.*serie", Filenames[i])) {
                     for (k in 1:length(tmp)) {
                         tmp[[k]] =
-                            dplyr::filter(tmp[[k]], Code %in% CodeALL10)
+                            dplyr::filter(tmp[[k]], code %in% CodeALL10)
                     }
                 }
 
@@ -600,18 +594,19 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             if (length(diag_station_selection) == 0) {
                                 break
                             }
-                            model = names(diag_station_selection)[j]
-                            code = diag_station_selection[j]
+                            hm_selection = names(diag_station_selection)[j]
+                            code_selection = diag_station_selection[j]
                             tmp = dplyr::filter(tmp,
-                                                !(Model == model &
-                                                  grepl(code, Code)))  
+                                                !(HM == hm_selection &
+                                                  grepl(code_selection,
+                                                        code)))  
                         }
                     }
 
                     if (grepl("dataEX.*serie", Filenames[i])) {
 
                         for (j in 1:length(diag_period_selection)) {
-                            model = names(diag_period_selection)[j]
+                            hm = names(diag_period_selection)[j]
                             period = diag_period_selection[[j]]
                             start = period[1]
                             if (is.na(start)) {
@@ -622,17 +617,17 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 end = max(as.Date(period_extract_diag))
                             }                        
                             for (k in 1:length(tmp)) {
-                                if (!("Date" %in% names(tmp[[k]])) |
+                                if (!("date" %in% names(tmp[[k]])) |
                                     !any(sapply(tmp[[k]],
                                                 lubridate::is.Date))) {
                                     next
                                 }
                                 tmp[[k]] =
                                     dplyr::filter(tmp[[k]],
-                                                  Model != model |
-                                                  (Model == model & 
-                                                   start < Date &
-                                                   Date < end))
+                                                  HM != hm |
+                                                  (HM == hm & 
+                                                   start < date &
+                                                   date < end))
                             }
 
                         }
@@ -640,13 +635,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             if (length(diag_station_selection) == 0) {
                                 break
                             }
-                            model = names(diag_station_selection)[j]
-                            code = diag_station_selection[j]
+                            hm_selection = names(diag_station_selection)[j]
+                            code_selection = diag_station_selection[j]
                             for (k in 1:length(tmp)) {
                                 tmp[[k]] =
                                     dplyr::filter(tmp[[k]],
-                                                  !(Model == model &
-                                                    grepl(code, Code)))
+                                                  !(HM == hm_selection &
+                                                    grepl(code_selection,
+                                                          code)))
                             }
                         }
 
@@ -683,14 +679,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                 if (selection) {
                     if (grepl("metaEX.*criteria", Filenames[i])) {
-                        row2keep = sapply(tmp$var, any_grepl,
+                        row2keep = sapply(tmp$variable, any_grepl,
                                           pattern=pattern)
                         tmp = tmp[row2keep,]
 
                     }
 
                     if (grepl("metaEX.*serie", Filenames[i])) {
-                        row2keep = sapply(tmp$var, any_grepl,
+                        row2keep = sapply(tmp$variable, any_grepl,
                                           pattern=pattern)
                         tmp = tmp[row2keep,]
                         
@@ -702,11 +698,11 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             if (length(diag_station_selection) == 0) {
                                 break
                             }
-                            model = names(diag_station_selection)[j]
+                            hm = names(diag_station_selection)[j]
                             code = diag_station_selection[j]
-                            tmp[[paste0("Surface_",
-                                        model, "_km2")]][grepl(code,
-                                                               tmp$Code)] = NA
+                            tmp[[paste0("surface_",
+                                        hm, "_km2")]][grepl(code,
+                                                               tmp$code)] = NA
                         }
                     }
                 }
@@ -750,7 +746,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                             "Chain",
                                                             "GCM", "EXP",
                                                             "RCM", "BC",
-                                                            "Model",
+                                                            "HM",
                                                             sep="|",
                                                             remove=FALSE)
                                 }
@@ -760,7 +756,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     tmp[[k]] = tidyr::unite(tmp[[k]],
                                                             "Chain",
                                                             "climateChain",
-                                                            "Model",
+                                                            "HM",
                                                             sep="|",
                                                             remove=FALSE)
                                     tmp[[k]] = dplyr::relocate(tmp[[k]],
@@ -793,12 +789,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     } else if (grepl("metaEX.*criteria", Filenames[i])) {
                         metaEX_criteria =
                             dplyr::bind_rows(metaEX_criteria,
-                                             tmp[!(tmp$var %in% metaEX_criteria$var),])
+                                             tmp[!(tmp$variable %in% metaEX_criteria$variable),])
                         
                     } else if (grepl("metaEX.*serie", Filenames[i])) {
                         metaEX_serie =
                             dplyr::bind_rows(metaEX_serie,
-                                             tmp[!(tmp$var %in% metaEX_serie$var),])
+                                             tmp[!(tmp$variable %in% metaEX_serie$variable),])
                         
                     } else if (grepl("data[_]", Filenames[i])) {
                         data = dplyr::bind_rows(data, tmp)
@@ -822,7 +818,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                            list(list(name=name_criteria,
                                      type="criteria",
                                      variables=
-                                         metaEX_criteria$var)))
+                                         metaEX_criteria$variable)))
                 names(extract_data_tmp)[length(extract_data_tmp)] =
                     "criteria"
             }
@@ -831,7 +827,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     append(extract_data_tmp,
                            list(list(name=name_serie,
                                      type="serie",
-                                     variables=metaEX_serie$var)))
+                                     variables=metaEX_serie$variable)))
                 names(extract_data_tmp)[length(extract_data_tmp)] =
                     "serie"
             }
@@ -840,9 +836,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
         
         if (!is.null(names(codes_to_use)) & exists("meta")) {
-            info = dplyr::tibble(Code=codes_to_use,
+            info = dplyr::tibble(code=codes_to_use,
                                  info=names(codes_to_use))
-            meta = dplyr::left_join(meta, info, by="Code")
+            meta = dplyr::left_join(meta, info, by="code")
         }
 
 
@@ -876,108 +872,84 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
 
 
-# -- Table for time series data
-# CREATE TABLE IF NOT EXISTS data (
-#     ID SERIAL PRIMARY KEY,
-#     code VARCHAR(255) REFERENCES Stations(code),
-#     date DATE NOT NULL,
-#     value DOUBLE PRECISION NOT NULL,
-#     variable VARCHAR(255) REFERENCES Variables(variable),
-#     projection INT REFERENCES Projections(projection)
-# );
+        stop()
 
-# -- Table for stations
-# CREATE TABLE IF NOT EXISTS Stations (
-#     code VARCHAR(255) PRIMARY KEY,
-#     name VARCHAR(255) NOT NULL,
-#     hydro_region VARCHAR(255) NOT NULL,
-#     source VARCHAR(255) NOT NULL,
-#     is_reference BOOLEAN NOT NULL,
-#     XL93_m DOUBLE PRECISION NOT NULL,
-#     YL93_m DOUBLE PRECISION NOT NULL,
-#     surface_km2 DOUBLE PRECISION NOT NULL
-# );
-
-# -- Table for variables
-# CREATE TABLE IF NOT EXISTS Variables (
-#     variable VARCHAR(255) PRIMARY KEY,
-#     unit VARCHAR(255) NOT NULL,
-#     is_date BOOLEAN NOT NULL,
-#     is_normalize BOOLEAN NOT NULL,
-#     palette VARCHAR(255) NOT NULL,
-#     glose VARCHAR(255) NOT NULL,
-#     topic VARCHAR(255) NOT NULL,
-#     sampling_period VARCHAR(255) NOT NULL
-# );
-
-# -- Table for projections
-# CREATE TABLE IF NOT EXISTS Projections (
-#     projection SERIAL PRIMARY KEY,
-#     EXP VARCHAR(255) NOT NULL,
-#     GCM VARCHAR(255) NOT NULL,
-#     RCM VARCHAR(255) NOT NULL,
-#     BC VARCHAR(255) NOT NULL,
-#     HM VARCHAR(255) NOT NULL,
-#     storylines VARCHAR(255) NOT NULL
-# );
-
-
-
-
-
-        
-
-        query_models = "
-  CREATE TABLE IF NOT EXISTS meta (
-    ModelID SERIAL PRIMARY KEY,
-    ModelName VARCHAR(255) NOT NULL,
-    VariableName VARCHAR(255) NOT NULL
-  )
-"
-        dbExecute(con, query_models)
-
-        query_timeseries = "
-  CREATE TABLE IF NOT EXISTS data (
+        # Table for time series data
+        query = " 
+CREATE TABLE IF NOT EXISTS data (
     ID SERIAL PRIMARY KEY,
-    ModelID INT REFERENCES meta(ModelID),
-    Code VARCHAR(255) NOT NULL,
-    Date DATE NOT NULL,
-    Value DOUBLE PRECISION NOT NULL
-  )
+    code VARCHAR(255) REFERENCES Stations(code),
+    date DATE NOT NULL,
+    value DOUBLE PRECISION NOT NULL,
+    variable VARCHAR(255) REFERENCES Variables(variable),
+    projection INT REFERENCES Projections(projection)
+);
 "
-        dbExecute(con, query_timeseries)
-
-        # Replace 'your_model_name' and 'your_variable_name' with actual model and variable names
-        your_model_name = "ExampleModel"
-        your_variable_name = "ExampleVariable"
-
-        # Insert into ClimateModels table
-        query_insert_model = "
-  INSERT INTO ClimateModels (ModelName, VariableName)
-  VALUES (?, ?)
-  RETURNING ModelID
+        dbExecute(con, query)
+        
+        # Table for stations
+        query = " 
+CREATE TABLE IF NOT EXISTS Stations (
+    code VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    hydrological_region VARCHAR(255) NOT NULL,
+    source VARCHAR(255) NOT NULL,
+    is_reference BOOLEAN NOT NULL,
+    XL93_m DOUBLE PRECISION NOT NULL,
+    YL93_m DOUBLE PRECISION NOT NULL,
+    surface_km2 DOUBLE PRECISION NOT NULL
+);
 "
-        your_model_id = dbGetQuery(con, query_insert_model, your_model_name, your_variable_name)$modelid
+        dbExecute(con, query)
+        
+        # Table for variables
+        query = "       
+CREATE TABLE IF NOT EXISTS Variables (
+    variable VARCHAR(255) PRIMARY KEY,
+    unit VARCHAR(255) NOT NULL,
+    is_date BOOLEAN NOT NULL,
+    is_normalize BOOLEAN NOT NULL,
+    palette VARCHAR(255) NOT NULL,
+    glose VARCHAR(255) NOT NULL,
+    topic VARCHAR(255) NOT NULL,
+    sampling_period VARCHAR(255) NOT NULL
+);
+"
+        dbExecute(con, query)
+        
+        # Table for projections
+        query = "      
+CREATE TABLE IF NOT EXISTS Projections (
+    projection SERIAL PRIMARY KEY,
+    EXP VARCHAR(255) NOT NULL,
+    GCM VARCHAR(255) NOT NULL,
+    RCM VARCHAR(255) NOT NULL,
+    BC VARCHAR(255) NOT NULL,
+    HM VARCHAR(255) NOT NULL,
+    storylines VARCHAR(255) NOT NULL
+);
+"
+        dbExecute(con, query)
 
-        # Replace 'your_data_frame' with your actual data frame
-        # Iterate over your data frame and insert rows into the TimeSeriesData table
-        for (i in 1:nrow(your_data_frame)) {
-            query_insert_timeseries = "
-    INSERT INTO TimeSeriesData (ModelID, Code, Date, Value)
-    VALUES (?, ?, ?, ?)
-  "
-            dbExecute(
-                con,
-                query_insert_timeseries,
-                your_model_id,
-                your_data_frame$Code[i],
-                your_data_frame$Date[i],
-                your_data_frame$Value[i]
-            )
-        }
 
+
+
+        metaEX_tmp = metaEX_tmp
+        metaEX_tmp = dplyr::rename(metaEX_tmp,
+                                   variable=var,
+                                   is_normalize=normalize,
+                                   sampling_period=sampling_period)
+        write_tibble(metaEX_tmp, filedir=, filename=)
+
+        dbWriteTable(con, "Variables", metaEX_tmp,
+                     append=TRUE, row.names=FALSE)
+
+
+        Projections_tmp = Projections[i,]
         
         
+
+
     }
 
 
@@ -1012,12 +984,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     dplyr::select(meta,
                                   !dplyr::starts_with("Regime_hydro_"))
 
-                Code = levels(factor(dataEX$Code))
+                Code = levels(factor(dataEX$code))
                 nCode = length(Code)
 
                 dataEXserieQM_obs =
                     dplyr::summarise(dplyr::group_by(dataEX$QM,
-                                                     Code, Date),
+                                                     code, date),
                                      QM=median(QM_obs,
                                                na.rm=TRUE),
                                      .groups="drop")
@@ -1025,11 +997,11 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 dataEXserieR_ratio =
                     dplyr::full_join(dataEX$Rl_ratio,
                                      dataEX$Rs_ratio,
-                                     by=c("Code", "Model"))
+                                     by=c("code", "HM"))
                 dataEXserieR_ratio =
                     dplyr::summarise(
                                dplyr::group_by(dataEXserieR_ratio,
-                                               Code),
+                                               code),
                                Rs_ratio=median(Rs_ratio_obs,
                                                na.rm=TRUE),
                                Rl_ratio=median(Rl_ratio_obs,
@@ -1040,11 +1012,11 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                lim_number=NULL,
                                                dataEXserieR_ratio)
 
-                ok = names(regimeHydro) != "Code"
+                ok = names(regimeHydro) != "code"
                 names(regimeHydro)[ok] =
                     paste0("Regime_hydro_", names(regimeHydro)[ok])
                 
-                meta = dplyr::full_join(meta, regimeHydro, "Code")
+                meta = dplyr::full_join(meta, regimeHydro, "code")
                 
                 write_tibble(meta,
                              filedir=today_resdir,
@@ -1060,7 +1032,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         post(paste0("Reading tmp data in ", tmppath))
         Paths = list.files(tmppath,
                            pattern=paste0("(",
-                                          paste0(var2search,
+                                          paste0(variable2search,
                                                  collapse=")|("),
                                           ")"),
                            include.dirs=TRUE,
@@ -1135,17 +1107,17 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 code_rm_data_path = file.path(computer_data_path,
                                               type,
                                               code_correction_dir,
-                                              paste0(proj$Model,
+                                              paste0(proj$HM,
                                                      "_rm.csv"))
                 code_mv_data_path = file.path(computer_data_path,
                                               type,
                                               code_correction_dir,
-                                              paste0(proj$Model,
+                                              paste0(proj$HM,
                                                      "_mv.csv"))
                 code_o_data_path = file.path(computer_data_path,
                                              type,
                                              code_correction_dir,
-                                             paste0(proj$Model,
+                                             paste0(proj$HM,
                                                     "_o.csv"))
                 
                 if (file.exists(code_rm_data_path) &
@@ -1161,12 +1133,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                "", 1:10,
                                                create_dimvar=FALSE,
                                                longname=NULL)
-                        var = ncdf4::ncvar_def("code_new", "",
+                        variable = ncdf4::ncvar_def("code_new", "",
                                                list(dim,
                                                     NC$dim$station),
                                                longname="code of stations",
                                                prec="char")
-                        NC = ncdf4::ncvar_add(NC, var)
+                        NC = ncdf4::ncvar_add(NC, variable)
                         ncdf4::nc_close(NC)
                         NC = ncdf4::nc_open(proj_clean_path,
                                             write=TRUE)
@@ -1299,45 +1271,45 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         # stop()
 
                         nDate = length(ncdf4::ncvar_get(NC, "time"))
-                        Var = c("topologicalSurface",
-                                "topologicalSurface_model",
+                        Variable = c("topologicalSurface",
+                                "topologicalSurface_HM",
                                 "WGS84_lon", "WGS84_lat",
-                                "WGS84_lon_model", "WGS84_lat_model",
+                                "WGS84_lon_HM", "WGS84_lat_HM",
                                 "LII_Y", "LII_X",
-                                "LII_Y_model", "LII_X_model",
+                                "LII_Y_HM", "LII_X_HM",
                                 "L93_Y", "L93_X",
-                                "L93_Y_model", "L93_X_model")
-                        Var_chr = c("name",  "network_origin",
+                                "L93_Y_HM", "L93_X_HM")
+                        Variable_chr = c("name",  "network_origin",
                                     "code_type", "code",
                                     "code_new")
 
-                        for (var in Var) {
-                            if (!(var %in% names(NC$var))) {
+                        for (variable in Variable) {
+                            if (!(variable %in% names(NC$var))) {
                                 next
                             }
-                            value = ncdf4::ncvar_get(NC, var)
+                            value = ncdf4::ncvar_get(NC, variable)
                             value[Id_rm] = NaN
-                            ncdf4::ncvar_put(NC, var, value)
+                            ncdf4::ncvar_put(NC, variable, value)
                             ncdf4::ncvar_change_missval(NC,
-                                                        var,
+                                                        variable,
                                                         NaN)
                         }
 
-                        for (var in Var_chr) {
-                            if (!(var %in% names(NC$var)) &
-                                var != "code_new") {
+                        for (variable in Variable_chr) {
+                            if (!(variable %in% names(NC$var)) &
+                                variable != "code_new") {
                                 next
                             }
-                            value = ncdf4::ncvar_get(NC, var)
+                            value = ncdf4::ncvar_get(NC, variable)
                             if (is.matrix(value)) {
                                 next
                             }
                             n = max(nchar(value, allowNA=TRUE),
                                     na.rm=TRUE)
                             value[Id_rm] = strrep("-", n)
-                            ncdf4::ncvar_put(NC, var, value)
+                            ncdf4::ncvar_put(NC, variable, value)
                             ncdf4::ncvar_change_missval(NC,
-                                                        var,
+                                                        variable,
                                                         strrep("-", n))
                         }
                         
@@ -1417,8 +1389,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         Historicals =
             Projections[Projections$EXP ==
                         "historical" &
-                        Projections$Model %in%
-                        models_to_use,]
+                        Projections$HM %in%
+                        HM_to_use,]
         nHistoricals = nrow(Historicals)
 
         if (MPI == "file") {
@@ -1465,8 +1437,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 "historical" &
                                 Projections$BC ==
                                 historical$BC &
-                                Projections$Model ==
-                                historical$Model,]
+                                Projections$HM ==
+                                historical$HM,]
                 
                 # jehfezoifjezoifjezoifjezoiji EROS
                 projs = projs[substr(projs$file, "1", "15") ==
@@ -1559,7 +1531,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         if (nrow(flag) > 0) {            
             flag = tidyr::separate(flag, col="Chain",
                                    into=c("GCM", "EXP", "RCM",
-                                          "BC", "Model"), sep="[|]")
+                                          "BC", "HM"), sep="[|]")
             write_tibble(flag, tmppath,
                          paste0("flag_", rank , ".fst"))
         }

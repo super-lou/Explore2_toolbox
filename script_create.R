@@ -29,8 +29,8 @@
 #     if (is.null(data_sim)) {
 #         data_sim = dplyr::tibble()
 #     } else {
-#         data_sim$Code = convert_codeNtoM(data_sim$Code)
-#         data_sim = data_sim[data_sim$Code %in% CodeSUB10,]
+#         data_sim$code = convert_codeNtoM(data_sim$code)
+#         data_sim = data_sim[data_sim$code %in% codeSUB10,]
 #         data_sim = data_sim[order(data_sim$Code),]
 #     }
 #     return (data_sim)
@@ -75,7 +75,7 @@ create_data = function () {
             
             for (p in path) {
                 
-                if (file.exists(path)) {
+                if (file.exists(p)) {
                     Chain = c(Chain, chain)
                     post(paste0("Get simulated data from ", chain,
                                 " in ", p))
@@ -90,12 +90,12 @@ create_data = function () {
                         data_sim_tmp = dplyr::tibble()
                     } else {
                         if (type == "hydrologie") {
-                            data_sim_tmp$Code =
-                                convert_codeNtoM(data_sim_tmp$Code)
-                            data_sim_tmp = data_sim_tmp[data_sim_tmp$Code %in%
+                            data_sim_tmp$code =
+                                convert_codeNtoM(data_sim_tmp$code)
+                            data_sim_tmp = data_sim_tmp[data_sim_tmp$code %in%
                                                         CodeSUB10,]
                             data_sim_tmp =
-                                data_sim_tmp[order(data_sim_tmp$Code),]
+                                data_sim_tmp[order(data_sim_tmp$code),]
                         }
                     }
                     data_sim = dplyr::bind_rows(data_sim, data_sim_tmp)
@@ -112,82 +112,83 @@ create_data = function () {
             id = match(CodeSUB10, CodeALL10)
             meta_sim =
                 dplyr::tibble(
-                           Code=CodeSUB10,
-                           Nom=codes_selection_data$SuggestionNOM[id],
-                           Region_Hydro=
+                           code=CodeSUB10,
+                           name=codes_selection_data$SuggestionNOM[id],
+                           hydrological_region=
                                iRegHydro()[substr(CodeSUB10, 1, 1)],
-                           Source=codes_selection_data$SOURCE[id],
-                           Référence=
+                           source=codes_selection_data$SOURCE[id],
+                           reference=
                                codes_selection_data$Référence[id],
                            XL93_m=
                                as.numeric(codes_selection_data$XL93[id]),
                            YL93_m=
                                as.numeric(codes_selection_data$YL93[id]),
-                           Surface_km2=
+                           surface_km2=
                                as.numeric(codes_selection_data$S_HYDRO[id]))
 
             meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
-                                                            Model,
-                                                            Code),
+                                                            HM,
+                                                            code),
                                             S=S[1])
             meta_sim_tmp = tidyr::pivot_wider(
                                       meta_sim_tmp,
-                                      names_from=Model,
+                                      names_from=HM,
                                       values_from=S,
-                                      names_glue="Surface_{Model}_km2")
+                                      names_glue="surface_{HM}_km2")
 
-            meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp, by="Code")
+            meta_sim = dplyr::left_join(meta_sim, meta_sim_tmp, by="code")
             rm ("meta_sim_tmp"); gc()
-            
+
+
             data_sim = dplyr::select(data_sim, -"S")
 
 
             if (grepl("diagnostic", mode)) {
                 
                 val2check = names(data_sim)[!(names(data_sim) %in%
-                                              c("Model", "Code",
-                                                "Date", "Q_sim"))]
+                                              c("HM", "code",
+                                                "date", "Q_sim"))]
 
-                Model = Chain
-                nModel = length(Model)
+                HM = Chain
+                nHM = length(HM)
 
                 if (!is.null(complete_by)) {
-                    Model4complete = complete_by[complete_by %in% Model]
+                    HM4complete = complete_by[complete_by %in% HM]
                     nVal2check = length(val2check)
                     
-                    if (!all(is.na(Model4complete))) {
-                        for (model4complete in Model4complete) {
-                            data_model4complete =
-                                data_sim[data_sim$Model == model4complete,]
-                            data_model4complete =
-                                dplyr::select(data_model4complete,
-                                              -Model)
+                    if (!all(is.na(HM4complete))) {
+                        for (hm4complete in HM4complete) {
+                            data_hm4complete =
+                                data_sim[data_sim$HM == hm4complete,]
+                            data_hm4complete =
+                                dplyr::select(data_hm4complete,
+                                              -HM)
                             
-                            for (model in Model) {
-                                data_model = data_sim[data_sim$Model == model,]
-                                data_model = dplyr::select(data_model,
-                                                           -Model)
+                            for (hm in HM) {
+                                data_hm = data_sim[data_sim$HM == hm,]
+                                data_hm = dplyr::select(data_hm,
+                                                           -HM)
 
                                 for (i in 1:nVal2check) {
                                     col = val2check[i]
                                     
-                                    if (all(is.na(data_model[[col]]))) {
-                                        data_model =
+                                    if (all(is.na(data_hm[[col]]))) {
+                                        data_hm =
                                             dplyr::left_join(
-                                                       dplyr::select(data_model, -col),
-                                                       dplyr::select(data_model4complete,
-                                                                     c("Date",
-                                                                       "Code",
+                                                       dplyr::select(data_hm, -col),
+                                                       dplyr::select(data_hm4complete,
+                                                                     c("date",
+                                                                       "code",
                                                                        col)),
-                                                       by=c("Code", "Date"))
+                                                       by=c("code", "date"))
                                     }
                                 }
-                                data_model = dplyr::bind_cols(Model=model,
-                                                              data_model)
-                                data_model = data_model[names(data_sim)]
-                                data_sim[data_sim$Model == model,] = data_model
+                                data_hm = dplyr::bind_cols(HM=hm,
+                                                              data_hm)
+                                data_hm = data_hm[names(data_sim)]
+                                data_sim[data_sim$HM == hm,] = data_hm
 
-                                rm ("data_model")
+                                rm ("data_hm")
                                 gc()
                             }
                         }
@@ -204,21 +205,21 @@ create_data = function () {
                 }
                 if ("R" %in% names(data_sim)) {
                     data_sim$R[!is.finite(data_sim$R)] = NA
-                    data_sim = dplyr::filter(dplyr::group_by(data_sim, Code),
+                    data_sim = dplyr::filter(dplyr::group_by(data_sim, code),
                                              rep(!all(is.na(R)), length(R)))
                 }
                 
                 for (i in 1:length(diag_station_to_remove)) {
                     data_sim = dplyr::filter(
                                           data_sim,
-                                          !(Model ==
+                                          !(HM ==
                                             names(diag_station_to_remove)[i] &
                                             grepl(diag_station_to_remove[i],
-                                                  Code)))
-                    meta_sim[[paste0("Surface_",
+                                                  code)))
+                    meta_sim[[paste0("surface_",
                                      names(diag_station_to_remove)[i],
                                      "_km2")]][
-                        grepl(diag_station_to_remove[i], meta_sim$Code)
+                        grepl(diag_station_to_remove[i], meta_sim$code)
                     ] = NA
                 }
             }
@@ -231,7 +232,7 @@ create_data = function () {
         post("### Observation data")
         
         if (isSim) {
-            Code10_available = levels(factor(data_sim$Code))
+            Code10_available = levels(factor(data_sim$code))
         } else {
             Code10_available = CodeSUB10
         }
@@ -246,7 +247,7 @@ create_data = function () {
                                                    obs_hydro_dir),
                                          Code8_filename,
                                          verbose=subverbose)
-            meta_obs$Code = convert_codeNtoM(meta_obs$Code)
+            meta_obs$code = convert_codeNtoM(meta_obs$code)
         } else {
             meta_obs = dplyr::tibble()
         }
@@ -263,12 +264,12 @@ create_data = function () {
             dplyr::filter(
                        data_obs,
                        dplyr::between(
-                                  Date,
+                                  date,
                                   as.Date(period_extract[1]),
                                   as.Date(period_extract[2])))
 
-        data_obs$Code = convert_codeNtoM(data_obs$Code)
-        data_obs = dplyr::arrange(data_obs, Code)
+        data_obs$code = convert_codeNtoM(data_obs$code)
+        data_obs = dplyr::arrange(data_obs, code)
         names(data_obs)[names(data_obs) == "Q"] = "Q_obs"
 
         meta_obs = get_lacune(dplyr::rename(data_obs, Q=Q_obs),
@@ -279,15 +280,15 @@ create_data = function () {
     if (isSim & isObs) {
         meta = dplyr::left_join(meta_sim,
                                 dplyr::select(meta_obs,
-                                              Code,
+                                              code,
                                               Gestionnaire,
                                               Altitude_m,
                                               tLac_pct,
                                               meanLac),
-                                by="Code")
+                                by="code")
         data = dplyr::inner_join(data_sim,
                                  data_obs,
-                                 by=c("Code", "Date"))
+                                 by=c("code", "date"))
         
         rm ("data_sim"); gc()
         rm ("data_obs"); gc()
@@ -345,33 +346,33 @@ create_data = function () {
 
     
     if (isSim & !is.null(complete_by) & grepl("diagnostic", mode)) {
-        Model4complete = complete_by[complete_by %in% Model]
+        HM4complete = complete_by[complete_by %in% HM]
         
-        if (!all(is.na(Model4complete))) {
-            for (model4complete in Model4complete) {
+        if (!all(is.na(HM4complete))) {
+            for (hm4complete in HM4complete) {
 
                 if (!exists("data_val_obs")) {
                     data_val_obs = dplyr::filter(data,
-                                                 Model ==
-                                                 model4complete)
+                                                 HM ==
+                                                 hm4complete)
                 } else {
                     data_val_obs =
                         dplyr::bind_rows(
                                    data_val_obs,
                                    dplyr::filter(data,
-                                                 Model ==
-                                                 model4complete &
-                                                 !(Code %in%
-                                                   data_val_obs$Code)))
+                                                 HM ==
+                                                 hm4complete &
+                                                 !(code %in%
+                                                   data_val_obs$code)))
                 }
             }
             
             data_val_obs = dplyr::select(data_val_obs,
-                                         all_of(c("Code", "Date",
+                                         all_of(c("code", "date",
                                                   paste0(val2check, "_sim"))))
             names(data_val_obs) = gsub("[_]sim", "_obs", names(data_val_obs))
-            data = dplyr::left_join(data, data_val_obs, by=c("Code",
-                                                             "Date"))
+            data = dplyr::left_join(data, data_val_obs, by=c("code",
+                                                             "date"))
         }
     }
     
@@ -384,8 +385,11 @@ create_data = function () {
                                      subset_name, ".fst"))
         rm ("data"); gc()
 
-        meta = dplyr::arrange(meta, Code)
+        meta = dplyr::arrange(meta, code)
+
+
         
+
         write_tibble(meta,
                      filedir=tmppath,
                      filename=paste0("meta_",

@@ -167,8 +167,8 @@ NetCDF_to_tibble = function (NetCDF_path,
             Q_sim = Q_sim[CodeOrder,,drop=FALSE]
             Q_sim = c(t(Q_sim))
             
-            data = dplyr::tibble(Code=rep(Code, each=nDate),
-                                 Date=rep(Date, times=nCode),
+            data = dplyr::tibble(code=rep(Code, each=nDate),
+                                 date=rep(Date, times=nCode),
                                  Q_sim=Q_sim)
             
             if (chain %in% c("CTRIP")) {
@@ -180,7 +180,7 @@ NetCDF_to_tibble = function (NetCDF_path,
                                      start=start,
                                      count=count)
             } else {
-                S = ncdf4::ncvar_get(NCdata, "surface_model",
+                S = ncdf4::ncvar_get(NCdata, "surface_HM",
                                      start=start,
                                      count=count)
             }
@@ -245,7 +245,7 @@ NetCDF_to_tibble = function (NetCDF_path,
                 data$T = data$T - 273.15
             }
             
-            data = dplyr::bind_cols(Model=chain, data)
+            data = dplyr::bind_cols(HM=chain, data)
             data = dplyr::filter(data, !is.nan(Q_sim))
             
         } else if (grepl("projection", mode)) {
@@ -267,27 +267,25 @@ NetCDF_to_tibble = function (NetCDF_path,
             count = max(station) - start + 1
             station = station - start + 1
 
-            # print(start)
-            # print(count)
-            # print(station)
-            
             Q_sim = ncdf4::ncvar_get(NCdata, "debit",
                                      start=c(start, 1),
                                      count=c(count, -1))
 
-            # print(Q_sim)
             
             Q_sim = matrix(Q_sim, nrow=count)
             Q_sim = Q_sim[station,,drop=FALSE]
             Q_sim = Q_sim[CodeOrder,,drop=FALSE]
             Q_sim = c(t(Q_sim))
 
-            if ("topologicalSurface_model" %in% names(NCdata$var)) {
-                S = ncdf4::ncvar_get(NCdata, "topologicalSurface_model",
+            if ("topologicalSurface_model" %in%
+                names(NCdata$var)) {
+                S = ncdf4::ncvar_get(NCdata,
+                                     "topologicalSurface_model",
                                      start=start,
                                      count=count)
             } else {
-                S = ncdf4::ncvar_get(NCdata, "surface_model",
+                S = ncdf4::ncvar_get(NCdata,
+                                     "surface_model",
                                      start=start,
                                      count=count)
             }
@@ -297,14 +295,14 @@ NetCDF_to_tibble = function (NetCDF_path,
             # S = rep(NA, times=nCode)
             # }
 
-            data = dplyr::tibble(Code=rep(Code, each=nDate),
-                                 Date=rep(Date, times=nCode),
+            data = dplyr::tibble(code=rep(Code, each=nDate),
+                                 date=rep(Date, times=nCode),
                                  Q_sim=Q_sim,
                                  S=rep(S, each=nDate))
             
             data = dplyr::filter(data, !is.nan(Q_sim))
             chainValue = unlist(strsplit(chain, "[|]"))
-            chainName = c("GCM", "EXP", "RCM", "BC", "Model")
+            chainName = c("GCM", "EXP", "RCM", "BC", "HM")
             chainName = chainName[nchar(chainValue) > 0]
             chainValue = chainValue[nchar(chainValue) > 0]
             Chain = dplyr::tibble(!!!chainValue)
@@ -325,7 +323,7 @@ get_select = function (dataEX, metaEX,
                        select="") {
     if (!any(select == "all")) {
         select = paste0("(",
-                        paste0(c("Model", "Code", select),
+                        paste0(c("HM", "code", select),
                                collapse=")|("), ")")
 
         select = gsub("[{]", "[{]", select)
@@ -346,7 +344,7 @@ get_select = function (dataEX, metaEX,
             }
         }
         
-        metaEX = metaEX[metaEX$var %in% select,]
+        metaEX = metaEX[metaEX$variable %in% select,]
     }
     return (list(metaEX=metaEX, dataEX=dataEX))
 }
@@ -366,7 +364,7 @@ find_Warnings = function (dataEXind, metaEXind,
         "[{]t.*[}]"=c(-1, 1),
         "^RAT"=c(FALSE, TRUE))
 
-    all_model = "<b>L'ensemble des modèles</b>"
+    all_HM = "<b>L'ensemble des modèles</b>"
     
     tick_line = list(
         
@@ -517,19 +515,19 @@ find_Warnings = function (dataEXind, metaEXind,
     line_NOK = "Les modèles ont des difficultés à reproduire le régime sauf "
     line_allNOK = "<b>Aucun modèle</b> ne semble simuler de manière acceptable le régime."
 
-    orderVar = c("Général", "^RAT.*T$",  "^RAT.*R$", "^KGE",
+    orderVariable = c("Général", "^RAT.*T$",  "^RAT.*R$", "^KGE",
                  "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}]",
                  "^alpha", "^epsilon.*")
 
     if (is.null(codeLight)) {
-        Code = levels(factor(dataEXind$Code))  
+        Code = levels(factor(dataEXind$code))  
     } else {
         Code = codeLight
     }
     nCode = length(Code)
 
-    Model = levels(factor(dataEXind$Model))
-    nModel = length(Model)
+    HM = levels(factor(dataEXind$HM))
+    nHM = length(HM)
     
     Warnings = dplyr::tibble()
     allLines = dplyr::tibble()
@@ -542,53 +540,53 @@ find_Warnings = function (dataEXind, metaEXind,
         
         code = Code[k]
 
-        dataEXind_code = dataEXind[dataEXind$Code == code,]
+        dataEXind_code = dataEXind[dataEXind$code == code,]
         
-        vars2keep = names(dataEXind_code)
-        vars2keep = vars2keep[!grepl("([_]obs)|([_]sim)", vars2keep)]
+        variables2keep = names(dataEXind_code)
+        variables2keep = variables2keep[!grepl("([_]obs)|([_]sim)", variables2keep)]
 
         dataEXind_code = dplyr::mutate(dataEXind_code,
                                        dplyr::across(where(is.logical),
                                                      as.numeric),
                                        .keep="all")
         
-        dataEXind_code = dplyr::select(dataEXind_code, vars2keep)
+        dataEXind_code = dplyr::select(dataEXind_code, variables2keep)
         
-        Model = levels(factor(dataEXind_code$Model))
-        nModel = length(Model)
+        HM = levels(factor(dataEXind_code$HM))
+        nHM = length(HM)
         
         dataEXind_code_tmp = dataEXind_code
         dataEXind_code_tmp = dplyr::select(dataEXind_code_tmp,
-                                           -c(Code, Model))
+                                           -c(code, HM))
 
-        matchVar = match(names(dataEXind_code_tmp), metaEXind$var)
-        matchVar = matchVar[!is.na(matchVar)]
-        dataEXind_code_tmp = dataEXind_code_tmp[matchVar]
+        matchVariable = match(names(dataEXind_code_tmp), metaEXind$variable)
+        matchVariable = matchVariable[!is.na(matchVariable)]
+        dataEXind_code_tmp = dataEXind_code_tmp[matchVariable]
 
         nameCol = names(dataEXind_code_tmp)
-        Var = nameCol
-        nVar = length(Var)
+        Variable = nameCol
+        nVariable = length(Variable)
         
         Lines = dplyr::tibble()
         
-        for (i in 1:nVar) {
-            var = Var[i]
-            x = dataEXind_code[[var]]
+        for (i in 1:nVariable) {
+            variable = Variable[i]
+            x = dataEXind_code[[variable]]
 
             range = unlist(tick_range[sapply(names(tick_range),
-                                             grepl, var)],
+                                             grepl, variable)],
                            use.names=FALSE)
 
             lines = tick_line[sapply(names(tick_line),
                                      grepl,
-                                     var)][[1]]
+                                     variable)][[1]]
             nlines = tick_nline[sapply(names(tick_nline),
                                        grepl,
-                                       var)][[1]]
+                                       variable)][[1]]
             
-            for (j in 1:nModel) {
-                model = Model[j]
-                x = dataEXind_code[dataEXind_code$Model == model,][[var]]
+            for (j in 1:nHM) {
+                hm = HM[j]
+                x = dataEXind_code[dataEXind_code$HM == hm,][[variable]]
                 if (is.na(x)) {
                     next 
                 }
@@ -604,8 +602,8 @@ find_Warnings = function (dataEXind, metaEXind,
                 }
                 
                 if (nrow(Lines) == 0) {
-                    Lines = dplyr::tibble(var=var,
-                                          model=model,
+                    Lines = dplyr::tibble(variable=variable,
+                                          hm=hm,
                                           niveau=niveau,
                                           line=lines[id],
                                           nline=nlines[id])
@@ -613,8 +611,8 @@ find_Warnings = function (dataEXind, metaEXind,
                     Lines =
                         dplyr::bind_rows(Lines,
                                          dplyr::tibble(
-                                                    var=var,
-                                                    model=model,
+                                                    variable=variable,
+                                                    hm=hm,
                                                     niveau=niveau,
                                                     line=lines[id],
                                                     nline=nlines[id]))
@@ -623,87 +621,87 @@ find_Warnings = function (dataEXind, metaEXind,
         }
 
         allLines = dplyr::bind_rows(allLines,
-                                    dplyr::select(Lines, c(var,
+                                    dplyr::select(Lines, c(variable,
                                                            niveau,
                                                            line,
                                                            nline)))
         
         statLines =
             dplyr::summarise(
-                       dplyr::group_by(Lines, var, niveau),
+                       dplyr::group_by(Lines, variable, niveau),
                        n=dplyr::n(),
-                       model=
-                           list(model[niveau ==
+                       hm=
+                           list(hm[niveau ==
                                       dplyr::cur_group()$niveau]),
                        line=line[1],
                        nline=nline[1],
                        .groups="drop")
 
-        Line_KGE = statLines[statLines$var == "KGEracine",]
-        Line_Biais = statLines[statLines$var == "Biais",]
+        Line_KGE = statLines[statLines$variable == "KGEracine",]
+        Line_Biais = statLines[statLines$variable == "Biais",]
 
         if (all(Line_KGE$niveau == 0) &
             all(Line_Biais$niveau == 0)) {
             
             # if (Line_KGE$niveau == 0 & Line_Biais$niveau == 0) {
-            model_OK = Model
+            hm_OK = HM
             line = line_allOK
             niveau = 1
-            line_model = line_allOK
+            line_hm = line_allOK
             Warnings_code = statLines[statLines$niveau != 0,]
-            Warnings_code = Warnings_code[c("var", "model",
+            Warnings_code = Warnings_code[c("variable", "hm",
                                             "line", "nline")]
             Warnings_code =
-                dplyr::bind_rows(dplyr::tibble(var="Général",
-                                               model=NA,
-                                               line=line_model,
+                dplyr::bind_rows(dplyr::tibble(variable="Général",
+                                               hm=NA,
+                                               line=line_hm,
                                                nline=NA),
                                  Warnings_code)
         } else if (all(Line_KGE$niveau != 0) &
                    all(Line_Biais$niveau != 0)) {
-            model_OK = c()
+            hm_OK = c()
             line = line_allNOK
             niveau = -1
-            line_model = line_allNOK
-            Warnings_code = dplyr::tibble(var="Général",
-                                          model=NA,
-                                          line=line_model,
+            line_hm = line_allNOK
+            Warnings_code = dplyr::tibble(variable="Général",
+                                          hm=NA,
+                                          line=line_hm,
                                           nline=NA)
             # }
 
         } else {            
-            model_KGE_OK = unlist(Line_KGE$model[Line_KGE$niveau == 0])
-            model_Biais_OK =
-                unlist(Line_Biais$model[Line_Biais$niveau == 0])
-            model_OK = c(model_KGE_OK, model_Biais_OK)
-            model_OK = model_OK[duplicated(model_OK)]
+            hm_KGE_OK = unlist(Line_KGE$hm[Line_KGE$niveau == 0])
+            hm_Biais_OK =
+                unlist(Line_Biais$hm[Line_Biais$niveau == 0])
+            hm_OK = c(hm_KGE_OK, hm_Biais_OK)
+            hm_OK = hm_OK[duplicated(hm_OK)]
 
-            model_KGE_NOK = unlist(Line_KGE$model[Line_KGE$niveau != 0])
-            model_Biais_NOK =
-                unlist(Line_Biais$model[Line_Biais$niveau != 0])
-            model_NOK = c(model_KGE_NOK, model_Biais_NOK)
-            model_NOK = model_NOK[!duplicated(model_NOK)]
+            hm_KGE_NOK = unlist(Line_KGE$hm[Line_KGE$niveau != 0])
+            hm_Biais_NOK =
+                unlist(Line_Biais$hm[Line_Biais$niveau != 0])
+            hm_NOK = c(hm_KGE_NOK, hm_Biais_NOK)
+            hm_NOK = hm_NOK[!duplicated(hm_NOK)]
 
-            if (length(model_OK) >= nModel/2) {
+            if (length(hm_OK) >= nHM/2) {
                 line = line_OK
                 niveau = 0.5
-                models = paste0("<b>", model_NOK, "</b>")
+                hms = paste0("<b>", hm_NOK, "</b>")
             } else {
                 line = line_NOK
                 niveau = -0.5
-                models = paste0("<b>", model_OK, "</b>")
+                hms = paste0("<b>", hm_OK, "</b>")
             }
-            models_len = length(models)
-            if (models_len > 1) {
-                models = paste0(
-                    paste0(models[-models_len],
+            hms_len = length(hms)
+            if (hms_len > 1) {
+                hms = paste0(
+                    paste0(hms[-hms_len],
                            collapse=", "),
-                    " et ", models[models_len], ".")
+                    " et ", hms[hms_len], ".")
             }
-            line_model = paste0(line, models)
+            line_hm = paste0(line, hms)
 
             rm_NOK = function (X) {
-                X = X[!(X %in% model_NOK)]
+                X = X[!(X %in% hm_NOK)]
                 if (length(X) == 0) {
                     X = NA
                 }
@@ -711,83 +709,83 @@ find_Warnings = function (dataEXind, metaEXind,
             }
             
             Warnings_code = statLines[statLines$niveau != 0,]
-            Warnings_code = Warnings_code[c("var", "model",
+            Warnings_code = Warnings_code[c("variable", "hm",
                                             "line", "nline")]
-            Warnings_code$model = lapply(Warnings_code$model, rm_NOK)
-            Warnings_code = Warnings_code[!is.na(Warnings_code$model),]
+            Warnings_code$hm = lapply(Warnings_code$hm, rm_NOK)
+            Warnings_code = Warnings_code[!is.na(Warnings_code$hm),]
             
             Warnings_code =
-                dplyr::bind_rows(dplyr::tibble(var="Général",
-                                               model=NA,
-                                               line=line_model,
+                dplyr::bind_rows(dplyr::tibble(variable="Général",
+                                               hm=NA,
+                                               line=line_hm,
                                                nline=NA),
                                  Warnings_code)
         }
 
-        Warnings_code$model_OK = list(model_OK)
+        Warnings_code$hm_OK = list(hm_OK)
         
         allLines = dplyr::bind_rows(allLines,
-                                    dplyr::tibble(var="Général",
+                                    dplyr::tibble(variable="Général",
                                                   niveau=niveau,
                                                   line=line,
                                                   nline=NA))
 
         for (i in 1:nrow(Warnings_code)) {
             Line = Warnings_code[i,]
-            if (is.null(unlist(Line$model))) {
+            if (is.null(unlist(Line$hm))) {
                 next
             }
             
-            Model_OK = unlist(Line$model_OK)
-            nModel_OK = length(Model_OK)
+            HM_OK = unlist(Line$hm_OK)
+            nHM_OK = length(HM_OK)
 
-            if (length(unlist(Line$model)) == nModel_OK) {
+            if (length(unlist(Line$hm)) == nHM_OK) {
                 Line$line =
-                    paste0(all_model, " ",
+                    paste0(all_HM, " ",
                            gsub("([|][^:]*[:])|([:])",
                                 "",
                                 Line$line))
-            } else if (nModel_OK > 0) {
-                models = unlist(Line$model)
-                models_len = length(models)
+            } else if (nHM_OK > 0) {
+                hms = unlist(Line$hm)
+                hms_len = length(hms)
                 
-                if (models_len > nModel_OK/2) {
-                    models = Model_OK[!(Model_OK %in% models)]
-                    models_len = length(models)
-                    models_str = paste0("<b>", models, "</b>")
-                    if (models_len == 1) {
+                if (hms_len > nHM_OK/2) {
+                    hms = HM_OK[!(HM_OK %in% hms)]
+                    hms_len = length(hms)
+                    hms_str = paste0("<b>", hms, "</b>")
+                    if (hms_len == 1) {
                         Line$line =
-                            paste0("Seul ", models_str, " ",
+                            paste0("Seul ", hms_str, " ",
                                    gsub("([|][^:]*[:])|([:])",
                                         "",
                                         Line$nline))
                     } else {
-                        models_str = paste0(
-                            paste0(models_str[-models_len],
+                        hms_str = paste0(
+                            paste0(hms_str[-hms_len],
                                    collapse=", "),
-                            " et ", models_str[models_len])
+                            " et ", hms_str[hms_len])
                         Line$line =
-                            paste0("Seuls ", models_str, " ",
+                            paste0("Seuls ", hms_str, " ",
                                    gsub("([:][^:]*[|])|([:])",
                                         "",
                                         Line$nline))
                     }
                     
                 } else {
-                    models_str = paste0("<b>", models, "</b>")
-                    if (models_len == 1) {
+                    hms_str = paste0("<b>", hms, "</b>")
+                    if (hms_len == 1) {
                         Line$line =
-                            paste0(models_str, " ",
+                            paste0(hms_str, " ",
                                    gsub("([|][^:]*[:])|([:])",
                                         "",
                                         Line$line))
                     } else {
-                        models_str = paste0(
-                            paste0(models_str[-models_len],
+                        hms_str = paste0(
+                            paste0(hms_str[-hms_len],
                                    collapse=", "),
-                            " et ", models_str[models_len])
+                            " et ", hms_str[hms_len])
                         Line$line =
-                            paste0(models_str, " ",
+                            paste0(hms_str, " ",
                                    gsub("([:][^:]*[|])|([:])",
                                         "",
                                         Line$line))
@@ -800,21 +798,21 @@ find_Warnings = function (dataEXind, metaEXind,
         
         warningsOrder = c()
         for (i in 1:nrow(Warnings_code)) {
-            var = Warnings_code$var[i]
+            variable = Warnings_code$variable[i]
             warningsOrder = c(warningsOrder,
-                              which(sapply(orderVar, grepl,
-                                           x=var)))
+                              which(sapply(orderVariable, grepl,
+                                           x=variable)))
         }
         warningsOrder = order(warningsOrder)
         Warnings_code = Warnings_code[warningsOrder,]
         
         if (nrow(Warnings) == 0) {
-            Warnings = dplyr::tibble(Code=code,
+            Warnings = dplyr::tibble(code=code,
                                      warning=Warnings_code$line)
         } else {
             Warnings =
                 dplyr::bind_rows(Warnings,
-                                 dplyr::tibble(Code=code,
+                                 dplyr::tibble(code=code,
                                                warning=
                                                    Warnings_code$line))
         }
@@ -822,12 +820,12 @@ find_Warnings = function (dataEXind, metaEXind,
     
     frq = dplyr::summarise(dplyr::group_by(allLines,
                                            line),
-                           var=var[1],
+                           variable=variable[1],
                            niveau=niveau[1],
                            n=dplyr::n(),
                            .groups="drop")
     frq = dplyr::summarise(dplyr::group_by(frq,
-                                           var),
+                                           variable),
                            n=n,
                            Npv=sum(n),
                            niveau=niveau,
@@ -852,9 +850,9 @@ find_Warnings = function (dataEXind, metaEXind,
                   # codeLight="V232000000",
                   # save=FALSE)
 # Warnings_frequency_short =
-    # select(Warnings_frequency, c(var, niveau, npv_pct))
+    # select(Warnings_frequency, c(variable, niveau, npv_pct))
 # Warnings_frequency_short =
-    # arrange(group_by(Warnings_frequency_short, var),
+    # arrange(group_by(Warnings_frequency_short, variable),
             # desc(niveau), .by_group=TRUE)
 # Warnings_frequency_short$npv_pct =
     # round(Warnings_frequency_short$npv_pct)

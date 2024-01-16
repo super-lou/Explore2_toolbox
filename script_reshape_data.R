@@ -36,7 +36,7 @@ if (type == "piezometrie") {
     nCode = length(Code_bss)
     Code_bdlisa = ncdf4::ncvar_get(NCdata, "codes_bdlisa")
 
-    Model = ncdf4::ncvar_get(NCdata, "MODELE")
+    HM = ncdf4::ncvar_get(NCdata, "MODELE")
     
     libelle_pe = ncdf4::ncvar_get(NCdata, "libelle_pe")
     nb_mesures_piezo = ncdf4::ncvar_get(NCdata, "nb_mesures_piezo")
@@ -62,26 +62,26 @@ if (type == "piezometrie") {
     H_sim = matrix(hsim, nrow=nCode)
     H_sim = c(t(H_sim))
     
-    data = dplyr::tibble(Model=rep(Model, each=nDate),
-                         Code=rep(Code_bss, each=nDate),
-                         Date=rep(Date, times=nCode),
+    data = dplyr::tibble(HM=rep(HM, each=nDate),
+                         code=rep(Code_bss, each=nDate),
+                         date=rep(Date, times=nCode),
                          H_obs=H_obs,
                          H_sim=H_sim)
 
     data = dplyr::filter(data,
-                         is.finite(H_sim) | Model != "MONA")
-    data[data$Model == "MONA",]$Date =
+                         is.finite(H_sim) | HM != "MONA")
+    data[data$HM == "MONA",]$date =
         as.Date(
             paste0(
-                lubridate::year(data$Date[data$Model == "MONA"]),
+                lubridate::year(data$date[data$HM == "MONA"]),
                 "-01-01"))
 
     data$H_obs[!is.finite(data$H_obs)] = NA
     data$H_sim[!is.finite(data$H_sim)] = NA
 
-    meta = dplyr::tibble(Code=Code_bss,
+    meta = dplyr::tibble(code=Code_bss,
                          Couche=Code_bdlisa,
-                         Nom=libelle_pe,
+                         name=libelle_pe,
                          Altitude_m=altitude_sation,
                          XL93_m=X,
                          YL93_m=Y)
@@ -90,18 +90,18 @@ if (type == "piezometrie") {
     Couche[lapply(Couche, length) == 0] = ""
     meta$Couche = sapply(lapply(Couche, substr, 1, 3), paste0, collapse="|")
     
-    meta$Nom =
+    meta$name =
         gsub(" A ", " à ",
              gsub("L ", "l'",
                   gsub("^L ", "L'",
                        stringr::str_to_title(
                                     gsub("L'", "L ",
-                                         meta$Nom
+                                         meta$name
                                          )))))
     
     dataEX_Explore2_criteria_diag_performance =
-        dplyr::tibble(Model=Model,
-                      Code=Code_bss,
+        dplyr::tibble(HM=HM,
+                      code=Code_bss,
                       NSEbiais=nash_ss_biais,
                       NSEips=nash_spli,
                       r=correlation,
@@ -109,7 +109,7 @@ if (type == "piezometrie") {
     
     metaEX_Explore2_criteria_diag_performance =
         dplyr::tibble(
-                   var=c("NSEbiais",
+                   variable=c("NSEbiais",
                          "NSEips",
                          "r",
                          "Biaismoy"),
@@ -118,7 +118,7 @@ if (type == "piezometrie") {
                           "sans unité",
                           "m"),
                    is_date=FALSE,
-                   normalize=FALSE,
+                   is_normalize=FALSE,
                    reverse_palette=FALSE,
                    glose=c(
                        "Coeffcient d'efficacité de Nash-Sutcliffe des débits retranchés du biais",
@@ -126,7 +126,7 @@ if (type == "piezometrie") {
                        "Corrélation",
                        "Biais des moyennes, différence entre les moyennes des débits journaliers simulés et observés"),
                    topic="Niveau piézométrique|Performance",
-                   samplePeriod="")
+                   sampling_period="")
 
     write_tibble(data,
                  filedir=tmppath,

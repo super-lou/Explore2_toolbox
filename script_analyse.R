@@ -25,8 +25,8 @@ if ('analyse_data' %in% to_do) {
     post("### Analaysing data")
     
     print("number of simulated station")
-    print(summarise(group_by(dataEX_criteria, Model),
-                    n=length(unique(Code))))
+    print(summarise(group_by(dataEX_criteria, HM),
+                    n=length(unique(code))))
     print("")
     
     print("Choice of best modele for complete")
@@ -34,12 +34,12 @@ if ('analyse_data' %in% to_do) {
     # which(is.na(meta[["Surface_MORDOR-SD_km2"]]))
     # which(is.na(meta$Surface_SMASH_km2))
     SMASH_surface =
-        sum(abs(meta$Surface_km2 - meta[["Surface_SMASH_km2"]]) /
-            meta$Surface_km2,
+        sum(abs(meta$surface_km2 - meta[["surface_SMASH_km2"]]) /
+            meta$surface_km2,
             na.rm=TRUE)
     MORDOR_SD_surface =
-        sum(abs(meta$Surface_km2 - meta[["Surface_MORDOR-SD_km2"]]) /
-        meta$Surface_km2,
+        sum(abs(meta$surface_km2 - meta[["surface_MORDOR-SD_km2"]]) /
+        meta$surface_km2,
         na.rm=TRUE)
     print("SMASH")
     print(SMASH_surface)
@@ -48,10 +48,10 @@ if ('analyse_data' %in% to_do) {
     print("")
     
     print("Surface relative supérieur à 50 %")
-    for (model in models_to_use) {
-        dS_rel = abs(meta[[paste0("Surface_", model, "_km2")]] - meta$Surface_km2)/meta$Surface_km2
+    for (hm in HM_to_use) {
+        dS_rel = abs(meta[[paste0("surface_", hm, "_km2")]] - meta$surface_km2)/meta$surface_km2
         dS_rel[is.na(dS_rel)] = 0
-        print(model)
-        print(meta$Code[dS_rel>0.2])
+        print(hm)
+        print(meta$code[dS_rel>0.2])
     }
 }

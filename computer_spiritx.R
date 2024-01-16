@@ -70,7 +70,7 @@ CARD_path = file.path(dev_lib_path, "CARD")
 # calculate a variable
 init_tools_dir = '__tools__'
 # Name of the default parameters file for a variable
-init_var_file = '__default__.R'
+init_variable_file = '__default__.R'
 
 ### 2.3. Resources ___________________________________________________
 resources_path = file.path(computer_work_path, 'resources')

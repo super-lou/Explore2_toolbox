@@ -35,17 +35,17 @@ plot_sheet_diagnostic_station = function (dataEX_criteria_chunk,
     Paths = Paths[letterPaths %in% substr(Code_to_plot, 1, 1)]
     for (path in Paths) {
         data = read_tibble(filepath=path) 
-        Code_tmp = levels(factor(data$Code))
+        Code_tmp = levels(factor(data$code))
 
         if (any(Code_tmp %in% Code_to_plot)) {
-            data = data[data$Code %in% Code_to_plot,]
+            data = data[data$code %in% Code_to_plot,]
             Pages = sheet_diagnostic_station(
                 data,
                 meta,
                 dataEX_criteria_chunk,
                 metaEX_criteria_chunk,
                 dataEX_serie_chunk,
-                Colors=Colors_of_models,
+                Colors=Colors_of_HM,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
@@ -86,26 +86,26 @@ if (!exists("Shapefiles")) {
         toleranceRel=toleranceRel)
 
     if (type == "hydrologie") {
-        Shapefiles$entiteHydro$Code =
-            codes10_selection[match(Shapefiles$entiteHydro$Code,
+        Shapefiles$entiteHydro$code =
+            codes10_selection[match(Shapefiles$entiteHydro$code,
                                     codes8_selection)]
     }
 }
 
 
 if (add_multi) {
-    group_of_models_to_use = as.list(models_to_use)
-    names(group_of_models_to_use) = models_to_use
-    if (length(models_to_use) > 2) {
-        group_of_models_to_use =
-            append(group_of_models_to_use,
-                   list(models_to_use))
-        names(group_of_models_to_use)[
-            length(group_of_models_to_use)] = "Multi-modèle"
+    group_of_HM_to_use = as.list(HM_to_use)
+    names(group_of_HM_to_use) = HM_to_use
+    if (length(HM_to_use) > 2) {
+        group_of_HM_to_use =
+            append(group_of_HM_to_use,
+                   list(HM_to_use))
+        names(group_of_HM_to_use)[
+            length(group_of_HM_to_use)] = "Multi-modèle"
     }
 } else {
-    group_of_models_to_use = as.list(models_to_use)
-    names(group_of_models_to_use) = models_to_use
+    group_of_HM_to_use = as.list(HM_to_use)
+    names(group_of_HM_to_use) = HM_to_use
 }
 
 
@@ -155,18 +155,18 @@ if (doc_chunk == "") {
 
     plotCode = chunkCode
     
-} else if (doc_chunk == "model") {
-    chunkCode = replicate(length(group_of_models_to_use),
+} else if (doc_chunk == "hm") {
+    chunkCode = replicate(length(group_of_HM_to_use),
                          codes10_selection,
                          simplify=FALSE)
-    names(chunkCode) = names(group_of_models_to_use)
+    names(chunkCode) = names(group_of_HM_to_use)
     plotCode = chunkCode
 
 } else if (doc_chunk == "critere") {
-    chunkCode = replicate(length(metaEX_criteria$var),
+    chunkCode = replicate(length(metaEX_criteria$variable),
                          codes10_selection,
                          simplify=FALSE)
-    names(chunkCode) = metaEX_criteria$var
+    names(chunkCode) = metaEX_criteria$variable
     plotCode = chunkCode
 }
 
@@ -202,8 +202,8 @@ for (i in 1:nChunk) {
         today_figdir_leaf = today_figdir
     }
 
-    data_chunk = data[data$Code %in% chunk,]
-    meta_chunk = meta[meta$Code %in% chunk,]
+    data_chunk = data[data$code %in% chunk,]
+    meta_chunk = meta[meta$code %in% chunk,]
     dataEX_criteria = dataEX_criteria
     metaEX_criteria_chunk = metaEX_criteria
     dataEX_serie = dataEX_serie
@@ -211,7 +211,7 @@ for (i in 1:nChunk) {
 
     if (exists("dataEX_criteria")) {
         if (nrow(dataEX_criteria) > 0) {
-            dataEX_criteria_chunk = dataEX_criteria[dataEX_criteria$Code %in% chunk,]
+            dataEX_criteria_chunk = dataEX_criteria[dataEX_criteria$code %in% chunk,]
             if (nrow(dataEX_criteria_chunk) == 0 & nrow(dataEX_criteria) != 0) {
                 next
             }
@@ -223,7 +223,7 @@ for (i in 1:nChunk) {
             for (j in 1:length(dataEX_serie)) {
                 dataEX_serie_chunk = append(
                     dataEX_serie_chunk,
-                    list(dataEX_serie[[j]][dataEX_serie[[j]]$Code %in%
+                    list(dataEX_serie[[j]][dataEX_serie[[j]]$code %in%
                                           chunk,]))
             }
             names(dataEX_serie_chunk) = names(dataEX_serie)
@@ -240,21 +240,21 @@ for (i in 1:nChunk) {
         if (sheet == 'correlation_matrix') {
             post("### Plotting correlation matrix")
 
-            group_of_models_to_use = as.list(models_to_use)
-            names(group_of_models_to_use) = models_to_use
-            if (length(models_to_use) > 2) {
-                group_of_models_to_use =
-                    append(group_of_models_to_use,
-                           list(models_to_use))
-                names(group_of_models_to_use)[
-                    length(group_of_models_to_use)] = "Multi-modèle"
+            group_of_HM_to_use = as.list(HM_to_use)
+            names(group_of_HM_to_use) = HM_to_use
+            if (length(HM_to_use) > 2) {
+                group_of_HM_to_use =
+                    append(group_of_HM_to_use,
+                           list(HM_to_use))
+                names(group_of_HM_to_use)[
+                    length(group_of_HM_to_use)] = "Multi-modèle"
             }
 
             Pages = sheet_correlation_matrix(
                 dataEX_criteria_chunk,
                 metaEX_criteria_chunk,
-                ModelGroup=group_of_models_to_use,
-                Colors=Colors_of_models,
+                HMGroup=group_of_HM_to_use,
+                Colors=Colors_of_HM,
                 subtitle=doc_subtitle,
                 criteria_selection=diag_criteria_selection,
                 icon_path=icon_path,
@@ -281,17 +281,17 @@ for (i in 1:nChunk) {
         if (grepl('carte[_]critere', sheet)) {
             post("### Plotting map")
             one_colorbar = FALSE
-            if (doc_chunk == "model") {
-                ModelSelection = group_of_models_to_use[chunkname]
-                names(ModelSelection) = chunkname
+            if (doc_chunk == "hm") {
+                HMSelection = group_of_HM_to_use[chunkname]
+                names(HMSelection) = chunkname
             } else {
-                ModelSelection = group_of_models_to_use
+                HMSelection = group_of_HM_to_use
             }
 
             if (doc_chunk == "critere") {
                 one_colorbar = TRUE
                 metaEX_criteria_chunk =
-                    metaEX_criteria_chunk[metaEX_criteria_chunk$var == chunkname,]
+                    metaEX_criteria_chunk[metaEX_criteria_chunk$variable == chunkname,]
             } else {
                 metaEX_criteria_chunk = metaEX_criteria_chunk
             }
@@ -309,9 +309,9 @@ for (i in 1:nChunk) {
             }
 
             if (grepl('shape', sheet)) {
-                model_by_shape = TRUE
+                hm_by_shape = TRUE
             } else {
-                model_by_shape = FALSE
+                hm_by_shape = FALSE
             }
 
             if (grepl('piezo', sheet)) {
@@ -330,12 +330,12 @@ for (i in 1:nChunk) {
                     return (X)
                 }
                 dataEX_criteria_chunk =
-                    mutate(group_by(dataEX_criteria_chunk, Model),
+                    mutate(group_by(dataEX_criteria_chunk, HM),
                            across(names(dataEX_criteria_chunk)[
                                !(names(dataEX_criteria_chunk) %in%
-                                 c("Code", "Model"))],
+                                 c("code", "HM"))],
                                to_NA,
-                               Code=Code, 
+                               code=code, 
                                code_warning=MORDOR_code_warning))
             }
 
@@ -344,8 +344,8 @@ for (i in 1:nChunk) {
                 metaEX_criteria_chunk,
                 meta,
                 prob=prob_of_quantile_for_palette,
-                ModelSelection=ModelSelection,
-                Colors=Colors_of_models,
+                HMSelection=HMSelection,
+                Colors=Colors_of_HM,
                 subtitle=doc_subtitle,
                 one_colorbar=one_colorbar,
                 icon_path=icon_path,
@@ -353,7 +353,7 @@ for (i in 1:nChunk) {
                 is_foot=FALSE,
                 is_secteur=is_secteur,
                 is_warning=is_warning,
-                model_by_shape=model_by_shape,
+                hm_by_shape=hm_by_shape,
                 remove_warning_lim=remove_warning_lim,
                 figdir=today_figdir_leaf,
                 Pages=Pages,
@@ -369,7 +369,7 @@ for (i in 1:nChunk) {
                 dataEX_criteria_chunk,
                 metaEX_criteria_chunk,
                 dataEX_serie_chunk,
-                Colors=Colors_of_models,
+                Colors=Colors_of_HM,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
@@ -387,7 +387,7 @@ for (i in 1:nChunk) {
                 dataEX_criteria_chunk,
                 metaEX_criteria_chunk,
                 dataEX_serie_chunk,
-                Colors=Colors_of_models,
+                Colors=Colors_of_HM,
                 icon_path=icon_path,
                 logo_path=logo_path,
                 Shapefiles=Shapefiles,
@@ -404,7 +404,7 @@ for (i in 1:nChunk) {
                 dataEX_criteria_chunk,
                 metaEX_criteria_chunk,
                 dataEX_serie_chunk,
-                Colors=Colors_of_models,
+                Colors=Colors_of_HM,
                 icon_path=icon_path,
                 Warnings=Warnings,
                 logo_path=logo_path,
@@ -426,10 +426,10 @@ for (i in 1:nChunk) {
         }
 
         if (sheet == 'fiche_precip_ratio') {            
-            ModelGroup = lapply(models_to_use, c, "SAFRAN")       
+            HMGroup = lapply(HM_to_use, c, "SAFRAN")       
             Pages = sheet_precip_ratio(dataEX_serie_chunk,
-                                         ModelGroup=ModelGroup,
-                                         Colors=Colors_of_models,
+                                         HMGroup=HMGroup,
+                                         Colors=Colors_of_HM,
                                          refCOL=refCOL,
                                          figdir=today_figdir_leaf,
                                          Pages=Pages,

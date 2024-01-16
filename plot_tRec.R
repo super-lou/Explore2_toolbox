@@ -39,11 +39,11 @@ HTML2rgba = function (HTML, alpha) {
 data = data[!is.na(data$Q_obs),]
 
 
-# ss = smooth.spline(data$Date,
+# ss = smooth.spline(data$date,
 #                    data$Q_obs,
 #                    df=10,
 #                    spar=0.5,
-#                    nknots=length(data$Date)/1.5,
+#                    nknots=length(data$date)/1.5,
 #                    w=1/sqrt(data$Q_obs/max(data$Q_obs)))
 
 
@@ -94,7 +94,7 @@ BFS = function (Q, d=5, w=0.9) {
 }
 
 
-ssX = data$Date
+ssX = data$date
 ssY = BFS(data$Q_obs)
 
 # ssX = as.Date(ss$x, origin=as.Date("1970-01-01"))
@@ -181,7 +181,7 @@ fig1 = plotly::plot_ly()
 fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="lines",
-                         x=data$Date,
+                         x=data$date,
                          y=(data$Q_obs),
                          line=list(color="white",
                                    width=6),
@@ -192,7 +192,7 @@ fig1 = plotly::add_trace(fig1,
 fig1 = plotly::add_trace(fig1,
                          type="scatter",
                          mode="lines",
-                         x=data$Date,
+                         x=data$date,
                          y=(data$Q_obs),
                          line=list(color="PaleTurquoise",
                                    width=1.5),
