@@ -1227,7 +1227,7 @@ if (type == "hydrologie") {
         write_tibble(dplyr::select(Projections,
                                    -"path"),
                      filedir=today_resdir,
-                     filename="projs_selection.txt")
+                     filename="projections_selection.csv")
 
     } else if (grepl("diagnostic", mode)) { #####
         diag_path = file.path(computer_data_path, type, mode)
@@ -1268,7 +1268,7 @@ if (type == "hydrologie") {
                                          )))))
     write_tibble(codes_selection_data,
                  filedir=today_resdir,
-                 filename="selection.csv")
+                 filename="stations_selection.csv")
 
     if (grepl("diagnostic", mode)) {
         ref = 1
