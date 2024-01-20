@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -158,12 +158,12 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    'create_data',
-    'extract_data',
-    'save_extract'
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    # "create_database"
+    "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
@@ -285,8 +285,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -314,8 +314,8 @@ nCode4RAM = 20
 projs_type =
     # "raw"
     # "cleaned"
-    "merged"
-    # "extracted"
+    # "merged"
+    "extracted"
 
 projs_to_use =
     c(
@@ -340,24 +340,26 @@ projection_to_remove =
     c("CNRM[-]CERFACS[-]CNRM[-]CM5.*KNMI[-]RACMO22E",
       "IPSL[-]IPSL[-]CM5A[-]MR.*IPSL[-]WRF381P")
 
-storyLines =
-    c("HadGEM2-ES|rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été", #feu
-      "EC-EARTH|rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, recharge moindre en hiver", #soleil
-      "CNRM-CM5|rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et changement de précipitations", #nuage
-      "HadGEM2-ES|rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #parapluie
+storylines =
+    c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été", #feu
+      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, recharge moindre en hiver", #soleil
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et changement de précipitations", #nuage
+      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #parapluie
+
+shift_id_projection = 252
 
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
+        "CTRIP",
+        "EROS",
+        "GRSD",
         # "J2000"
-        "SIM2"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        # "SMASH"
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -408,7 +410,7 @@ variables_to_use =
         # "^moyRA$", "^moyRA[_]DJF$", "^moyRA[_]MAM$", "^moyRA[_]JJA$", "^moyRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        "^QA$", "^VCN10$"
+        "^QJXA$", "^QA", "^VCN10"
     )
 
 
@@ -1215,11 +1217,11 @@ if (type == "hydrologie") {
                            factor(climateChain,
                                   levels=projs_to_use))
 
-        Projections$storyLines = ""
-        ok = match(names(storyLines),
+        Projections$storylines = ""
+        ok = match(names(storylines),
                    Projections$climateChain)
-        Projections$storyLines[ok[!is.na(ok)]] =
-            storyLines[!is.na(ok)]
+        Projections$storylines[ok[!is.na(ok)]] =
+            storylines[!is.na(ok)]
 
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain

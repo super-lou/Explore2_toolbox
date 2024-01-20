@@ -866,85 +866,206 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         )
 
 
-
         stop()
 
-        # Table for time series data
-        query = " 
-CREATE TABLE IF NOT EXISTS data (
-    ID SERIAL PRIMARY KEY,
-    code VARCHAR(255) REFERENCES Stations(code),
-    date DATE NOT NULL,
-    value DOUBLE PRECISION NOT NULL,
-    variable VARCHAR(255) REFERENCES Variables(variable),
-    projection INT REFERENCES Projections(projection)
+
+        # Table for stations
+        query = '
+CREATE TABLE IF NOT EXISTS stations (
+    code VARCHAR(255) PRIMARY KEY,
+    code_hydro2 VARCHAR(255),
+    name VARCHAR(255),
+    hydrological_region VARCHAR(255),
+    source VARCHAR(255),
+    is_reference BOOLEAN,
+    xl93_m DOUBLE PRECISION,
+    yl93_m DOUBLE PRECISION,
+    surface_km2 DOUBLE PRECISION,
+    surface_ctrip_km2 DOUBLE PRECISION,
+    surface_eros_km2 DOUBLE PRECISION,
+    surface_grsd_km2 DOUBLE PRECISION,
+    surface_j2000_km2 DOUBLE PRECISION,
+    surface_mordor_sd_km2 DOUBLE PRECISION,
+    surface_mordor_ts_km2 DOUBLE PRECISION,
+    surface_orchidee_km2 DOUBLE PRECISION,
+    surface_sim2_km2 DOUBLE PRECISION,
+    surface_smash_km2 DOUBLE PRECISION
 );
-"
+'
+        dbExecute(con, query)
+
+        # Table for projections
+        query = '      
+CREATE TABLE IF NOT EXISTS projections (
+    chain VARCHAR(255) PRIMARY KEY,
+    gcm VARCHAR(255),
+    exp VARCHAR(255),
+    rcm VARCHAR(255),
+    bc VARCHAR(255),
+    hm VARCHAR(255),
+    storylines VARCHAR(255)
+);
+'
         dbExecute(con, query)
         
-        # Table for stations
-        query = " 
-CREATE TABLE IF NOT EXISTS Stations (
-    code VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    hydrological_region VARCHAR(255) NOT NULL,
-    source VARCHAR(255) NOT NULL,
-    is_reference BOOLEAN NOT NULL,
-    XL93_m DOUBLE PRECISION NOT NULL,
-    YL93_m DOUBLE PRECISION NOT NULL,
-    surface_km2 DOUBLE PRECISION NOT NULL
-);
-"
-        dbExecute(con, query)
         
         # Table for variables
-        query = "       
-CREATE TABLE IF NOT EXISTS Variables (
+        query = '      
+CREATE TABLE IF NOT EXISTS variables (
     variable VARCHAR(255) PRIMARY KEY,
-    unit VARCHAR(255) NOT NULL,
-    is_date BOOLEAN NOT NULL,
-    is_normalize BOOLEAN NOT NULL,
-    palette VARCHAR(255) NOT NULL,
-    glose VARCHAR(255) NOT NULL,
-    topic VARCHAR(255) NOT NULL,
-    sampling_period VARCHAR(255) NOT NULL
+    unit VARCHAR(255),
+    is_date BOOLEAN,
+    is_normalize BOOLEAN,
+    palette VARCHAR(255),
+    glose VARCHAR(255),
+    topic VARCHAR(255),
+    sampling_period VARCHAR(255)
 );
-"
+'
+        dbExecute(con, query)
+
+        
+        # Table for time series data
+        query = '
+CREATE TABLE IF NOT EXISTS data (
+    id SERIAL PRIMARY KEY,
+    chain VARCHAR(255) REFERENCES projections(chain),
+    variable VARCHAR(255) REFERENCES variables(variable),
+    code VARCHAR(255) REFERENCES stations(code),
+    date DATE,
+    value DOUBLE PRECISION
+);
+'
         dbExecute(con, query)
         
-        # Table for projections
-        query = "      
-CREATE TABLE IF NOT EXISTS Projections (
-    projection SERIAL PRIMARY KEY,
-    EXP VARCHAR(255) NOT NULL,
-    GCM VARCHAR(255) NOT NULL,
-    RCM VARCHAR(255) NOT NULL,
-    BC VARCHAR(255) NOT NULL,
-    HM VARCHAR(255) NOT NULL,
-    storylines VARCHAR(255) NOT NULL
-);
-"
-        dbExecute(con, query)
 
 
 
 
-        metaEX_tmp = metaEX_tmp
-        metaEX_tmp = dplyr::rename(metaEX_tmp,
-                                   variable=var,
-                                   is_normalize=normalize,
-                                   sampling_period=sampling_period)
-        write_tibble(metaEX_tmp, filedir=, filename=)
 
-        dbWriteTable(con, "Variables", metaEX_tmp,
+        DirPaths = Projections$path[!duplicated(Projections$HM)]
+        nDirPath = length(DirPaths)
+        Stations_tmp = dplyr::tibble()
+        for (j in 1:nDirPath) {
+            if (nrow(Stations_tmp) == 0) {
+                Stations_tmp = read_tibble(file.path(DirPaths[j],
+                                                     "meta.fst"))
+            } else {
+                Stations_tmp =
+                    dplyr::full_join(
+                               Stations_tmp,
+                               read_tibble(file.path(DirPaths[j],
+                                                     "meta.fst")))
+            }
+        }
+        Stations_tmp$is_reference = as.logical(Stations_tmp$reference)
+        Stations_tmp = dplyr::select(Stations_tmp, -reference)
+        Stations_tmp =
+            dplyr::left_join(Stations_tmp,
+                             dplyr::select(codes_selection_data,
+                                           code_hydro2=CODE,
+                                           code=SuggestionCode),
+                             by="code")
+        Stations_tmp = dplyr::rename(Stations_tmp,
+                                     "surface_MORDOR_SD_km2"=
+                                         "surface_MORDOR-SD_km2",
+                                     "surface_MORDOR_TS_km2"=
+                                         "surface_MORDOR-TS_km2")
+
+        Stations_tmp = dplyr::relocate(Stations_tmp,
+                                       is_reference,
+                                       .after=code)
+        Stations_tmp = dplyr::relocate(Stations_tmp,
+                                       code_hydro2,
+                                       .after=code)
+        write_tibble(Stations_tmp, today_resdir,
+                     "stations_selection.csv")
+        names(Stations_tmp) = tolower(names(Stations_tmp))
+        dbWriteTable(con, "stations", Stations_tmp,
+                     append=TRUE, row.names=FALSE)
+        
+
+        DirPaths = Projections$path
+        nDirPath = length(DirPaths)
+        Projections_tmp = dplyr::select(Projections,
+                                        -c(climateChain, regexp,
+                                           dir, file, path))
+        names(Projections_tmp) = tolower(names(Projections_tmp))
+        dbWriteTable(con, "projections", Projections_tmp,
                      append=TRUE, row.names=FALSE)
 
 
-        Projections_tmp = Projections[i,]
+        Paths = list.files(DirPaths[1],
+                           pattern="metaEX",
+                           full.names=TRUE)
+        nPath = length(Paths)
+        variables_regexp =
+            paste0("(", paste0(variables_to_use,
+                               collapse=")|("), ")")
+        for (j in 1:nPath) {
+            Variables_tmp = read_tibble(Paths[j])
+            Variables_tmp =
+                Variables_tmp[grepl(variables_regexp,
+                                    Variables_tmp$variable),]
+            if (nrow(Variables_tmp) == 0) {
+                next
+            }
+            names(Variables_tmp) = tolower(names(Variables_tmp))
+            dbWriteTable(con, "variables", Variables_tmp,
+                         append=TRUE, row.names=FALSE)
+        }
         
         
+        for (i in 1:nDirPath) {
+            print(paste0(i, "/", nDirPath,
+                         " so ",
+                         round(i/nDirPath*100, 1), "%"))
+            Paths_tmp = list.files(DirPaths[i],
+                                   pattern="dataEX",
+                                   include.dirs=TRUE,
+                                   full.names=TRUE)
+            Paths = list.files(Paths_tmp,
+                               pattern=".fst",
+                               full.names=TRUE)
+            Paths = Paths[grepl(variables_regexp,
+                                gsub("[.]fst", "",
+                                     basename(Paths)))]
+            if (length(Paths) == 0) {
+                next
+            }
+            
+            nPath = length(Paths)
+            nPath = length(Paths)
+            
+            for (j in 1:nPath) {
+                print(paste0("    ", j, "/", nPath,
+                             " so ",
+                             round(j/nPath*100, 1), "%"))
+                Data_tmp = read_tibble(Paths[j])
+                Data_tmp =
+                    dplyr::rename(Data_tmp,
+                                  value=dplyr::where(is.numeric))
+                Data_tmp$Chain = 
+                    Projections$Chain[
+                                    Projections$GCM == Data_tmp$GCM[1] &
+                                    Projections$EXP == Data_tmp$EXP[1] &
+                                    Projections$RCM == Data_tmp$RCM[1] &
+                                    Projections$BC == Data_tmp$BC[1] &
+                                    Projections$HM == Data_tmp$HM[1]
+                                ]
+                Data_tmp = dplyr::select(Data_tmp,
+                                         -c(GCM, RCM, EXP, BC, HM))
+                Data_tmp$variable = gsub("[.]fst", "",
+                                         basename(Paths[j]))
+
+                names(Data_tmp) = tolower(names(Data_tmp))
+                dbWriteTable(con, "data", Data_tmp,
+                             append=TRUE, row.names=FALSE)
+            }
+        }
 
 
+        dbDisconnect(con)
     }
 
 
