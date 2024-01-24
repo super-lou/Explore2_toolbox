@@ -159,11 +159,11 @@ to_do = c(
     # 'merge_nc'
     # 'reshape_data',
     # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'extract_data',
+    'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    "create_database"
+    # "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
@@ -178,7 +178,7 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_sensibilite_RAT',
     # 'Explore2_criteria_diagnostic_HE',
     # 'Explore2_criteria_diagnostic_ME',
-    # 'Explore2_criteria_diagnostic_BE',
+    # 'Explore2_criteria_diagnostic_LF',
     # 'Explore2_criteria_diagnostic_BF',
     # 'Explore2_serie_diagnostic_plot'
     # 'Explore2_criteria_diagnostic_SAFRAN',
@@ -312,18 +312,18 @@ propagate_NA = TRUE
 nCode4RAM = 20
 
 projs_type =
-    # "raw"
+    "raw"
     # "cleaned"
     # "merged"
-    "extracted"
+    # "extracted"
 
 projs_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
         
-        # "SAFRAN-France-20"
+        "SAFRAN-France-20"
         
         ## story lines ##
         # "HadGEM2.*historical.*CCLM4.*ADAMONT"
@@ -351,14 +351,14 @@ shift_id_projection = 252
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
         # "J2000"
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SIM2",
         "SMASH"
 
         # "AquiFR",
@@ -369,8 +369,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        'all'
-        # 'K298191001' #ref
+        # 'all'
+        'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
@@ -402,12 +402,12 @@ variables_to_use =
     c(
         # ".*"
         
-        # "KGEracine", "Biais$",
+        # "KGEsqrt", "Bias$",
         # "epsilon.*JJA$", "epsilon.*DJF$",
         # "RAT[_]T$", "RAT[_]R$",
-        # "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$",
-        # "^moyTA$", "^moyTA[_]DJF$", "^moyTA[_]MAM$", "^moyTA[_]JJA$", "^moyTA[_]SON$",
-        # "^moyRA$", "^moyRA[_]DJF$", "^moyRA[_]MAM$", "^moyRA[_]JJA$", "^moyRA[_]SON$",
+        # "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^aFDC$", "Q90$", "med[{]tVCN10[}]$",
+        # "^meanTA$", "^meanTA[_]DJF$", "^meanTA[_]MAM$", "^meanTA[_]JJA$", "^meanTA[_]SON$",
+        # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
         "^QJXA$", "^QA", "^VCN10"
@@ -448,9 +448,9 @@ WIP =
 Explore2_criteria_diagnostic_performance = 
     list(name='Explore2_criteria_diagnostic_performance',
          type="criteria",
-         variables=c("KGE", "KGEracine",
-                     "NSE", "NSEracine", "NSElog", "NSEinv",
-                     "Biais", "Biais_season",
+         variables=c("KGE", "KGEsqrt",
+                     "NSE", "NSEsqrt", "NSElog", "NSEinv",
+                     "Bias", "Bias_season",
                      "STD"),
          suffix=NULL)
 
@@ -472,17 +472,17 @@ Explore2_criteria_diagnostic_HE =
          type="criteria",
          variables=c("Q10",
                      "QJXA-10", "alphaQJXA",
-                     "med{tQJXA}", "med{dtCrue}"),
+                     "med{tQJXA}", "med{dtFlood}"),
          suffix=c("obs", "sim"))
 
 Explore2_criteria_diagnostic_ME = 
     list(name='Explore2_criteria_diagnostic_ME',
          type="criteria",
-         variables=c("Q50", "aCDC", "alphaQA"),
+         variables=c("Q50", "aFDC", "alphaQA"),
          suffix=c("obs", "sim"))
 
-Explore2_criteria_diagnostic_BE = 
-    list(name='Explore2_criteria_diagnostic_BE',
+Explore2_criteria_diagnostic_LF = 
+    list(name='Explore2_criteria_diagnostic_LF',
          type="criteria",
          variables=c("Q90",
                      "QMNA-5", "VCN30-2", "VCN10-5", "alphaVCN10", 
@@ -493,7 +493,7 @@ Explore2_criteria_diagnostic_BF =
     list(name='Explore2_criteria_diagnostic_BF',
          type="criteria",
          variables=c("BFI", "BFM",
-                     "med{debutBF}", "med{centreBF}", "med{finBF}",
+                     "med{startBF}", "med{centerBF}", "med{endBF}",
                      "med{dtBF}", "med{vBF}", "med{dtRec}"),
          suffix=c("obs", "sim"))
 
@@ -501,10 +501,10 @@ Explore2_criteria_diagnostic_SAFRAN =
     list(name='Explore2_criteria_diagnostic_SAFRAN',
          type="criteria",
          variables=c(
-             "moyTA",
-             "moyTA_season",
-             "moyRA",
-             "moyRA_season",
+             "meanTA",
+             "meanTA_season",
+             "meanRA",
+             "meanRA_season",
              "Rl_ratio",
              "Rs_ratio"
          ),
@@ -524,7 +524,7 @@ Explore2_serie_diagnostic_plot =
     list(name='Explore2_serie_diagnostic_plot',
          type="serie",
          variables=c("QM", "QA", "RA_all", "RA_ratio",
-                     "medQJC5", "CDC"),
+                     "medQJC5", "FDC"),
          suffix=c("obs", "sim"))
 
 
@@ -537,19 +537,19 @@ Explore2_serie_projection_HE =
     list(name='Explore2_serie_projection_HE',
          type="serie",
          variables=c(
-             "QA01", "QA05", "QA10", "QA25", 
+             "QA01", "QA05", "QA10", 
              "QJXA", "tQJXA",
              "VCX3", "tVCX3",
              "VCX10", "tVCX10",
              "fQA01", "fQA05", "fQA10",
-             "dtCrue"),
+             "dtFlood"),
          suffix="sim")
 
 Explore2_serie_projection_ME =
     list(name='Explore2_serie_projection_ME',
          type="serie",
          variables=c(
-             "QA50",
+             "QA25", "QA50", "QA75",
              "QA", "QA_month", "QA_season"),
          suffix="sim")
 
@@ -557,38 +557,38 @@ Explore2_serie_projection_BE =
     list(name='Explore2_serie_projection_BE',
          type="serie",
          variables=c(
-             "QA75", "QA90", "QA95", "QA99",
+             "QA90", "QA95", "QA99",
              "QNA", "QMNA",
              "VCN10", "tVCN10",
              "VCN3", "VCN30",
-             "allBE"),
+             "allLF"),
          suffix="sim")
 
 Explore2_serie_projection_BE_estival =
     list(name='Explore2_serie_projection_BE_estival',
          type="serie",
          variables=c(
-             "QNA_estival", "QMNA_estival",
-             "VCN10_estival", "tVCN10_estival",
-             "VCN3_estival", "VCN30_estival",
-             "allBE_estival"),
+             "QNA_summer", "QMNA_summer",
+             "VCN10_summer", "tVCN10_summer",
+             "VCN3_summer", "VCN30_summer",
+             "allLF_summer"),
          suffix="sim")
 
 Explore2_serie_projection_BE_hivernal =
     list(name='Explore2_serie_projection_BE_hivernal',
          type="serie",
          variables=c(
-             "QNA_hivernal", "QMNA_hivernal",
-             "VCN10_hivernal", "tVCN10_hivernal",
-             "VCN3_hivernal", "VCN30_hivernal",
-             "allBE_hivernal"),
+             "QNA_winter", "QMNA_winter",
+             "VCN10_winter", "tVCN10_winter",
+             "VCN3_winter", "VCN30_winter",
+             "allLF_winter"),
          suffix="sim")
 
 Explore2_serie_projection_BF =
     list(name='Explore2_serie_projection_BF',
          type="serie",
          variables=c(
-             "debutBF", "centreBF", "finBF",
+             "startBF", "centerBF", "endBF",
              "dtBF", "vBF",
              "dtRec"),
          suffix="sim")
@@ -596,7 +596,7 @@ Explore2_serie_projection_BF =
 Explore2_serie_projection_CDC =
     list(name='Explore2_serie_projection_CDC',
          type="serie",
-         variables="CDC",
+         variables="FDC",
          horizons=c(),
          suffix="sim")
 

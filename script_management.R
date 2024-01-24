@@ -915,7 +915,7 @@ CREATE TABLE IF NOT EXISTS variables (
     variable VARCHAR(255) PRIMARY KEY,
     unit VARCHAR(255),
     is_date BOOLEAN,
-    is_normalize BOOLEAN,
+    to_normalize BOOLEAN,
     palette VARCHAR(255),
     glose VARCHAR(255),
     topic VARCHAR(255),
@@ -926,16 +926,18 @@ CREATE TABLE IF NOT EXISTS variables (
 
         
         # Table for time series data
-        query = '
+        query = "
+CREATE SEQUENCE data_id_seq START 1 INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1;
+
 CREATE TABLE IF NOT EXISTS data (
-    id SERIAL PRIMARY KEY,
+    id BIGINT DEFAULT nextval('data_id_seq'::regclass) PRIMARY KEY,
     chain VARCHAR(255) REFERENCES projections(chain),
     variable VARCHAR(255) REFERENCES variables(variable),
     code VARCHAR(255) REFERENCES stations(code),
     date DATE,
     value DOUBLE PRECISION
 );
-'
+"
         dbExecute(con, query)
         
 
@@ -981,8 +983,10 @@ CREATE TABLE IF NOT EXISTS data (
         write_tibble(Stations_tmp, today_resdir,
                      "stations_selection.csv")
         names(Stations_tmp) = tolower(names(Stations_tmp))
+        ###
         dbWriteTable(con, "stations", Stations_tmp,
                      append=TRUE, row.names=FALSE)
+        ###
         
 
         DirPaths = Projections$path
@@ -991,9 +995,10 @@ CREATE TABLE IF NOT EXISTS data (
                                         -c(climateChain, regexp,
                                            dir, file, path))
         names(Projections_tmp) = tolower(names(Projections_tmp))
+        ###
         dbWriteTable(con, "projections", Projections_tmp,
                      append=TRUE, row.names=FALSE)
-
+        ###
 
         Paths = list.files(DirPaths[1],
                            pattern="metaEX",
@@ -1011,11 +1016,14 @@ CREATE TABLE IF NOT EXISTS data (
                 next
             }
             names(Variables_tmp) = tolower(names(Variables_tmp))
+            ###
             dbWriteTable(con, "variables", Variables_tmp,
                          append=TRUE, row.names=FALSE)
+            ###
         }
         
-        
+
+        # start = 326
         for (i in 1:nDirPath) {
             print(paste0(i, "/", nDirPath,
                          " so ",
@@ -1059,8 +1067,10 @@ CREATE TABLE IF NOT EXISTS data (
                                          basename(Paths[j]))
 
                 names(Data_tmp) = tolower(names(Data_tmp))
+                ###
                 dbWriteTable(con, "data", Data_tmp,
                              append=TRUE, row.names=FALSE)
+                ###
             }
         }
 

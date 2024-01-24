@@ -105,26 +105,26 @@ if (type == "piezometrie") {
                       NSEbiais=nash_ss_biais,
                       NSEips=nash_spli,
                       r=correlation,
-                      Biaismoy=bias)
+                      Biasmoy=bias)
     
     metaEX_Explore2_criteria_diag_performance =
         dplyr::tibble(
                    variable=c("NSEbiais",
                          "NSEips",
                          "r",
-                         "Biaismoy"),
+                         "Biasmoy"),
                    unit=c("sans unité",
                           "sans unité",
                           "sans unité",
                           "m"),
                    is_date=FALSE,
-                   is_normalize=FALSE,
+                   to_normalize=FALSE,
                    reverse_palette=FALSE,
                    glose=c(
                        "Coeffcient d'efficacité de Nash-Sutcliffe des débits retranchés du biais",
                        "Coeffcient d'efficacité de Nash-Sutcliffe entre l’Indicateur Piézomètre Standardisé (IPS) simulé et l’IPS observé",
                        "Corrélation",
-                       "Biais des moyennes, différence entre les moyennes des débits journaliers simulés et observés"),
+                       "Bias des moyennes, différence entre les moyennes des débits journaliers simulés et observés"),
                    topic="Niveau piézométrique|Performance",
                    sampling_period="")
 

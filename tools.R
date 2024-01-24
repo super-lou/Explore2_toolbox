@@ -104,10 +104,9 @@ convert_codeNtoM = function (Code, N=8, M=10, crop=TRUE, top="0") {
 
 NetCDF_extrat_time = function (NCdata, data_name="time") {
     Date = ncdf4::ncvar_get(NCdata, data_name)
-    if (Date[2] - Date[1] == 86400) {
-        Date = Date/86400
-    }
-    
+    # if (Date[2] - Date[1] == 86400) {
+        # Date = Date/86400
+    # }
     Date = as.Date(Date,
                    origin=
                        as.Date(str_extract(
@@ -357,7 +356,7 @@ find_Warnings = function (dataEXind, metaEXind,
 
     tick_range = list(
         "^KGE"=c(0.5, 1),
-        "^Biais$"=c(-0.2, 0.2),
+        "^Bias$"=c(-0.2, 0.2),
         "(^epsilon.*)|(^alpha)|(^a)"=c(0.5, 2),
         "^Q10$"=c(-0.2, 0.2),
         "^Q90$"=c(-0.8, 0.8),
@@ -373,7 +372,7 @@ find_Warnings = function (dataEXind, metaEXind,
             ":reproduit|reproduisent: correctement les observations.",
             ":reproduit|reproduisent: mal les observations."),
         
-        "^Biais$"=c(
+        "^Bias$"=c(
             ":a|ont: un biais négatif important.",
             ":a|ont: un biais acceptable.",
             ":a|ont: un biais positif important."),
@@ -408,7 +407,7 @@ find_Warnings = function (dataEXind, metaEXind,
             ":simule|simulent: de manière correcte la temporalité annuelle des crues.",
             ":produit|produisent: des crues trop tard dans l'année."),
 
-        "^aCDC$"=c(
+        "^aFDC$"=c(
             ":simule|simulent: un régime des moyennes eaux pas suffisamment contrasté.",
             ":simule|simulent: de manière correcte le régime des moyennes eaux.",
             ":simule|simulent: un régime des moyennes eaux trop contrasté."),
@@ -445,7 +444,7 @@ find_Warnings = function (dataEXind, metaEXind,
             ":reproduit|reproduisent: mal les observations.",
             ":reproduit|reproduisent: correctement les observations."),
         
-        "^Biais$"=c(
+        "^Bias$"=c(
             ":a|ont: un biais acceptable.",
             ":a|ont: un biais important.",
             ":a|ont: un biais acceptable."),
@@ -480,7 +479,7 @@ find_Warnings = function (dataEXind, metaEXind,
             "ne :simule|simulent: pas de manière correcte la temporalité annuelle des crues.",
             ":simule|simulent: de manière correcte la temporalité annuelle des crues."),
 
-        "^aCDC$"=c(
+        "^aFDC$"=c(
             ":simule|simulent: de manière correcte le régime des moyennes eaux.",
             "ne :simule|simulent: pas de manière correcte le régime des moyennes eaux.",
             ":simule|simulent: de manière correcte le régime des moyennes eaux."),
@@ -516,7 +515,7 @@ find_Warnings = function (dataEXind, metaEXind,
     line_allNOK = "<b>Aucun modèle</b> ne semble simuler de manière acceptable le régime."
 
     orderVariable = c("Général", "^RAT.*T$",  "^RAT.*R$", "^KGE",
-                 "^Biais$", "^Q[[:digit:]]+$", "[{]t.*[}]",
+                 "^Bias$", "^Q[[:digit:]]+$", "[{]t.*[}]",
                  "^alpha", "^epsilon.*")
 
     if (is.null(codeLight)) {
@@ -637,13 +636,13 @@ find_Warnings = function (dataEXind, metaEXind,
                        nline=nline[1],
                        .groups="drop")
 
-        Line_KGE = statLines[statLines$variable == "KGEracine",]
-        Line_Biais = statLines[statLines$variable == "Biais",]
+        Line_KGE = statLines[statLines$variable == "KGEsqrt",]
+        Line_Bias = statLines[statLines$variable == "Bias",]
 
         if (all(Line_KGE$niveau == 0) &
-            all(Line_Biais$niveau == 0)) {
+            all(Line_Bias$niveau == 0)) {
             
-            # if (Line_KGE$niveau == 0 & Line_Biais$niveau == 0) {
+            # if (Line_KGE$niveau == 0 & Line_Bias$niveau == 0) {
             hm_OK = HM
             line = line_allOK
             niveau = 1
@@ -658,7 +657,7 @@ find_Warnings = function (dataEXind, metaEXind,
                                                nline=NA),
                                  Warnings_code)
         } else if (all(Line_KGE$niveau != 0) &
-                   all(Line_Biais$niveau != 0)) {
+                   all(Line_Bias$niveau != 0)) {
             hm_OK = c()
             line = line_allNOK
             niveau = -1
@@ -671,15 +670,15 @@ find_Warnings = function (dataEXind, metaEXind,
 
         } else {            
             hm_KGE_OK = unlist(Line_KGE$hm[Line_KGE$niveau == 0])
-            hm_Biais_OK =
-                unlist(Line_Biais$hm[Line_Biais$niveau == 0])
-            hm_OK = c(hm_KGE_OK, hm_Biais_OK)
+            hm_Bias_OK =
+                unlist(Line_Bias$hm[Line_Bias$niveau == 0])
+            hm_OK = c(hm_KGE_OK, hm_Bias_OK)
             hm_OK = hm_OK[duplicated(hm_OK)]
 
             hm_KGE_NOK = unlist(Line_KGE$hm[Line_KGE$niveau != 0])
-            hm_Biais_NOK =
-                unlist(Line_Biais$hm[Line_Biais$niveau != 0])
-            hm_NOK = c(hm_KGE_NOK, hm_Biais_NOK)
+            hm_Bias_NOK =
+                unlist(Line_Bias$hm[Line_Bias$niveau != 0])
+            hm_NOK = c(hm_KGE_NOK, hm_Bias_NOK)
             hm_NOK = hm_NOK[!duplicated(hm_NOK)]
 
             if (length(hm_OK) >= nHM/2) {
