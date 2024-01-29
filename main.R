@@ -159,11 +159,11 @@ to_do = c(
     # 'merge_nc'
     # 'reshape_data',
     # 'create_data',
-    'extract_data',
-    'save_extract'
+    # 'extract_data',
+    # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    # "create_database"
+    "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
@@ -174,21 +174,21 @@ to_do = c(
 extract_data = c(
     # 'WIP'
     # 'Explore2_criteria_diagnostic_performance',
-    # 'Explore2_criteria_diagnostic_sensibilite',
-    # 'Explore2_criteria_diagnostic_sensibilite_RAT',
-    # 'Explore2_criteria_diagnostic_HE',
-    # 'Explore2_criteria_diagnostic_ME',
+    # 'Explore2_criteria_diagnostic_sensibility',
+    # 'Explore2_criteria_diagnostic_sensibility_RAT',
+    # 'Explore2_criteria_diagnostic_HF',
+    # 'Explore2_criteria_diagnostic_MF',
     # 'Explore2_criteria_diagnostic_LF',
     # 'Explore2_criteria_diagnostic_BF',
     # 'Explore2_serie_diagnostic_plot'
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HE',
-    'Explore2_serie_projection_ME',
-    'Explore2_serie_projection_BE',
-    'Explore2_serie_projection_BE_estival',
-    'Explore2_serie_projection_BE_hivernal',
+    'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_MF',
+    'Explore2_serie_projection_LF',
+    'Explore2_serie_projection_LF_summer',
+    'Explore2_serie_projection_LF_winter',
     'Explore2_serie_projection_BF'
 )
 
@@ -312,18 +312,18 @@ propagate_NA = TRUE
 nCode4RAM = 20
 
 projs_type =
-    "raw"
+    # "raw"
     # "cleaned"
     # "merged"
-    # "extracted"
+    "extracted"
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
         
-        "SAFRAN-France-20"
+        # "SAFRAN-France-20"
         
         ## story lines ##
         # "HadGEM2.*historical.*CCLM4.*ADAMONT"
@@ -342,8 +342,8 @@ projection_to_remove =
 
 storylines =
     c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été", #feu
-      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, recharge moindre en hiver", #soleil
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et changement de précipitations", #nuage
+      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, précipitations moindre en hiver", #soleil
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et en changement de précipitations", #nuage
       "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #parapluie
 
 shift_id_projection = 252
@@ -351,14 +351,14 @@ shift_id_projection = 252
 
 HM_to_use = 
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
+        "CTRIP",
+        "EROS",
+        "GRSD",
         # "J2000"
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
-        # "SIM2",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
         "SMASH"
 
         # "AquiFR",
@@ -369,8 +369,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # 'all'
-        'K298191001' #ref
+        'all'
+        # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
@@ -410,7 +410,9 @@ variables_to_use =
         # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        "^QJXA$", "^QA", "^VCN10"
+        "^QJXA$", "^fQA10$",
+        "^QA$", "^QA_DJF$", "^QA_MAM$", "^QA_JJA$", "^QA_SON$",
+        "^VCN10[_]summer$", "^startLF[_]summer$", "^dtLF[_]summer$" 
     )
 
 
@@ -454,29 +456,29 @@ Explore2_criteria_diagnostic_performance =
                      "STD"),
          suffix=NULL)
 
-Explore2_criteria_diagnostic_sensibilite = 
-    list(name='Explore2_criteria_diagnostic_sensibilite',
+Explore2_criteria_diagnostic_sensibility = 
+    list(name='Explore2_criteria_diagnostic_sensibility',
          type="criteria",
          variables=c("epsilon_R", "epsilon_R_season",
                      "epsilon_T", "epsilon_T_season"),
          suffix=c("obs", "sim"))
 
-Explore2_criteria_diagnostic_sensibilite_RAT = 
-    list(name='Explore2_criteria_diagnostic_sensibilite_RAT',
+Explore2_criteria_diagnostic_sensibility_RAT = 
+    list(name='Explore2_criteria_diagnostic_sensibility_RAT',
          type="criteria",
          variables=c("RAT_T", "RAT_R", "RAT_ET0"),
          suffix=NULL)
 
-Explore2_criteria_diagnostic_HE = 
-    list(name='Explore2_criteria_diagnostic_HE',
+Explore2_criteria_diagnostic_HF = 
+    list(name='Explore2_criteria_diagnostic_HF',
          type="criteria",
          variables=c("Q10",
                      "QJXA-10", "alphaQJXA",
                      "med{tQJXA}", "med{dtFlood}"),
          suffix=c("obs", "sim"))
 
-Explore2_criteria_diagnostic_ME = 
-    list(name='Explore2_criteria_diagnostic_ME',
+Explore2_criteria_diagnostic_MF = 
+    list(name='Explore2_criteria_diagnostic_MF',
          type="criteria",
          variables=c("Q50", "aFDC", "alphaQA"),
          suffix=c("obs", "sim"))
@@ -533,11 +535,12 @@ if (type == "piezometrie") {
 }
 
 # projection
-Explore2_serie_projection_HE =
-    list(name='Explore2_serie_projection_HE',
+Explore2_serie_projection_HF =
+    list(name='Explore2_serie_projection_HF',
          type="serie",
          variables=c(
-             "QA01", "QA05", "QA10", 
+             # "QA01",
+             "QA05", "QA10", 
              "QJXA", "tQJXA",
              "VCX3", "tVCX3",
              "VCX10", "tVCX10",
@@ -545,27 +548,27 @@ Explore2_serie_projection_HE =
              "dtFlood"),
          suffix="sim")
 
-Explore2_serie_projection_ME =
-    list(name='Explore2_serie_projection_ME',
+Explore2_serie_projection_MF =
+    list(name='Explore2_serie_projection_MF',
          type="serie",
          variables=c(
              "QA25", "QA50", "QA75",
              "QA", "QA_month", "QA_season"),
          suffix="sim")
 
-Explore2_serie_projection_BE =
-    list(name='Explore2_serie_projection_BE',
+Explore2_serie_projection_LF =
+    list(name='Explore2_serie_projection_LF',
          type="serie",
          variables=c(
-             "QA90", "QA95", "QA99",
+             "QA90", "QA95", #"QA99",
              "QNA", "QMNA",
              "VCN10", "tVCN10",
              "VCN3", "VCN30",
              "allLF"),
          suffix="sim")
 
-Explore2_serie_projection_BE_estival =
-    list(name='Explore2_serie_projection_BE_estival',
+Explore2_serie_projection_LF_summer =
+    list(name='Explore2_serie_projection_LF_summer',
          type="serie",
          variables=c(
              "QNA_summer", "QMNA_summer",
@@ -574,8 +577,8 @@ Explore2_serie_projection_BE_estival =
              "allLF_summer"),
          suffix="sim")
 
-Explore2_serie_projection_BE_hivernal =
-    list(name='Explore2_serie_projection_BE_hivernal',
+Explore2_serie_projection_LF_winter =
+    list(name='Explore2_serie_projection_LF_winter',
          type="serie",
          variables=c(
              "QNA_winter", "QMNA_winter",
@@ -593,8 +596,8 @@ Explore2_serie_projection_BF =
              "dtRec"),
          suffix="sim")
 
-Explore2_serie_projection_CDC =
-    list(name='Explore2_serie_projection_CDC',
+Explore2_serie_projection_FDC =
+    list(name='Explore2_serie_projection_FDC',
          type="serie",
          variables="FDC",
          horizons=c(),

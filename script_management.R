@@ -912,36 +912,42 @@ CREATE TABLE IF NOT EXISTS projections (
         # Table for variables
         query = '      
 CREATE TABLE IF NOT EXISTS variables (
-    variable VARCHAR(255) PRIMARY KEY,
-    unit VARCHAR(255),
+    variable_en VARCHAR(255) PRIMARY KEY,
+    unit_en VARCHAR(255),
+    name_en VARCHAR(255),
+    description_en VARCHAR(1000),
+    method_en VARCHAR(1000),
+    sampling_period_en VARCHAR(255),
+    topic_en VARCHAR(255),
+    variable_fr VARCHAR(255),
+    unit_fr VARCHAR(255),
+    name_fr VARCHAR(255),
+    description_fr VARCHAR(1000),
+    method_fr VARCHAR(1000),
+    sampling_period_fr VARCHAR(255),
+    topic_fr VARCHAR(255),
     is_date BOOLEAN,
     to_normalize BOOLEAN,
-    palette VARCHAR(255),
-    glose VARCHAR(255),
-    topic VARCHAR(255),
-    sampling_period VARCHAR(255)
+    palette VARCHAR(255)
 );
 '
         dbExecute(con, query)
-
         
         # Table for time series data
         query = "
+DROP SEQUENCE IF EXISTS data_id_seq;
 CREATE SEQUENCE data_id_seq START 1 INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1;
 
 CREATE TABLE IF NOT EXISTS data (
     id BIGINT DEFAULT nextval('data_id_seq'::regclass) PRIMARY KEY,
     chain VARCHAR(255) REFERENCES projections(chain),
-    variable VARCHAR(255) REFERENCES variables(variable),
+    variable_en VARCHAR(255) REFERENCES variables(variable_en),
     code VARCHAR(255) REFERENCES stations(code),
     date DATE,
     value DOUBLE PRECISION
 );
 "
         dbExecute(con, query)
-        
-
-
 
 
 
@@ -1011,7 +1017,7 @@ CREATE TABLE IF NOT EXISTS data (
             Variables_tmp = read_tibble(Paths[j])
             Variables_tmp =
                 Variables_tmp[grepl(variables_regexp,
-                                    Variables_tmp$variable),]
+                                    Variables_tmp$variable_en),]
             if (nrow(Variables_tmp) == 0) {
                 next
             }
@@ -1023,7 +1029,6 @@ CREATE TABLE IF NOT EXISTS data (
         }
         
 
-        # start = 326
         for (i in 1:nDirPath) {
             print(paste0(i, "/", nDirPath,
                          " so ",
@@ -1063,8 +1068,8 @@ CREATE TABLE IF NOT EXISTS data (
                                 ]
                 Data_tmp = dplyr::select(Data_tmp,
                                          -c(GCM, RCM, EXP, BC, HM))
-                Data_tmp$variable = gsub("[.]fst", "",
-                                         basename(Paths[j]))
+                Data_tmp$variable_en = gsub("[.]fst", "",
+                                            basename(Paths[j]))
 
                 names(Data_tmp) = tolower(names(Data_tmp))
                 ###
