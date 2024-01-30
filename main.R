@@ -355,8 +355,8 @@ HM_to_use =
         # "EROS" ok
         # "GRSD" ok
         # "J2000"
-        "MORDOR-SD"
-        # "MORDOR-TS"
+        # "MORDOR-SD" ok
+        "MORDOR-TS"
         # "ORCHIDEE" ok
         # "SIM2" ok
         # "SMASH"
