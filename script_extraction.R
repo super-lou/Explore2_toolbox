@@ -60,13 +60,19 @@ CARD_extract_data = function () {
             cancel_lim = FALSE
         }
 
+        if (isSim & !isObs) {
+            suffix = NULL
+        } else {
+            suffix = extract$suffix
+        }
+
         res = CARD_extraction(data,
                               CARD_path=CARD_path,
                               CARD_dir=paste0(extract$name, "_", rank),
                               CARD_tmp=tmppath,
                               period=period_extract,
                               simplify=simplify,
-                              suffix=extract$suffix,
+                              suffix=suffix,
                               expand_overwrite=expand,
                               cancel_lim=cancel_lim,
                               rm_duplicates=TRUE,

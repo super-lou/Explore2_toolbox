@@ -32,8 +32,17 @@ if (!require (NCf)) remotes::install_github("super-lou/NCf")
 meta_projection_file = "tableau_metadata_EXPLORE2.csv"
 meta_projection = ASHE::read_tibble(meta_projection_file)
 
-data_dirpath = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/results/projection/hydrologie"
-Chain_dirpath = list.dirs(data_dirpath, recursive=FALSE)
+data_dirpath = "/home/louis/Documents/bouleau/INRAE/data/Explore2/hydrologie/projection"
+data_Paths = list.files(data_dirpath,
+                        pattern="[.]nc$",
+                        full.names=TRUE,
+                        recursive=TRUE)
+
+results_dirpath = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/results/projection/hydrologie"
+Projection_path = file.path(results_dirpath, "projections_selection.csv")
+Projection = ASHE::read_tibble(Projection_path)
+
+Chain_dirpath = list.dirs(results_dirpath, recursive=FALSE)
 Chain_dirpath = list.dirs(Chain_dirpath, recursive=FALSE)
 Chain_dirpath = Chain_dirpath[!grepl("^SAFRAN[_]",
                                      basename(Chain_dirpath))]
@@ -45,6 +54,13 @@ for (chain_dirpath in Chain_dirpath) {
     ###
     chain_dirpath = Chain_dirpath[1]
     ###
+
+    regexp = gsub("historical[[][-][]]", "",
+                  Projection$regexp[Projection$dir ==
+                                    basename(chain_dirpath)])
+    data_path = data_Paths[grepl(regexp, basename(data_Paths))]
+    NC = ncdf4::nc_open(data_path)
+
     
     Var_path = list.files(chain_dirpath,
                           pattern="[.]fst",
@@ -60,6 +76,7 @@ for (chain_dirpath in Chain_dirpath) {
         var = gsub("[.]fst", "", basename(var_path))
 
         dataEX = ASHE::read_tibble(var_path)
+        dataEX = dplyr::arrange(dataEX, code)
         
         metaEX_path =
             file.path(dirname(dirname(var_path)),
@@ -71,7 +88,7 @@ for (chain_dirpath in Chain_dirpath) {
         
         meta_path = file.path(dirname(dirname(var_path)), "meta.fst")
         meta = ASHE::read_tibble(meta_path)
-        
+        meta = dplyr::arrange(meta, code)
 
         Date = as.Date(levels(factor(dataEX$date)))
         Date = seq.Date(as.Date(paste0(lubridate::year(min(Date)),
@@ -109,4 +126,6 @@ for (chain_dirpath in Chain_dirpath) {
 
         generate_NCf(out_dir=out_dir, verbose=TRUE)
     }
+
+    ncdf4::nc_close(NC)
 }

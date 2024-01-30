@@ -38,29 +38,6 @@
 
 create_data = function () {
 
-    if (length(extract_data) == 0) {
-        isObs = TRUE
-        isSim = TRUE
-        
-    } else {
-        isObs = FALSE
-        isSim = FALSE
-        for (i in 1:length(extract_data)) {    
-            extract = extract_data[[i]]
-            if (is.null(extract$suffix)) {
-                isObs = TRUE
-                isSim = TRUE
-            } else {
-                if ("obs" %in% extract$suffix) {
-                    isObs = TRUE
-                }
-                if ("sim" %in% extract$suffix) {
-                    isSim = TRUE
-                }
-            }
-        }
-    }
-
     data = dplyr::tibble()
 
     if (isSim) {
@@ -386,6 +363,11 @@ create_data = function () {
     
     
     if (nrow(data) > 0) {
+
+        if (isSim & !isObs) {
+            names(data) = gsub("[_]sim", "", names(data))
+        }
+        
         write_tibble(data,
                      filedir=tmppath,
                      filename=paste0("data_",

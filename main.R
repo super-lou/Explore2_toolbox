@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -158,12 +158,12 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'create_data',
+    'extract_data',
+    'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    "create_database"
+    # "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
@@ -285,8 +285,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -309,13 +309,13 @@ propagate_NA = TRUE
 # nCode4RAM | 20 | 20
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 20
+nCode4RAM = 25
 
 projs_type =
     # "raw"
     # "cleaned"
-    # "merged"
-    "extracted"
+    "merged"
+    # "extracted"
 
 projs_to_use =
     c(
@@ -351,15 +351,15 @@ shift_id_projection = 252
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
+        "CTRIP"
+        # "EROS",
+        # "GRSD",
         # "J2000"
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
-        "SMASH"
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SIM2",
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -539,8 +539,7 @@ Explore2_serie_projection_HF =
     list(name='Explore2_serie_projection_HF',
          type="serie",
          variables=c(
-             # "QA01",
-             "QA05", "QA10", 
+             "QA01", "QA05", "QA10", 
              "QJXA", "tQJXA",
              "VCX3", "tVCX3",
              "VCX10", "tVCX10",
@@ -560,7 +559,7 @@ Explore2_serie_projection_LF =
     list(name='Explore2_serie_projection_LF',
          type="serie",
          variables=c(
-             "QA90", "QA95", #"QA99",
+             "QA90", "QA95", "QA99",
              "QNA", "QMNA",
              "VCN10", "tVCN10",
              "VCN3", "VCN30",
@@ -1055,6 +1054,29 @@ if ('plot_doc' %in% to_do) {
 }
 
 if (type == "hydrologie") {
+
+    if (length(extract_data) == 0) {
+        isObs = TRUE
+        isSim = TRUE
+        
+    } else {
+        isObs = FALSE
+        isSim = FALSE
+        for (i in 1:length(extract_data)) {    
+            extract = extract_data[[i]]
+            if (is.null(extract$suffix)) {
+                isObs = TRUE
+                isSim = TRUE
+            } else {
+                if ("obs" %in% extract$suffix) {
+                    isObs = TRUE
+                }
+                if ("sim" %in% extract$suffix) {
+                    isSim = TRUE
+                }
+            }
+        }
+    }
 
     if (grepl("projection", mode)) {
         Projections = read_tibble(file.path(
