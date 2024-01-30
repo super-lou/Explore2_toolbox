@@ -353,9 +353,9 @@ HM_to_use =
     c(
         # "CTRIP" ok
         # "EROS" ok
-        "GRSD" 
+        # "GRSD" ok
         # "J2000"
-        # "MORDOR-SD"
+        "MORDOR-SD"
         # "MORDOR-TS"
         # "ORCHIDEE" ok
         # "SIM2" ok
