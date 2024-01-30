@@ -352,12 +352,12 @@ shift_id_projection = 252
 HM_to_use = 
     c(
         # "CTRIP"
-        "EROS"
+        # "EROS"
         # "GRSD"
         # "J2000"
         # "MORDOR-SD"
         # "MORDOR-TS"
-        # "ORCHIDEE"
+        "ORCHIDEE"
         # "SIM2"
         # "SMASH"
 
