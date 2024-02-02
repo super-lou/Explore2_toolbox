@@ -45,8 +45,8 @@
 # Explore2_toolbox path
 lib_path =
     # "./"
-    '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -156,11 +156,11 @@ mode =
 to_do = c(
     # 'delete_tmp',
     # 'clean_nc'
-    'merge_nc'
+    # 'merge_nc'
     # 'reshape_data',
-    # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'create_data',
+    'extract_data',
+    'save_extract'
     # 'read_tmp'
     # 'read_saving'
     # "create_database"
@@ -313,8 +313,8 @@ nCode4RAM = 25
 
 projs_type =
     # "raw"
-    "cleaned"
-    # "merged"
+    # "cleaned"
+    "merged"
     # "extracted"
 
 projs_to_use =
@@ -354,12 +354,12 @@ HM_to_use =
         # "CTRIP" ok
         # "EROS" ok
         # "GRSD" ok
-        "J2000"
+        # "J2000"
         # "MORDOR-SD" ok
         # "MORDOR-TS" ok
         # "ORCHIDEE" ok
         # "SIM2" ok
-        # "SMASH" ok
+        "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
