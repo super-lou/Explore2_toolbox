@@ -354,12 +354,12 @@ HM_to_use =
         # "CTRIP" ok
         # "EROS" ok
         # "GRSD" ok
-        # "J2000"
+        "J2000"
         # "MORDOR-SD" ok
         # "MORDOR-TS" ok
         # "ORCHIDEE" ok
         # "SIM2" ok
-        "SMASH" 
+        # "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
