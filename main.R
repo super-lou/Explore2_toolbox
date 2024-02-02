@@ -155,8 +155,8 @@ mode =
 
 to_do = c(
     # 'delete_tmp',
-    'clean_nc'
-    # 'merge_nc'
+    # 'clean_nc'
+    'merge_nc'
     # 'reshape_data',
     # 'create_data',
     # 'extract_data',
@@ -312,8 +312,8 @@ propagate_NA = TRUE
 nCode4RAM = 25
 
 projs_type =
-    "raw"
-    # "cleaned"
+    # "raw"
+    "cleaned"
     # "merged"
     # "extracted"
 
