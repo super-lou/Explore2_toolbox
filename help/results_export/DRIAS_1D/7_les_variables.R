@@ -52,13 +52,14 @@
 
 
 ## 1. VARIABLES ______________________________________________________
-NCf$debit.name = "variable"
-NCf$debit.dimension = "station, time"
-NCf$debit.precision = "float"
-NCf$debit.value = data_matrix
-NCf$debit.01.standard_name = "debit"
-NCf$debit.02.long_name = "debit modcou"
-NCf$debit.03.units = "m3.s-1"
-NCf$debit.04.missing_value = NaN
-# Décrit et détaille la méthode de calcul de l’indicateur
-NCf$debit.06.comment = "Count the number of days from November 1 of year N to April 30 of year N+1 fulfilling the conditions “Snowdepth ≥ 50 cm” (using natural snow simulations)"
+NCf$variable.name = metaEX_var$variable_en
+NCf$variable.dimension = "station, time"
+NCf$variable.precision = "float"
+NCf$variable.value = dataEX_matrix
+NCf$variable.01.standard_name = metaEX_var$variable_en
+NCf$variable.02.long_name = metaEX_var$name_en
+NCf$variable.03.units = metaEX_var$unti_en
+NCf$variable.04.missing_value = NaN
+NCf$variable.05.description = metaEX_var$description_en
+NCf$variable.06.method = metaEX_var$method_en
+NCf$variable.07.sampling_period = metaEX_var$sampling_period_en

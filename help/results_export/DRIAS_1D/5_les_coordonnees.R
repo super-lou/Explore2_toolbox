@@ -42,7 +42,12 @@
 #
 #             units : Spécifie l’unité de la variable coordonnée
 
-Code_nc = ncdf4::ncvar_get(NC, "code")
+
+##############
+# Code_nc = ncdf4::ncvar_get(NC, "code")
+# idCode_match = match(Code_nc, Code)
+# idCode_match = idCode_match[!is.na(idCode_match)]
+##############
 
 
 ## 1. WGS 84 _____________________________________________________
@@ -51,7 +56,7 @@ Code_nc = ncdf4::ncvar_get(NC, "code")
 NCf$WGS84_lon.name = "WGS84_lon"
 NCf$WGS84_lon.dimension = "station"
 NCf$WGS84_lon.precision = "double"
-NCf$WGS84_lon.value = 1:length(NCf$station.value)
+NCf$WGS84_lon.value = ncdf4::ncvar_get(NC, "WGS84_lon")[idCode_match]
 NCf$WGS84_lon.01.standard_name = "longitude"
 NCf$WGS84_lon.02.long_name = "longitude coordinate in WGS84"
 NCf$WGS84_lon.03.units = "degrees_east"
@@ -59,7 +64,8 @@ NCf$WGS84_lon.03.units = "degrees_east"
 NCf$WGS84_lon_model.name = "WGS84_lon_model"
 NCf$WGS84_lon_model.dimension = "station"
 NCf$WGS84_lon_model.precision = "double"
-NCf$WGS84_lon_model.value = 1:length(NCf$station.value)
+NCf$WGS84_lon_model.value =
+    ncdf4::ncvar_get(NC, "WGS84_lon_model")[idCode_match]
 NCf$WGS84_lon_model.01.standard_name = "longitude model"
 NCf$WGS84_lon_model.02.long_name =
     "longitude coordinate in WGS84 in the model world"
@@ -70,7 +76,7 @@ NCf$WGS84_lon_model.03.units = "degrees_east"
 NCf$WGS84_lat.name = "WGS84_lat"
 NCf$WGS84_lat.dimension = "station"
 NCf$WGS84_lat.precision = "double"
-NCf$WGS84_lat.value = 1:length(NCf$station.value)
+NCf$WGS84_lat.value = ncdf4::ncvar_get(NC, "WGS84_lat")[idCode_match]
 NCf$WGS84_lat.01.standard_name = "latitude"
 NCf$WGS84_lat.02.long_name = "latitude coordinate in WGS84"
 NCf$WGS84_lat.03.units = "degrees_north"
@@ -78,7 +84,8 @@ NCf$WGS84_lat.03.units = "degrees_north"
 NCf$WGS84_lat_model.name = "WGS84_lat_model"
 NCf$WGS84_lat_model.dimension = "station"
 NCf$WGS84_lat_model.precision = "double"
-NCf$WGS84_lat_model.value = 1:length(NCf$station.value)
+NCf$WGS84_lat_model.value = 
+    ncdf4::ncvar_get(NC, "WGS84_lat_model")[idCode_match]
 NCf$WGS84_lat_model.01.standard_name = "latitude model"
 NCf$WGS84_lat_model.02.long_name =
     "latitude coordinate in WGS84 in the model world"
@@ -91,7 +98,7 @@ NCf$WGS84_lat_model.03.units = "degrees_north"
 NCf$L93_X.name = "L93_X"
 NCf$L93_X.dimension = "station"
 NCf$L93_X.precision = "double"
-NCf$L93_X.value = 1:length(NCf$station.value)
+NCf$L93_X.value = ncdf4::ncvar_get(NC, "L93_X")[idCode_match]
 NCf$L93_X.01.standard_name = "X Lambert-93"
 NCf$L93_X.02.long_name = "horizontal coordinate in Lambert-93"
 NCf$L93_X.03.units = "m"
@@ -99,7 +106,8 @@ NCf$L93_X.03.units = "m"
 NCf$L93_X_model.name = "L93_X_model"
 NCf$L93_X_model.dimension = "station"
 NCf$L93_X_model.precision = "double"
-NCf$L93_X_model.value = 1:length(NCf$station.value)
+NCf$L93_X_model.value =
+    ncdf4::ncvar_get(NC, "L93_X_model")[idCode_match]
 NCf$L93_X_model.01.standard_name = "X Lambert-93 model"
 NCf$L93_X_model.02.long_name =
     "horizontal coordinate in Lambert-93 in the model world"
@@ -110,7 +118,7 @@ NCf$L93_X_model.03.units = "m"
 NCf$L93_Y.name = "L93_Y"
 NCf$L93_Y.dimension = "station"
 NCf$L93_Y.precision = "double"
-NCf$L93_Y.value = 1:length(NCf$station.value)
+NCf$L93_Y.value = ncdf4::ncvar_get(NC, "L93_Y")[idCode_match]
 NCf$L93_Y.01.standard_name = "Y Lambert-93"
 NCf$L93_Y.02.long_name = "vertical coordinate in Lambert-93"
 NCf$L93_Y.03.units = "m"
@@ -118,7 +126,8 @@ NCf$L93_Y.03.units = "m"
 NCf$L93_Y_model.name = "L93_Y_model"
 NCf$L93_Y_model.dimension = "station"
 NCf$L93_Y_model.precision = "double"
-NCf$L93_Y_model.value = 1:length(NCf$station.value)
+NCf$L93_Y_model.value =
+    ncdf4::ncvar_get(NC, "L93_Y_model")[idCode_match]
 NCf$L93_Y_model.01.standard_name = "Y Lambert-93 model"
 NCf$L93_Y_model.02.long_name =
     "vertical coordinate in Lambert-93 in the model world"
@@ -131,7 +140,7 @@ NCf$L93_Y_model.03.units = "m"
 NCf$LII_X.name = "LII_X"
 NCf$LII_X.dimension = "station"
 NCf$LII_X.precision = "double"
-NCf$LII_X.value = 1:length(NCf$station.value)
+NCf$LII_X.value = ncdf4::ncvar_get(NC, "LII_X")[idCode_match]
 NCf$LII_X.01.standard_name = "X Lambert-II"
 NCf$LII_X.02.long_name = "horizontal coordinate in Lambert-II"
 NCf$LII_X.03.units = "m"
@@ -139,7 +148,8 @@ NCf$LII_X.03.units = "m"
 NCf$LII_X_model.name = "LII_X_model"
 NCf$LII_X_model.dimension = "station"
 NCf$LII_X_model.precision = "double"
-NCf$LII_X_model.value = 1:length(NCf$station.value)
+NCf$LII_X_model.value =
+    ncdf4::ncvar_get(NC, "LII_X_model")[idCode_match]
 NCf$LII_X_model.01.standard_name = "X Lambert-II model"
 NCf$LII_X_model.02.long_name =
     "horizontal coordinate in Lambert-II in the model world"
@@ -150,7 +160,7 @@ NCf$LII_X_model.03.units = "m"
 NCf$LII_Y.name = "LII_Y"
 NCf$LII_Y.dimension = "station"
 NCf$LII_Y.precision = "double"
-NCf$LII_Y.value = 1:length(NCf$station.value)
+NCf$LII_Y.value = ncdf4::ncvar_get(NC, "LII_Y")[idCode_match]
 NCf$LII_Y.01.standard_name = "Y Lambert-II"
 NCf$LII_Y.02.long_name = "vertical coordinate in Lambert-II"
 NCf$LII_Y.03.units = "m"
@@ -158,7 +168,8 @@ NCf$LII_Y.03.units = "m"
 NCf$LII_Y_model.name = "LII_Y_model"
 NCf$LII_Y_model.dimension = "station"
 NCf$LII_Y_model.precision = "double"
-NCf$LII_Y_model.value = 1:length(NCf$station.value)
+NCf$LII_Y_model.value =
+    ncdf4::ncvar_get(NC, "LII_Y_model")[idCode_match]
 NCf$LII_Y_model.01.standard_name = "Y Lambert-II model"
 NCf$LII_Y_model.02.long_name =
     "vertical coordinate in Lambert-II in the model world"
