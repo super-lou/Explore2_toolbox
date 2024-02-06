@@ -351,15 +351,15 @@ shift_id_projection = 252
 
 HM_to_use = 
     c(
-        # "CTRIP" ok
-        # "EROS" ok
-        # "GRSD" ok
-        "J2000"
-        # "MORDOR-SD" ok
-        # "MORDOR-TS" ok
-        # "ORCHIDEE" ok
-        # "SIM2" ok
-        # "SMASH" 
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
+        "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
