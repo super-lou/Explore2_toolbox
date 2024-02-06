@@ -53,10 +53,14 @@
 ## 1. WGS 84 _____________________________________________________
 ### 1.1. WGS 84 lon ________________________________________________
 #### 1.1.1. Real _____________________________________________________
+WGS84_lon = c("WGS84_lon", "Lon", "lon")
 NCf$WGS84_lon.name = "WGS84_lon"
 NCf$WGS84_lon.dimension = "station"
 NCf$WGS84_lon.precision = "double"
-NCf$WGS84_lon.value = ncdf4::ncvar_get(NC, "WGS84_lon")[idCode_match]
+NCf$WGS84_lon.value =
+    ncdf4::ncvar_get(NC,
+                     WGS84_lon[WGS84_lon %in%
+                               names(NC$var)])[idCode_match]
 NCf$WGS84_lon.01.standard_name = "longitude"
 NCf$WGS84_lon.02.long_name = "longitude coordinate in WGS84"
 NCf$WGS84_lon.03.units = "degrees_east"

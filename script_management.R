@@ -1403,16 +1403,16 @@ CREATE TABLE IF NOT EXISTS data (
 
                         nDate = length(ncdf4::ncvar_get(NC, "time"))
                         Variable = c("topologicalSurface",
-                                "topologicalSurface_HM",
-                                "WGS84_lon", "WGS84_lat",
-                                "WGS84_lon_HM", "WGS84_lat_HM",
-                                "LII_Y", "LII_X",
-                                "LII_Y_HM", "LII_X_HM",
-                                "L93_Y", "L93_X",
-                                "L93_Y_HM", "L93_X_HM")
+                                     "topologicalSurface_model",
+                                     "WGS84_lon", "WGS84_lat",
+                                     "WGS84_lon_model", "WGS84_lat_model",
+                                     "LII_Y", "LII_X",
+                                     "LII_Y_model", "LII_X_model",
+                                     "L93_Y", "L93_X",
+                                     "L93_Y_model", "L93_X_model")
                         Variable_chr = c("name",  "network_origin",
-                                    "code_type", "code",
-                                    "code_new")
+                                         "code_type", "code",
+                                         "code_new")
 
                         for (variable in Variable) {
                             if (!(variable %in% names(NC$var))) {
