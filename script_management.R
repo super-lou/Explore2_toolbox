@@ -130,8 +130,8 @@ manage_data = function () {
                                 dataEX[[paste0(variableREL,
                                                "_obs")]]
 
-                            metaEX$glose[metaEX$variable == variableREL] =
-                                paste0(metaEX$glose[metaEX$variable == variableREL],
+                            metaEX$glose[metaEX$variable_en == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable_en == variableREL],
                                        " (Comparaison entre les valeurs simulées et observées)")
 
                         } else if (grepl(regexp_time, variableREL)) {
@@ -143,10 +143,10 @@ manage_data = function () {
                                                    "_obs")]],
                                     period=365.25)/30.4375
 
-                            metaEX$unit[metaEX$variable == variableREL] = "mois"
-                            metaEX$isDate[metaEX$variable == variableREL] = FALSE
-                            metaEX$glose[metaEX$variable == variableREL] =
-                                paste0(metaEX$glose[metaEX$variable == variableREL],
+                            metaEX$unit[metaEX$variable_en == variableREL] = "mois"
+                            metaEX$isDate[metaEX$variable_en == variableREL] = FALSE
+                            metaEX$glose[metaEX$variable_en == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable_en == variableREL],
                                        " (Écart normalisé entre les valeurs simulées et observées)")
                             
 
@@ -163,9 +163,9 @@ manage_data = function () {
                                                 "_obs")]]
                             ] = NA
                             
-                            metaEX$unit[metaEX$variable == variableREL] = "sans unité"
-                            metaEX$glose[metaEX$variable == variableREL] =
-                                paste0(metaEX$glose[metaEX$variable == variableREL],
+                            metaEX$unit[metaEX$variable_en == variableREL] = "sans unité"
+                            metaEX$glose[metaEX$variable_en == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable_en == variableREL],
                                        " (Ratio entre les valeurs simulées et observées)")
                             
                         } else if (grepl(regexp_ratio, variableREL)) {
@@ -173,9 +173,9 @@ manage_data = function () {
                                 dataEX[[paste0(variableREL, "_sim")]] /
                                 dataEX[[paste0(variableREL, "_obs")]]
 
-                            metaEX$unit[metaEX$variable == variableREL] = "sans unité"
-                            metaEX$glose[metaEX$variable == variableREL] =
-                                paste0(metaEX$glose[metaEX$variable == variableREL],
+                            metaEX$unit[metaEX$variable_en == variableREL] = "sans unité"
+                            metaEX$glose[metaEX$variable_en == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable_en == variableREL],
                                        " (Ratio entre les valeurs simulées et observées)")
 
                         } else if (grepl(regexp_diff, variableREL)) {
@@ -183,8 +183,8 @@ manage_data = function () {
                                 round(dataEX[[paste0(variableREL, "_sim")]] -
                                       dataEX[[paste0(variableREL, "_obs")]], 5)
                             
-                            metaEX$glose[metaEX$variable == variableREL] =
-                                paste0(metaEX$glose[metaEX$variable == variableREL],
+                            metaEX$glose[metaEX$variable_en == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable_en == variableREL],
                                        " (Écart entre les valeurs simulées et observées)")
 
                         } else {
@@ -196,9 +196,9 @@ manage_data = function () {
                                 dataEX[[paste0(variableREL,
                                                "_obs")]]
                             
-                            metaEX$unit[metaEX$variable == variableREL] = "sans unité"
-                            metaEX$glose[metaEX$variable == variableREL] =
-                                paste0(metaEX$glose[metaEX$variable == variableREL],
+                            metaEX$unit[metaEX$variable_en == variableREL] = "sans unité"
+                            metaEX$glose[metaEX$variable_en == variableREL] =
+                                paste0(metaEX$glose[metaEX$variable_en == variableREL],
                                        " (Ratio relatif entre les valeurs simulées et observées)")
                         }
 
@@ -463,13 +463,15 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             if (grepl("diagnostic", mode)) {
                 path2search = file.path(resdir, read_saving)
             } else if (grepl("projection", mode)) {
-                path2search = file.path(resdir, read_saving,
-                                        Projections$dir)
+                # path2search = file.path(resdir, read_saving,
+                                        # Projections$dir)
+                path2search = Projections$path
             }
             
             Paths = list.files(path2search,
                                include.dirs=TRUE,
-                               full.names=TRUE)
+                               full.names=TRUE,
+                               recursive=TRUE)
             Paths = Paths[!duplicated(Paths)]
 
             pattern = variable2search
@@ -509,9 +511,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                  "", Filenames[i]), " reads in ",
                             Paths[i]))
 
-                
-
-
                 if (selection & grepl("projection", mode) &
                     grepl("dataEX.*serie", Filenames[i]) &
                     selection_before_reading_for_projection) {
@@ -526,7 +525,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                            "metaEX",
                                                            Paths[i]))
                     variables_to_read =
-                        metaEX_tmp$variable[sapply(metaEX_tmp$variable,
+                        metaEX_tmp$variable_en[sapply(metaEX_tmp$variable_en,
                                               any_grepl, pattern=pattern)]
 
                     tmp = list()
@@ -674,14 +673,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                 if (selection) {
                     if (grepl("metaEX.*criteria", Filenames[i])) {
-                        row2keep = sapply(tmp$variable, any_grepl,
+                        row2keep = sapply(tmp$variable_en, any_grepl,
                                           pattern=pattern)
                         tmp = tmp[row2keep,]
 
                     }
 
                     if (grepl("metaEX.*serie", Filenames[i])) {
-                        row2keep = sapply(tmp$variable, any_grepl,
+                        row2keep = sapply(tmp$variable_en, any_grepl,
                                           pattern=pattern)
                         tmp = tmp[row2keep,]
                         
@@ -784,12 +783,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     } else if (grepl("metaEX.*criteria", Filenames[i])) {
                         metaEX_criteria =
                             dplyr::bind_rows(metaEX_criteria,
-                                             tmp[!(tmp$variable %in% metaEX_criteria$variable),])
+                                             tmp[!(tmp$variable_en %in% metaEX_criteria$variable_en),])
                         
                     } else if (grepl("metaEX.*serie", Filenames[i])) {
                         metaEX_serie =
                             dplyr::bind_rows(metaEX_serie,
-                                             tmp[!(tmp$variable %in% metaEX_serie$variable),])
+                                             tmp[!(tmp$variable_en %in% metaEX_serie$variable_en),])
                         
                     } else if (grepl("data[_]", Filenames[i])) {
                         data = dplyr::bind_rows(data, tmp)
@@ -813,7 +812,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                            list(list(name=name_criteria,
                                      type="criteria",
                                      variables=
-                                         metaEX_criteria$variable)))
+                                         metaEX_criteria$variable_en)))
                 names(extract_data_tmp)[length(extract_data_tmp)] =
                     "criteria"
             }
@@ -822,7 +821,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     append(extract_data_tmp,
                            list(list(name=name_serie,
                                      type="serie",
-                                     variables=metaEX_serie$variable)))
+                                     variables=metaEX_serie$variable_en)))
                 names(extract_data_tmp)[length(extract_data_tmp)] =
                     "serie"
             }

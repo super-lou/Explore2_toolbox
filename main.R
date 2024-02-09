@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -158,15 +158,15 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    'create_data',
-    'extract_data',
-    'save_extract'
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
     # 'read_tmp'
-    # 'read_saving'
+    'read_saving',
     # "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
-    # 'analyse_data'
+    'analyse_data'
     # 'plot_sheet'
     # 'plot_doc'
 )
@@ -184,12 +184,12 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF',
-    'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter',
-    'Explore2_serie_projection_BF'
+    # 'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_MF'
+    # 'Explore2_serie_projection_LF',
+    # 'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_winter',
+    # 'Explore2_serie_projection_BF'
 )
 
 # dataEX_criteria_normal = dataEX_criteria
@@ -285,8 +285,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -314,12 +314,12 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    "merged"
-    # "extracted"
+    # "merged"
+    "extracted"
 
 projs_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
         
@@ -330,10 +330,11 @@ projs_to_use =
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
-        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT"
-        # "EARTH.*rcp85.*HadREM3.*ADAMONT",
-        # "CNRM.*rcp85.*ALADIN63.*ADAMONT"
-        # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
+        
+        "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
+        "EARTH.*rcp85.*HadREM3.*ADAMONT",
+        "CNRM.*rcp85.*ALADIN63.*ADAMONT",
+        "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 
 projection_to_remove =
@@ -401,6 +402,7 @@ MORDOR_code_warning =
 variables_to_use =
     c(
         # ".*"
+        "^QA$"
         
         # "KGEsqrt", "Bias$",
         # "epsilon.*JJA$", "epsilon.*DJF$",
@@ -410,9 +412,9 @@ variables_to_use =
         # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        "^QJXA$", "^fQA10$",
-        "^QA$", "^QA_DJF$", "^QA_MAM$", "^QA_JJA$", "^QA_SON$",
-        "^VCN10[_]summer$", "^startLF[_]summer$", "^dtLF[_]summer$" 
+        # "^QJXA$", "^fQA10$",
+        # "^QA$", "^QA_DJF$", "^QA_MAM$", "^QA_JJA$", "^QA_SON$",
+        # "^VCN10[_]summer$", "^startLF[_]summer$", "^dtLF[_]summer$" 
     )
 
 
@@ -539,11 +541,11 @@ Explore2_serie_projection_HF =
     list(name='Explore2_serie_projection_HF',
          type="serie",
          variables=c(
-             "QA01", "QA05", "QA10", 
+             "Q01A", "Q05A", "Q10A", 
              "QJXA", "tQJXA",
              "VCX3", "tVCX3",
              "VCX10", "tVCX10",
-             "fQA01", "fQA05", "fQA10",
+             "fQ01A", "fQ05A", "fQ10A",
              "dtFlood"),
          suffix="sim")
 
@@ -551,15 +553,15 @@ Explore2_serie_projection_MF =
     list(name='Explore2_serie_projection_MF',
          type="serie",
          variables=c(
-             "QA25", "QA50", "QA75",
-             "QA", "QA_month", "QA_season"),
+             "Q25A", "Q50A", "Q75A",
+             "QA", "QMA_month", "QSA_season"),
          suffix="sim")
 
 Explore2_serie_projection_LF =
     list(name='Explore2_serie_projection_LF',
          type="serie",
          variables=c(
-             "QA90", "QA95", "QA99",
+             "Q90A", "Q95A", "Q99A",
              "QNA", "QMNA",
              "VCN10", "tVCN10",
              "VCN3", "VCN30",
@@ -591,8 +593,9 @@ Explore2_serie_projection_BF =
          type="serie",
          variables=c(
              "startBF", "centerBF", "endBF",
-             "dtBF", "vBF",
-             "dtRec"),
+             "dtBF", "vBF"
+             # "dtRec"
+         ),
          suffix="sim")
 
 Explore2_serie_projection_FDC =
@@ -1710,6 +1713,6 @@ if (any(c('analyse_data') %in% to_do)) {
 
 
 if (MPI != "") {
-     Sys.sleep(10)
+    Sys.sleep(10)
     mpi.finalize()
 }

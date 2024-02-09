@@ -32,7 +32,7 @@ if (!require (NCf)) remotes::install_github("super-lou/NCf")
 meta_projection_file = "tableau_metadata_EXPLORE2.csv"
 meta_projection = ASHE::read_tibble(meta_projection_file)
 
-data_dirpath = "/home/louis/Documents/bouleau/INRAE/data/Explore2/hydrologie/projection"
+data_dirpath = "/home/louis/Documents/bouleau/INRAE/data/Explore2/hydrologie/projection_merge"
 data_Paths = list.files(data_dirpath,
                         pattern="[.]nc$",
                         full.names=TRUE,
@@ -52,8 +52,10 @@ Chain_dirpath = Chain_dirpath[!grepl("^SAFRAN[_]",
 for (chain_dirpath in Chain_dirpath) {
     
     ###
-    chain_dirpath = Chain_dirpath[1]
+    # chain_dirpath = Chain_dirpath[1]
     ###
+
+    print(chain_dirpath)
 
     regexp = gsub("historical[[][-][]]", "",
                   Projection$regexp[Projection$dir ==
@@ -71,10 +73,13 @@ for (chain_dirpath in Chain_dirpath) {
     for (var_path in Var_path) {
 
         ###
-        var_path = Var_path[1]
+        # var_path = Var_path[1]
+        # var_path = Var_path[grepl("QMA_dec", Var_path)]
         ###
         var = gsub("[.]fst", "", basename(var_path))
 
+        print(var)
+        
         dataEX = ASHE::read_tibble(var_path)
         dataEX = dplyr::arrange(dataEX, code)
         
@@ -90,6 +95,9 @@ for (chain_dirpath in Chain_dirpath) {
         meta = ASHE::read_tibble(meta_path)
         meta = dplyr::arrange(meta, code)
 
+        if (!("date" %in% names(dataEX))) {
+            next
+        }
         Date = as.Date(levels(factor(dataEX$date)))
         Date = seq.Date(as.Date(paste0(lubridate::year(min(Date)),
                                        "-01-01")),
@@ -98,8 +106,13 @@ for (chain_dirpath in Chain_dirpath) {
                         by="years")
         
         Code = levels(factor(dataEX$code))
-        Date = as.Date(levels(factor(dataEX$date)))
 
+        Date_tmp = as.Date(levels(factor(dataEX$date)))
+        if (length(Date_tmp) != length(Date)) {
+            dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
+                                         "-01-01"))
+        }
+        
         dataEX_matrix = dplyr::select(dataEX, code, date,
                                       dplyr::all_of(var))
         dataEX_matrix =
@@ -124,7 +137,7 @@ for (chain_dirpath in Chain_dirpath) {
             dir.create(out_dir)
         }
 
-        generate_NCf(out_dir=out_dir, verbose=TRUE)
+        generate_NCf(out_dir=out_dir, verbose=FALSE)
     }
 
     ncdf4::nc_close(NC)

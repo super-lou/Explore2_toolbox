@@ -163,10 +163,10 @@ if (doc_chunk == "") {
     plotCode = chunkCode
 
 } else if (doc_chunk == "critere") {
-    chunkCode = replicate(length(metaEX_criteria$variable),
+    chunkCode = replicate(length(metaEX_criteria$variable_en),
                          codes10_selection,
                          simplify=FALSE)
-    names(chunkCode) = metaEX_criteria$variable
+    names(chunkCode) = metaEX_criteria$variable_en
     plotCode = chunkCode
 }
 
@@ -291,7 +291,7 @@ for (i in 1:nChunk) {
             if (doc_chunk == "critere") {
                 one_colorbar = TRUE
                 metaEX_criteria_chunk =
-                    metaEX_criteria_chunk[metaEX_criteria_chunk$variable == chunkname,]
+                    metaEX_criteria_chunk[metaEX_criteria_chunk$variable_en == chunkname,]
             } else {
                 metaEX_criteria_chunk = metaEX_criteria_chunk
             }

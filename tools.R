@@ -343,7 +343,7 @@ get_select = function (dataEX, metaEX,
             }
         }
         
-        metaEX = metaEX[metaEX$variable %in% select,]
+        metaEX = metaEX[metaEX$variable_en %in% select,]
     }
     return (list(metaEX=metaEX, dataEX=dataEX))
 }
@@ -558,7 +558,7 @@ find_Warnings = function (dataEXind, metaEXind,
         dataEXind_code_tmp = dplyr::select(dataEXind_code_tmp,
                                            -c(code, HM))
 
-        matchVariable = match(names(dataEXind_code_tmp), metaEXind$variable)
+        matchVariable = match(names(dataEXind_code_tmp), metaEXind$variable_en)
         matchVariable = matchVariable[!is.na(matchVariable)]
         dataEXind_code_tmp = dataEXind_code_tmp[matchVariable]
 
@@ -636,8 +636,8 @@ find_Warnings = function (dataEXind, metaEXind,
                        nline=nline[1],
                        .groups="drop")
 
-        Line_KGE = statLines[statLines$variable == "KGEsqrt",]
-        Line_Bias = statLines[statLines$variable == "Bias",]
+        Line_KGE = statLines[statLines$variable_en == "KGEsqrt",]
+        Line_Bias = statLines[statLines$variable_en == "Bias",]
 
         if (all(Line_KGE$niveau == 0) &
             all(Line_Bias$niveau == 0)) {
@@ -797,7 +797,7 @@ find_Warnings = function (dataEXind, metaEXind,
         
         warningsOrder = c()
         for (i in 1:nrow(Warnings_code)) {
-            variable = Warnings_code$variable[i]
+            variable = Warnings_code$variable_en[i]
             warningsOrder = c(warningsOrder,
                               which(sapply(orderVariable, grepl,
                                            x=variable)))

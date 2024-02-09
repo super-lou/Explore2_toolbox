@@ -96,9 +96,10 @@ pas_de_temps =
     # "sec"
     # "10 min"
     # "hours"
-    "days"
+    # "days"
     # "3 weeks"
     # "months"
+    "years"
 
 from = as.POSIXct(min(Date), tz=fuseau_horaire)
 to = as.POSIXct(max(Date), tz=fuseau_horaire)
