@@ -213,6 +213,9 @@ manage_data = function () {
             } else if (extract$type == "serie") {
                 if ("HM" %in% names(dataEX[[1]])) {
                     for (j in 1:length(dataEX)) {
+                        if (nrow(dataEX[[j]]) == 0) {
+                            next
+                        }
                         dataEX[[j]] =
                             dataEX[[j]][order(dataEX[[j]]$HM),]       
                     }
