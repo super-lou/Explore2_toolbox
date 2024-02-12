@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -158,15 +158,15 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'create_data',
+    'extract_data',
+    'save_extract'
     # 'read_tmp'
-    'read_saving',
+    # 'read_saving',
     # "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
-    'analyse_data'
+    # 'analyse_data'
     # 'plot_sheet'
     # 'plot_doc'
 )
@@ -185,11 +185,14 @@ extract_data = c(
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
     # 'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF'
+    # 'Explore2_serie_projection_MF'
     # 'Explore2_serie_projection_LF',
     # 'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF'
+    'Explore2_serie_projection_FDC',
+    'Explore2_serie_projection_medQJ'
+    
 )
 
 # dataEX_criteria_normal = dataEX_criteria
@@ -285,8 +288,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -314,12 +317,12 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    # "merged"
-    "extracted"
+    "merged"
+    # "extracted"
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
         
@@ -331,10 +334,10 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
-        "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
-        "EARTH.*rcp85.*HadREM3.*ADAMONT",
-        "CNRM.*rcp85.*ALADIN63.*ADAMONT",
-        "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
+        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
+        # "EARTH.*rcp85.*HadREM3.*ADAMONT",
+        # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
+        # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 
 projection_to_remove =
@@ -601,15 +604,22 @@ Explore2_serie_projection_BF =
 Explore2_serie_projection_FDC =
     list(name='Explore2_serie_projection_FDC',
          type="serie",
-         variables="FDC",
-         horizons=c(),
+         variables=c("FDC_H0", "FDC_H1",
+                     "FDC_H2", "FDC_H3"),
+         suffix="sim")
+
+Explore2_serie_projection_medQJ =
+    list(name='Explore2_serie_projection_medQJ',
+         type="serie",
+         variables=c("medQJ_H0", "medQJ_H1",
+                     "medQJ_H2", "medQJ_H3"),
          suffix="sim")
 
 Explore2_serie_projection_BFI =
     list(name='Explore2_serie_projection_BFI',
          type="serie",
-         variables="BFI",
-         horizons=c(),
+         variables=c("BFI_H0", "BFI_H1",
+                     "BFI_H2", "BFI_H3"),
          suffix="sim")
 
 
