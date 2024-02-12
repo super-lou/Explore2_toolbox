@@ -353,7 +353,7 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
+        "CTRIP"
         # "EROS"
         # "GRSD"
         # "J2000"
@@ -361,7 +361,7 @@ HM_to_use =
         # "MORDOR-TS"
         # "ORCHIDEE"
         # "SIM2"
-        "SMASH" 
+        # "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
