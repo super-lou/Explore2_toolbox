@@ -51,7 +51,11 @@ CARD_extract_data = function () {
             expand = FALSE
         } else if (extract$type == "serie") {
             simplify = FALSE
-            expand = TRUE
+            if ("expand" %in% names(extract)) {
+               expand = extract$expand
+            } else {
+                expand = TRUE
+            }
         }
 
         if (grepl("diagnostic", mode)) {

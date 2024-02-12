@@ -606,6 +606,7 @@ Explore2_serie_projection_FDC =
          type="serie",
          variables=c("FDC_H0", "FDC_H1",
                      "FDC_H2", "FDC_H3"),
+         expand=FALSE,
          suffix="sim")
 
 Explore2_serie_projection_medQJ =
