@@ -334,7 +334,7 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
-        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
+        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT"
         # "EARTH.*rcp85.*HadREM3.*ADAMONT",
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
         # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
@@ -349,8 +349,6 @@ storylines =
       "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, précipitations moindre en hiver", #soleil
       "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et en changement de précipitations", #nuage
       "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #parapluie
-
-shift_id_projection = 252
 
 
 HM_to_use = 
