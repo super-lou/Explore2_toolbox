@@ -896,19 +896,19 @@ CREATE TABLE IF NOT EXISTS stations (
 '
         dbExecute(con, query)
 
-        # Table for projections
-        query = '      
-CREATE TABLE IF NOT EXISTS projections (
-    chain VARCHAR(255) PRIMARY KEY,
-    gcm VARCHAR(255),
-    exp VARCHAR(255),
-    rcm VARCHAR(255),
-    bc VARCHAR(255),
-    hm VARCHAR(255),
-    storylines VARCHAR(255)
-);
-'
-        dbExecute(con, query)
+#         # Table for projections
+#         query = '      
+# CREATE TABLE IF NOT EXISTS projections (
+#     chain VARCHAR(255) PRIMARY KEY,
+#     gcm VARCHAR(255),
+#     exp VARCHAR(255),
+#     rcm VARCHAR(255),
+#     bc VARCHAR(255),
+#     hm VARCHAR(255),
+#     storylines VARCHAR(255)
+# );
+# '
+#         dbExecute(con, query)
         
         
         # Table for variables
@@ -942,18 +942,25 @@ CREATE SEQUENCE data_id_seq START 1 INCREMENT 1 MINVALUE 1 MAXVALUE 922337203685
 
 CREATE TABLE IF NOT EXISTS data (
     id BIGINT DEFAULT nextval('data_id_seq'::regclass) PRIMARY KEY,
-    chain VARCHAR(255) REFERENCES projections(chain),
+    gcm VARCHAR(255),
+    exp VARCHAR(255),
+    rcm VARCHAR(255),
+    bc VARCHAR(255),
+    hm VARCHAR(255),
     variable_en VARCHAR(255) REFERENCES variables(variable_en),
     code VARCHAR(255) REFERENCES stations(code),
     date DATE,
     value DOUBLE PRECISION
 );
 "
+        # chain VARCHAR(255) REFERENCES projections(chain),
         dbExecute(con, query)
 
 
+        # DirPaths = Projections$path[!duplicated(Projections$HM)]
+        DirPaths = Projections$path[Projections$EXP != "SAFRAN"]
 
-        DirPaths = Projections$path[!duplicated(Projections$HM)]
+        
         nDirPath = length(DirPaths)
         Stations_tmp = dplyr::tibble()
         for (j in 1:nDirPath) {
@@ -997,16 +1004,16 @@ CREATE TABLE IF NOT EXISTS data (
         ###
         
 
-        DirPaths = Projections$path
-        nDirPath = length(DirPaths)
-        Projections_tmp = dplyr::select(Projections,
-                                        -c(climateChain, regexp,
-                                           dir, file, path))
-        names(Projections_tmp) = tolower(names(Projections_tmp))
-        ###
-        dbWriteTable(con, "projections", Projections_tmp,
-                     append=TRUE, row.names=FALSE)
-        ###
+        # DirPaths = Projections$path
+        # nDirPath = length(DirPaths)
+        # Projections_tmp = dplyr::select(Projections,
+        #                                 -c(climateChain, regexp,
+        #                                    dir, file, path))
+        # names(Projections_tmp) = tolower(names(Projections_tmp))
+        # ###
+        # dbWriteTable(con, "projections", Projections_tmp,
+        #              append=TRUE, row.names=FALSE)
+        # ###
 
         Paths = list.files(DirPaths[1],
                            pattern="metaEX",
@@ -1060,16 +1067,6 @@ CREATE TABLE IF NOT EXISTS data (
                 Data_tmp =
                     dplyr::rename(Data_tmp,
                                   value=dplyr::where(is.numeric))
-                Data_tmp$Chain = 
-                    Projections$Chain[
-                                    Projections$GCM == Data_tmp$GCM[1] &
-                                    Projections$EXP == Data_tmp$EXP[1] &
-                                    Projections$RCM == Data_tmp$RCM[1] &
-                                    Projections$BC == Data_tmp$BC[1] &
-                                    Projections$HM == Data_tmp$HM[1]
-                                ]
-                Data_tmp = dplyr::select(Data_tmp,
-                                         -c(GCM, RCM, EXP, BC, HM))
                 Data_tmp$variable_en = gsub("[.]fst", "",
                                             basename(Paths[j]))
 

@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -158,10 +158,10 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    'create_data',
-    'extract_data',
-    'save_extract'
-    # 'read_tmp'
+    # 'create_data'
+    # 'extract_data',
+    # 'save_extract'
+    'read_tmp'
     # 'read_saving',
     # "create_database"
     # 'write_warnings',
@@ -184,14 +184,14 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    # 'Explore2_serie_projection_HF',
-    # 'Explore2_serie_projection_MF'
-    # 'Explore2_serie_projection_LF',
-    # 'Explore2_serie_projection_LF_summer',
-    # 'Explore2_serie_projection_LF_winter',
-    # 'Explore2_serie_projection_BF'
-    'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ'
+    'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_MF',
+    'Explore2_serie_projection_LF',
+    'Explore2_serie_projection_LF_summer',
+    'Explore2_serie_projection_LF_winter',
+    'Explore2_serie_projection_BF'
+    # 'Explore2_serie_projection_FDC',
+    # 'Explore2_serie_projection_medQJ'
     
 )
 
@@ -283,13 +283,13 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -315,18 +315,18 @@ propagate_NA = TRUE
 nCode4RAM = 25
 
 projs_type =
-    # "raw"
+    "raw"
     # "cleaned"
-    "merged"
+    # "merged"
     # "extracted"
 
 projs_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
         
-        # "SAFRAN-France-20"
+        "SAFRAN-France-20"
         
         ## story lines ##
         # "HadGEM2.*historical.*CCLM4.*ADAMONT"
@@ -353,14 +353,14 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
-        # "J2000"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        # "SIM2"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
         "SMASH" 
 
         # "AquiFR",
@@ -371,8 +371,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        'all'
-        # 'K298191001' #ref
+        # 'all'
+        'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
@@ -403,7 +403,7 @@ MORDOR_code_warning =
 variables_to_use =
     c(
         # ".*"
-        "^QA$"
+        # "^QA$"
         
         # "KGEsqrt", "Bias$",
         # "epsilon.*JJA$", "epsilon.*DJF$",
@@ -413,9 +413,9 @@ variables_to_use =
         # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        # "^QJXA$", "^fQA10$",
-        # "^QA$", "^QA_DJF$", "^QA_MAM$", "^QA_JJA$", "^QA_SON$",
-        # "^VCN10[_]summer$", "^startLF[_]summer$", "^dtLF[_]summer$" 
+        "^QJXA$", "^fQ10A$",
+        "^QA$", "^QSA_DJF$", "^QSA_MAM$", "^QSA_JJA$", "^QSA_SON$",
+        "^VCN10[_]summer$", "^startLF[_]summer$", "^dtLF[_]summer$" 
     )
 
 
@@ -1144,7 +1144,7 @@ if (type == "hydrologie") {
                        dplyr::tibble(HM=HM_to_use,
                                      GCM=NA,
                                      RCM=NA,
-                                     EXP=NA,
+                                     EXP="SAFRAN",
                                      BC=NA,  
                                      climateChain="SAFRAN",
                                      Chain=paste0(
@@ -1153,10 +1153,10 @@ if (type == "hydrologie") {
                                          "||",
                                          HM_to_use),
                                      regexp=paste0(
-                                         ".*SAFRAN-France-20",
-                                         ".*",
+                                         "(.*_SAFRAN.*",
                                          HM_to_use,
-                                         ".*"),
+                                         ".*)|(^SAFRAN.*",
+                                         HM_to_use, ".*)"),
                                      dir=""))
         
         Projections$regexp = gsub("[-]", "[-]",
@@ -1194,14 +1194,16 @@ if (type == "hydrologie") {
         Files = basename(Paths)
         Paths = Paths[!duplicated(Files)]
         Files = Files[!duplicated(Files)]
+
+        # stop()
         
         any_grepl = function (pattern, x) {
             any(grepl(pattern, x))
         }
         Projections =
             Projections[sapply(Projections$regexp,
-                                        any_grepl,
-                                        x=Files),]
+                               any_grepl,
+                               x=Files),]
         Projections$file =
             lapply(Projections$regexp,
                    apply_grepl, table=Files)
@@ -1209,7 +1211,6 @@ if (type == "hydrologie") {
             lapply(Projections$file,
                    apply_match, table=Files, target=Paths)
 
-        
         Projections_nest = Projections
         Projections = tidyr::unnest(Projections,
                                              c(file, path))
@@ -1231,8 +1232,6 @@ if (type == "hydrologie") {
             Projections = Projections[OK,]
         }
 
-        
-        
         if (all(projs_to_use != "all")) {
             OK = apply(as.matrix(
                 sapply(projs_to_use, grepl,
