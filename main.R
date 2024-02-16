@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    # "./"
+    '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -158,10 +158,10 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    # 'create_data'
-    # 'extract_data',
-    # 'save_extract'
-    'read_tmp'
+    'create_data',
+    'extract_data',
+    'save_extract'
+    # 'read_tmp'
     # 'read_saving',
     # "create_database"
     # 'write_warnings',
@@ -185,11 +185,11 @@ extract_data = c(
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
     'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF',
-    'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter',
-    'Explore2_serie_projection_BF'
+    # 'Explore2_serie_projection_MF',
+    'Explore2_serie_projection_LF'
+    # 'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_winter',
+    # 'Explore2_serie_projection_BF'
     # 'Explore2_serie_projection_FDC',
     # 'Explore2_serie_projection_medQJ'
     
@@ -283,13 +283,13 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    # FALSE
-    TRUE
+    FALSE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -315,18 +315,18 @@ propagate_NA = TRUE
 nCode4RAM = 25
 
 projs_type =
-    "raw"
+    # "raw"
     # "cleaned"
-    # "merged"
+    "merged"
     # "extracted"
 
 projs_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
         
-        "SAFRAN-France-20"
+        # "SAFRAN-France-20"
         
         ## story lines ##
         # "HadGEM2.*historical.*CCLM4.*ADAMONT"
@@ -371,8 +371,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # 'all'
-        'K298191001' #ref
+        'all'
+        # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
@@ -542,12 +542,13 @@ Explore2_serie_projection_HF =
     list(name='Explore2_serie_projection_HF',
          type="serie",
          variables=c(
-             "Q01A", "Q05A", "Q10A", 
-             "QJXA", "tQJXA",
-             "VCX3", "tVCX3",
-             "VCX10", "tVCX10",
-             "fQ01A", "fQ05A", "fQ10A",
-             "dtFlood"),
+             # "Q01A", "Q05A", "Q10A", 
+             # "QJXA", "tQJXA",
+             # "VCX3", "tVCX3",
+             "VCX10", "tVCX10"
+             # "fQ01A", "fQ05A", "fQ10A",
+             # "dtFlood"
+         ),
          suffix="sim")
 
 Explore2_serie_projection_MF =
@@ -562,11 +563,12 @@ Explore2_serie_projection_LF =
     list(name='Explore2_serie_projection_LF',
          type="serie",
          variables=c(
-             "Q90A", "Q95A", "Q99A",
-             "QNA", "QMNA",
-             "VCN10", "tVCN10",
-             "VCN3", "VCN30",
-             "allLF"),
+             # "Q90A", "Q95A", "Q99A",
+             # "QNA", "QMNA",
+             # "VCN10", "tVCN10",
+             # "VCN3", "VCN30",
+             "allLF"
+         ),
          suffix="sim")
 
 Explore2_serie_projection_LF_summer =

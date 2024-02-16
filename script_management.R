@@ -426,14 +426,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             post(paste0("End signal for extract from rank ", rank)) 
         }
     }
-        
+    
     if ('create_data' %in% to_do | 'extract_data' %in% to_do) {
         if (MPI == "code" & rank == 0 |
             MPI != "code") {
             manage_data()
         }
     }
-        
+    
     if ('save_extract' %in% to_do) {
         if (MPI == "code" & rank == 0 |
             MPI != "code") {
@@ -467,7 +467,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 path2search = file.path(resdir, read_saving)
             } else if (grepl("projection", mode)) {
                 # path2search = file.path(resdir, read_saving,
-                                        # Projections$dir)
+                # Projections$dir)
                 path2search = Projections$path
             }
             
@@ -529,12 +529,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                            Paths[i]))
                     variables_to_read =
                         metaEX_tmp$variable_en[sapply(metaEX_tmp$variable_en,
-                                              any_grepl, pattern=pattern)]
+                                                      any_grepl, pattern=pattern)]
 
                     tmp = list()
                     if (length(variables_to_read) > 0) {
                         Paths_variable = file.path(gsub("[.]fst", "", Paths[i]),
-                                              paste0(variables_to_read, ".fst"))
+                                                   paste0(variables_to_read, ".fst"))
                         
                         for (j in 1:length(Paths_variable)) {
                             tmp = append(tmp,
@@ -699,7 +699,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             code = diag_station_selection[j]
                             tmp[[paste0("surface_",
                                         hm, "_km2")]][grepl(code,
-                                                               tmp$code)] = NA
+                                                            tmp$code)] = NA
                         }
                     }
                 }
@@ -725,7 +725,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                            tmp,
                                            by=character_cols)
                         }
-                    ### /!\ pour proj ###
+                        ### /!\ pour proj ###
 
                         
                     } else if (grepl("dataEX.*serie", Filenames[i])) {
@@ -761,7 +761,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                                .after=Chain)
                                 }
                             }
-                        
+                            
                             names_in = names(tmp)[names(tmp) %in%
                                                   names(dataEX_serie)]
                             names_out = names(tmp)[!(names(tmp) %in%
@@ -782,7 +782,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             dataEX_serie =
                                 append(dataEX_serie, tmp)
                         }
-    
+                        
                     } else if (grepl("metaEX.*criteria", Filenames[i])) {
                         metaEX_criteria =
                             dplyr::bind_rows(metaEX_criteria,
@@ -896,19 +896,19 @@ CREATE TABLE IF NOT EXISTS stations (
 '
         dbExecute(con, query)
 
-#         # Table for projections
-#         query = '      
-# CREATE TABLE IF NOT EXISTS projections (
-#     chain VARCHAR(255) PRIMARY KEY,
-#     gcm VARCHAR(255),
-#     exp VARCHAR(255),
-#     rcm VARCHAR(255),
-#     bc VARCHAR(255),
-#     hm VARCHAR(255),
-#     storylines VARCHAR(255)
-# );
-# '
-#         dbExecute(con, query)
+        # Table for projections
+        query = '      
+CREATE TABLE IF NOT EXISTS projections (
+    chain VARCHAR(255) PRIMARY KEY,
+    exp VARCHAR(255),    
+    gcm VARCHAR(255),
+    rcm VARCHAR(255),
+    bc VARCHAR(255),
+    hm VARCHAR(255),
+    storylines VARCHAR(255)
+);
+'
+        dbExecute(con, query)
         
         
         # Table for variables
@@ -936,32 +936,35 @@ CREATE TABLE IF NOT EXISTS variables (
         dbExecute(con, query)
         
         # Table for time series data
-        query = "
-DROP SEQUENCE IF EXISTS data_id_seq;
-CREATE SEQUENCE data_id_seq START 1 INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1;
+#         query = "
+# DROP SEQUENCE IF EXISTS data_id_seq;
+# CREATE SEQUENCE data_id_seq START 1 INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1;
 
-CREATE TABLE IF NOT EXISTS data (
-    id BIGINT DEFAULT nextval('data_id_seq'::regclass) PRIMARY KEY,
-    gcm VARCHAR(255),
-    exp VARCHAR(255),
-    rcm VARCHAR(255),
-    bc VARCHAR(255),
-    hm VARCHAR(255),
-    variable_en VARCHAR(255) REFERENCES variables(variable_en),
-    code VARCHAR(255) REFERENCES stations(code),
-    date DATE,
-    value DOUBLE PRECISION
-);
-"
-        # chain VARCHAR(255) REFERENCES projections(chain),
-        dbExecute(con, query)
+# CREATE TABLE IF NOT EXISTS data (
+#     id BIGINT DEFAULT nextval('data_id_seq'::regclass) PRIMARY KEY,
+#     chain VARCHAR(255) REFERENCES projections(chain),
+#     variable_en VARCHAR(255) REFERENCES variables(variable_en),
+#     code VARCHAR(255) REFERENCES stations(code),
+#     date DATE,
+#     value DOUBLE PRECISION
+# );
+# "
+#         # chain VARCHAR(255) REFERENCES projections(chain),
+#         dbExecute(con, query)
 
 
-        # DirPaths = Projections$path[!duplicated(Projections$HM)]
-        DirPaths = Projections$path[Projections$EXP != "SAFRAN"]
+        Projections = Projections[Projections$EXP != "SAFRAN",]
+        Projections = dplyr::relocate(Projections, EXP, .before=GCM)
+        Projections = dplyr::select(Projections, -Chain)
+        Projections$Chain = paste(Projections$EXP,
+                                  Projections$GCM,
+                                  Projections$RCM,
+                                  Projections$BC,
+                                  Projections$HM, sep="_")
+        DirPaths = Projections$path
+        nDirPath = length(DirPaths)
 
         
-        nDirPath = length(DirPaths)
         Stations_tmp = dplyr::tibble()
         for (j in 1:nDirPath) {
             if (nrow(Stations_tmp) == 0) {
@@ -1004,16 +1007,17 @@ CREATE TABLE IF NOT EXISTS data (
         ###
         
 
-        # DirPaths = Projections$path
-        # nDirPath = length(DirPaths)
-        # Projections_tmp = dplyr::select(Projections,
-        #                                 -c(climateChain, regexp,
-        #                                    dir, file, path))
-        # names(Projections_tmp) = tolower(names(Projections_tmp))
-        # ###
-        # dbWriteTable(con, "projections", Projections_tmp,
-        #              append=TRUE, row.names=FALSE)
-        # ###
+        DirPaths = Projections$path
+        nDirPath = length(DirPaths)
+        Projections_tmp = dplyr::select(Projections,
+                                        -c(climateChain, regexp,
+                                           dir, file, path))
+        Projections_tmp$Chain = gsub("[|]", "_", Projections_tmp$Chain)
+        names(Projections_tmp) = tolower(names(Projections_tmp))
+        ###
+        dbWriteTable(con, "projections", Projections_tmp,
+                     append=TRUE, row.names=FALSE)
+        ###
 
         Paths = list.files(DirPaths[1],
                            pattern="metaEX",
@@ -1022,6 +1026,7 @@ CREATE TABLE IF NOT EXISTS data (
         variables_regexp =
             paste0("(", paste0(variables_to_use,
                                collapse=")|("), ")")
+        Variables = dplyr::tibble()
         for (j in 1:nPath) {
             Variables_tmp = read_tibble(Paths[j])
             Variables_tmp =
@@ -1031,55 +1036,141 @@ CREATE TABLE IF NOT EXISTS data (
                 next
             }
             names(Variables_tmp) = tolower(names(Variables_tmp))
-            ###
-            dbWriteTable(con, "variables", Variables_tmp,
-                         append=TRUE, row.names=FALSE)
-            ###
+            Variables = dplyr::bind_rows(Variables, Variables_tmp)
         }
+        ###
+        dbWriteTable(con, "variables", Variables,
+                     append=TRUE, row.names=FALSE)
+        ###
         
 
-        for (i in 1:nDirPath) {
-            print(paste0(i, "/", nDirPath,
-                         " so ",
-                         round(i/nDirPath*100, 1), "%"))
-            Paths_tmp = list.files(DirPaths[i],
+        
+        
+        EXP = levels(factor(Projections$EXP))
+        for (exp in EXP) {
+            Projections_exp = Projections[Projections$EXP == exp,]
+
+            for (var in Variables$variable_en) {
+                print(paste0(exp, " ", var))
+
+                db_id = tolower(paste0(gsub("[-]", "_", exp),
+                                       "_", var))
+                db_name = paste0("data_", db_id)
+                
+                query = paste0("
+CREATE TABLE IF NOT EXISTS ", db_name, " (
+    id SERIAL PRIMARY KEY,
+    chain VARCHAR(255) REFERENCES projections(chain),
+    variable_en VARCHAR(255) REFERENCES variables(variable_en),
+    code VARCHAR(255) REFERENCES stations(code),
+    date DATE,
+    value DOUBLE PRECISION
+);
+")
+                dbExecute(con, query)
+                
+                Paths = list.files(Projections_exp$path,
                                    pattern="dataEX",
                                    include.dirs=TRUE,
                                    full.names=TRUE)
-            Paths = list.files(Paths_tmp,
-                               pattern=".fst",
-                               full.names=TRUE)
-            Paths = Paths[grepl(variables_regexp,
-                                gsub("[.]fst", "",
-                                     basename(Paths)))]
-            if (length(Paths) == 0) {
-                next
-            }
-            
-            nPath = length(Paths)
-            nPath = length(Paths)
-            
-            for (j in 1:nPath) {
-                print(paste0("    ", j, "/", nPath,
-                             " so ",
-                             round(j/nPath*100, 1), "%"))
-                Data_tmp = read_tibble(Paths[j])
-                Data_tmp =
-                    dplyr::rename(Data_tmp,
-                                  value=dplyr::where(is.numeric))
-                Data_tmp$variable_en = gsub("[.]fst", "",
-                                            basename(Paths[j]))
+                Paths = list.files(Paths,
+                                   pattern=paste0("^",
+                                                  gsub("[_]",
+                                                       "[_]",
+                                                       var),
+                                                  "[.]fst"),
+                                   full.names=TRUE)
+                nPath = length(Paths)
+                
+                for (j in 1:nPath) {
+                    print(paste0("    ", j, "/", nPath,
+                                 " so ",
+                                 round(j/nPath*100, 1), "%"))
+                    Data_tmp = read_tibble(Paths[j])
+                    Data_tmp =
+                        dplyr::rename(Data_tmp,
+                                      value=dplyr::where(is.numeric))
+                    Data_tmp$variable_en = gsub("[.]fst", "",
+                                                basename(Paths[j]))
 
-                names(Data_tmp) = tolower(names(Data_tmp))
-                ###
-                dbWriteTable(con, "data", Data_tmp,
-                             append=TRUE, row.names=FALSE)
-                ###
+                    Data_tmp$Chain = paste(Data_tmp$EXP,
+                                           Data_tmp$GCM,
+                                           Data_tmp$RCM,
+                                           Data_tmp$BC,
+                                           Data_tmp$HM, sep="_")
+                    Data_tmp = dplyr::select(Data_tmp,
+                                             -c(EXP, GCM, RCM, BC, HM))
+
+                    names(Data_tmp) = tolower(names(Data_tmp))
+                    ###
+                    dbWriteTable(con, db_name, Data_tmp,
+                                 append=TRUE, row.names=FALSE)
+                    ###
+                }
+
+                print("indexing")
+                query = paste0("CREATE INDEX idx_", db_id, "_chain_date ON ", db_name, " (chain, date);")
+                dbExecute(con, query)
+                
             }
         }
 
 
-        dbDisconnect(con)
+        dbDisconnect(con)  
+            
+            
+            
+
+        
+        
+        # for (i in 1:nDirPath) {
+        #     print(paste0(i, "/", nDirPath,
+        #                  " so ",
+        #                  round(i/nDirPath*100, 1), "%"))
+        #     Paths_tmp = list.files(DirPaths[i],
+        #                            pattern="dataEX",
+        #                            include.dirs=TRUE,
+        #                            full.names=TRUE)
+        #     Paths = list.files(Paths_tmp,
+        #                        pattern=".fst",
+        #                        full.names=TRUE)
+        #     Paths = Paths[grepl(variables_regexp,
+        #                         gsub("[.]fst", "",
+        #                              basename(Paths)))]
+        #     if (length(Paths) == 0) {
+        #         next
+        #     }
+            
+        #     nPath = length(Paths)
+        #     nPath = length(Paths)
+            
+        #     for (j in 1:nPath) {
+        #         print(paste0("    ", j, "/", nPath,
+        #                      " so ",
+        #                      round(j/nPath*100, 1), "%"))
+        #         Data_tmp = read_tibble(Paths[j])
+        #         Data_tmp =
+        #             dplyr::rename(Data_tmp,
+        #                           value=dplyr::where(is.numeric))
+        #         Data_tmp$variable_en = gsub("[.]fst", "",
+        #                                     basename(Paths[j]))
+
+        #         Data_tmp$Chain = paste(Data_tmp$EXP,
+        #                                Data_tmp$GCM,
+        #                                Data_tmp$RCM,
+        #                                Data_tmp$BC,
+        #                                Data_tmp$HM, sep="_")
+        #         Data_tmp = dplyr::select(Data_tmp,
+        #                                  -c(EXP, GCM, RCM, BC, HM))
+
+        #         names(Data_tmp) = tolower(names(Data_tmp))
+        #         ###
+        #         dbWriteTable(con, "data", Data_tmp,
+        #                      append=TRUE, row.names=FALSE)
+        #         ###
+        #     }
+        # }
+        # dbDisconnect(con)
     }
 
 
@@ -1217,7 +1308,7 @@ CREATE TABLE IF NOT EXISTS data (
         nProjections = nrow(Projections)
 
         if (nProjections > 0) {
-        
+            
             for (i in 1:nProjections) {
                 proj = Projections[i,]
                 proj_path = proj$path
@@ -1228,7 +1319,7 @@ CREATE TABLE IF NOT EXISTS data (
                 proj_clean_file = gsub("[_]v[[:digit:]]+[_]",
                                        paste0("_v", ver+1, "_"),
                                        proj_file)
-               
+                
                 proj_clean_path = file.path(proj_clean_dirpath,
                                             proj_clean_file)
                 
@@ -1264,10 +1355,10 @@ CREATE TABLE IF NOT EXISTS data (
                                                create_dimvar=FALSE,
                                                longname=NULL)
                         variable = ncdf4::ncvar_def("code_new", "",
-                                               list(dim,
-                                                    NC$dim$station),
-                                               longname="code of stations",
-                                               prec="char")
+                                                    list(dim,
+                                                         NC$dim$station),
+                                                    longname="code of stations",
+                                                    prec="char")
                         NC = ncdf4::ncvar_add(NC, variable)
                         ncdf4::nc_close(NC)
                         NC = ncdf4::nc_open(proj_clean_path,
@@ -1288,7 +1379,7 @@ CREATE TABLE IF NOT EXISTS data (
                         ncdf4::ncvar_put(NC, "code_new", code_o)
                         Code = ncdf4::ncvar_get(NC, "code_new")
                     }
-                   
+                    
                     nCode = length(Code)
                     XL93 = ncdf4::ncvar_get(NC, "L93_X")
                     YL93 = ncdf4::ncvar_get(NC, "L93_Y")
@@ -1546,7 +1637,7 @@ CREATE TABLE IF NOT EXISTS data (
         flag = dplyr::tibble()
 
         if (nHistoricals > 0) {
-        
+            
             for (i in 1:nHistoricals) {
                 historical = Historicals[i,]
                 historical_path = historical$path
@@ -1618,10 +1709,10 @@ CREATE TABLE IF NOT EXISTS data (
                                 proj_merge_file))
 
                     # cdoCmd = paste0("cdo", " ",
-                                    # "--sortname --history -O mergetime", " ",
-                                    # historical_path, " ",
-                                    # proj_path, " ", 
-                                    # proj_merge_path)
+                    # "--sortname --history -O mergetime", " ",
+                    # historical_path, " ",
+                    # proj_path, " ", 
+                    # proj_merge_path)
                     # system(cdoCmd)
 
                     # ncoCmd = paste0("ncks -h -A -O -v", " ",
