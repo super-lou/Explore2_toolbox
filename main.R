@@ -159,7 +159,7 @@ to_do = c(
     # 'merge_nc'
     # 'reshape_data',
     'create_data',
-    # 'extract_data',
+    'extract_data',
     'save_extract'
     # 'read_tmp'
     # 'read_saving',
@@ -184,14 +184,14 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF',
-    'Explore2_serie_projection_LF',
+    # 'Explore2_serie_projection_HF',
+    # 'Explore2_serie_projection_MF',
+    # 'Explore2_serie_projection_LF',
     'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter',
-    'Explore2_serie_projection_BF',
-    'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ'
+    'Explore2_serie_projection_LF_winter'
+    # 'Explore2_serie_projection_BF',
+    # 'Explore2_serie_projection_FDC',
+    # 'Explore2_serie_projection_medQJ'
     
 )
 
@@ -353,15 +353,15 @@ storylines =
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
-        "SMASH" 
+        "CTRIP"
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SIM2",
+        # "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
