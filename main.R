@@ -354,13 +354,13 @@ storylines =
 HM_to_use = 
     c(
         "CTRIP"
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
-        # "SIM2",
+        # "EROS"
+        # "GRSD"
+        # "J2000"
+        # "MORDOR-SD"
+        # "MORDOR-TS"
+        # "ORCHIDEE"
+        # "SIM2"
         # "SMASH" 
 
         # "AquiFR",
@@ -371,8 +371,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # 'all'
-        'K298191001' #ref
+        'all'
+        # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
@@ -575,9 +575,9 @@ Explore2_serie_projection_LF_summer =
     list(name='Explore2_serie_projection_LF_summer',
          type="serie",
          variables=c(
-             "QNA_summer", "QMNA_summer",
-             "VCN10_summer", "tVCN10_summer",
-             "VCN3_summer", "VCN30_summer",
+             # "QNA_summer", "QMNA_summer",
+             # "VCN10_summer", "tVCN10_summer",
+             # "VCN3_summer", "VCN30_summer",
              "allLF_summer"),
          suffix="sim")
 
@@ -585,9 +585,9 @@ Explore2_serie_projection_LF_winter =
     list(name='Explore2_serie_projection_LF_winter',
          type="serie",
          variables=c(
-             "QNA_winter", "QMNA_winter",
-             "VCN10_winter", "tVCN10_winter",
-             "VCN3_winter", "VCN30_winter",
+             # "QNA_winter", "QMNA_winter",
+             # "VCN10_winter", "tVCN10_winter",
+             # "VCN3_winter", "VCN30_winter",
              "allLF_winter"),
          suffix="sim")
 
