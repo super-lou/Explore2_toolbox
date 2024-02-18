@@ -184,14 +184,14 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    # 'Explore2_serie_projection_HF',
-    # 'Explore2_serie_projection_MF',
-    # 'Explore2_serie_projection_LF',
+    'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_MF',
+    'Explore2_serie_projection_LF',
     'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter'
-    # 'Explore2_serie_projection_BF',
-    # 'Explore2_serie_projection_FDC',
-    # 'Explore2_serie_projection_medQJ'
+    'Explore2_serie_projection_LF_winter',
+    'Explore2_serie_projection_BF',
+    'Explore2_serie_projection_FDC',
+    'Explore2_serie_projection_medQJ'
     
 )
 
@@ -353,14 +353,14 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
-        # "J2000"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        # "SIM2"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
         "SMASH" 
 
         # "AquiFR",
@@ -371,8 +371,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        'all'
-        # 'K298191001' #ref
+        # 'all'
+        'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
