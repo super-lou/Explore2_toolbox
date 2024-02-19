@@ -184,14 +184,14 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF',
+    # 'Explore2_serie_projection_HF',
+    # 'Explore2_serie_projection_MF',
     'Explore2_serie_projection_LF',
     'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter',
-    'Explore2_serie_projection_BF',
-    'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ'
+    'Explore2_serie_projection_LF_winter'
+    # 'Explore2_serie_projection_BF',
+    # 'Explore2_serie_projection_FDC',
+    # 'Explore2_serie_projection_medQJ'
     
 )
 
@@ -200,6 +200,24 @@ extract_data = c(
 # dataEX_criteria = dplyr::filter(dataEX_criteria_normal, !(HM %in% c("GRSD", "SMASH")))
 # dataEX_criteria = dplyr::bind_rows(dataEX_criteria, dataEX_criteria_ungauged)
 # dataEX_criteria = dplyr::filter(dataEX_criteria, HM != "MORDOR-SD")
+
+
+# library(ggplot2)
+# code_light = "K298191001"
+# plot = ggplot() + theme_minimal() +
+#     geom_line(data=dplyr::filter(dataEX_WIP$tVCN10,
+#                                  code==code_light),
+#               aes(x=date, y=tVCN10), color="red") + 
+#     geom_line(data=dplyr::filter(dataEX_WIP$startLF,
+#                                  code==code_light),
+#               aes(x=date, y=startLF), color="darkcyan") +
+#     geom_line(data=dplyr::filter(dataEX_WIP$centerLF,
+#                                  code==code_light),
+#               aes(x=date, y=centerLF), color="black") +
+#     geom_line(data=dplyr::filter(dataEX_WIP$endLF,
+#                                  code==code_light),
+#               aes(x=date, y=endLF), color="blue")
+# ggsave("LF.pdf", plot, height=21, width=29.7, units="cm")
 
 
 ## 3. PLOTTING PROCESSES _____________________________________________
@@ -353,15 +371,15 @@ storylines =
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
-        "SMASH" 
+        "CTRIP"
+        # "EROS"
+        # "GRSD"
+        # "J2000"
+        # "MORDOR-SD"
+        # "MORDOR-TS"
+        # "ORCHIDEE"
+        # "SIM2"
+        # "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -371,13 +389,13 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # 'all'
-        'K298191001' #ref
+        'all'
+        # 'K298191001' #ref
         # 'K294401001'
         # "O036251010"
         # "^H"
         # "^D"
-        # "^K"
+        # "^K00"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -440,7 +458,9 @@ WIP =
          type="serie",
          # variables=c("QA", "QA_season"),
          variables=c(
-             "QA"
+             "allLF",
+             "allLF_summer",
+             "allLF_winter"
          ),
          # variables=c("T_chronique",
                      # "R_chronique"),
@@ -563,10 +583,10 @@ Explore2_serie_projection_LF =
     list(name='Explore2_serie_projection_LF',
          type="serie",
          variables=c(
-             "Q90A", "Q95A", "Q99A",
-             "QNA", "QMNA",
-             "VCN10", "tVCN10",
-             "VCN3", "VCN30",
+             # "Q90A", "Q95A", "Q99A",
+             # "QNA", "QMNA",
+             # "VCN10", "tVCN10",
+             # "VCN3", "VCN30",
              "allLF"
          ),
          suffix="sim")
@@ -1217,7 +1237,6 @@ if (type == "hydrologie") {
         Projections = tidyr::unnest(Projections,
                                              c(file, path))
 
-
         if (nrow(Projections) == 1) { #### MOCHE ####
             nOK = apply(as.matrix(
                 sapply(projection_to_remove, grepl,
@@ -1264,8 +1283,10 @@ if (type == "hydrologie") {
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
 
-        write_tibble(dplyr::select(Projections,
-                                   -"path"),
+        write_tibble(dplyr::select(
+                                dplyr::filter(Projections,
+                                              !duplicated(Chain)),
+                                -"path"),
                      filedir=today_resdir,
                      filename="projections_selection.csv")
 

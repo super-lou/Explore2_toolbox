@@ -242,7 +242,8 @@ create_data = function () {
                                      file.path(type,
                                                obs_hydro_dir),
                                      Code8_filename,
-                                     val2keep=c(val_E2=0),
+                                     variable_to_load="Qm3s",
+                                     val_to_keep=c(val_E2=0),
                                      verbose=subverbose)
         
         data_obs =
