@@ -378,8 +378,8 @@ HM_to_use =
         # "MORDOR-SD"
         # "MORDOR-TS"
         # "ORCHIDEE"
-        "SIM2"
-        # "SMASH" 
+        # "SIM2"
+        "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
