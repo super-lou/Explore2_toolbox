@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -158,12 +158,12 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_data',
-    'create_data',
-    'extract_data',
-    'save_extract'
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
     # 'read_tmp'
-    # 'read_saving',
-    # "create_database"
+    # 'read_saving'
+    "create_database"
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
@@ -185,14 +185,19 @@ extract_data = c(
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
     # 'Explore2_serie_projection_HF',
-    # 'Explore2_serie_projection_MF',
-    'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter'
+    'Explore2_serie_projection_MF',
+    'Explore2_serie_projection_LF'
+    # 'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
     # 'Explore2_serie_projection_medQJ'
     
+)
+
+
+analyse_data = c(
+    "compute_delta"
 )
 
 # dataEX_criteria_normal = dataEX_criteria
@@ -306,8 +311,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -319,6 +324,12 @@ MPI =
 period_extract_diag = c('1976-01-01', '2019-12-31')
 period_extract_projection = c('1975-09-01', '2100-08-31')
 period_reference = c("1976-01-01", "2005-12-31")
+
+historical = c("1976-01-01", "2005-08-31")
+Futurs = list(H1=c("2021-01-01", "2050-12-31"),
+              H2=c("2041-01-01", "2070-12-31"),
+              H3=c("2070-01-01", "2099-12-31"))
+
 propagate_NA = TRUE
 ## diag ##
 # nCode4RAM | 32 |
@@ -335,8 +346,8 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    "merged"
-    # "extracted"
+    # "merged"
+    "extracted"
 
 projs_to_use =
     c(
@@ -352,7 +363,7 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
-        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT"
+        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
         # "EARTH.*rcp85.*HadREM3.*ADAMONT",
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
         # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
@@ -371,14 +382,14 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
-        # "J2000"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        # "SIM2"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
         "SMASH" 
 
         # "AquiFR",
@@ -400,6 +411,13 @@ codes_to_use =
         # "A882000101"
         # LETTERS[11:26]
 
+        # Flora
+        # "V506401001",
+        # "V500403001",
+        # "V501401001",
+        # "V502050000"
+        
+        # Eric 
         # "Seine"="H700011001",
         # "Rhone"="V720001002",
         # "Garonne"="O972001000",
@@ -422,7 +440,8 @@ variables_to_use =
     c(
         # ".*"
         # "^QA$"
-        
+
+        # Diagnostic
         # "KGEsqrt", "Bias$",
         # "epsilon.*JJA$", "epsilon.*DJF$",
         # "RAT[_]T$", "RAT[_]R$",
@@ -431,9 +450,20 @@ variables_to_use =
         # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        "^QJXA$", "^fQ10A$",
-        "^QA$", "^QSA_DJF$", "^QSA_MAM$", "^QSA_JJA$", "^QSA_SON$",
-        "^VCN10[_]summer$", "^startLF[_]summer$", "^dtLF[_]summer$" 
+        # Louis
+        "^QJXA$",
+        # "^fQ10A$",
+        "^QA$",
+        # "^QSA_DJF$", "^QSA_MAM$", "^QSA_JJA$", "^QSA_SON$",
+        "^VCN10[_]summer$"
+        # "^startLF[_]summer$", "^dtLF[_]summer$"
+
+        # Flora
+        # "^QA$",
+        # "^QMA_*", "^QSA_*",
+        # "^Q90A$", "^QMNA$", "^VCN30$",
+        # "^startLF$", "^dtLF$" 
+       
     )
 
 
@@ -583,10 +613,10 @@ Explore2_serie_projection_LF =
     list(name='Explore2_serie_projection_LF',
          type="serie",
          variables=c(
-             # "Q90A", "Q95A", "Q99A",
-             # "QNA", "QMNA",
-             # "VCN10", "tVCN10",
-             # "VCN3", "VCN30",
+             "Q90A", "Q95A", "Q99A",
+             "QNA", "QMNA",
+             "VCN10", "tVCN10",
+             "VCN3", "VCN30",
              "allLF"
          ),
          suffix="sim")
@@ -595,9 +625,9 @@ Explore2_serie_projection_LF_summer =
     list(name='Explore2_serie_projection_LF_summer',
          type="serie",
          variables=c(
-             # "QNA_summer", "QMNA_summer",
-             # "VCN10_summer", "tVCN10_summer",
-             # "VCN3_summer", "VCN30_summer",
+             "QNA_summer", "QMNA_summer",
+             "VCN10_summer", "tVCN10_summer",
+             "VCN3_summer", "VCN30_summer",
              "allLF_summer"),
          suffix="sim")
 
@@ -605,9 +635,9 @@ Explore2_serie_projection_LF_winter =
     list(name='Explore2_serie_projection_LF_winter',
          type="serie",
          variables=c(
-             # "QNA_winter", "QMNA_winter",
-             # "VCN10_winter", "tVCN10_winter",
-             # "VCN3_winter", "VCN30_winter",
+             "QNA_winter", "QMNA_winter",
+             "VCN10_winter", "tVCN10_winter",
+             "VCN3_winter", "VCN30_winter",
              "allLF_winter"),
          suffix="sim")
 
@@ -1066,9 +1096,6 @@ if (grepl("diagnostic", mode)) {
     variable2save = variable2save[variable2save != "data"]
 }
 
-# if (!(file.exists(resources_path)) & rank == 0) {
-  # dir.create(resources_path)
-# }
 
 delete_tmp = FALSE
 clean_nc = FALSE
@@ -1076,11 +1103,18 @@ merge_nc = FALSE
 read_tmp = FALSE
 
 
-# if ('extract_data' %in% to_do) {
 extract_data_tmp = lapply(extract_data, get)
 names(extract_data_tmp) = extract_data
 extract_data = extract_data_tmp
-# }
+
+variables_regexp =
+    paste0("(", paste0(variables_to_use,
+                       collapse=")|("), ")")
+
+historical = as.Date(historical)
+Futurs = lapply(Futurs, as.Date)
+nFuturs = length(Futurs)
+
 
 
 if ('plot_doc' %in% to_do) {
@@ -1170,9 +1204,8 @@ if (type == "hydrologie") {
                                      BC=NA,  
                                      climateChain="SAFRAN",
                                      Chain=paste0(
-                                         "||",
                                          "SAFRAN",
-                                         "||",
+                                         "|",
                                          HM_to_use),
                                      regexp=paste0(
                                          "(.*_SAFRAN.*",
@@ -1206,6 +1239,16 @@ if (type == "hydrologie") {
             proj_path = file.path(resdir, read_saving)
             pattern = NULL
             include.dirs = TRUE
+
+            Projections = dplyr::relocate(Projections, EXP, .before=GCM)
+            Projections = dplyr::select(Projections, -Chain)
+            Projections$Chain = paste(Projections$EXP,
+                                      Projections$GCM,
+                                      Projections$RCM,
+                                      Projections$BC,
+                                      Projections$HM, sep="|")
+            Projections$Chain = gsub("NA[|]NA[|]NA[|]",
+                                     "", Projections$Chain)
         }
         
         Paths = list.files(proj_path,
@@ -1329,7 +1372,7 @@ if (type == "hydrologie") {
                                          )))))
     write_tibble(codes_selection_data,
                  filedir=today_resdir,
-                 filename="stations_selection.csv")
+                 filename=codes_hydro_selection_file)
 
     if (grepl("diagnostic", mode)) {
         ref = 1
@@ -1689,7 +1732,7 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                  paste0("timer_", rank, ".txt"))
 }
 
-if (any(c('selection', 'create_database', 'write_warnings',
+if (any(c('selection', 'write_warnings',
           'add_regime_hydro', 'read_saving') %in% to_do)) {
     post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
@@ -1710,9 +1753,15 @@ if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
            encoding='UTF-8')
 }
 
-if (any(c('analyse_data') %in% to_do)) {
+if ('analyse_data' %in% to_do) {
     post("## ANALYSING DATA")
     source(file.path(lib_path, 'script_analyse.R'),
+           encoding='UTF-8')
+}
+
+if ('create_database' %in% to_do) {
+    post("## DATABASE")
+    source(file.path(lib_path, 'script_database.R'),
            encoding='UTF-8')
 }
 
