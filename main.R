@@ -388,8 +388,8 @@ HM_to_use =
         # "J2000"
         # "MORDOR-SD"
         # "MORDOR-TS"
-        "ORCHIDEE"
-        # "SIM2"
+        # "ORCHIDEE"
+        "SIM2"
         # "SMASH" 
 
         # "AquiFR",
