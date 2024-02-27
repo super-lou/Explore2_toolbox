@@ -1202,10 +1202,9 @@ if (type == "hydrologie") {
                                      RCM=NA,
                                      EXP="SAFRAN",
                                      BC=NA,  
-                                     climateChain="SAFRAN",
+                                     climateChain="|SAFRAN||",
                                      Chain=paste0(
-                                         "SAFRAN",
-                                         "|",
+                                         "|SAFRAN|||",
                                          HM_to_use),
                                      regexp=paste0(
                                          "(.*_SAFRAN.*",

@@ -103,9 +103,6 @@ create_data = function () {
                            surface_km2=
                                as.numeric(codes_selection_data$S_HYDRO[id]))
 
-            print(data_sim)
-            # print()
-            
             meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
                                                             HM,
                                                             code),
