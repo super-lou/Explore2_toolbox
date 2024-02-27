@@ -363,7 +363,7 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
-        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
+        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT"
         # "EARTH.*rcp85.*HadREM3.*ADAMONT",
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
         # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
@@ -382,8 +382,8 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        "EROS"
+        "CTRIP"
+        # "EROS"
         # "GRSD"
         # "J2000"
         # "MORDOR-SD"
