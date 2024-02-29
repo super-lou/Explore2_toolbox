@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -191,7 +191,8 @@ extract_data = c(
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ'
+    # 'Explore2_serie_projection_medQJ'
+    'Explore2_serie_projection_BFI'
     
 )
 
@@ -382,7 +383,7 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
+        "CTRIP"
         # "EROS"
         # "GRSD"
         # "J2000"
@@ -390,7 +391,7 @@ HM_to_use =
         # "MORDOR-TS"
         # "ORCHIDEE"
         # "SIM2"
-        "SMASH" 
+        # "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -669,8 +670,10 @@ Explore2_serie_projection_medQJ =
 Explore2_serie_projection_BFI =
     list(name='Explore2_serie_projection_BFI',
          type="serie",
-         variables=c("BFI_H0", "BFI_H1",
-                     "BFI_H2", "BFI_H3"),
+         variables=c("BFI_Wal_H0", "BFI_Wal_H1",
+                     "BFI_Wal_H2", "BFI_Wal_H3",
+                     "BFI_LH_H0", "BFI_LH_H1",
+                     "BFI_LH_H2", "BFI_LH_H3"),
          suffix="sim")
 
 
