@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS variables (
     sampling_period_fr VARCHAR(255),
     topic_fr VARCHAR(255),
     is_date BOOLEAN,
-    to_normalize BOOLEAN,
+    to_normalise BOOLEAN,
     palette VARCHAR(255)
 );
 '

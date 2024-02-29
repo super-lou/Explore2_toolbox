@@ -118,7 +118,7 @@ if (type == "piezometrie") {
                           "sans unité",
                           "m"),
                    is_date=FALSE,
-                   to_normalize=FALSE,
+                   to_normalise=FALSE,
                    reverse_palette=FALSE,
                    glose=c(
                        "Coeffcient d'efficacité de Nash-Sutcliffe des débits retranchés du biais",
