@@ -307,8 +307,8 @@ verbose =
     # FALSE
     TRUE
 subverbose =
-    FALSE
-    # TRUE
+    # FALSE
+    TRUE
 
 # Which type of MPI is used
 MPI =
@@ -384,12 +384,12 @@ storylines =
 HM_to_use = 
     c(
         # "CTRIP"
-        # "EROS"
+        "EROS"
         # "GRSD"
         # "J2000"
         # "MORDOR-SD"
         # "MORDOR-TS"
-        "ORCHIDEE"
+        # "ORCHIDEE"
         # "SIM2"
         # "SMASH" 
 
