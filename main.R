@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -63,6 +63,23 @@ lib_path =
 # - 'delete_tmp' :
 #     Delete temporary data in the tmpdir/.
 #     > Permanently erase temporary data.
+#
+# - 'clean_nc' :
+#     Clean NetCDF files from data producer to manage code association
+#     error thanks to data contained in HM_rm.csv and HM_mv.csv
+#     files in computer_data_path/code_correction/.
+#     > Cleaned NetCDF in computer_data_path/projection_clean/.
+#
+# - 'merge_nc' :
+#     Merge historical part of NetCDF file to its corresponding
+#     scenario path NetCDF.
+#     > Merged NetCDF in computer_data_path/projection_merge/.
+#
+# - 'reshape_piezo_data' :
+#     Reshape input piezo data from BRGM for aggregated value for
+#     diagnostic. It replaces 'create_data' and a part of
+#     'extract_data' for hydrologie type.
+#     > dataEX, metaEX, meta and data in tmpdir/. 
 #
 # - 'create_data' :
 #     Creation of tibble of data that will be saved in tmpdir/. The
@@ -118,16 +135,32 @@ lib_path =
 #     based on var2search.
 #     > Same as 'read_tmp' results but again from resdir/.
 #
-# - 'selection' :
-#     Select only the criteria listed in the selection
-#     variable in the extracted data.
-#     > For example, if dataEXind exists, it will returns the same
-#       dataEXind tibble but only with columns of selected criteria. 
+# - 'reshape_extracted_data_by_code' :
+#     Change structure of aggregated data stored in
+#     resdir/projection/. It pass from projection chain base
+#     structure to code base strucutre in order to be easily read for
+#     plotting. 
+#     > Aggregated data in resdir/projection_by_code/ but stored base
+#       on code.
+#
+# - 'create_database' :
+#     Start the process to create database. Needs to go in script next
+#     because it needs to not be overwrited.
+#     > Postgresql database.
 #
 # - 'write_warnings' :
 #     Writes in tmpdir/ the Warnings.fst file which is a tibble of
 #     warnings based on the dataEXind tibble.
 #     > Warnings tibble in RAM and writes it in tmpdir/.
+#
+# - 'add_regime_hydro' :
+#     Add hydrological regime to meta base on variables in
+#     Explore2_serie_diagnostic_plot analyse.
+#     > meta modified with new column for hydrological regime.
+#
+# - 'analyse_data' :
+#     Perfom basic analyses specified in analyse_data variable.
+#     > depends
 #
 # - 'plot_sheet' :
 #     Plots a set of datasheets specify by the plot_sheet variable
@@ -143,31 +176,32 @@ lib_path =
 #       those individual file in a specific directory of the figdir/
 #       directory.
 
-type =
-    "hydrologie"
-    # "piezometrie"
-    # "climat"
-
 mode =
     # "diagnostic"
     # "diagnostic_ungauged"
     "projection"
 
+type =
+    "hydrologie"
+    # "piezometrie"
+    # "climat"
+
 to_do = c(
     # 'delete_tmp',
     # 'clean_nc'
     # 'merge_nc'
-    # 'reshape_data',
-    'create_data',
-    'extract_data',
-    'save_extract'
+    # 'reshape_piezo_data',
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    # "create_database"
+    # 'reshape_extracted_data_by_code'
+    # 'create_database'
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -186,27 +220,26 @@ extract_data = c(
     
     'Explore2_serie_projection_HF',
     'Explore2_serie_projection_MF',
-    'Explore2_serie_projection_LF',
+    # 'Explore2_serie_projection_LF',
     'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter',
-    'Explore2_serie_projection_BF',
-    'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ',
-    'Explore2_serie_projection_BFI'
+    # 'Explore2_serie_projection_LF_winter',
+    # 'Explore2_serie_projection_BF',
+    # 'Explore2_serie_projection_FDC',
+    'Explore2_serie_projection_medQJ'
+    # 'Explore2_serie_projection_BFI'
     
 )
-
 
 analyse_data = c(
     "compute_delta"
 )
+
 
 # dataEX_criteria_normal = dataEX_criteria
 # dataEX_criteria_ungauged = dataEX_criteria
 # dataEX_criteria = dplyr::filter(dataEX_criteria_normal, !(HM %in% c("GRSD", "SMASH")))
 # dataEX_criteria = dplyr::bind_rows(dataEX_criteria, dataEX_criteria_ungauged)
 # dataEX_criteria = dplyr::filter(dataEX_criteria, HM != "MORDOR-SD")
-
 
 # library(ggplot2)
 # code_light = "K298191001"
@@ -262,13 +295,15 @@ analyse_data = c(
 plot_sheet = c(
     # 'sommaire'
     # 'correlation_matrix'
-    'fiche_diagnostic_station'
+    # 'fiche_diagnostic_station'
     # 'fiche_diagnostic_region'
     # 'fiche_diagnostic_regime'
     # 'fiche_diagnostic_piezometre'
     # 'carte_regime'
     # 'carte_critere'
     # 'stripes'
+
+    'fiche_projection_station'
 )
 
 ### 3.2. Document ____________________________________________________
@@ -312,8 +347,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -332,25 +367,31 @@ Futurs = list(H1=c("2021-01-01", "2050-12-31"),
               H3=c("2070-01-01", "2099-12-31"))
 
 propagate_NA = TRUE
-## diag ##
+# Number of code to load in RAM
+## diagnostic ##
 # nCode4RAM | 32 |
 # nSubsets  | 31 |
 # nodes     |  1 |
 # tasks     | 31 |
-## proj per hm ##
+## projections per hm ##
 # nProj     | 82 | 41
-# nCode4RAM | 20 | 20
+# nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
 nCode4RAM = 25
 
+# Directory where to search for projections structures:
+# - 'raw' is for computer_data_path/projection/
+# - 'cleaned' is for computer_data_path/projection_clean/
+# - 'merged' is for computer_data_path/projection_merge/
+# - 'extracted' is for resdir/projection/
 projs_type =
     # "raw"
     # "cleaned"
-    "merged"
-    # "extracted"
+    # "merged"
+    "extracted"
 
-projs_to_use =
+projections_to_use =
     c(
         'all'
         # "(rcp26)|(rcp45)|(rcp85")
@@ -364,13 +405,16 @@ projs_to_use =
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
-        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT"
+        # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
         # "EARTH.*rcp85.*HadREM3.*ADAMONT",
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
         # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
+except_SAFRAN =
+    TRUE
+    # FALSE
 
-projection_to_remove =
+projections_to_remove =
     c("CNRM[-]CERFACS[-]CNRM[-]CM5.*KNMI[-]RACMO22E",
       "IPSL[-]IPSL[-]CM5A[-]MR.*IPSL[-]WRF381P")
 
@@ -383,14 +427,14 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
-        # "J2000"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        # "SIM2"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
         "SMASH" 
 
         # "AquiFR",
@@ -401,13 +445,14 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        'all'
-        # 'K298191001' #ref
-        # 'K294401001'
+        # "all"
+        # "K298191001" #ref
+        # "K294401001"
         # "O036251010"
+        "A105003001"
         # "^H"
         # "^D"
-        # "^K00"
+        # "^K"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -425,17 +470,24 @@ codes_to_use =
         # "Loire"="M842001000",
         # "Moselle"="A886006000"
     )
+n_projections_by_code =
+    # NULL
+    4
+
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
       "CTRIP"="O038401001",
       "CTRIP"="D020601001")
 MORDOR_code_warning =
-    c("K002000101", "K222302001", "K225401001", "O023402001", "O036251001",
-      "O038401001", "O074404001", "O312102002", "O319401001", "O701151001",
-      "P027251002", "P171291001", "Q010002500", "V612501001", "W022000201",
-      "W030000201", "W103000301", "W273050001", "W211401000", "W271000101",
-      "W273050003", "W043050000", "Y662000301", "Y700000201", "Y902000101")
-
+    c("K002000101", "K222302001", "K225401001",
+      "O023402001", "O036251001", "O038401001",
+      "O074404001", "O312102002", "O319401001",
+      "O701151001", "P027251002", "P171291001",
+      "Q010002500", "V612501001", "W022000201",
+      "W030000201", "W103000301", "W273050001",
+      "W211401000", "W271000101", "W273050003",
+      "W043050000", "Y662000301", "Y700000201",
+      "Y902000101")
 
 variables_to_use =
     c(
@@ -451,23 +503,26 @@ variables_to_use =
         # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        # Louis
+        # fiche resultats
         "^QJXA$",
-        # "^fQ10A$",
         "^QA$",
+        "^VCN10[_]summer$",
+        "^medQJ"
+        
+        # Louis
+        # "^QJXA$",
+        # "^fQ10A$",
+        # "^QA$",
         # "^QSA_DJF$", "^QSA_MAM$", "^QSA_JJA$", "^QSA_SON$",
-        "^VCN10[_]summer$"
+        # "^VCN10[_]summer$"
         # "^startLF[_]summer$", "^dtLF[_]summer$"
 
         # Flora
         # "^QA$",
         # "^QMA_*", "^QSA_*",
         # "^Q90A$", "^QMNA$", "^VCN30$",
-        # "^startLF$", "^dtLF$" 
-       
+        # "^startLF$", "^dtLF$"  
     )
-
-
 
 
 ## 2. EXTRACT_DATA ___________________________________________________
@@ -677,18 +732,6 @@ Explore2_serie_projection_BFI =
          suffix="sim")
 
 
-# estival 05-01 -> 11-30
-# hivernal 11-01 -> 04-30
-
-
-
-# Explore2_proj_delta =
-#     list(name='Explore2_proj_delta',
-#          variables="deltaQA",
-#          cancel_lim=FALSE,
-#          simplify=TRUE)
-
-
 ## 3. SAVE_EXTRACT ___________________________________________________
 # If one input file need to give one output file
 by_files =
@@ -716,7 +759,7 @@ read_saving =
 
 variable2search =
     c(
-        # 'data[_]', ### /!\ très lourd ###
+        # 'data[_]', ### /!\ heavy ###
         # 'meta[_]',
         'data[.]',
         'meta[.]',
@@ -729,10 +772,13 @@ merge_read_saving =
     TRUE
     # FALSE
 
-# ## 5. SELECTION _____________________________________________
+## 5. SELECTION ______________________________________________________
+# Perform selection operation when reading results base on
+# projections_to_use, codes_to_use, variables_to_use
 selection =
     TRUE
     # FALSE
+
 selection_before_reading_for_projection =
     TRUE
     # FALSE
@@ -769,10 +815,9 @@ toleranceRel =
     # 9000 # mini map
 
 # Which logo do you want to show in the footnote
-logo_to_show =
-    c(
-        Explore2='LogoExplore2.png'
-    )
+logo_info = list(
+    "EX2"=c(file='LogoExplore2.png', y=0.4, height=1, width=1)
+)
 
 # Probability used to define the min and max quantile needed for
 # colorbar extremes. For example, if set to 0.01, quartile 1 and
@@ -1214,7 +1259,9 @@ if (type == "hydrologie") {
                                          HM_to_use,
                                          ".*)|(^SAFRAN.*",
                                          HM_to_use, ".*)"),
-                                     dir=""))
+                                     dir=paste0(
+                                         "SAFRAN_",
+                                         HM_to_use)))
         
         Projections$regexp = gsub("[-]", "[-]",
                                            Projections$regexp)
@@ -1284,7 +1331,7 @@ if (type == "hydrologie") {
 
         if (nrow(Projections) == 1) { #### MOCHE ####
             nOK = apply(as.matrix(
-                sapply(projection_to_remove, grepl,
+                sapply(projections_to_remove, grepl,
                        x=Projections$file)),
                 1, any)
             if (any(nOK)) {
@@ -1292,32 +1339,35 @@ if (type == "hydrologie") {
             }
         } else {
             OK = !apply(as.matrix(
-                      sapply(projection_to_remove, grepl,
+                      sapply(projections_to_remove, grepl,
                              x=Projections$file)),
                       1, any)
             Projections = Projections[OK,]
         }
 
-        if (all(projs_to_use != "all")) {
+        if (all(projections_to_use != "all")) {
             OK = apply(as.matrix(
-                sapply(projs_to_use, grepl,
+                sapply(projections_to_use, grepl,
                        x=Projections$file)),
                 1, any)
             Projections = Projections[OK,]
             OK_nest = apply(as.matrix(
-                sapply(projs_to_use, grepl,
+                sapply(projections_to_use, grepl,
                        x=Projections_nest$file)),
                 1, any)
             Projections_nest = Projections_nest[OK_nest,]
         }
+        if (except_SAFRAN) {
+            Projections = dplyr::filter(Projections, EXP != "SAFRAN")
+        }
 
         climateChain = unique(Projections$climateChain)
-        projs_to_use = sapply(projs_to_use, apply_grepl,
+        projections_to_use = sapply(projections_to_use, apply_grepl,
                               climateChain)
         Projections =
             dplyr::arrange(Projections,
                            factor(climateChain,
-                                  levels=projs_to_use))
+                                  levels=projections_to_use))
 
         Projections$storylines = ""
         ok = match(names(storylines),
@@ -1382,6 +1432,12 @@ if (type == "hydrologie") {
         ref = c(0, 1)
     }
 
+    if (!is.null(n_projections_by_code)) {
+        codes_selection_data =
+            dplyr::filter(codes_selection_data,
+                          n >= n_projections_by_code)
+    }
+
     codes_selection_data =
         codes_selection_data[codes_selection_data$Référence %in%
                              ref,]
@@ -1412,6 +1468,9 @@ if (type == "hydrologie") {
     CodeALL8 = CodeALL8[nchar(CodeALL8) > 0]
     CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
     nCodeALL = length(CodeALL10)
+
+    CodeSUB8 = CodeALL8
+    CodeSUB10 = CodeALL10
     
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
@@ -1430,12 +1489,14 @@ if (type == "hydrologie") {
         n = 1
         while (id+nCode4RAM-1 < Id) {
             Subsets = append(Subsets, list(c(id, id+nCode4RAM-1)))
-            names(Subsets)[length(Subsets)] = paste0(name, n)
+            names(Subsets)[length(Subsets)] =
+                paste0(name, formatC(n, width=2, flag="0"))
             id = id+nCode4RAM
             n = n+1
         }
         Subsets = append(Subsets, list(c(id, Id)))
-        names(Subsets)[length(Subsets)] = paste0(name, n)
+        names(Subsets)[length(Subsets)] =
+            paste0(name, formatC(n, width=2, flag="0"))
     }
     nSubsets = length(Subsets)
 
@@ -1571,24 +1632,23 @@ if ("merge_nc" %in% to_do) {
            encoding='UTF-8')
 }
 
-if ('reshape_data' %in% to_do) {
+if ('reshape_piezo_data' %in% to_do) {
     post("## RESHAPE DATA")
     source(file.path(lib_path, 'script_reshape_data.R'),
            encoding='UTF-8')
 }
 
-if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
+if (any(c('create_data', 'extract_data', 'save_extract',
+          'reshape_extracted_data_by_code') %in% to_do)) {
 
     if (all(c('create_data', 'extract_data') %in% to_do)) {
         post("## CREATING AND EXTRACTING DATA")
     } else if ('create_data' %in% to_do) {
         post("## CREATING DATA")
     } else if ('extract_data' %in% to_do) {
-        post("## EXTRACTING DATA")
-    } else if (!('save_extract' %in% to_do)) {
-        post("Maybe you can start by creating data")
+        post("## EXTRACTING DATA")   
     }
-
+    
     timer = dplyr::tibble()
 
     if (nFiles != 0 & nSubsets != 0) {
@@ -1662,14 +1722,8 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                 }
                 
                 post(paste0(ss, "/", nSubsets,
-                            " chunks of stations in extract so ",
-                            round(ss/nSubsets*100, 1), "% done"))
-
-                if (all(file_test %in% list.files(tmppath,
-                                                  include.dirs=TRUE))) {
-                    Create_ok = c(Create_ok, TRUE)
-                    next
-                }
+                            " chunks of stations -> ",
+                            round(ss/nSubsets*100, 1), "%"))
 
                 if (type == "hydrologie") {
                     CodeSUB8 = CodeALL8[subset[1]:subset[2]]
@@ -1679,6 +1733,42 @@ if (any(c('create_data', 'extract_data', 'save_extract') %in% to_do)) {
                     nCodeSUB = length(CodeSUB10)
                 } else if (type == "piezometrie") {                    
                     CodeSUB = CodeALL
+                }
+
+
+                if ('reshape_extracted_data_by_code' %in% to_do) {
+                    if (ss == 1) {
+                        extract_data_save = extract_data
+                        to_do = c(to_do, 'read_saving')
+                    }
+                    extract_data = extract_data_save
+                    
+                    source(file.path(lib_path, 'script_management.R'),
+                           encoding='UTF-8')
+
+                    write_tibble(dataEX_serie,
+                                 file.path(resdir,
+                                           type,
+                                           paste0(mode, "_by_code")),
+                                 paste0("dataEX_serie_",
+                                        subset_name, ".fst"))
+                    write_tibble(metaEX_serie,
+                                 file.path(resdir,
+                                           type,
+                                           paste0(mode, "_by_code")),
+                                 "metaEX_serie.fst")
+                    write_tibble(meta,
+                                 file.path(resdir,
+                                           type,
+                                           paste0(mode, "_by_code")),
+                                 paste0("meta_", subset_name, ".fst"))
+                }
+                
+
+                if (all(file_test %in%
+                        list.files(tmppath, include.dirs=TRUE))) {
+                    Create_ok = c(Create_ok, TRUE)
+                    next
                 }
 
                 if ('create_data' %in% to_do) {

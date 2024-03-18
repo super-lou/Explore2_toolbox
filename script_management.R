@@ -546,19 +546,33 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 } else {
                     tmp = read_tibble(filepath=Paths[i])
                 }
+
+                if (tibble::is_tibble(tmp)) {
+                    if (nrow(tmp) == 0) {
+                        next
+                    }
+                } else {
+                    if (length(tmp) == 0) {
+                        next
+                    }
+                }
                 
                 
 
                 if (grepl("dataEX.*criteria", Filenames[i])) {
-                    tmp = dplyr::filter(tmp, code %in% CodeALL10)
+                    tmp = dplyr::filter(tmp, code %in% CodeSUB10)
                     
                 } else if (grepl("dataEX.*serie", Filenames[i])) {
                     for (k in 1:length(tmp)) {
-                        tmp[[k]] =
-                            dplyr::filter(tmp[[k]], code %in% CodeALL10)
+                        if (nrow(tmp[[k]]) > 0) {
+                            tmp[[k]] =
+                                dplyr::filter(tmp[[k]],
+                                              code %in% CodeSUB10)
+                        }
                     }
+                } else if (grepl("^meta$", Filenames[i])) {
+                    tmp = dplyr::filter(tmp, code %in% CodeSUB10)
                 }
-
 
 
                 if (selection & grepl("diagnostic", mode)) {
@@ -591,7 +605,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             if (length(diag_station_selection) == 0) {
                                 break
                             }
-                            hm_selection = names(diag_station_selection)[j]
+                            hm_selection =
+                                names(diag_station_selection)[j]
                             code_selection = diag_station_selection[j]
                             tmp = dplyr::filter(tmp,
                                                 !(HM == hm_selection &
@@ -832,11 +847,11 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         }
 
         
-        if (!is.null(names(codes_to_use)) & exists("meta")) {
-            info = dplyr::tibble(code=codes_to_use,
-                                 info=names(codes_to_use))
-            meta = dplyr::left_join(meta, info, by="code")
-        }
+        # if (!is.null(names(codes_to_use)) & exists("meta")) {
+        #     info = dplyr::tibble(code=codes_to_use,
+        #                          info=names(codes_to_use))
+        #     meta = dplyr::left_join(meta, info, by="code")
+        # }
 
 
         if (type == "piezometrie" & exists("meta")) {

@@ -59,8 +59,64 @@ plot_sheet_diagnostic_station = function (dataEX_criteria_chunk,
     return (Pages)
 }
 
+plot_sheet_projection_station = function (Code_to_plot,
+                                          today_figdir_leaf,
+                                          Pages=NULL,
+                                          subverbose=FALSE) {
+    
+    Paths = list.files(file.path(resdir,
+                                 gsub("projection",
+                                      "projection_by_code",
+                                      read_saving)),
+                       pattern="^dataEX[_]serie.*$",
+                       include.dirs=TRUE,
+                       full.names=TRUE)
+    letterPaths = gsub("(.*[_])|([[:digit:]]+)", "", Paths)
+    Paths = Paths[letterPaths %in% substr(Code_to_plot, 1, 1)]
+    for (path in Paths) {
+        meta_path = paste0(gsub("dataEX[_]serie",
+                                "meta", path), ".fst")
+        meta_tmp = read_tibble(meta_path)
+        Code_tmp = levels(factor(meta_tmp$code))
 
-logo_path = load_logo(resources_path, logo_dir, logo_to_show)
+        if (any(Code_tmp %in% Code_to_plot)) {
+            meta_tmp = meta_tmp[meta_tmp$code %in% Code_to_plot,]
+            dataEX_serie_tmp = read_tibble(paste0(path, ".fst"))
+            for (k in 1:length(dataEX_serie_tmp)) {
+                dataEX_serie_tmp[[k]] =
+                    dplyr::filter(dataEX_serie_tmp[[k]],
+                                  code %in% Code_to_plot)
+            }
+            metaEX_serie_path = file.path(dirname(path),
+                                          "metaEX_serie.fst")
+            metaEX_serie_tmp = read_tibble(metaEX_serie_path)
+            stop()
+
+            Pages = sheet_projections_station(
+                meta_tmp,
+                dataEX_serie_chunk,
+                metaEX_serie_chunk,
+                Colors=Colors_of_HM,
+                icon_path=icon_path,
+                Warnings=Warnings,
+                logo_path=logo_path,
+                Shapefiles=Shapefiles,
+                figdir=today_figdir_leaf,
+                Pages=Pages,
+                verbose=subverbose)
+            break
+        }
+    }
+    return (Pages)
+}
+
+
+add_path = function (x) {
+    x = c(x, file.path(resources_path, logo_dir, x["file"]))
+    names(x)[length(x)] = "path"
+    return (x)
+}
+logo_info = lapply(logo_info, add_path)
 icon_path = file.path(resources_path, icon_dir)
 
 if (!exists("Shapefiles")) {
@@ -202,13 +258,19 @@ for (i in 1:nChunk) {
         today_figdir_leaf = today_figdir
     }
 
-    data_chunk = data[data$code %in% chunk,]
-    meta_chunk = meta[meta$code %in% chunk,]
-    dataEX_criteria = dataEX_criteria
-    metaEX_criteria_chunk = metaEX_criteria
-    dataEX_serie = dataEX_serie
-    metaEX_serie_chunk = metaEX_serie
-
+    if ("code" %in% names("data")) {
+        data_chunk = data[data$code %in% chunk,]
+    }
+    if (exists("meta")) {
+        meta_chunk = meta[meta$code %in% chunk,]
+    }
+    if (exists("metaEX_criteria")) {
+        metaEX_criteria_chunk = metaEX_criteria
+    }
+    if (exists("metaEX_serie")) {
+        metaEX_serie_chunk = metaEX_serie
+    }
+    
     if (exists("dataEX_criteria")) {
         if (nrow(dataEX_criteria) > 0) {
             dataEX_criteria_chunk = dataEX_criteria[dataEX_criteria$code %in% chunk,]
@@ -229,6 +291,7 @@ for (i in 1:nChunk) {
             names(dataEX_serie_chunk) = names(dataEX_serie)
         }
     }
+
     
     for (sheet in sheet_list) {
         
@@ -237,6 +300,8 @@ for (i in 1:nChunk) {
             Pages = tibble(section='Sommaire', subsection=NA, n=1)
         }
 
+
+## DIAGNOSTIC ________________________________________________________
         if (sheet == 'correlation_matrix') {
             post("### Plotting correlation matrix")
 
@@ -320,7 +385,6 @@ for (i in 1:nChunk) {
                 remove_warning_lim = FALSE
             }
 
-
             if (any(sapply(extract_data, '[[', "name") %in%
                     c('Explore2_criteria_diagnostic_SAFRAN',
                       'Explore2_criteria_more_diagnostic_SAFRAN'))) {
@@ -361,7 +425,6 @@ for (i in 1:nChunk) {
                 verbose=subverbose)
         }
         
-
         if (sheet == 'fiche_diagnostic_regime') {
             post("### Plotting sheet diagnostic regime")
             Pages = sheet_diagnostic_regime(
@@ -395,7 +458,6 @@ for (i in 1:nChunk) {
                 Pages=Pages,
                 verbose=subverbose)
         }
-
 
         if (sheet == 'fiche_diagnostic_region') {
             post("### Plotting sheet diagnostic region")
@@ -447,6 +509,17 @@ for (i in 1:nChunk) {
                                   figdir=today_figdir_leaf,
                                   Pages=Pages,
                                   verbose=subverbose)
+        }
+        
+
+## PROJECTIONS _______________________________________________________
+        if (sheet == 'fiche_projection_station') {
+            post("### Plotting sheet projection station")
+            Pages = plot_sheet_projection_station(
+                Code_to_plot,
+                today_figdir_leaf=today_figdir_leaf,
+                Pages=Pages,
+                subverbose=subverbose)
         }
 
         
