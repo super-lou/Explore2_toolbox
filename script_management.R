@@ -564,11 +564,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     
                 } else if (grepl("dataEX.*serie", Filenames[i])) {
                     for (k in 1:length(tmp)) {
-                        if (nrow(tmp[[k]]) > 0) {
-                            tmp[[k]] =
-                                dplyr::filter(tmp[[k]],
-                                              code %in% CodeSUB10)
+                        if (nrow(tmp[[k]]) == 0) {
+                            next
                         }
+                        tmp[[k]] =
+                            dplyr::filter(tmp[[k]],
+                                          code %in% CodeSUB10)
                     }
                 } else if (grepl("^meta$", Filenames[i])) {
                     tmp = dplyr::filter(tmp, code %in% CodeSUB10)
@@ -748,6 +749,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         if (grepl("projection", mode)) {
                             if ("GCM" %in% names(tmp[[1]])) {
                                 for (k in 1:length(tmp)) {
+                                    if (nrow(tmp[[k]]) == 0) {
+                                        next
+                                    } 
                                     tmp[[k]] = tidyr::unite(tmp[[k]],
                                                             "climateChain",
                                                             "GCM", "EXP",
@@ -764,6 +768,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 }
                             } else {
                                 for (k in 1:length(tmp)) {
+                                    if (nrow(tmp[[k]]) == 0) {
+                                        next
+                                    } 
                                     tmp[[k]]$climateChain = "SAFRAN"
                                     tmp[[k]] = tidyr::unite(tmp[[k]],
                                                             "Chain",

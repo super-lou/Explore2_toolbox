@@ -90,9 +90,8 @@ plot_sheet_projection_station = function (Code_to_plot,
             metaEX_serie_path = file.path(dirname(path),
                                           "metaEX_serie.fst")
             metaEX_serie_tmp = read_tibble(metaEX_serie_path)
-            stop()
 
-            Pages = sheet_projections_station(
+            Pages = sheet_projection_station(
                 meta_tmp,
                 dataEX_serie_chunk,
                 metaEX_serie_chunk,
@@ -128,24 +127,26 @@ if (!exists("Shapefiles")) {
         Code_shp = CodeALL
     }
     
-    Shapefiles = load_shapefile(
-        computer_shp_path, Code_shp,
-        france_shp_path,
-        bassinHydro_shp_path,
-        regionHydro_shp_path,
-        secteurHydro_shp_path,
-        entiteHydro_shp_path, entiteHydro_coord,
-        entitePiezo_shp_path,
-        river_shp_path,
-        river_selection=river_selection,
-        river_length=river_length,
-        toleranceRel=toleranceRel)
+    # Shapefiles = load_shapefile(
+    #     computer_shp_path, Code_shp,
+    #     france_shp_path,
+    #     bassinHydro_shp_path,
+    #     regionHydro_shp_path,
+    #     secteurHydro_shp_path,
+    #     entiteHydro_shp_path, entiteHydro_coord,
+    #     entitePiezo_shp_path,
+    #     river_shp_path,
+    #     river_selection=river_selection,
+    #     river_length=river_length,
+    #     toleranceRel=toleranceRel)
 
-    if (type == "hydrologie") {
-        Shapefiles$entiteHydro$code =
-            codes10_selection[match(Shapefiles$entiteHydro$code,
-                                    codes8_selection)]
-    }
+    # if (type == "hydrologie") {
+    #     Shapefiles$entiteHydro$code =
+    #         codes10_selection[match(Shapefiles$entiteHydro$code,
+    #                                 codes8_selection)]
+    # }
+    
+    Shapefiles = NULL
 }
 
 
@@ -248,14 +249,17 @@ for (i in 1:nChunk) {
                              gsub(" [-] ", "_",
                                   chunkname))
         today_figdir_leaf = file.path(today_figdir,
+                                      mode,
                                       doc_title_ns,
                                       doc_chunkname, "PDF")
     } else if ('plot_doc' %in% to_do) {
         today_figdir_leaf = file.path(today_figdir,
+                                      mode,
                                       doc_title_ns,
                                       "PDF")
     } else {
-        today_figdir_leaf = today_figdir
+        today_figdir_leaf = file.path(today_figdir,
+                                      mode)
     }
 
     if ("code" %in% names("data")) {

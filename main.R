@@ -196,12 +196,12 @@ to_do = c(
     # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    # 'reshape_extracted_data_by_code'
+    'reshape_extracted_data_by_code'
     # 'create_database'
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -393,10 +393,12 @@ projs_type =
 
 projections_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
-        
+        "rcp85",
+        "SAFRAN"
+
         # "SAFRAN-France-20"
         
         ## story lines ##
@@ -411,8 +413,8 @@ projections_to_use =
         # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 except_SAFRAN =
-    TRUE
-    # FALSE
+    # TRUE
+    FALSE
 
 projections_to_remove =
     c("CNRM[-]CERFACS[-]CNRM[-]CM5.*KNMI[-]RACMO22E",
@@ -449,10 +451,10 @@ codes_to_use =
         # "K298191001" #ref
         # "K294401001"
         # "O036251010"
-        "A105003001"
+        # "A105003001"
         # "^H"
         # "^D"
-        # "^K"
+        "^K29"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -811,8 +813,8 @@ river_length =
     
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
-    1000 # normal map
-    # 9000 # mini map
+    # 1000 # normal map
+    9000 # mini map
 
 # Which logo do you want to show in the footnote
 logo_info = list(
@@ -1748,19 +1750,19 @@ if (any(c('create_data', 'extract_data', 'save_extract',
 
                     write_tibble(dataEX_serie,
                                  file.path(resdir,
-                                           type,
-                                           paste0(mode, "_by_code")),
+                                           paste0(mode, "_by_code"),
+                                           type),
                                  paste0("dataEX_serie_",
                                         subset_name, ".fst"))
                     write_tibble(metaEX_serie,
                                  file.path(resdir,
-                                           type,
-                                           paste0(mode, "_by_code")),
+                                           paste0(mode, "_by_code"),
+                                           type),
                                  "metaEX_serie.fst")
                     write_tibble(meta,
                                  file.path(resdir,
-                                           type,
-                                           paste0(mode, "_by_code")),
+                                           paste0(mode, "_by_code"),
+                                           type),
                                  paste0("meta_", subset_name, ".fst"))
                 }
                 
