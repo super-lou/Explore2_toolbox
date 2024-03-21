@@ -93,12 +93,14 @@ plot_sheet_projection_station = function (Code_to_plot,
 
             Pages = sheet_projection_station(
                 meta_tmp,
-                dataEX_serie_chunk,
-                metaEX_serie_chunk,
-                Colors=Colors_of_HM,
+                dataEX_serie_tmp,
+                metaEX_serie_tmp,
+                Colors=Colors_of_storylines,
+                historical=historical,
+                prob=prob_of_quantile_for_palette,
                 icon_path=icon_path,
                 Warnings=Warnings,
-                logo_path=logo_path,
+                logo_info=logo_info,
                 Shapefiles=Shapefiles,
                 figdir=today_figdir_leaf,
                 Pages=Pages,
@@ -127,26 +129,24 @@ if (!exists("Shapefiles")) {
         Code_shp = CodeALL
     }
     
-    # Shapefiles = load_shapefile(
-    #     computer_shp_path, Code_shp,
-    #     france_shp_path,
-    #     bassinHydro_shp_path,
-    #     regionHydro_shp_path,
-    #     secteurHydro_shp_path,
-    #     entiteHydro_shp_path, entiteHydro_coord,
-    #     entitePiezo_shp_path,
-    #     river_shp_path,
-    #     river_selection=river_selection,
-    #     river_length=river_length,
-    #     toleranceRel=toleranceRel)
+    Shapefiles = load_shapefile(
+        computer_shp_path, Code_shp,
+        france_shp_path,
+        bassinHydro_shp_path,
+        regionHydro_shp_path,
+        secteurHydro_shp_path,
+        entiteHydro_shp_path, entiteHydro_coord,
+        entitePiezo_shp_path,
+        river_shp_path,
+        river_selection=river_selection,
+        river_length=river_length,
+        toleranceRel=toleranceRel)
 
-    # if (type == "hydrologie") {
-    #     Shapefiles$entiteHydro$code =
-    #         codes10_selection[match(Shapefiles$entiteHydro$code,
-    #                                 codes8_selection)]
-    # }
-    
-    Shapefiles = NULL
+    if (type == "hydrologie") {
+        Shapefiles$entiteHydro$code =
+            codes10_selection[match(Shapefiles$entiteHydro$code,
+                                    codes8_selection)]
+    }
 }
 
 

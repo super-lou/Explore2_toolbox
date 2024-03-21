@@ -41,6 +41,15 @@ if ('create_database' %in% to_do) {
         password=db_password
     )
 
+    Projections = dplyr::relocate(Projections, EXP, .before=GCM)
+    Projections = dplyr::select(Projections, -Chain)
+    Projections$Chain = paste(Projections$EXP,
+                              Projections$GCM,
+                              Projections$RCM,
+                              Projections$BC,
+                              Projections$HM, sep="|")
+    Projections$Chain = gsub("NA[|]NA[|]NA[|]",
+                             "", Projections$Chain)
 
     Projections = Projections[Projections$EXP != "SAFRAN",]
     DirPaths = Projections$path

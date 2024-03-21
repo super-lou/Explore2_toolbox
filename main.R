@@ -196,12 +196,12 @@ to_do = c(
     # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    'reshape_extracted_data_by_code'
+    # 'reshape_extracted_data_by_code'
     # 'create_database'
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -421,10 +421,10 @@ projections_to_remove =
       "IPSL[-]IPSL[-]CM5A[-]MR.*IPSL[-]WRF381P")
 
 storylines =
-    c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été", #feu
-      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, précipitations moindre en hiver", #soleil
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et en changement de précipitations", #nuage
-      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #parapluie
+    c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été", #violet
+      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, précipitations moindre en hiver", #orange
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et en changement de précipitations", #jaune
+      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #vert
 
 
 HM_to_use = 
@@ -818,7 +818,7 @@ toleranceRel =
 
 # Which logo do you want to show in the footnote
 logo_info = list(
-    "EX2"=c(file='LogoExplore2.png', y=0.4, height=1, width=1)
+    "EX2"=c(file='LogoExplore2.png', y=0.4, height=0.8, width=1)
 )
 
 # Probability used to define the min and max quantile needed for
@@ -844,6 +844,12 @@ Colors_of_HM = c(
     "EROS Bretagne"="#CECD8D", #vert clair
     "MONA"="#F5D80E" #jaune
 )
+
+Colors_of_storylines =
+    c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#70194E",
+      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#E2A13B",
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#E5E840", 
+      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#447C57")
 
 add_multi = TRUE
 
@@ -1105,6 +1111,8 @@ if (any(grepl("plot", to_do))) {
     library(latex2exp)
     require(sf) #nope
     library(ggtext)
+    
+    assign_colors_and_fonts("EXPLORE2")
 }
 
 if (MPI != "") {
@@ -1290,16 +1298,6 @@ if (type == "hydrologie") {
             proj_path = file.path(resdir, read_saving)
             pattern = NULL
             include.dirs = TRUE
-
-            Projections = dplyr::relocate(Projections, EXP, .before=GCM)
-            Projections = dplyr::select(Projections, -Chain)
-            Projections$Chain = paste(Projections$EXP,
-                                      Projections$GCM,
-                                      Projections$RCM,
-                                      Projections$BC,
-                                      Projections$HM, sep="|")
-            Projections$Chain = gsub("NA[|]NA[|]NA[|]",
-                                     "", Projections$Chain)
         }
         
         Paths = list.files(proj_path,
@@ -1311,8 +1309,6 @@ if (type == "hydrologie") {
         Paths = Paths[!duplicated(Files)]
         Files = Files[!duplicated(Files)]
 
-        # stop()
-        
         any_grepl = function (pattern, x) {
             any(grepl(pattern, x))
         }
@@ -1329,7 +1325,7 @@ if (type == "hydrologie") {
 
         Projections_nest = Projections
         Projections = tidyr::unnest(Projections,
-                                             c(file, path))
+                                    c(file, path))
 
         if (nrow(Projections) == 1) { #### MOCHE ####
             nOK = apply(as.matrix(
@@ -1759,6 +1755,21 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                                            paste0(mode, "_by_code"),
                                            type),
                                  "metaEX_serie.fst")
+                    meta =
+                        mutate(meta,
+                               across(starts_with("surface"),
+                                      ~ as.numeric(!is.na(.x)),
+                                      .names=
+                                          "is_{gsub('(surface)|([_])|(km2)', '', .col)}"))
+                    meta =
+                        mutate(meta,
+                               n=rowSums(select(meta,
+                                                starts_with("is_"))))
+                    meta =
+                        mutate(meta,
+                               n=rowSums(select(meta, starts_with("is_"))))
+                                         
+                    meta = dplyr::relocate(meta, n, .before=code)
                     write_tibble(meta,
                                  file.path(resdir,
                                            paste0(mode, "_by_code"),

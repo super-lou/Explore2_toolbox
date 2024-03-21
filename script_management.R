@@ -452,6 +452,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     read_saving))
 
         data = dplyr::tibble()
+        meta = dplyr::tibble()
         dataEX_criteria = dplyr::tibble()
         dataEX_serie = dplyr::tibble()
         metaEX_criteria = dplyr::tibble()
@@ -817,6 +818,13 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         
                     } else if (grepl("data[_]", Filenames[i])) {
                         data = dplyr::bind_rows(data, tmp)
+
+                    } else if (grepl("^meta$", Filenames[i])) {
+                        if (nrow(meta) == 0) {
+                            meta = tmp
+                        } else {
+                            meta = dplyr::full_join(meta, tmp)
+                        }
                         
                     } else {
                         assign(Filenames[i], tmp)
