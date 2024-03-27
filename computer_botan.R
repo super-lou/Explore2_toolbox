@@ -93,7 +93,7 @@ secteurHydro_shp_path = 'secteurHydro/secteurHydro.shp'
 # Path to the shapefile for station basins shape from 'computer_data_path' 
 entiteHydro_shp_path = c('entiteHydro/BV_4207_stations.shp',
                          'entiteHydro/3BVs_FRANCE_L2E_2018.shp')
-entiteHydro_coord = c('L93', 'L2')
+# entiteHydro_coord = c('L93', 'L2')
 river_shp_path = 'coursEau/CoursEau_FXX.shp'
 # piezo
 entitePiezo_shp_path = "entitePiezo_niveau1_extension/entitePiezo_niveau1_extension.shp"

@@ -131,13 +131,13 @@ if (!exists("Shapefiles")) {
     
     Shapefiles = load_shapefile(
         computer_shp_path, Code_shp,
-        france_shp_path,
-        bassinHydro_shp_path,
-        regionHydro_shp_path,
-        secteurHydro_shp_path,
-        entiteHydro_shp_path, entiteHydro_coord,
-        entitePiezo_shp_path,
-        river_shp_path,
+        france_shp_path=france_shp_path,
+        bassinHydro_shp_path=bassinHydro_shp_path,
+        regionHydro_shp_path=regionHydro_shp_path,
+        secteurHydro_shp_path=secteurHydro_shp_path,
+        entiteHydro_shp_path=entiteHydro_shp_path,
+        entitePiezo_shp_path=entitePiezo_shp_path,
+        river_shp_path=river_shp_path,
         river_selection=river_selection,
         river_length=river_length,
         toleranceRel=toleranceRel)
@@ -543,7 +543,7 @@ for (i in 1:nChunk) {
         sheet_summary(Pages,
                       title=doc_title,
                       subtitle=subtitle,
-                      logo_path=logo_path,
+                      logo_info=logo_info,
                       figdir=today_figdir_leaf)
     }
 

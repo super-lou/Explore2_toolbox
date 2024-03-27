@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -191,9 +191,9 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_piezo_data',
-    # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'create_data',
+    'extract_data',
+    'save_extract'
     # 'read_tmp'
     # 'read_saving'
     # 'reshape_extracted_data_by_code'
@@ -201,7 +201,7 @@ to_do = c(
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -218,15 +218,21 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF',
+    # 'Explore2_serie_projection_HF',
+    # 'Explore2_serie_projection_MF',
     # 'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ'
-    # 'Explore2_serie_projection_BFI'
+    # 'Explore2_serie_projection_medQJ'
+    
+    'Explore2_criteria_projection_HF',
+    'Explore2_criteria_projection_MF',
+    'Explore2_criteria_projection_LF',
+    'Explore2_criteria_projection_LF_summer',
+    'Explore2_criteria_projection_LF_winter',
+    'Explore2_criteria_projection_BF'
     
 )
 
@@ -257,6 +263,11 @@ analyse_data = c(
 #                                  code==code_light),
 #               aes(x=date, y=endLF), color="blue")
 # ggsave("LF.pdf", plot, height=21, width=29.7, units="cm")
+
+
+
+# '*bold('VCN10'['estival'])*'  OK
+# '*bold('VCN10'[estival])*'
 
 
 ## 3. PLOTTING PROCESSES _____________________________________________
@@ -347,8 +358,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -388,16 +399,16 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    # "merged"
-    "extracted"
+    "merged"
+    # "extracted"
 
 projections_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
-        "rcp85",
-        "SAFRAN"
+        # "rcp85",
+        # "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -408,7 +419,7 @@ projections_to_use =
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
         
         # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
-        # "EARTH.*rcp85.*HadREM3.*ADAMONT",
+        # "EARTH.*rcp85.*HadREM3.*ADAMONT"
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
         # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
@@ -423,21 +434,22 @@ projections_to_remove =
 storylines =
     c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été", #violet
       "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, précipitations moindre en hiver", #orange
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et en changement de précipitations", #jaune
-      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons") #vert
+      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons", #vert
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et en changement de précipitations" #jaune
+      )
 
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
-        "SMASH" 
+        "CTRIP"
+        # "EROS"
+        # "GRSD"
+        # "J2000"
+        # "MORDOR-SD"
+        # "MORDOR-TS"
+        # "ORCHIDEE"
+        # "SIM2"
+        # "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -447,14 +459,14 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # "all"
+        "all"
         # "K298191001" #ref
         # "K294401001"
         # "O036251010"
         # "A105003001"
         # "^H"
         # "^D"
-        "^K29"
+        # "^K29"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -493,7 +505,7 @@ MORDOR_code_warning =
 
 variables_to_use =
     c(
-        # ".*"
+        ".*"
         # "^QA$"
 
         # Diagnostic
@@ -506,10 +518,10 @@ variables_to_use =
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
         # fiche resultats
-        "^QJXA$",
-        "^QA$",
-        "^VCN10[_]summer$",
-        "^medQJ"
+        # "^QJXA$",
+        # "^QA$",
+        # "^VCN10[_]summer$",
+        # "^medQJ"
         
         # Louis
         # "^QJXA$",
@@ -724,13 +736,79 @@ Explore2_serie_projection_medQJ =
                      "medQJ_H2", "medQJ_H3"),
          suffix="sim")
 
-Explore2_serie_projection_BFI =
-    list(name='Explore2_serie_projection_BFI',
-         type="serie",
-         variables=c("BFI_Wal_H0", "BFI_Wal_H1",
-                     "BFI_Wal_H2", "BFI_Wal_H3",
-                     "BFI_LH_H0", "BFI_LH_H1",
-                     "BFI_LH_H2", "BFI_LH_H3"),
+# Explore2_serie_projection_BFI =
+#     list(name='Explore2_serie_projection_BFI',
+#          type="serie",
+#          variables=c("BFI_Wal_H0", "BFI_Wal_H1",
+#                      "BFI_Wal_H2", "BFI_Wal_H3",
+#                      "BFI_LH_H0", "BFI_LH_H1",
+#                      "BFI_LH_H2", "BFI_LH_H3"),
+#          suffix="sim")
+
+Explore2_criteria_projection_HF =
+    list(name='Explore2_criteria_projection_HF',
+         type="criteria",
+         variables=c(
+             "deltaQ01A_H", "deltaQ05A_H", "deltaQ10A_H", 
+             "deltaQJXA_H", "delta{tQJXA}_H",
+             "deltaVCX3_H", "delta{tVCX3}_H",
+             "deltaVCX10_H", "delta{tVCX10}_H",
+             "delta{fQ01A}_H", "delta{fQ05A}_H", "delta{fQ10A}_H",
+             "delta{dtFlood}_H",
+             "nQJXA-10_H", "deltaQJXA-10_H"
+         ),
+         suffix="sim")
+
+Explore2_criteria_projection_MF =
+    list(name='Explore2_criteria_projection_MF',
+         type="criteria",
+         variables=c(
+             "deltaQ25A_H", "deltaQ50A_H", "deltaQ75A_H",
+             "deltaQA_H", "deltaQMA_month_H", "deltaQSA_season_H"),
+         suffix="sim")
+
+Explore2_criteria_projection_LF =
+    list(name='Explore2_criteria_projection_LF',
+         type="criteria",
+         variables=c(
+             "deltaQ90A_H", "deltaQ95A_H", "deltaQ99A_H",
+             "deltaQNA_H", "deltaQMNA_H",
+             "deltaVCN10_H", "delta{tVCN10}_H",
+             "deltaVCN3_H", "deltaVCN30_H",
+             "delta{allLF}_H",
+             "nVCN10-5_H", "deltaVCN10-5_H"
+         ),
+         suffix="sim")
+
+Explore2_criteria_projection_LF_summer =
+    list(name='Explore2_criteria_projection_LF_summer',
+         type="criteria",
+         variables=c(
+             "deltaQNA_summer_H", "deltaQMNA_summer_H",
+             "deltaVCN10_summer_H", "delta{tVCN10}_summer_H",
+             "deltaVCN3_summer_H", "deltaVCN30_summer_H",
+             "delta{allLF}_summer_H"),
+         suffix="sim")
+
+Explore2_criteria_projection_LF_winter =
+    list(name='Explore2_criteria_projection_LF_winter',
+         type="criteria",
+         variables=c(
+             "deltaQNA_winter_H", "deltaQMNA_winter_H",
+             "deltaVCN10_winter_H", "delta{tVCN10}_winter_H",
+             "deltaVCN3_winter_H", "deltaVCN30_winter_H",
+             "delta{allLF}_winter_H"),
+         suffix="sim")
+
+Explore2_criteria_projection_BF =
+    list(name='Explore2_criteria_projection_BF',
+         type="criteria",
+         variables=c(
+             "delta{startBF}_H", "delta{centerBF}_H",
+             "delta{endBF}_H", "delta{dtBF}_H",
+             "delta{vBF}_H",
+             "delta{BFI}_LH_H", "delta{BFI}_Wal_H"
+         ),
          suffix="sim")
 
 
@@ -848,8 +926,8 @@ Colors_of_HM = c(
 Colors_of_storylines =
     c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#70194E",
       "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#E2A13B",
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#E5E840", 
-      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#447C57")
+      "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#447C57",
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#E5E840")
 
 add_multi = TRUE
 
