@@ -446,8 +446,8 @@ HM_to_use =
         # "GRSD"
         # "J2000"
         # "MORDOR-SD"
-        "MORDOR-TS"
-        # "ORCHIDEE"
+        # "MORDOR-TS"
+        "ORCHIDEE"
         # "SIM2"
         # "SMASH" 
 
