@@ -485,8 +485,8 @@ codes_to_use =
         # "Moselle"="A886006000"
     )
 n_projections_by_code =
-    # NULL
-    4
+    NULL
+    # 4
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
