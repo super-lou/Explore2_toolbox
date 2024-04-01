@@ -442,8 +442,8 @@ storylines =
 
 HM_to_use = 
     c(
-        "CTRIP"
-        # "EROS"
+        # "CTRIP"
+        "EROS"
         # "GRSD"
         # "J2000"
         # "MORDOR-SD"
