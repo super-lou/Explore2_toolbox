@@ -227,13 +227,14 @@ extract_data = c(
     # 'Explore2_serie_projection_FDC',
     # 'Explore2_serie_projection_medQJ'
     
-    'Explore2_criteria_projection_HF',
-    'Explore2_criteria_projection_MF',
-    'Explore2_criteria_projection_LF',
-    'Explore2_criteria_projection_LF_summer',
-    'Explore2_criteria_projection_LF_winter',
-    'Explore2_criteria_projection_BF'
-    
+    # 'Explore2_criteria_projection_HF',
+    # 'Explore2_criteria_projection_MF',
+    # 'Explore2_criteria_projection_LF',
+    # 'Explore2_criteria_projection_LF_summer',
+    # 'Explore2_criteria_projection_LF_winter',
+    # 'Explore2_criteria_projection_BF'
+
+    'Explore2_serie_projection_QM'
 )
 
 analyse_data = c(
@@ -441,7 +442,7 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
+        "CTRIP"
         # "EROS"
         # "GRSD"
         # "J2000"
@@ -449,7 +450,7 @@ HM_to_use =
         # "MORDOR-TS"
         # "ORCHIDEE"
         # "SIM2"
-        "SMASH" 
+        # "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -807,8 +808,16 @@ Explore2_criteria_projection_BF =
              "delta{startBF}_H", "delta{centerBF}_H",
              "delta{endBF}_H", "delta{dtBF}_H",
              "delta{vBF}_H",
-             "delta{BFI}_LH_H", "delta{BFI}_Wal_H"
-         ),
+             "delta{BFI}_LH_H", "delta{BFI}_Wal_H"),
+         suffix="sim")
+
+
+
+Explore2_serie_projection_QM =
+    list(name='Explore2_serie_projection_QM',
+         type="serie",
+         variables=c(
+             "QM_H0", "QM_H1", "QM_H2", "QM_H3"),
          suffix="sim")
 
 
@@ -1733,7 +1742,7 @@ if (any(c('create_data', 'extract_data', 'save_extract',
             files_name = Files_name[[ff]]
             if (by_files | MPI == "file") {
                 files_name_opt = gsub("[|]", "_", files_name[1]) #####
-                files_name_opt = gsub("[_][_]", "_", files_name_opt)
+                files_name_opt = gsub("[_]+", "_", files_name_opt)
                 files_name_opt = gsub("(^[_])|([_]$)", "",
                                       files_name_opt)
                 files_name_opt. = paste0(files_name_opt, "_")
