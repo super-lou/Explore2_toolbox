@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -191,17 +191,17 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_piezo_data',
-    'create_data',
-    'extract_data',
-    'save_extract'
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    # 'reshape_extracted_data_by_code'
+    # 'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -218,22 +218,22 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    # 'Explore2_serie_projection_HF',
-    # 'Explore2_serie_projection_MF',
+    'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_MF',
     # 'Explore2_serie_projection_LF',
-    # 'Explore2_serie_projection_LF_summer',
+    'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
-    # 'Explore2_serie_projection_medQJ',
+    'Explore2_serie_projection_medQJ',
     # 'Explore2_serie_projection_QM',
     
-    # 'Explore2_criteria_projection_HF',
-    # 'Explore2_criteria_projection_MF',
-    # 'Explore2_criteria_projection_LF',
-    # 'Explore2_criteria_projection_LF_summer',
-    # 'Explore2_criteria_projection_LF_winter',
-    'Explore2_criteria_projection_BF'
+    'Explore2_criteria_projection_HF',
+    'Explore2_criteria_projection_MF',
+    'Explore2_criteria_projection_LF',
+    'Explore2_criteria_projection_LF_summer'
+    # 'Explore2_criteria_projection_LF_winter'
+    # 'Explore2_criteria_projection_BF'
 )
 
 analyse_data = c(
@@ -358,8 +358,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -399,16 +399,18 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    "merged"
-    # "extracted"
+    # "merged"
+    "extracted"
 
 projections_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
-        # "rcp85",
-        # "SAFRAN"
+
+        ## figure ##
+        "rcp85",
+        "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -441,14 +443,14 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
-        # "J2000"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        # "SIM2"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
         "SMASH" 
 
         # "AquiFR",
@@ -459,14 +461,15 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        "all"
-        # "K298191001" #ref
+        # "all"
+        # "K298191001", #ref
         # "K294401001"
         # "O036251010"
         # "A105003001"
         # "^H"
         # "^D"
-        # "^K29"
+        "^K29"
+        # "^K"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -485,8 +488,8 @@ codes_to_use =
         # "Moselle"="A886006000"
     )
 n_projections_by_code =
-    NULL
-    # 4
+    # NULL
+    4
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
@@ -505,10 +508,10 @@ MORDOR_code_warning =
 
 variables_to_use =
     c(
-        ".*"
+        # ".*"
         # "^QA$"
 
-        # Diagnostic
+        ## Diagnostic ##
         # "KGEsqrt", "Bias$",
         # "epsilon.*JJA$", "epsilon.*DJF$",
         # "RAT[_]T$", "RAT[_]R$",
@@ -517,13 +520,16 @@ variables_to_use =
         # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        # fiche resultats
-        # "^QJXA$",
-        # "^QA$",
-        # "^VCN10[_]summer$",
-        # "^medQJ"
+        ## fiche resultats ##
+        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ",
         
-        # Louis
+        "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
+
+        "deltaQ50A", "deltaQA", "deltaQMA_jul", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
+
+        "deltaQ95A", "deltaQ90A", "deltaQMNA$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer"
+
+        ## MEANDRE ##
         # "^QJXA$",
         # "^fQ10A$",
         # "^QA$",
@@ -531,7 +537,7 @@ variables_to_use =
         # "^VCN10[_]summer$"
         # "^startLF[_]summer$", "^dtLF[_]summer$"
 
-        # Flora
+        ## Flora ##
         # "^QA$",
         # "^QMA_*", "^QSA_*",
         # "^Q90A$", "^QMNA$", "^VCN30$",
@@ -855,17 +861,11 @@ variable2search =
         'Warnings'
     )
 
-merge_read_saving =
-    TRUE
+# merge_read_saving =
+    # TRUE
     # FALSE
 
 ## 5. SELECTION ______________________________________________________
-# Perform selection operation when reading results base on
-# projections_to_use, codes_to_use, variables_to_use
-selection =
-    TRUE
-    # FALSE
-
 selection_before_reading_for_projection =
     TRUE
     # FALSE
@@ -1253,6 +1253,10 @@ extract_data = extract_data_tmp
 variables_regexp =
     paste0("(", paste0(variables_to_use,
                        collapse=")|("), ")")
+variables_regexp = gsub("[{]", "[{]", variables_regexp)
+variables_regexp = gsub("[}]", "[}]", variables_regexp)
+variables_regexp = gsub("[_]", "[_]", variables_regexp)
+variables_regexp = gsub("[-]", "[-]", variables_regexp)
 
 historical = as.Date(historical)
 Futurs = lapply(Futurs, as.Date)
@@ -1552,8 +1556,8 @@ if (type == "hydrologie") {
     CodeALL10 = CodeALL10[nchar(CodeALL10) > 0]
     nCodeALL = length(CodeALL10)
 
-    CodeSUB8 = CodeALL8
-    CodeSUB10 = CodeALL10
+    # CodeSUB8 = CodeALL8
+    # CodeSUB10 = CodeALL10
     
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
@@ -1686,6 +1690,7 @@ if (MPI != "") {
     tmppath = file.path(computer_work_path, tmpdir)
 }
 
+Code_selection = CodeALL10
 
 if ("delete_tmp" %in% to_do) {
     delete_tmp = TRUE
@@ -1722,7 +1727,7 @@ if ('reshape_piezo_data' %in% to_do) {
 }
 
 if (any(c('create_data', 'extract_data', 'save_extract',
-          'reshape_extracted_data_by_code') %in% to_do)) {
+          'reshape_extracted_data_for_figure') %in% to_do)) {
 
     if (all(c('create_data', 'extract_data') %in% to_do)) {
         post("## CREATING AND EXTRACTING DATA")
@@ -1819,27 +1824,30 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                 }
 
 
-                if ('reshape_extracted_data_by_code' %in% to_do) {
+                if ('reshape_extracted_data_for_figure' %in% to_do) {
                     if (ss == 1) {
                         extract_data_save = extract_data
-                        to_do = c(to_do, 'read_saving')
+                        to_do_save = to_do
                     }
-                    extract_data = extract_data_save
+                    to_do = c(to_do_save, 'read_saving')
+                    extract_data =
+                        extract_data_save[grepl("serie",
+                                                extract_data_save)]
+                    Code_selection = CodeSUB10
                     
                     source(file.path(lib_path, 'script_management.R'),
                            encoding='UTF-8')
 
                     write_tibble(dataEX_serie,
                                  file.path(resdir,
-                                           paste0(mode, "_by_code"),
+                                           paste0(mode, "_for_figure"),
                                            type),
                                  paste0("dataEX_serie_",
                                         subset_name, ".fst"))
                     write_tibble(metaEX_serie,
                                  file.path(resdir,
-                                           paste0(mode, "_by_code"),
-                                           type),
-                                 "metaEX_serie.fst")
+                                           paste0(mode, "_for_figure"),
+                                           type), "metaEX_serie.fst")
                     meta =
                         mutate(meta,
                                across(starts_with("surface"),
@@ -1857,9 +1865,10 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                     meta = dplyr::relocate(meta, n, .before=code)
                     write_tibble(meta,
                                  file.path(resdir,
-                                           paste0(mode, "_by_code"),
+                                           paste0(mode, "_for_figure"),
                                            type),
                                  paste0("meta_", subset_name, ".fst"))
+                    to_do = to_do_save
                 }
                 
 
@@ -1922,7 +1931,36 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                  paste0("timer_", rank, ".txt"))
 }
 
-if (any(c('selection', 'write_warnings',
+
+if ('reshape_extracted_data_for_figure' %in% to_do) {
+    # extract_data_save = extract_data #####
+    # to_do_save = to_do #####
+    
+    firstLetters = unique(firstLetterALL)
+    for (letter in firstLetters) {
+        Code_selection = CodeALL10[firstLetterALL == letter]
+        to_do = c(to_do_save, 'read_saving')
+        extract_data = extract_data_save[grepl("criteria",
+                                               extract_data_save)]
+    
+        source(file.path(lib_path, 'script_management.R'),
+               encoding='UTF-8')
+
+        write_tibble(dataEX_criteria,
+                     file.path(resdir,
+                               paste0(mode, "_for_figure"),
+                               type),
+                     paste0("dataEX_criteria_", letter, ".fst"))
+        write_tibble(metaEX_criteria,
+                     file.path(resdir,
+                               paste0(mode, "_for_figure"),
+                               type), "metaEX_criteria.fst")
+        to_do = to_do_save
+    }
+}
+
+
+if (any(c('write_warnings',
           'add_regime_hydro', 'read_saving') %in% to_do)) {
     post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),

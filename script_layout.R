@@ -66,7 +66,7 @@ plot_sheet_projection_station = function (Code_to_plot,
     
     Paths = list.files(file.path(resdir,
                                  gsub("projection",
-                                      "projection_by_code",
+                                      "projection_for_figure",
                                       read_saving)),
                        pattern="^dataEX[_]serie.*$",
                        include.dirs=TRUE,
@@ -91,10 +91,22 @@ plot_sheet_projection_station = function (Code_to_plot,
                                           "metaEX_serie.fst")
             metaEX_serie_tmp = read_tibble(metaEX_serie_path)
 
+            dataEX_criteria_path = file.path(dirname(path),
+                                             paste0("dataEX_criteria_",
+                                                    substr(Code_tmp[1],
+                                                           1, 1),
+                                                    ".fst"))
+            dataEX_criteria_tmp = read_tibble(dataEX_criteria_path)
+            metaEX_criteria_path = file.path(dirname(path),
+                                             "metaEX_criteria.fst")
+            metaEX_criteria_tmp = read_tibble(metaEX_criteria_path)
+
             Pages = sheet_projection_station(
                 meta_tmp,
                 dataEX_serie_tmp,
                 metaEX_serie_tmp,
+                dataEX_criteria_tmp,
+                metaEX_criteria_tmp,
                 Colors=Colors_of_storylines,
                 historical=historical,
                 prob=prob_of_quantile_for_palette,
@@ -141,7 +153,7 @@ if (!exists("Shapefiles")) {
         river_selection=river_selection,
         river_length=river_length,
         toleranceRel=toleranceRel)
-
+    
     if (type == "hydrologie") {
         Shapefiles$entiteHydro$code =
             codes10_selection[match(Shapefiles$entiteHydro$code,
