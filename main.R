@@ -468,8 +468,8 @@ codes_to_use =
         # "A105003001"
         # "^H"
         # "^D"
-        "^K29"
-        # "^K"
+        # "^K29"
+        "^K"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -527,7 +527,7 @@ variables_to_use =
 
         "deltaQ50A", "deltaQA", "deltaQMA_jul", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
 
-        "deltaQ95A", "deltaQ90A", "deltaQMNA$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
+        "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
         ## MEANDRE ##
         # "^QJXA$",
