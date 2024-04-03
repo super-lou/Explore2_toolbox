@@ -521,13 +521,13 @@ variables_to_use =
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
         ## fiche resultats ##
-        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ",
+        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
         
         "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
 
         "deltaQ50A", "deltaQA", "deltaQMA_jul", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
 
-        "deltaQ95A", "deltaQ90A", "deltaQMNA$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer"
+        "deltaQ95A", "deltaQ90A", "deltaQMNA$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
         ## MEANDRE ##
         # "^QJXA$",

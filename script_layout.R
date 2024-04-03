@@ -179,7 +179,7 @@ if (add_multi) {
 
 
 if ('plot_sheet' %in% to_do & !('plot_doc' %in% to_do)) {
-    Pages = NULL
+    Pages = dplyr::tibble()
     doc_chunk = ""
     doc_title = default_doc_title
     doc_subtitle = NULL
