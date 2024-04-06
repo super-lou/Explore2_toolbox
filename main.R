@@ -937,15 +937,15 @@ Colors_of_HM = c(
 #       "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#E5E840")
 
 Colors_of_storylines =
-    c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#5BA277", #vert
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#F1C03F", #jaune
-      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#E2A13B", #orange
+    c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#569A71", #vert
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#F0BB31", #jaune
+      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#E09B2F", #orange
       "HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#791F5D" #violet
       )
 Colors_light_of_storylines =
-    c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#BDDAC9", #vert
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#F9E6B2", #jaune
-      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#F3D9B1", #orange
+    c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#BAD8C6", #vert
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#F9E4AD", #jaune
+      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#F3D7AC", #orange
       "HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#E9A9D5" #violet
       )
 
