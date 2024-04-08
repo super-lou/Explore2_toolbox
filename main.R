@@ -196,12 +196,12 @@ to_do = c(
     # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    # 'reshape_extracted_data_for_figure'
+    'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'analyse_data'
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -232,7 +232,7 @@ extract_data = c(
     'Explore2_criteria_projection_MF',
     'Explore2_criteria_projection_LF',
     'Explore2_criteria_projection_LF_summer'
-    # 'Explore2_criteria_projection_LF_winter'
+    # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
 )
 
@@ -462,7 +462,7 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     c(
         # "all"
-        # "K298191001", #ref
+        # "K298191001" #ref
         # "K294401001"
         # "O036251010"
         # "A105003001"
@@ -525,7 +525,7 @@ variables_to_use =
         
         "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
 
-        "deltaQ50A", "deltaQA", "deltaQMA_jul", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
+        "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
 
         "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
@@ -1837,7 +1837,11 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                 }
 
 
-                if ('reshape_extracted_data_for_figure' %in% to_do) {
+                if ('reshape_extracted_data_for_figure' %in% to_do
+                    ## to rm
+                    & FALSE #####
+                    ## 
+                    ) {
                     if (ss == 1) {
                         extract_data_save = extract_data
                         to_do_save = to_do
@@ -1867,6 +1871,7 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                                       ~ as.numeric(!is.na(.x)),
                                       .names=
                                           "is_{gsub('(surface)|([_])|(km2)', '', .col)}"))
+                    meta = select(meta, -"is_")
                     meta =
                         mutate(meta,
                                n=rowSums(select(meta,
@@ -1946,8 +1951,10 @@ if (any(c('create_data', 'extract_data', 'save_extract',
 
 
 if ('reshape_extracted_data_for_figure' %in% to_do) {
-    # extract_data_save = extract_data #####
-    # to_do_save = to_do #####
+    ## to rm 
+    extract_data_save = extract_data #####
+    to_do_save = to_do #####
+    ##
     
     firstLetters = unique(firstLetterALL)
     for (letter in firstLetters) {
