@@ -56,10 +56,10 @@ NCf$variable.name = metaEX_var$variable_en
 NCf$variable.dimension = "station, time"
 NCf$variable.precision = "float"
 NCf$variable.value = dataEX_matrix
-NCf$variable.01.standard_name = metaEX_var$variable_en
-NCf$variable.02.long_name = metaEX_var$name_en
-NCf$variable.03.units = metaEX_var$unit_en
-NCf$variable.04.missing_value = NaN
-NCf$variable.05.description = metaEX_var$description_en
-NCf$variable.06.method = metaEX_var$method_en
-NCf$variable.07.sampling_period = metaEX_var$sampling_period_en
+NCf$variable.01.standard_name = metaEX_var$name_en
+NCf$variable.02.units = gsub("([^])|([{])|([}])", "", metaEX_var$unit_en)
+NCf$variable.03.missing_value = NaN
+
+if (!grepl(Month_pattern, var)) {
+    NCf$variable.04.sampling_period = metaEX_var$sampling_period_en
+}

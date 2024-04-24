@@ -88,24 +88,11 @@
 #
 #              axis : Axe associé à la variable
 
-date_de_debut = "2000-01-01"
-date_de_fin = "2000-01-31"
-fuseau_horaire = "UTC"
-pas_de_temps =
-    # "hours"
-    # "sec"
-    # "10 min"
-    # "hours"
-    # "days"
-    # "3 weeks"
-    # "months"
-    "years"
-
 from = as.POSIXct(min(Date), tz=fuseau_horaire)
 to = as.POSIXct(max(Date), tz=fuseau_horaire)
 origin = as.POSIXct("1950-01-01", tz=fuseau_horaire)
 units = paste0(pas_de_temps, " since ", origin)
-time = seq.POSIXt(from=from, to=to, by=pas_de_temps)
+time = seq.POSIXt(from=from, to=to, by=timestep)
 time = as.numeric(time - origin)
 
 NCf$time.name = "time"

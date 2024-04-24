@@ -237,12 +237,32 @@ NCf$global.37.hy_contact =
 ### 4.1. indicator_institute _________________________________________
 # Un nom d’identification court du centre de modélisation contribuant
 # aux données
-NCf$global.31.indicator_institute = "INRAE"
+NCf$global.38.indicator_institute = "INRAE"
 
-### 4.2. indicator_frequency _________________________________________
-# L’intervalle de temps d’échantillonnage de la série de données
-NCf$global.32.indicator_frequency = "yr"
-
-### 4.5. indicator_creation_date _____________________________________
+### 4.2. indicator_creation_date _____________________________________
 # La date à laquelle on a calculé l’indicateur
-NCf$global.36.indicator_creation_date = "2024-01-25"
+NCf$global.39.indicator_creation_date = as.character(Sys.Date())
+
+### 4.3. indicator_time _________________________________________
+# L’intervalle de temps d’échantillonnage de la série de données
+NCf$global.40.indicator_time_period = NCf$title.02.TimeFrequency
+
+if (NCf$title.02.TimeFrequency == 'mon') {
+    NCf$global.41.indicator_time_selection = "each month"
+    
+} else if (NCf$title.02.TimeFrequency == 'seas') {
+    NCf$global.41.indicator_time_selection =
+        stringr::str_extract(metaEX_var$variable_en, Season_pattern)
+    
+} else if (grepl("summer", var)) {
+    NCf$global.41.indicator_time_selection = "MJJASON"
+    
+} else if (grepl("winter", var)) {
+    NCf$global.41.indicator_time_selection = "NDJFMA"
+}
+
+NCf$global.42.indicator_time_operation = "TIMEseries"
+
+### 4.4. format_NetCDF _______________________________________________
+# Une chaîne de caractères qui indique la référence normative appliquée
+NCf$global.43.format_NetCDF = "spécifications - version du 2024-02-23"

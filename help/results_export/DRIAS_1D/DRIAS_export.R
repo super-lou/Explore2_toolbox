@@ -29,6 +29,23 @@
 if (!require (remotes)) install.packages("remotes")
 if (!require (NCf)) remotes::install_github("super-lou/NCf")
 
+
+
+Variable = c(
+    "^Q05A$", "^Q10A$", "^QJXA$", "^tQJXA$", "^VCX3$", "^tVCX3$",
+    "^VCX10$", "^tVCX10$", "^dtFlood$",
+    
+    "^Q50A$", "^QA$", "^QMA_", "^QSA_",
+    
+    "^Q95A$", "^Q90A$", "^QMNA$", "^VCN3_summer$", "^VCN10_summer$",
+    "^VCN30_summer$", "^startLF_summer$", "^centerLF_summer$", "^dtLF_summer$")
+Variable_pattern = paste0("(", paste0(Variable, collapse=")|("), ")")
+
+Season_pattern = "(DJF)|(MAM)|(JJA)|(SON)"
+Month = c("jan", "feb", "mar", "apr", "may", "jun",
+          "jul", "aug", "sep", "oct", "nov", "dec")
+Month_pattern = paste0("(", paste0(Month, collapse=")|("), ")") 
+
 meta_projection_file = "tableau_metadata_EXPLORE2.csv"
 meta_projection = ASHE::read_tibble(meta_projection_file)
 
@@ -68,21 +85,25 @@ for (chain_dirpath in Chain_dirpath) {
                           pattern="[.]fst",
                           full.names=TRUE,
                           recursive=TRUE)
+    Var_path = Var_path[grepl(Variable_pattern,
+                              basename(gsub("[.]fst", "", Var_path)))]
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
     
+    is_month_done = FALSE
+    
     for (var_path in Var_path) {
-
         ###
         # var_path = Var_path[1]
-        # var_path = Var_path[grepl("QMA_dec", Var_path)]
+        # var_path = Var_path[grepl("QMA_apr", Var_path)]
         ###
         var = gsub("[.]fst", "", basename(var_path))
 
         print(var)
-        
-        dataEX = ASHE::read_tibble(var_path)
-        dataEX = dplyr::arrange(dataEX, code)
-        
+
+        if (is_month_done) {
+            next
+        }
+
         metaEX_path =
             file.path(dirname(dirname(var_path)),
                       paste0(gsub("data", "meta",
@@ -90,6 +111,39 @@ for (chain_dirpath in Chain_dirpath) {
                              ".fst"))
         metaEX = ASHE::read_tibble(metaEX_path)
         metaEX_var = metaEX[metaEX$variable_en == var,]
+
+        if (!is_month_done & grepl(Month_pattern, var)) {
+            var_no_pattern =
+                gsub("[_]", "",
+                     gsub(Month_pattern, "",
+                          metaEX_var$variable_en))
+            metaEX_var$variable_en = var_no_pattern
+            metaEX_var$variable_en = gsub("each .*", "each month",
+                                          metaEX_var$variable_en)
+            
+            var_Month = paste0(gsub(Month_pattern, "", var),
+                               Month)
+            dataEX = dplyr::tibble()
+            for (var_month in var_Month) {
+                var_month_path = paste0(file.path(dirname(var_path), var_month),
+                                        ".fst")
+                dataEX_tmp = ASHE::read_tibble(var_month_path)
+                dataEX_tmp = dplyr::rename(dataEX_tmp,
+                                           !!var_no_pattern:=
+                                               dplyr::all_of(var_month))
+                dataEX =
+                    dplyr::bind_rows(dataEX, dataEX_tmp)
+            }
+            dataEX = dplyr::arrange(dataEX, code, date)
+            is_month_done = TRUE
+            timestep = "month"
+            
+        } else {
+            var_no_pattern = var
+            dataEX = ASHE::read_tibble(var_path)
+            dataEX = dplyr::arrange(dataEX, code)
+            timestep = "year"
+        }
         
         meta_path = file.path(dirname(dirname(var_path)), "meta.fst")
         meta = ASHE::read_tibble(meta_path)
@@ -98,32 +152,34 @@ for (chain_dirpath in Chain_dirpath) {
         if (!("date" %in% names(dataEX))) {
             next
         }
-        Date = as.Date(levels(factor(dataEX$date)))
-        Date = seq.Date(as.Date(paste0(lubridate::year(min(Date)),
-                                       "-01-01")),
-                        as.Date(paste0(lubridate::year(max(Date)),
-                                       "-01-01")),
-                        by="years")
-        
-        Code = levels(factor(dataEX$code))
-
-        Date_tmp = as.Date(levels(factor(dataEX$date)))
-        if (length(Date_tmp) != length(Date)) {
-            dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
-                                         "-01-01"))
+        Date = dataEX$date
+        if (timestep == "year") {
+            Date = seq.Date(as.Date(paste0(lubridate::year(min(Date)),
+                                           "-01-01")),
+                            as.Date(paste0(lubridate::year(max(Date)),
+                                           "-01-01")),
+                            by=timestep)
+            Date_tmp = as.Date(levels(factor(dataEX$date)))
+            if (length(Date_tmp) != length(Date)) {
+                dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
+                                             "-01-01"))
+            }
+            
+        } else if (timestep == "month") {
+            Date = seq.Date(min(Date), max(Date), by=timestep)
         }
+
+        Code = levels(factor(dataEX$code))
         
         dataEX_matrix = dplyr::select(dataEX, code, date,
-                                      dplyr::all_of(var))
+                                      dplyr::all_of(var_no_pattern))
         dataEX_matrix =
             tidyr::pivot_wider(dataEX_matrix,
                                names_from=code,
-                               values_from=dplyr::all_of(var))
+                               values_from=dplyr::all_of(var_no_pattern))
         dataEX_matrix = dplyr::select(dataEX_matrix, -date)
         dataEX_matrix = t(as.matrix(dataEX_matrix))
 
-        
-        
         initialise_NCf()
 
         list_path = list.files(getwd(), pattern='*.R$', full.names=TRUE)
