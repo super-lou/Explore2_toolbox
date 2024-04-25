@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -191,12 +191,12 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_piezo_data',
-    # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'create_data',
+    'extract_data',
+    'save_extract'
     # 'read_tmp'
     # 'read_saving'
-    'reshape_extracted_data_for_figure'
+    # 'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'write_warnings',
     # 'add_regime_hydro'
@@ -218,20 +218,20 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF',
+    # 'Explore2_serie_projection_HF',
+    # 'Explore2_serie_projection_MF',
     # 'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ',
+    # 'Explore2_serie_projection_medQJ',
     # 'Explore2_serie_projection_QM',
     
-    'Explore2_criteria_projection_HF',
-    'Explore2_criteria_projection_MF',
-    'Explore2_criteria_projection_LF',
-    'Explore2_criteria_projection_LF_summer'
+    'Explore2_criteria_projection_HF'
+    # 'Explore2_criteria_projection_MF',
+    # 'Explore2_criteria_projection_LF',
+    # 'Explore2_criteria_projection_LF_summer'
     # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
 )
@@ -358,8 +358,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
-    # "file"
+    # ""
+    "file"
     # "code"
 
 
@@ -399,18 +399,18 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    # "merged"
-    "extracted"
+    "merged"
+    # "extracted"
 
 projections_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
         ## figure ##
-        "rcp85",
-        "SAFRAN"
+        # "rcp85",
+        # "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -443,15 +443,15 @@ storylines =
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
-        "SMASH" 
+        "CTRIP"
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SIM2",
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -461,7 +461,7 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # "all"
+        "all"
         # "K298191001" #ref
         # "K294401001"
         # "O036251010"
@@ -469,7 +469,7 @@ codes_to_use =
         # "^H"
         # "^D"
         # "^K29"
-        "^K"
+        # "^K"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -488,8 +488,8 @@ codes_to_use =
         # "Moselle"="A886006000"
     )
 n_projections_by_code =
-    # NULL
-    4
+    NULL
+    # 4
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",

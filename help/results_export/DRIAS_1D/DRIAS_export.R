@@ -30,6 +30,8 @@ if (!require (remotes)) install.packages("remotes")
 if (!require (NCf)) remotes::install_github("super-lou/NCf")
 
 
+PROBELEME QSA
+
 
 Variable = c(
     "^Q05A$", "^Q10A$", "^QJXA$", "^tQJXA$", "^VCX3$", "^tVCX3$",
