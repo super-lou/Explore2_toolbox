@@ -218,22 +218,22 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    # 'Explore2_serie_projection_HF',
-    # 'Explore2_serie_projection_MF',
-    # 'Explore2_serie_projection_LF',
-    # 'Explore2_serie_projection_LF_summer',
-    # 'Explore2_serie_projection_LF_winter',
-    # 'Explore2_serie_projection_BF',
-    # 'Explore2_serie_projection_FDC',
-    # 'Explore2_serie_projection_medQJ',
-    # 'Explore2_serie_projection_QM',
+    'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_MF',
+    'Explore2_serie_projection_LF',
+    'Explore2_serie_projection_LF_summer',
+    'Explore2_serie_projection_LF_winter',
+    'Explore2_serie_projection_BF',
+    'Explore2_serie_projection_FDC',
+    'Explore2_serie_projection_medQJ',
+    'Explore2_serie_projection_QM',
     
-    'Explore2_criteria_projection_HF'
-    # 'Explore2_criteria_projection_MF',
-    # 'Explore2_criteria_projection_LF',
-    # 'Explore2_criteria_projection_LF_summer'
-    # 'Explore2_criteria_projection_LF_winter',
-    # 'Explore2_criteria_projection_BF'
+    'Explore2_criteria_projection_HF',
+    'Explore2_criteria_projection_MF',
+    'Explore2_criteria_projection_LF',
+    'Explore2_criteria_projection_LF_summer',
+    'Explore2_criteria_projection_LF_winter',
+    'Explore2_criteria_projection_BF'
 )
 
 analyse_data = c(
@@ -404,7 +404,7 @@ projs_type =
 
 projections_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
@@ -412,7 +412,7 @@ projections_to_use =
         # "rcp85",
         # "SAFRAN"
 
-        # "SAFRAN-France-20"
+        "SAFRAN-France-20"
         
         ## story lines ##
         # "HadGEM2.*historical.*CCLM4.*ADAMONT"
