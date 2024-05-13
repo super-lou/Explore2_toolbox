@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./"
+    "./"
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -191,11 +191,12 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'reshape_piezo_data',
-    'create_data',
-    'extract_data',
-    'save_extract'
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
     # 'read_tmp'
     # 'read_saving'
+    'find_chain_out'
     # 'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'write_warnings',
@@ -218,22 +219,22 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
+    # 'Explore2_serie_projection_HF',
     'Explore2_serie_projection_MF',
-    'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
-    'Explore2_serie_projection_LF_winter',
-    'Explore2_serie_projection_BF',
-    'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ',
-    'Explore2_serie_projection_QM',
+    # 'Explore2_serie_projection_LF',
+    # 'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_winter',
+    # 'Explore2_serie_projection_BF',
+    # 'Explore2_serie_projection_FDC',
+    # 'Explore2_serie_projection_medQJ',
+    # 'Explore2_serie_projection_QM',
     
-    'Explore2_criteria_projection_HF',
-    'Explore2_criteria_projection_MF',
-    'Explore2_criteria_projection_LF',
-    'Explore2_criteria_projection_LF_summer',
-    'Explore2_criteria_projection_LF_winter',
-    'Explore2_criteria_projection_BF'
+    # 'Explore2_criteria_projection_HF',
+    'Explore2_criteria_projection_MF'
+    # 'Explore2_criteria_projection_LF',
+    # 'Explore2_criteria_projection_LF_summer',
+    # 'Explore2_criteria_projection_LF_winter',
+    # 'Explore2_criteria_projection_BF'
 )
 
 analyse_data = c(
@@ -358,8 +359,8 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
+    ""
+    # "file"
     # "code"
 
 
@@ -399,8 +400,8 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    "merged"
-    # "extracted"
+    # "merged"
+    "extracted"
 
 projections_to_use =
     c(
@@ -409,10 +410,10 @@ projections_to_use =
         # "ADAMONT"
 
         ## figure ##
-        # "rcp85",
-        # "SAFRAN"
+        "rcp85",
+        "SAFRAN"
 
-        "SAFRAN-France-20"
+        # "SAFRAN-France-20"
         
         ## story lines ##
         # "HadGEM2.*historical.*CCLM4.*ADAMONT"
@@ -443,15 +444,15 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP"
-        # "EROS"
-        # "GRSD"
-        # "J2000"
-        # "MORDOR-SD"
-        # "MORDOR-TS"
-        # "ORCHIDEE"
-        "SIM2"
-        # "SMASH"
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -488,8 +489,8 @@ codes_to_use =
         # "Moselle"="A886006000"
     )
 n_projections_by_code =
-    NULL
-    # 4
+    # NULL
+    4
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
@@ -509,7 +510,7 @@ MORDOR_code_warning =
 variables_to_use =
     c(
         # ".*"
-        # "^QA$"
+        # "^QA$",
 
         ## Diagnostic ##
         # "KGEsqrt", "Bias$",
@@ -520,14 +521,17 @@ variables_to_use =
         # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
-        ## fiche resultats ##
-        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
+        ## to find out chain ##
+        "^QA$", "^deltaQA_H3$"
         
-        "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
+        ## fiche resultats ##
+        # "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
+        
+        # "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
 
-        "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
+        # "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
 
-        "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
+        # "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
         ## MEANDRE ##
         # "^QJXA$",
@@ -930,7 +934,7 @@ Colors_of_HM = c(
     "MONA"="#F5D80E" #jaune
 )
 
-# Colors_of_storylines =
+# Colors_of_storylines = # initial
 #     c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#70194E",
 #       "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#E2A13B",
 #       "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#447C57",
@@ -938,18 +942,20 @@ Colors_of_HM = c(
 
 Colors_of_storylines =
     c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#569A71", #vert
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#F0BB31", #jaune
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#EECC66", #jaune
       "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#E09B2F", #orange
       "HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#791F5D" #violet
       )
-Colors_light_of_storylines =
+Colors_light_of_storylines = # 60% lighter
     c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#BAD8C6", #vert
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#F9E4AD", #jaune
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#F8EBC2", #jaune
       "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#F3D7AC", #orange
       "HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#E9A9D5" #violet
       )
 
 add_multi = TRUE
+
+# eecc66
 
 
 ## 7. PLOT_DOC _______________________________________________________
@@ -1262,6 +1268,7 @@ read_tmp = FALSE
 extract_data_tmp = lapply(extract_data, get)
 names(extract_data_tmp) = extract_data
 extract_data = extract_data_tmp
+extract_data_save = extract_data
 
 variables_regexp =
     paste0("(", paste0(variables_to_use,
@@ -1739,8 +1746,15 @@ if ('reshape_piezo_data' %in% to_do) {
            encoding='UTF-8')
 }
 
+if ('find_chain_out' %in% to_do) {
+    dataEX_to_remove = dplyr::tibble()
+    dataEX_serieQA_ALL = dplyr::tibble()
+    dataEX_criteriaQA_ALL = dplyr::tibble()
+}
+    
+
 if (any(c('create_data', 'extract_data', 'save_extract',
-          'reshape_extracted_data_for_figure') %in% to_do)) {
+          'reshape_extracted_data_for_figure', 'find_chain_out') %in% to_do)) {
 
     if (all(c('create_data', 'extract_data') %in% to_do)) {
         post("## CREATING AND EXTRACTING DATA")
@@ -1837,16 +1851,19 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                 }
 
 
-                if ('reshape_extracted_data_for_figure' %in% to_do
+                if ('find_chain_out' %in% to_do |
+                    'reshape_extracted_data_for_figure' %in% to_do
+                    
                     ## to rm
-                    & FALSE #####
+                    # & FALSE #####
                     ## 
                     ) {
                     if (ss == 1) {
-                        extract_data_save = extract_data
+                        # extract_data_save = extract_data
                         to_do_save = to_do
                     }
-                    to_do = c(to_do_save, 'read_saving')
+                    to_do = c(to_do_save,
+                              'read_saving')
                     extract_data =
                         extract_data_save[grepl("serie",
                                                 extract_data_save)]
@@ -1854,38 +1871,7 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                     
                     source(file.path(lib_path, 'script_management.R'),
                            encoding='UTF-8')
-
-                    write_tibble(dataEX_serie,
-                                 file.path(resdir,
-                                           paste0(mode, "_for_figure"),
-                                           type),
-                                 paste0("dataEX_serie_",
-                                        subset_name, ".fst"))
-                    write_tibble(metaEX_serie,
-                                 file.path(resdir,
-                                           paste0(mode, "_for_figure"),
-                                           type), "metaEX_serie.fst")
-                    meta =
-                        mutate(meta,
-                               across(starts_with("surface"),
-                                      ~ as.numeric(!is.na(.x)),
-                                      .names=
-                                          "is_{gsub('(surface)|([_])|(km2)', '', .col)}"))
-                    meta = select(meta, -"is_")
-                    meta =
-                        mutate(meta,
-                               n=rowSums(select(meta,
-                                                starts_with("is_"))))
-                    meta =
-                        mutate(meta,
-                               n=rowSums(select(meta, starts_with("is_"))))
-                                         
-                    meta = dplyr::relocate(meta, n, .before=code)
-                    write_tibble(meta,
-                                 file.path(resdir,
-                                           paste0(mode, "_for_figure"),
-                                           type),
-                                 paste0("meta_", subset_name, ".fst"))
+                    
                     to_do = to_do_save
                 }
                 
@@ -1950,10 +1936,13 @@ if (any(c('create_data', 'extract_data', 'save_extract',
 }
 
 
-if ('reshape_extracted_data_for_figure' %in% to_do) {
+# summarise(group_by(filter(dataEX_serie$QA, historical[1]<=date&date<=historical[2] & code == "K294401001"), HM), meanQA=mean(QA, na.rm=TRUE))
+
+if ('find_chain_out' %in% to_do |
+    'reshape_extracted_data_for_figure' %in% to_do) {
     ## to rm 
-    extract_data_save = extract_data #####
-    to_do_save = to_do #####
+    # extract_data_save = extract_data #####
+    # to_do_save = to_do #####
     ##
     
     firstLetters = unique(firstLetterALL)
@@ -1966,17 +1955,44 @@ if ('reshape_extracted_data_for_figure' %in% to_do) {
         source(file.path(lib_path, 'script_management.R'),
                encoding='UTF-8')
 
-        write_tibble(dataEX_criteria,
-                     file.path(resdir,
-                               paste0(mode, "_for_figure"),
-                               type),
-                     paste0("dataEX_criteria_", letter, ".fst"))
-        write_tibble(metaEX_criteria,
-                     file.path(resdir,
-                               paste0(mode, "_for_figure"),
-                               type), "metaEX_criteria.fst")
         to_do = to_do_save
     }
+
+    # dataEX_serieQA_ALL$Chain =
+    #     gsub("SAFRAN", "|SAFRAN||", dataEX_serieQA_ALL$Chain)
+    # dataEX_serieQA_ALL =
+    #     tidyr::separate(dataEX_serieQA_ALL, col="Chain",
+    #                     into=c("GCM", "EXP", "RCM",
+    #                            "BC", "HM"), sep="[|]",
+    #                     remove=FALSE)
+
+    # dataEX_criteriaQA_ALL$Chain =
+    #     gsub("SAFRAN", "|SAFRAN||", dataEX_criteriaQA_ALL$Chain)
+    # dataEX_criteriaQA_ALL =
+    #     tidyr::separate(dataEX_criteriaQA_ALL, col="Chain",
+    #                     into=c("GCM", "EXP", "RCM",
+    #                            "BC", "HM"), sep="[|]",
+    #                     remove=FALSE)
+    
+    # dataEX_to_remove$Chain =
+    #     gsub("SAFRAN", "|SAFRAN||", dataEX_to_remove$Chain)
+    # dataEX_to_remove =
+    #     tidyr::separate(dataEX_to_remove, col="Chain",
+    #                     into=c("GCM", "EXP", "RCM",
+    #                            "BC", "HM"), sep="[|]",
+    #                     remove=FALSE)
+
+    stop()
+    OK = !dupliacted(paste0(dataEX_to_remove$code,
+                            dataEX_to_remove$Chain))
+    dataEX_to_remove = dataEX_to_remove[OK]
+    
+    write_tibble(dataEX_serieQA_ALL, today_resdir,
+                 "dataEX_serieQA_ALL.fst")
+    write_tibble(dataEX_criteriaQA_ALL, today_resdir,
+                 "dataEX_criteriaQA_ALL.fst")
+    write_tibble(dataEX_to_remove, today_resdir,
+                 "dataEX_to_remove.fst")
 }
 
 

@@ -29,21 +29,20 @@
 if (!require (remotes)) install.packages("remotes")
 if (!require (NCf)) remotes::install_github("super-lou/NCf")
 
-
-PROBELEME QSA
-
-
 Variable = c(
     "^Q05A$", "^Q10A$", "^QJXA$", "^tQJXA$", "^VCX3$", "^tVCX3$",
     "^VCX10$", "^tVCX10$", "^dtFlood$",
     
     "^Q50A$", "^QA$", "^QMA_", "^QSA_",
     
-    "^Q95A$", "^Q90A$", "^QMNA$", "^VCN3_summer$", "^VCN10_summer$",
-    "^VCN30_summer$", "^startLF_summer$", "^centerLF_summer$", "^dtLF_summer$")
+    "^Q95A$", "^Q90A$", "^QMNA$",
+    "^VCN3$", "^VCN10$", "^VCN30$",
+    "^startLF$", "^centerLF$", "^dtLF$",
+    "^VCN3_summer$", "^VCN10_summer$", "^VCN30_summer$",
+    "^startLF_summer$", "^centerLF_summer$", "^dtLF_summer$")
 Variable_pattern = paste0("(", paste0(Variable, collapse=")|("), ")")
 
-Season_pattern = "(DJF)|(MAM)|(JJA)|(SON)"
+Season_pattern = "(DJF)|(MAM)|(JJA)|(SON)|(MJJASON)|(NDJFMA)"
 Month = c("jan", "feb", "mar", "apr", "may", "jun",
           "jul", "aug", "sep", "oct", "nov", "dec")
 Month_pattern = paste0("(", paste0(Month, collapse=")|("), ")") 
@@ -96,13 +95,14 @@ for (chain_dirpath in Chain_dirpath) {
     for (var_path in Var_path) {
         ###
         # var_path = Var_path[1]
-        # var_path = Var_path[grepl("QMA_apr", Var_path)]
+        # var_path = Var_path[grepl("QSA_JJA", Var_path)]
+        # var_path = Var_path[grepl("QA.fst", Var_path)]
         ###
         var = gsub("[.]fst", "", basename(var_path))
 
         print(var)
-
-        if (is_month_done) {
+        
+        if (is_month_done & grepl(Month_pattern, var)) {
             next
         }
 
@@ -120,8 +120,8 @@ for (chain_dirpath in Chain_dirpath) {
                      gsub(Month_pattern, "",
                           metaEX_var$variable_en))
             metaEX_var$variable_en = var_no_pattern
-            metaEX_var$variable_en = gsub("each .*", "each month",
-                                          metaEX_var$variable_en)
+            metaEX_var$name_en = gsub("each .*", "each month",
+                                          metaEX_var$name_en)
             
             var_Month = paste0(gsub(Month_pattern, "", var),
                                Month)
@@ -141,12 +141,41 @@ for (chain_dirpath in Chain_dirpath) {
             timestep = "month"
             
         } else {
-            var_no_pattern = var
             dataEX = ASHE::read_tibble(var_path)
             dataEX = dplyr::arrange(dataEX, code)
             timestep = "year"
+
+            if (length(metaEX_var$sampling_period_en) != 2) {
+                SamplingPeriod =
+                    dplyr::summarise(dplyr::group_by(dataEX, code),
+                                     start=format(date[1], "%m-%d"),
+                                     end=format(as.Date(paste0("1970-", start))-1,
+                                                "%m-%d"))
+            } else {
+                SamplingPeriod =
+                    dplyr::tibble(code=levels(factor(dataEX$code)),
+                                  start=metaEX_var$sampling_period_en[1],
+                                  end=metaEX_var$sampling_period_en[2])
+            }
+            
+            if (grepl("summer", var)) {
+                season = "MJJASON"
+                var_no_pattern = gsub("summer", "", var)
+            } else if (grepl("winter", var)) {
+                season = "NDJFMA"
+                var_no_pattern = gsub("winter", "", var)
+            } else if (grepl(Season_pattern, var)) {
+                season = stringr::str_extract(var, Season_pattern)
+                var_no_pattern = gsub(Season_pattern, "", var)
+            } else {
+                season = NULL
+                var_no_pattern = var
+            }
+            var_no_pattern = gsub("[_]$", "", var_no_pattern)
+            metaEX_var$variable_en = var_no_pattern
+            dataEX = dplyr::rename(dataEX, !!var_no_pattern:=var)
         }
-        
+
         meta_path = file.path(dirname(dirname(var_path)), "meta.fst")
         meta = ASHE::read_tibble(meta_path)
         meta = dplyr::arrange(meta, code)

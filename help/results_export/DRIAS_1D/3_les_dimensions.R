@@ -88,10 +88,11 @@
 #
 #              axis : Axe associé à la variable
 
+fuseau_horaire = "UTC"
 from = as.POSIXct(min(Date), tz=fuseau_horaire)
 to = as.POSIXct(max(Date), tz=fuseau_horaire)
 origin = as.POSIXct("1950-01-01", tz=fuseau_horaire)
-units = paste0(pas_de_temps, " since ", origin)
+units = paste0("days since ", origin)
 time = seq.POSIXt(from=from, to=to, by=timestep)
 time = as.numeric(time - origin)
 
@@ -145,7 +146,7 @@ NCf$name_strlen.is_nchar_dimension = TRUE
 
 ### 2.3. Station code ________________________________________________
 NCf$code.name = "code"
-NCf$code.dimension = "station, code_strlen"
+NCf$code.dimension = "code_strlen, station"
 NCf$code.precision = "char"
 NCf$code.value = Code
 NCf$code.01.long_name = "code of stations"
@@ -156,7 +157,7 @@ NCf$code_strlen.is_nchar_dimension = TRUE
 ### 2.4. Station code type ___________________________________________
 # "SANDRE" / "BSS" / "MESO"
 NCf$code_type.name = "code_type"
-NCf$code_type.dimension = "station, code_type_strlen"
+NCf$code_type.dimension = "code_type_strlen, station"
 NCf$code_type.precision = "char"
 NCf$code_type.value = rep("SANDRE", length(Code))
 NCf$code_type.01.long_name = "type of code for stations"
@@ -167,7 +168,7 @@ NCf$code_type_strlen.is_nchar_dimension = TRUE
 ### 2.5. Station network origin ________________________________________
 # "ONDE" / "RCS" / "HYDRO" / "Explore2" / "Point Nodal" / "ADES"
 NCf$network_origin.name = "network_origin"
-NCf$network_origin.dimension = "station, network_origin_strlen"
+NCf$network_origin.dimension = "network_origin_strlen, station"
 NCf$network_origin.precision = "char"
 NCf$network_origin.value = meta$source
 NCf$network_origin.01.long_name = "origin of network for stations"

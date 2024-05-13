@@ -43,12 +43,10 @@ NCf$title.01.Indicator = metaEX_var$variable_en
 
 ## 2. Pas de temps ___________________________________________________
 # Le pas de temps du traitement
-if (metaEX_var$sampling_period_en == "09-01") {
-    NCf$title.02.TimeFrequency = 'hyr'
-} else if (grepl(Month_pattern, var)) {
+if (grepl(Month_pattern, var)) {
     NCf$title.02.TimeFrequency = 'mon'
-} else if (grepl(Season_pattern, var)) {
-    NCf$title.02.TimeFrequency = 'seas'
+} else if (!is.null(season)) {
+    NCf$title.02.TimeFrequency = paste0('seas-', season)
 } else {
     NCf$title.02.TimeFrequency = 'yr'
 }
@@ -61,7 +59,7 @@ NCf$title.03.StartTime_EndTime = paste0(format(min(Date), "%Y"),
                                         format(max(Date), "%Y"))
 
 ## 4. Type ___________________________________________________________
-NCf$title.04.type = "TIMEseries"
+NCf$title.04.type = "TIMEseries_GEOstation"
 
 ## 5. Domain _________________________________________________________
 #  Couverture spatiale des données
@@ -77,26 +75,27 @@ if (dataEX$HM[1] %in%
 }
 
 ## 6. Dataset ________________________________________________________
-NCf$title.09.dataset = "EXPLORE2-2024"
+NCf$title.06.dataset = "EXPLORE2-2024"
 
 ## 7. Bc-Inst-Method-Obs-Period ______________________________________
 # Identifiant de la méthode de correction de biais statistique =
 # Institut-Méthode-Réanalyse-Période
-BC = c('MF-ADAMONT', 'LSCE-IPSL-CDFt')
-NCf$title.09.Bc_Inst_Method = BC[grepl(dataEX$BC[1], BC)][1]
+BC_short = c('ADAMONT', 'CDFt')
+BC_name = c('MF-ADAMONT', 'LSCE-IPSL-CDFt')
+NCf$title.07.Bc_Inst_Method = BC_name[BC_short == dataEX$BC[1]]
 
 ## 8. Experiment _____________________________________________________
 # Identifiant de l’expérience historique ou future via le scénario
-NCf$title.07.Experiment = dataEX$EXP[1]
+NCf$title.08.Experiment = dataEX$EXP[1]
 
 ## 9. GCM-Model _________________________________________________
 # Identifiant du GCM forçeur
-NCf$title.06.GCM_Model = meta_projection$gcm.short[projection_ok]
+NCf$title.09.GCM_Model = meta_projection$gcm.short[projection_ok]
 
 ## 10. RCM-Model _________________________________________________
 # Identifiant du RCM
-NCf$title.08.RCM_Model = meta_projection$rcm.short[projection_ok]
+NCf$title.10.RCM_Model = meta_projection$rcm.short[projection_ok]
 
 ## 11. HYDRO-Inst-Model _______________________________________________
 # Identifiant du HYDRO = Institut-Modèle
-NCf$title.10.HYDRO_Inst_Model = dataEX$HM[1]
+NCf$title.11.HYDRO_Inst_Model = dataEX$HM[1]

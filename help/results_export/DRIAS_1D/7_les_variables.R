@@ -51,15 +51,35 @@
 #                     l’extraction de la variable
 
 
-## 1. VARIABLES ______________________________________________________
-NCf$variable.name = metaEX_var$variable_en
-NCf$variable.dimension = "station, time"
-NCf$variable.precision = "float"
-NCf$variable.value = dataEX_matrix
-NCf$variable.01.standard_name = metaEX_var$name_en
-NCf$variable.02.units = gsub("([^])|([{])|([}])", "", metaEX_var$unit_en)
-NCf$variable.03.missing_value = NaN
-
-if (!grepl(Month_pattern, var)) {
-    NCf$variable.04.sampling_period = metaEX_var$sampling_period_en
+## 1. SAMPLING PERIOD ________________________________________________
+NCf$sampling_period.name = "sampling_period"
+NCf$sampling_period.dimension = "sampling_period_strlen, station"
+NCf$sampling_period.precision = "char"
+if (grepl(Month_pattern, var)) {
+    NCf$sampling_period.value = rep("each month", length(Code))
+} else {
+    NCf$sampling_period.value = paste0("from ", SamplingPeriod$start,
+                                       " to ", SamplingPeriod$end)
 }
+NCf$sampling_period.01.long_name = "sampling period"
+NCf$sampling_period_strlen.name = "sampling_period_strlen"
+NCf$sampling_period_strlen.value = 1:max(nchar(NCf$sampling_period.value))
+NCf$sampling_period_strlen.is_nchar_dimension = TRUE
+
+
+## 2. VARIABLES ______________________________________________________
+assign(paste0(metaEX_var$variable_en, ".name"),
+       metaEX_var$variable_en, envir=NCf)
+assign(paste0(metaEX_var$variable_en, ".dimension"),
+       "station, time", envir=NCf)
+assign(paste0(metaEX_var$variable_en, ".precision"),
+       "float", envir=NCf)
+assign(paste0(metaEX_var$variable_en, ".value"),
+       dataEX_matrix, envir=NCf)
+assign(paste0(metaEX_var$variable_en, ".01.standard_name"),
+       metaEX_var$name_en, envir=NCf)
+assign(paste0(metaEX_var$variable_en, ".02.units"),
+       gsub("([\\^])|([{])|([}])", "", metaEX_var$unit_en), envir=NCf)
+assign(paste0(metaEX_var$variable_en, ".03.missing_value"),
+       NaN, envir=NCf)
+

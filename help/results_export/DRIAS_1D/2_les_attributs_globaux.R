@@ -250,19 +250,12 @@ NCf$global.40.indicator_time_period = NCf$title.02.TimeFrequency
 if (NCf$title.02.TimeFrequency == 'mon') {
     NCf$global.41.indicator_time_selection = "each month"
     
-} else if (NCf$title.02.TimeFrequency == 'seas') {
-    NCf$global.41.indicator_time_selection =
-        stringr::str_extract(metaEX_var$variable_en, Season_pattern)
-    
-} else if (grepl("summer", var)) {
-    NCf$global.41.indicator_time_selection = "MJJASON"
-    
-} else if (grepl("winter", var)) {
-    NCf$global.41.indicator_time_selection = "NDJFMA"
+} else if (!is.null(season)) {
+    NCf$global.41.indicator_time_selection = season
 }
 
 NCf$global.42.indicator_time_operation = "TIMEseries"
 
 ### 4.4. format_NetCDF _______________________________________________
 # Une chaîne de caractères qui indique la référence normative appliquée
-NCf$global.43.format_NetCDF = "spécifications - version du 2024-02-23"
+NCf$global.43.format_NetCDF = "spécifications - version du 2024-02-25"

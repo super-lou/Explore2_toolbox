@@ -447,6 +447,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
 
     if ('read_saving' %in% to_do) {
+
+        # stop()
+        
         post("### Reading saving")
         post(paste0("Reading extracted data and metadata in ",
                     read_saving))
@@ -513,27 +516,27 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
             dataEX_criteria_extract = dplyr::tibble()
             
-            for (i in 1:nFile) {
+            for (ii in 1:nFile) {
                 post(paste0(gsub("([_].*)|([.].*)",
-                                 "", Filenames[i]), " reads in ",
-                            Paths[i]))
+                                 "", Filenames[ii]), " reads in ",
+                            Paths[ii]))
 
                 
                 if (grepl("projection", mode) &
-                    grepl("dataEX.*serie", Filenames[i]) &
+                    grepl("dataEX.*serie", Filenames[ii]) &
                     selection_before_reading_for_projection) {
                     print("selection before reading for projection")
 
                     metaEX_tmp = read_tibble(filepath=gsub("dataEX",
                                                            "metaEX",
-                                                           Paths[i]))
+                                                           Paths[ii]))
                     variables_to_read =
                         metaEX_tmp$variable_en[sapply(metaEX_tmp$variable_en,
                                                       any_grepl, pattern=variables_regexp)]
 
                     tmp = list()
                     if (length(variables_to_read) > 0) {
-                        Paths_variable = file.path(gsub("[.]fst", "", Paths[i]),
+                        Paths_variable = file.path(gsub("[.]fst", "", Paths[ii]),
                                                    paste0(variables_to_read, ".fst"))
                         
                         for (j in 1:length(Paths_variable)) {
@@ -543,7 +546,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         }
                     }
                 } else {
-                    tmp = read_tibble(filepath=Paths[i])
+                    tmp = read_tibble(filepath=Paths[ii])
                 }
                 
 
@@ -558,7 +561,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 }
                 
 
-                if (grepl("dataEX.*criteria", Filenames[i])) {
+                if (grepl("dataEX.*criteria", Filenames[ii])) {
                     tmp = dplyr::filter(tmp, code %in% Code_selection)
 
                     by = names(tmp)[sapply(tmp, is.character)]
@@ -586,7 +589,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     }
 
                     
-                } else if (grepl("dataEX.*serie", Filenames[i])) {
+                } else if (grepl("dataEX.*serie", Filenames[ii])) {
                     for (k in 1:length(tmp)) {
                         if (nrow(tmp[[k]]) == 0) {
                             next
@@ -625,7 +628,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                    start < date &
                                                    date < end))
                             }
-
                         }
                         for (j in 1:length(diag_station_selection)) {
                             if (length(diag_station_selection) == 0) {
@@ -644,19 +646,19 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     }
 
                     
-                } else if (grepl("metaEX.*criteria", Filenames[i])) {
+                } else if (grepl("metaEX.*criteria", Filenames[ii])) {
                     row2keep = sapply(tmp$variable_en, any_grepl,
                                       pattern=variables_regexp)
                     tmp = tmp[row2keep,]
 
                 
-                } else if (grepl("metaEX.*serie", Filenames[i])) {
+                } else if (grepl("metaEX.*serie", Filenames[ii])) {
                     row2keep = sapply(tmp$variable_en, any_grepl,
                                       pattern=variables_regexp)
                     tmp = tmp[row2keep,]
                 
 
-                } else if (grepl("meta", Filenames[i])) {
+                } else if (grepl("meta", Filenames[ii])) {
                     tmp = dplyr::filter(tmp, code %in% Code_selection)
 
                     if (grepl("diagnostic", mode)) {
@@ -677,7 +679,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 if (length(tmp) > 0) {
 
                     ### /!\ pour proj ###
-                    if (grepl("dataEX.*criteria", Filenames[i])) {
+                    if (grepl("dataEX.*criteria", Filenames[ii])) {
                         # if (nrow(dataEX_criteria) == 0) {
                         #     dataEX_criteria = tmp
 
@@ -727,6 +729,35 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                             #                tmp,
                         #                by=character_cols)
 
+                        if (grepl("projection", mode)) {
+                            if ("GCM" %in% names(tmp)) {
+                                tmp = tidyr::unite(tmp,
+                                                   "climateChain",
+                                                   "GCM", "EXP",
+                                                   "RCM", "BC",
+                                                   sep="|",
+                                                   remove=FALSE)
+                                tmp = tidyr::unite(tmp,
+                                                   "Chain",
+                                                   "GCM", "EXP",
+                                                   "RCM", "BC",
+                                                   "HM",
+                                                   sep="|",
+                                                   remove=FALSE)
+                            } else {
+                                tmp$climateChain = "SAFRAN"
+                                tmp = tidyr::unite(tmp,
+                                                   "Chain",
+                                                   "climateChain",
+                                                   "HM",
+                                                   sep="|",
+                                                   remove=FALSE)
+                                tmp = dplyr::relocate(tmp,
+                                                      climateChain,
+                                                      .after=Chain)
+                            }
+                        }
+                        
                         dataEX_criteria_extract =
                             dplyr::bind_rows(dataEX_criteria_extract, tmp)
                         
@@ -734,7 +765,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         ### /!\ pour proj ###
 
                         
-                    } else if (grepl("dataEX.*serie", Filenames[i])) {
+                    } else if (grepl("dataEX.*serie", Filenames[ii])) {
 
                         if (grepl("projection", mode)) {
                             if ("GCM" %in% names(tmp[[1]])) {
@@ -795,20 +826,20 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 append(dataEX_serie, tmp)
                         }
                         
-                    } else if (grepl("metaEX.*criteria", Filenames[i])) {
+                    } else if (grepl("metaEX.*criteria", Filenames[ii])) {
                         metaEX_criteria =
                             dplyr::bind_rows(metaEX_criteria,
                                              tmp[!(tmp$variable_en %in% metaEX_criteria$variable_en),])
                         
-                    } else if (grepl("metaEX.*serie", Filenames[i])) {
+                    } else if (grepl("metaEX.*serie", Filenames[ii])) {
                         metaEX_serie =
                             dplyr::bind_rows(metaEX_serie,
                                              tmp[!(tmp$variable_en %in% metaEX_serie$variable_en),])
                         
-                    } else if (grepl("data[_]", Filenames[i])) {
+                    } else if (grepl("data[_]", Filenames[ii])) {
                         data = dplyr::bind_rows(data, tmp)
 
-                    } else if (grepl("^meta$", Filenames[i])) {
+                    } else if (grepl("^meta$", Filenames[ii])) {
                         if (nrow(meta) == 0) {
                             meta = tmp
                         } else {
@@ -816,11 +847,11 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         }
                         
                     } else {
-                        assign(Filenames[i], tmp)
+                        assign(Filenames[ii], tmp)
                     }
                     
                 } else {
-                    assign(Filenames[i], tmp)
+                    assign(Filenames[ii], tmp)
                 }
             }
 
@@ -875,9 +906,177 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         if (type == "piezometrie" & exists("meta")) {
             meta = get_couche_in_meta(meta)
         }
-        
+
     }
 
+
+
+    
+    ratio_lim = 2
+    ## serie ratio
+    # tmp = dplyr::filter(dataEX_serieQA_ALL, ratio < 1/ratio_lim | ratio_lim < ratio)
+    # nrow(tmp)/nrow(dataEX_serieQA_ALL)*100
+    # tmp$Chain = gsub("SAFRAN", "|SAFRAN||", tmp$Chain)
+    # tmp = tidyr::separate(tmp, col="Chain",
+    #                       into=c("GCM", "EXP", "RCM",
+    #                              "BC", "HM"), sep="[|]",
+    #                       remove=FALSE)
+    # summarise(group_by(tmp, HM), pct=n()/nrow(tmp)*100)
+
+    ## serie median
+    # dataEX_stat_ALL =
+    #     summarise(group_by(dataEX_serieQA_ALL, code),
+    #               stdmeanQA=sd(meanQA, na.rm=TRUE))
+    # dataEX_serieQA_ALL = full_join(dataEX_serieQA_ALL,
+    #                              dataEX_stat_ALL,
+    #                              by="code")
+    # tmp = dplyr::filter(dataEX_serieQA_ALL,
+    #                     meanQA < medmeanQA-2*stdmeanQA |
+    #                     medmeanQA+2*stdmeanQA < meanQA)
+
+    fact = 3
+    ## criteria median
+    # tmp =
+    #     dplyr::filter(dataEX_criteriaQA_ALL,
+    #                   deltaQA_H3 < medQA-fact*stdQA |
+    #                   medQA+fact*stdQA < deltaQA_H3)
+    # nrow(tmp)/nrow(dataEX_criteriaQA_ALL)*100
+    # tmp$Chain = gsub("SAFRAN", "|SAFRAN||", tmp$Chain)
+    # tmp = tidyr::separate(tmp, col="Chain",
+    #                       into=c("GCM", "EXP", "RCM",
+    #                              "BC", "HM"), sep="[|]",
+    #                       remove=FALSE)
+    # summarise(group_by(tmp, HM), pct=n()/nrow(tmp)*100)
+    
+    if ('find_chain_out' %in% to_do) {
+        if (any(grepl("serie", extract_data))) {
+            if ("QA" %in% names(dataEX_serie)) {
+                dataEX_tmp = dataEX_serie$QA
+                dataEX_tmp =
+                    dplyr::filter(dataEX_tmp,
+                                  historical[1] <= date &
+                                  date <= historical[2])
+                dataEX_tmp_mean =
+                    dplyr::summarise(
+                               dplyr::group_by(dataEX_tmp,
+                                               code, Chain),
+                               meanQA=mean(QA, na.rm=TRUE),
+                               GCM=GCM[1], EXP=EXP[1], RCM=RCM[1],
+                               BC=BC[1], HM=HM[1])
+                dataEX_tmp_med =
+                    dplyr::summarise(dplyr::group_by(dataEX_tmp_mean,
+                                                     code),
+                                     medmeanQA=median(meanQA, na.rm=TRUE))
+                dataEX_tmp_mean =
+                    dplyr::full_join(dataEX_tmp_mean,
+                                     dataEX_tmp_med,
+                                     by="code")
+                dataEX_tmp_mean$ratio =
+                    dataEX_tmp_mean$meanQA / dataEX_tmp_mean$medmeanQA
+
+                dataEX_serieQA_ALL = dplyr::bind_rows(dataEX_serieQA_ALL,
+                                                      dataEX_tmp_mean)
+                
+                dataEX_to_remove_tmp =
+                    dplyr::filter(dataEX_tmp_mean,
+                                  ratio < 1/ratio_lim |
+                                  ratio_lim < ratio)
+
+                dataEX_to_remove_tmp = dplyr::select(dataEX_to_remove_tmp,
+                                                     code, Chain,
+                                                     GCM, EXP, RCM,
+                                                     BC, HM)
+                dataEX_to_remove_tmp$on = "serie" 
+                dataEX_to_remove = dplyr::bind_rows(dataEX_to_remove,
+                                                    dataEX_to_remove_tmp)
+            } else {
+                stop("You need to have QA variable in dataEX_serie")
+            }
+        }
+
+        if (any(grepl("criteria", extract_data))) {
+            if ("deltaQA_H3" %in% names(dataEX_criteria)) {
+                dataEX_tmp = dataEX_criteria
+
+                dataEX_tmp_stat =
+                    dplyr::summarise(dplyr::group_by(dataEX_tmp,
+                                                     code),
+                                     medQA=median(deltaQA_H3, na.rm=TRUE),
+                                     stdQA=sd(deltaQA_H3, na.rm=TRUE))
+                dataEX_tmp =
+                    dplyr::full_join(dataEX_tmp,
+                                     dataEX_tmp_stat,
+                                     by="code")
+                dataEX_criteriaQA_ALL =
+                    dplyr::bind_rows(dataEX_criteriaQA_ALL,
+                                     dataEX_tmp)
+                dataEX_to_remove_tmp =
+                    dplyr::filter(dataEX_tmp,
+                                  deltaQA_H3 < medQA-fact*stdQA |
+                                  medQA+fact*stdQA < deltaQA_H3)
+
+                dataEX_to_remove_tmp = dplyr::select(dataEX_to_remove_tmp,
+                                                     code, Chain,
+                                                     GCM, EXP, RCM,
+                                                     BC, HM)
+                dataEX_to_remove_tmp$on = "criteria"
+                dataEX_to_remove = dplyr::bind_rows(dataEX_to_remove,
+                                                    dataEX_to_remove_tmp)
+            } else {
+                stop("You need to have deltaQA_H3 variable in dataEX_criteria")
+            }
+        }
+    }
+
+    
+    if ('reshape_extracted_data_for_figure' %in% to_do) {
+
+        if (any(grepl("serie", extract_data))) {
+            write_tibble(dataEX_serie,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type),
+                         paste0("dataEX_serie_",
+                                subset_name, ".fst"))
+            write_tibble(metaEX_serie,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type), "metaEX_serie.fst")
+            meta =
+                mutate(meta,
+                       across(starts_with("surface"),
+                              ~ as.numeric(!is.na(.x)),
+                              .names=
+                                  "is_{gsub('(surface)|([_])|(km2)', '', .col)}"))
+            meta = select(meta, -"is_")
+            meta =
+                mutate(meta,
+                       n=rowSums(select(meta,
+                                        starts_with("is_"))))
+            meta =
+                mutate(meta,
+                       n=rowSums(select(meta, starts_with("is_"))))
+            
+            meta = dplyr::relocate(meta, n, .before=code)
+            write_tibble(meta,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type),
+                         paste0("meta_", subset_name, ".fst"))
+        }
+
+        if (any(grepl("criteria", extract_data))) {
+            write_tibble(dataEX_criteria,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type),
+                         paste0("dataEX_criteria_", letter, ".fst"))
+            write_tibble(metaEX_criteria,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type), "metaEX_criteria.fst")
+        }
+    }
 
 
     if ('write_warnings' %in% to_do) {
