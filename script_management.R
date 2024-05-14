@@ -908,45 +908,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         }
 
     }
-
-
-
+    
     
     ratio_lim = 2
-    ## serie ratio
-    # tmp = dplyr::filter(dataEX_serieQA_ALL, ratio < 1/ratio_lim | ratio_lim < ratio)
-    # nrow(tmp)/nrow(dataEX_serieQA_ALL)*100
-    # tmp$Chain = gsub("SAFRAN", "|SAFRAN||", tmp$Chain)
-    # tmp = tidyr::separate(tmp, col="Chain",
-    #                       into=c("GCM", "EXP", "RCM",
-    #                              "BC", "HM"), sep="[|]",
-    #                       remove=FALSE)
-    # summarise(group_by(tmp, HM), pct=n()/nrow(tmp)*100)
-
-    ## serie median
-    # dataEX_stat_ALL =
-    #     summarise(group_by(dataEX_serieQA_ALL, code),
-    #               stdmeanQA=sd(meanQA, na.rm=TRUE))
-    # dataEX_serieQA_ALL = full_join(dataEX_serieQA_ALL,
-    #                              dataEX_stat_ALL,
-    #                              by="code")
-    # tmp = dplyr::filter(dataEX_serieQA_ALL,
-    #                     meanQA < medmeanQA-2*stdmeanQA |
-    #                     medmeanQA+2*stdmeanQA < meanQA)
-
     fact = 3
-    ## criteria median
-    # tmp =
-    #     dplyr::filter(dataEX_criteriaQA_ALL,
-    #                   deltaQA_H3 < medQA-fact*stdQA |
-    #                   medQA+fact*stdQA < deltaQA_H3)
-    # nrow(tmp)/nrow(dataEX_criteriaQA_ALL)*100
-    # tmp$Chain = gsub("SAFRAN", "|SAFRAN||", tmp$Chain)
-    # tmp = tidyr::separate(tmp, col="Chain",
-    #                       into=c("GCM", "EXP", "RCM",
-    #                              "BC", "HM"), sep="[|]",
-    #                       remove=FALSE)
-    # summarise(group_by(tmp, HM), pct=n()/nrow(tmp)*100)
     
     if ('find_chain_out' %in% to_do) {
         if (any(grepl("serie", extract_data))) {
@@ -1027,6 +992,164 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             }
         }
     }
+
+
+    if ('add_more_info_to_metadata' %in% to_do) {
+        Projections = Projections[Projections$EXP != "SAFRAN",]
+        DirPaths = Projections$path
+        nDirPath = length(DirPaths)
+        
+        meta_ALL = dplyr::tibble()
+        for (j in 1:nDirPath) {
+            if (nrow(meta_ALL) == 0) {
+                meta_ALL = read_tibble(file.path(DirPaths[j],
+                                                 "meta.fst"))
+            } else {
+                meta_ALL =
+                    dplyr::full_join(
+                               meta_ALL,
+                               read_tibble(file.path(DirPaths[j],
+                                                     "meta.fst")))
+            }
+        }
+        meta_ALL = arrange(meta_ALL, code)
+        meta_ALL = dplyr::rename(meta_ALL,
+                                 "surface_MORDOR_SD_km2"=
+                                     "surface_MORDOR-SD_km2",
+                                 "surface_MORDOR_TS_km2"=
+                                     "surface_MORDOR-TS_km2")
+
+        meta_ALL =
+            dplyr::mutate(
+                       meta_ALL,
+                       n_input_CTRIP=as.numeric(!is.na(surface_CTRIP_km2)),
+                       n_input_EROS=as.numeric(!is.na(surface_EROS_km2)),
+                       n_input_GRSD=as.numeric(!is.na(surface_GRSD_km2)),
+                       n_input_J2000=as.numeric(!is.na(surface_J2000_km2)),
+                       n_input_MORDOR_SD=as.numeric(!is.na(surface_MORDOR_SD_km2)),
+                       n_input_MORDOR_TS=as.numeric(!is.na(surface_MORDOR_TS_km2)),
+                       n_input_ORCHIDEE=as.numeric(!is.na(surface_ORCHIDEE_km2)),
+                       n_input_SIM2=as.numeric(!is.na(surface_SIM2_km2)),
+                       n_input_SMASH=as.numeric(!is.na(surface_SMASH_km2)))
+        meta_ALL =
+            dplyr::mutate(meta_ALL,
+                          n_input=n_input_CTRIP + n_input_EROS + n_input_GRSD +
+                              n_input_J2000 + n_input_MORDOR_SD + n_input_MORDOR_TS +
+                              n_input_ORCHIDEE + n_input_SIM2 + n_input_SMASH)
+        meta_ALL = dplyr::relocate(meta_ALL,
+                                   n_input, .before=code)
+        meta_ALL = left_join(meta_ALL,
+                             select(codes_selection_data, code, n_raw_input=n),
+                             by="code")
+
+        if (!all(meta_ALL$n_raw_input == meta_ALL$n_input)) {
+            stop("issue with n")
+        }
+
+        meta_ALL = select(meta_ALL, -n_raw_input)
+        meta_ALL$is_reference = as.logical(meta_ALL$reference)
+        meta_ALL = dplyr::select(meta_ALL, -reference)
+        meta_ALL =
+            dplyr::left_join(meta_ALL,
+                             dplyr::select(codes_selection_data,
+                                           code_hydro2,
+                                           code),
+                             by="code")
+        meta_ALL = dplyr::relocate(meta_ALL,
+                                   is_reference,
+                                   .after=code)
+        meta_ALL = dplyr::relocate(meta_ALL,
+                                   code_hydro2,
+                                   .after=code)
+        
+        meta_ALL_sf =
+            sf::st_as_sf(meta_ALL,
+                         coords=c("XL93_m", "YL93_m"))
+        sf::st_crs(meta_ALL_sf) = sf::st_crs(2154)
+        meta_ALL_sf = sf::st_transform(meta_ALL_sf, 4326)    
+        get_lon = function (id) {
+            meta_ALL_sf$geometry[[id]][1]
+        }
+        get_lat = function (id) {
+            meta_ALL_sf$geometry[[id]][2]
+        }
+        meta_ALL$lon_deg = sapply(1:nrow(meta_ALL_sf), get_lon)
+        meta_ALL$lat_deg = sapply(1:nrow(meta_ALL_sf), get_lat)
+        meta_ALL = dplyr::relocate(meta_ALL,
+                                   lon_deg,
+                                   .after=YL93_m)
+        meta_ALL = dplyr::relocate(meta_ALL,
+                                   lat_deg,
+                                   .after=lon_deg)
+
+        chain_to_remove = read_tibble(filedir=file.path(resdir,
+                                                        mode,
+                                                        type),
+                                      filename="chain_to_remove.csv")
+        N_max = tibble(HM=c("CTRIP", "EROS", "GRSD",
+                            "J2000", "MORDOR-SD", "MORDOR-TS",
+                            "ORCHIDEE", "SIM2", "SMASH"),
+                       N_max=c(17, 34, 34, 34, 34, 34, 17, 17, 34))
+        N_chain_to_remove =
+            summarise(group_by(filter(chain_to_remove, EXP!="SAFRAN"),
+                               code, HM), N=n())
+        N_chain_to_remove = full_join(N_chain_to_remove,
+                                      N_max, by="HM")
+
+        N_chain_to_remove = filter(N_chain_to_remove,
+                                   N > N_max/2)
+        N_chain_to_remove$n = -1
+        N_chain_to_remove = select(N_chain_to_remove, code, HM, n)
+        N_chain_to_remove = arrange(N_chain_to_remove, HM)
+        
+        N_chain_to_remove$HM = gsub("[-]", "_",
+                                    N_chain_to_remove$HM)
+        N_chain_to_remove =
+            tidyr::pivot_wider(N_chain_to_remove,
+                               names_from=HM, values_from=n,
+                               names_glue="n_{HM}",
+                               values_fill=0)
+        N_chain_to_remove = arrange(N_chain_to_remove, code)
+        n_HM = paste0("n_", gsub("[-]", "_", N_max$HM))
+        for (n_hm in n_HM) {
+            if (!(n_hm %in% names(N_chain_to_remove))) {
+                N_chain_to_remove[[n_hm]] = 0
+            }
+        }
+        
+        meta_ALL = full_join(meta_ALL,
+                             N_chain_to_remove,
+                             by="code")
+
+        meta_ALL = mutate(meta_ALL,
+                          across(starts_with("n_"),
+                                 ~ifelse(is.na(.), 0, .)))
+        
+        meta_ALL =
+            dplyr::mutate(
+                       meta_ALL,
+                       n_CTRIP=n_CTRIP + n_input_CTRIP,
+                       n_EROS=n_EROS + n_input_EROS,
+                       n_GRSD=n_GRSD + n_input_GRSD,
+                       n_J2000=n_J2000 + n_input_J2000,
+                       n_MORDOR_SD=n_MORDOR_SD + n_input_MORDOR_SD,
+                       n_MORDOR_TS=n_MORDOR_TS + n_input_MORDOR_TS,
+                       n_ORCHIDEE=n_ORCHIDEE + n_input_ORCHIDEE,
+                       n_SIM2=n_SIM2 + n_input_SIM2,
+                       n_SMASH=n_SMASH + n_input_SMASH)
+        meta_ALL =
+            dplyr::mutate(meta_ALL,
+                          n=n_CTRIP + n_EROS + n_GRSD +
+                              n_J2000 + n_MORDOR_SD + n_MORDOR_TS +
+                              n_ORCHIDEE + n_SIM2 + n_SMASH)
+        meta_ALL = dplyr::relocate(meta_ALL,
+                                   n, .before=n_input)
+        
+        write_tibble(meta_ALL,
+                     filedir=today_resdir,
+                     filename="stations_selection.csv")
+    }
+    
 
     
     if ('reshape_extracted_data_for_figure' %in% to_do) {

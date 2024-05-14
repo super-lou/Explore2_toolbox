@@ -146,69 +146,69 @@ CREATE TABLE IF NOT EXISTS variables (
 
 
     
-    Stations = dplyr::tibble()
-    for (j in 1:nDirPath) {
-        if (nrow(Stations) == 0) {
-            Stations = read_tibble(file.path(DirPaths[j],
-                                             "meta.fst"))
-        } else {
-            Stations =
-                dplyr::full_join(
-                           Stations,
-                           read_tibble(file.path(DirPaths[j],
-                                                 "meta.fst")))
-        }
-    }
-    Stations$is_reference = as.logical(Stations$reference)
-    Stations = dplyr::select(Stations, -reference)
-    Stations =
-        dplyr::left_join(Stations,
-                         dplyr::select(codes_selection_data,
-                                       code_hydro2=CODE,
-                                       code=SuggestionCode),
-                         by="code")
-    Stations = dplyr::rename(Stations,
-                             "surface_MORDOR_SD_km2"=
-                                 "surface_MORDOR-SD_km2",
-                             "surface_MORDOR_TS_km2"=
-                                 "surface_MORDOR-TS_km2")
-    Stations = dplyr::relocate(Stations,
-                               is_reference,
-                               .after=code)
-    Stations = dplyr::relocate(Stations,
-                               code_hydro2,
-                               .after=code)
-    Stations =
-        dplyr::mutate(Stations,
-                      n=
-                          as.numeric(!is.na(surface_CTRIP_km2)) +
-                          as.numeric(!is.na(surface_EROS_km2)) +
-                          as.numeric(!is.na(surface_GRSD_km2)) +
-                          as.numeric(!is.na(surface_J2000_km2)) +
-                          as.numeric(!is.na(surface_MORDOR_SD_km2)) +
-                          as.numeric(!is.na(surface_MORDOR_TS_km2)) +
-                          as.numeric(!is.na(surface_ORCHIDEE_km2)) +
-                          as.numeric(!is.na(surface_SIM2_km2)) +
-                          as.numeric(!is.na(surface_SMASH_km2)))
-    Stations = dplyr::relocate(Stations, n, .before=code)
+    # Stations = dplyr::tibble()
+    # for (j in 1:nDirPath) {
+    #     if (nrow(Stations) == 0) {
+    #         Stations = read_tibble(file.path(DirPaths[j],
+    #                                          "meta.fst"))
+    #     } else {
+    #         Stations =
+    #             dplyr::full_join(
+    #                        Stations,
+    #                        read_tibble(file.path(DirPaths[j],
+    #                                              "meta.fst")))
+    #     }
+    # }
+    # Stations$is_reference = as.logical(Stations$reference)
+    # Stations = dplyr::select(Stations, -reference)
+    # Stations =
+    #     dplyr::left_join(Stations,
+    #                      dplyr::select(codes_selection_data,
+    #                                    code_hydro2=CODE,
+    #                                    code=SuggestionCode),
+    #                      by="code")
+    # Stations = dplyr::rename(Stations,
+    #                          "surface_MORDOR_SD_km2"=
+    #                              "surface_MORDOR-SD_km2",
+    #                          "surface_MORDOR_TS_km2"=
+    #                              "surface_MORDOR-TS_km2")
+    # Stations = dplyr::relocate(Stations,
+    #                            is_reference,
+    #                            .after=code)
+    # Stations = dplyr::relocate(Stations,
+    #                            code_hydro2,
+    #                            .after=code)
+    # Stations =
+    #     dplyr::mutate(Stations,
+    #                   n=
+    #                       as.numeric(!is.na(surface_CTRIP_km2)) +
+    #                       as.numeric(!is.na(surface_EROS_km2)) +
+    #                       as.numeric(!is.na(surface_GRSD_km2)) +
+    #                       as.numeric(!is.na(surface_J2000_km2)) +
+    #                       as.numeric(!is.na(surface_MORDOR_SD_km2)) +
+    #                       as.numeric(!is.na(surface_MORDOR_TS_km2)) +
+    #                       as.numeric(!is.na(surface_ORCHIDEE_km2)) +
+    #                       as.numeric(!is.na(surface_SIM2_km2)) +
+    #                       as.numeric(!is.na(surface_SMASH_km2)))
+    # Stations = dplyr::relocate(Stations, n, .before=code)
 
-    Stations_sf = sf::st_as_sf(Stations, coords=c("XL93_m", "YL93_m"))
-    sf::st_crs(Stations_sf) = sf::st_crs(2154)
-    Stations_sf = sf::st_transform(Stations_sf, 4326)    
-    get_lon = function (id) {
-        Stations_sf$geometry[[id]][1]
-    }
-    get_lat = function (id) {
-        Stations_sf$geometry[[id]][2]
-    }
-    Stations$lon_deg = sapply(1:nrow(Stations_sf), get_lon)
-    Stations$lat_deg = sapply(1:nrow(Stations_sf), get_lat)
-    Stations = dplyr::relocate(Stations,
-                               lon_deg,
-                               .after=YL93_m)
-    Stations = dplyr::relocate(Stations,
-                               lat_deg,
-                               .after=lon_deg)
+    # Stations_sf = sf::st_as_sf(Stations, coords=c("XL93_m", "YL93_m"))
+    # sf::st_crs(Stations_sf) = sf::st_crs(2154)
+    # Stations_sf = sf::st_transform(Stations_sf, 4326)    
+    # get_lon = function (id) {
+    #     Stations_sf$geometry[[id]][1]
+    # }
+    # get_lat = function (id) {
+    #     Stations_sf$geometry[[id]][2]
+    # }
+    # Stations$lon_deg = sapply(1:nrow(Stations_sf), get_lon)
+    # Stations$lat_deg = sapply(1:nrow(Stations_sf), get_lat)
+    # Stations = dplyr::relocate(Stations,
+    #                            lon_deg,
+    #                            .after=YL93_m)
+    # Stations = dplyr::relocate(Stations,
+    #                            lat_deg,
+    #                            .after=lon_deg)
     
     write_tibble(Stations, today_resdir,
                  "stations_selection.csv")

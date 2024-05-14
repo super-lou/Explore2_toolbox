@@ -187,21 +187,33 @@ type =
     # "climat"
 
 to_do = c(
+    ## diagnostic
     # 'delete_tmp',
-    # 'clean_nc'
-    # 'merge_nc'
     # 'reshape_piezo_data',
     # 'create_data',
     # 'extract_data',
     # 'save_extract'
-    # 'read_tmp'
-    # 'read_saving'
-    'find_chain_out'
-    # 'reshape_extracted_data_for_figure'
-    # 'create_database'
     # 'write_warnings',
     # 'add_regime_hydro'
-    # 'analyse_data'
+    # 'read_tmp'
+    # 'read_saving'
+    
+    ## projection
+    # 'delete_tmp',
+    # 'clean_nc'
+    # 'merge_nc'
+    # 'delete_tmp',
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
+    # 'find_chain_out'
+    'add_more_info_to_metadata'
+    # 'reshape_extracted_data_for_figure'
+    # 'create_database'
+    # 'read_tmp'
+    # 'read_saving'
+
+    ## all
     # 'plot_sheet'
     # 'plot_doc'
 )
@@ -235,10 +247,6 @@ extract_data = c(
     # 'Explore2_criteria_projection_LF_summer',
     # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
-)
-
-analyse_data = c(
-    "compute_delta"
 )
 
 
@@ -405,13 +413,13 @@ projs_type =
 
 projections_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
         ## figure ##
-        "rcp85",
-        "SAFRAN"
+        # "rcp85",
+        # "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -489,8 +497,8 @@ codes_to_use =
         # "Moselle"="A886006000"
     )
 n_projections_by_code =
-    # NULL
-    4
+    NULL
+    # 4
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
@@ -1511,27 +1519,48 @@ if (type == "hydrologie") {
 
     nFiles_to_use = length(files_to_use)
 
-    codes_selection_data = read_tibble(file.path(
-        computer_data_path, type,
-        codes_hydro_selection_file))
-    codes_selection_data = dplyr::filter(codes_selection_data,
-                                         !grepl("Supprimer",
-                                                PointsSupprimes))
-
-    codes_selection_data = dplyr::arrange(codes_selection_data,
-                                          SuggestionCode)
-    
-    codes_selection_data$SuggestionNOM =
-        gsub(" A ", " à ",
-             gsub("L ", "l'",
-                  gsub("^L ", "L'",
-                       stringr::str_to_title(
-                                    gsub("L'", "L ",
-                                         codes_selection_data$SuggestionNOM
-                                         )))))
-    write_tibble(codes_selection_data,
-                 filedir=today_resdir,
-                 filename=codes_hydro_selection_file)
+    if (projs_type != "extracted" |
+        'add_more_info_to_metadata' %in% to_do) {
+        codes_selection_data = read_tibble(file.path(
+            computer_data_path, type,
+            codes_hydro_selection_file))
+        codes_selection_data = dplyr::filter(codes_selection_data,
+                                             !grepl("Supprimer",
+                                                    PointsSupprimes))
+        
+        codes_selection_data =
+            dplyr::select(n=n,
+                          codes_selection_data,
+                          code=SuggestionCode,
+                          code_hydro2=CODE,
+                          is_reference=Référence,
+                          name=SuggestionNOM,
+                          source=SOURCE,
+                          XL93_m=XL93,
+                          YL93_m=YL93,
+                          surface_km2=S_HYDRO)
+        codes_selection_data = dplyr::arrange(codes_selection_data,
+                                              code)
+        codes_selection_data$is_reference =
+            as.logical(codes_selection_data$is_reference)
+        codes_selection_data$name =
+            gsub(" A ", " à ",
+                 gsub("L ", "l'",
+                      gsub("^L ", "L'",
+                           stringr::str_to_title(
+                                        gsub("L'", "L ",
+                                             codes_selection_data$name
+                                             )))))
+    } else {
+        codes_selection_data =
+            read_tibble(filedir=file.path(resdir,
+                                          mode, type),
+                        filename="stations_selection.csv")
+        chain_to_remove =
+            read_tibble(filedir=file.path(resdir,
+                                          mode, type),
+                        filename="chain_to_remove.csv")
+    }
 
     if (grepl("diagnostic", mode)) {
         ref = 1
@@ -1546,10 +1575,10 @@ if (type == "hydrologie") {
     }
 
     codes_selection_data =
-        codes_selection_data[codes_selection_data$Référence %in%
+        codes_selection_data[codes_selection_data$is_reference %in%
                              ref,]
-    codes8_selection = codes_selection_data$CODE
-    codes10_selection = codes_selection_data$SuggestionCode
+    codes8_selection = codes_selection_data$code_hydro2
+    codes10_selection = codes_selection_data$code
     ok = !is.na(codes10_selection) & !is.na(codes8_selection)
     codes8_selection = codes8_selection[ok]
     codes10_selection = codes10_selection[ok]
@@ -1958,45 +1987,22 @@ if ('find_chain_out' %in% to_do |
         to_do = to_do_save
     }
 
-    # dataEX_serieQA_ALL$Chain =
-    #     gsub("SAFRAN", "|SAFRAN||", dataEX_serieQA_ALL$Chain)
-    # dataEX_serieQA_ALL =
-    #     tidyr::separate(dataEX_serieQA_ALL, col="Chain",
-    #                     into=c("GCM", "EXP", "RCM",
-    #                            "BC", "HM"), sep="[|]",
-    #                     remove=FALSE)
-
-    # dataEX_criteriaQA_ALL$Chain =
-    #     gsub("SAFRAN", "|SAFRAN||", dataEX_criteriaQA_ALL$Chain)
-    # dataEX_criteriaQA_ALL =
-    #     tidyr::separate(dataEX_criteriaQA_ALL, col="Chain",
-    #                     into=c("GCM", "EXP", "RCM",
-    #                            "BC", "HM"), sep="[|]",
-    #                     remove=FALSE)
-    
-    # dataEX_to_remove$Chain =
-    #     gsub("SAFRAN", "|SAFRAN||", dataEX_to_remove$Chain)
-    # dataEX_to_remove =
-    #     tidyr::separate(dataEX_to_remove, col="Chain",
-    #                     into=c("GCM", "EXP", "RCM",
-    #                            "BC", "HM"), sep="[|]",
-    #                     remove=FALSE)
-
-    stop()
-    OK = !dupliacted(paste0(dataEX_to_remove$code,
+    OK = !duplicated(paste0(dataEX_to_remove$code,
                             dataEX_to_remove$Chain))
-    dataEX_to_remove = dataEX_to_remove[OK]
+    dataEX_to_remove = dataEX_to_remove[OK,]
     
     write_tibble(dataEX_serieQA_ALL, today_resdir,
                  "dataEX_serieQA_ALL.fst")
     write_tibble(dataEX_criteriaQA_ALL, today_resdir,
                  "dataEX_criteriaQA_ALL.fst")
     write_tibble(dataEX_to_remove, today_resdir,
-                 "dataEX_to_remove.fst")
+                 "chain_to_remove.fst")
+    write_tibble(dataEX_to_remove, today_resdir,
+                 "chain_to_remove.csv")
 }
 
 
-if (any(c('write_warnings',
+if (any(c('write_warnings', 'add_more_info_to_metadata',
           'add_regime_hydro', 'read_saving') %in% to_do)) {
     post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
@@ -2014,12 +2020,6 @@ if ("read_tmp" %in% to_do) {
 if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
     post("## PLOTTING DATA")
     source(file.path(lib_path, 'script_layout.R'),
-           encoding='UTF-8')
-}
-
-if ('analyse_data' %in% to_do) {
-    post("## ANALYSING DATA")
-    source(file.path(lib_path, 'script_analyse.R'),
            encoding='UTF-8')
 }
 
