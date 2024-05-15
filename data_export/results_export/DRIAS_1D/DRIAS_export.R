@@ -25,10 +25,59 @@
 # | |) ||   / | |  / _ \ \__ \   / -_)\ \ /| '_ \/ _ \| '_||  _|
 # |___/ |_|_\|___|/_/ \_\|___/   \___|/_\_\| .__/\___/|_|   \__| ______
 # Export pour le portail DRIAS des données |_| hydro-climatiques 
+library(NCf)
+computer = Sys.info()["nodename"]
 
-if (!require (remotes)) install.packages("remotes")
-if (!require (NCf)) remotes::install_github("super-lou/NCf")
+if (computer == "botan") {
+    out_dir = "NetCDF"
+    data_dirpath = "/home/louis/Documents/bouleau/INRAE/data/Explore2/hydrologie/projection_merge"
+    results_dirpath = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/results/projection/hydrologie"
+    MPI = ""
+}
 
+if (computer == "spiritx") {
+    out_dir = "/scratchx/lheraut/NetCDF"
+    data_dirpath = "/scratchx/lheraut/data/Explore2/hydrologie/projection_merge"
+    results_dirpath = "/scratchx/lheraut/projection"
+    MPI = "file"
+}
+
+
+## MPI _______________________________________________________________
+if (MPI != "") {
+    library(Rmpi)
+    rank = mpi.comm.rank(comm=0)
+    size = mpi.comm.size(comm=0)
+
+    if (size > 1) {
+        if (rank == 0) {
+            Rrank_sample = sample(0:(size-1))
+            for (root in 1:(size-1)) {
+                Rmpi::mpi.send(as.integer(Rrank_sample[root+1]),
+                               type=1, dest=root,
+                               tag=1, comm=0)
+            }
+            Rrank = Rrank_sample[1]
+        } else {
+            Rrank = Rmpi::mpi.recv(as.integer(0),
+                                   type=1,
+                                   source=0,
+                                   tag=1, comm=0)
+        }
+    } else {
+        Rrank = 0
+    }
+    ASHE::post(paste0("Random rank attributed : ", Rrank))
+    
+} else {
+    rank = 0
+    size = 1
+    Rrank = 0
+}
+
+
+
+## INTRO _____________________________________________________________
 Variable = c(
     "^Q05A$", "^Q10A$", "^QJXA$", "^tQJXA$", "^VCX3$", "^tVCX3$",
     "^VCX10$", "^tVCX10$", "^dtFlood$",
@@ -41,49 +90,77 @@ Variable = c(
     "^VCN3_summer$", "^VCN10_summer$", "^VCN30_summer$",
     "^startLF_summer$", "^centerLF_summer$", "^dtLF_summer$")
 Variable_pattern = paste0("(", paste0(Variable, collapse=")|("), ")")
+Variable_hyr = c("QJXA", "tQJXA", "tVCX3", "VCN10", "VCN3", "VCX3")
 
 Season_pattern = "(DJF)|(MAM)|(JJA)|(SON)|(MJJASON)|(NDJFMA)"
 Month = c("jan", "feb", "mar", "apr", "may", "jun",
           "jul", "aug", "sep", "oct", "nov", "dec")
 Month_pattern = paste0("(", paste0(Month, collapse=")|("), ")")
 
-Variable_hyr = c("QJXA", "tQJXA", "tVCX3", "VCN10", "VCN3", "VCX3")
-
 date_min = "1975-01-01"
 
 meta_projection_file = "tableau_metadata_EXPLORE2.csv"
-meta_projection = ASHE::read_tibble(meta_projection_file)
+Projection_file = "projections_selection.csv"
+chain_to_remove_file = "chain_to_remove_adjust.csv"
+meta_ALL_file = "stations_selection.csv"
 
-data_dirpath = "/home/louis/Documents/bouleau/INRAE/data/Explore2/hydrologie/projection_merge"
+meta_projection = ASHE::read_tibble(meta_projection_file)
+Projection = ASHE::read_tibble(file.path(results_dirpath,
+                                         Projection_file))
+chain_to_remove = ASHE::read_tibble(file.path(results_dirpath,
+                                              chain_to_remove_file))
+meta_ALL = ASHE::read_tibble(file.path(results_dirpath,
+                                       meta_ALL_file))
+n_lim = 4 
+
 data_Paths = list.files(data_dirpath,
                         pattern="[.]nc$",
                         full.names=TRUE,
                         recursive=TRUE)
 
-results_dirpath = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/results/projection/hydrologie"
-Projection_path = file.path(results_dirpath, "projections_selection.csv")
-Projection = ASHE::read_tibble(Projection_path)
-
-chain_to_remove_file = "chain_to_remove_adjust.csv"
-chain_to_remove = ASHE::read_tibble(file.path(results_dirpath,
-                                              chain_to_remove_file))
-
 Chain_dirpath = list.dirs(results_dirpath, recursive=FALSE)
 Chain_dirpath = list.dirs(Chain_dirpath, recursive=FALSE)
 
-###
+### NOT SAFRAN
 Chain_dirpath = Chain_dirpath[!grepl("^SAFRAN[_]",
                                      basename(Chain_dirpath))]
 ###
 
+nChain_dirpath = length(Chain_dirpath)
 
-for (chain_dirpath in Chain_dirpath) {
-    
-    ###
-    # chain_dirpath = Chain_dirpath[1]
-    ###
+if (MPI == "file") {            
+    start = ceiling(seq(1, nChain_dirpath,
+                        by=(nChain_dirpath/size)))
+    if (any(diff(start) == 0)) {
+        start = 1:nChain_dirpath
+        end = start
+    } else {
+        end = c(start[-1]-1, nChain_dirpath)
+    }
+    if (rank == 0) {
+        ASHE::post(paste0(paste0("rank ", 0:(size-1), " get ",
+                                 end-start+1, " files"),
+                          collapse="    "))
+    }
+    if (Rrank+1 > nChain_dirpath) {
+        Chain_dirpath = NULL
+    } else {
+        Chain_dirpath = Chain_dirpath[start[Rrank+1]:end[Rrank+1]]
+    }
+}
 
-    print(chain_dirpath)
+nChain_dirpath = length(Chain_dirpath)
+
+
+## PROCESS ___________________________________________________________
+for (i in 1:nChain_dirpath) {
+    if (nChain_dirpath == 0) {
+        break
+    }
+    chain_dirpath =  Chain_dirpath[i]
+
+    ASHE::post(paste0("* ", i, " -> ",
+                      round(i/nChain_dirpath*100, 1), "%"))
 
     regexp = gsub("historical[[][-][]]", "",
                   Projection$regexp[Projection$dir ==
@@ -91,7 +168,6 @@ for (chain_dirpath in Chain_dirpath) {
     data_path = data_Paths[grepl(regexp, basename(data_Paths))]
     NC = ncdf4::nc_open(data_path)
 
-    
     Var_path = list.files(chain_dirpath,
                           pattern="[.]fst",
                           full.names=TRUE,
@@ -99,18 +175,20 @@ for (chain_dirpath in Chain_dirpath) {
     Var_path = Var_path[grepl(Variable_pattern,
                               basename(gsub("[.]fst", "", Var_path)))]
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
+    nVar_path = length(Var_path)
     
     is_month_done = FALSE
     
-    for (var_path in Var_path) {
+    for (j in 1:nVar_path) {
         ###
-        # var_path = Var_path[1]
         # var_path = Var_path[grepl("QSA_JJA", Var_path)]
         # var_path = Var_path[grepl("QA.fst", Var_path)]
         ###
+        var_path = Var_path[j]
         var = gsub("[.]fst", "", basename(var_path))
 
-        print(var)
+        ASHE::post(paste0("** ", j, " -> ",
+                          round(j/nVar_path*100, 1), "%"))
         
         if (is_month_done & grepl(Month_pattern, var)) {
             next
@@ -155,8 +233,14 @@ for (chain_dirpath in Chain_dirpath) {
         } else {
             dataEX = ASHE::read_tibble(var_path)
             dataEX = dplyr::filter(dataEX, date_min <= date)
-            
+
+            exp = gsub(".*[-]", "", dataEX$EXP[1])
+            Code_selection =
+                dplyr::filter(meta_ALL,
+                              get(paste0("n_", exp)) >= 4)$code
+            dataEX = dplyr::filter(dataEX, code %in% Code_selection)
             dataEX = dplyr::arrange(dataEX, code)
+
             timestep = "year"
 
             if (length(metaEX_var$sampling_period_en) != 2) {
@@ -254,7 +338,6 @@ for (chain_dirpath in Chain_dirpath) {
             source(path, encoding='UTF-8')    
         }
 
-        out_dir = "NetCDF"
         if (!(file.exists(out_dir))) {
             dir.create(out_dir)
         }
@@ -263,4 +346,10 @@ for (chain_dirpath in Chain_dirpath) {
     }
 
     ncdf4::nc_close(NC)
+}
+
+
+if (MPI != "") {
+    Sys.sleep(10)
+    mpi.finalize()
 }
