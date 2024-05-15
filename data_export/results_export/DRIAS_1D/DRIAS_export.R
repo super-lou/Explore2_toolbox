@@ -42,6 +42,8 @@ if (grepl("spiritx", computer)) {
     MPI = "file"
 }
 
+verbose = TRUE
+
 
 ## MPI _______________________________________________________________
 if (MPI != "") {
