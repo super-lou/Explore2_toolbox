@@ -28,14 +28,14 @@
 library(NCf)
 computer = Sys.info()["nodename"]
 
-if (computer == "botan") {
+if (grepl("botan", computer)) {
     out_dir = "NetCDF"
     data_dirpath = "/home/louis/Documents/bouleau/INRAE/data/Explore2/hydrologie/projection_merge"
     results_dirpath = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/results/projection/hydrologie"
     MPI = ""
 }
 
-if (computer == "spiritx") {
+if (grepl("spiritx", computer)) {
     out_dir = "/scratchx/lheraut/NetCDF"
     data_dirpath = "/scratchx/lheraut/data/Explore2/hydrologie/projection_merge"
     results_dirpath = "/scratchx/lheraut/projection"
