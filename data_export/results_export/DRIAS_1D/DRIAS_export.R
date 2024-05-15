@@ -69,6 +69,7 @@ if (MPI != "") {
     } else {
         Rrank = 0
     }
+    print(Rrank)
     ASHE::post(paste0("Random rank attributed : ", Rrank))
     
 } else {
