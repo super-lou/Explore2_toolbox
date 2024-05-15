@@ -59,6 +59,7 @@ obs_hydro_dir = "Explore2 HYDRO QJM critiques 2023"
 obs_hydro_format = "_HYDRO_QJM.txt"
 codes_hydro_selection_file = "Selection_points_simulation.csv"
 code_correction_dir = "code_correction"
+QUALYPSO_dir = "QUALYPSO"
 #### 2.1.2. Piezo ____________________________________________________
 raw_data_piezo_file = "diagnostic_piezos_ref_explore2_v1.nc"
 codes_piezo_selection_file = "piezometres_references_hubeau.txt"

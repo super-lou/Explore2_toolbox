@@ -1194,21 +1194,83 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
                                    type), "metaEX_serie.fst")
-            # meta =
-            #     mutate(meta,
-            #            across(starts_with("surface"),
-            #                   ~ as.numeric(!is.na(.x)),
-            #                   .names=
-            #                       "is_{gsub('(surface)|([_])|(km2)', '', .col)}"))
-            # meta = select(meta, -"is_")
-            # meta =
-            #     mutate(meta,
-            #            n=rowSums(select(meta,
-            #                             starts_with("is_"))))
-            # meta =
-            #     mutate(meta,
-            #            n=rowSums(select(meta, starts_with("is_"))))
-            # meta = dplyr::relocate(meta, n, .before=code)
+
+            meta_tmp = filter(codes_selection_data, code %in% meta$code)
+            write_tibble(meta_tmp,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type),
+                         paste0("meta_", subset_name, ".fst"))
+
+            Paths_QUALYPSO = file.path(computer_data_path, type,
+                                       QUALYPSO_dir,
+                                       paste0(meta_tmp$code, ".rds"))
+
+            convert = c("Augmentation"=1,
+                        "Pas de tendance"=0,
+                        "Diminution"=-1)
+
+            data_QUALYPSO = tibble()
+
+            for (path in Paths_QUALYPSO) {
+                code = gsub("[.].*", "", basename(path))
+                tmp = read_tibble(path)
+                tmp = tmp[c(1, 2, 4)]
+                for (k in 1:length(tmp)) {
+                    names(tmp[[k]]) = c("spread", "signe")
+                    spread_name = c("inside", "outside")
+                    names(tmp[[k]]$spread) = spread_name
+
+                    for (x in spread_name) {
+                        tmp[[k]]$spread[[x]] = 
+                            tibble(tmp[[k]]$spread[[x]]) %>%
+                            filter(rcp=="rcp85") %>%
+                            select(-rcp) %>%
+                            rename(date=year) %>%
+                            mutate(code=code,
+                                   date=as.Date(paste0(date,
+                                                       "-01-01"))) %>%
+                            relocate(code, .before=date)
+                        names(tmp[[k]]$spread[[x]]) =
+                            gsub("chg[_]", "",
+                                 names(tmp[[k]]$spread[[x]]))
+
+                    }
+                    tmp[[k]]$signe = 
+                        tmp[[k]]$signe %>%
+                        filter(rcp=="rcp85") %>%
+                        rename(date=year) %>%
+                        mutate(code=code,
+                               date=as.Date(paste0(date, "-01-01")),
+                               signe=convert[match(cat,
+                                                   names(convert))]) %>%
+                        select(-rcp, -val, -cat) %>%
+                        relocate(code, .before=date)
+                }
+
+                if (length(data_QUALYPSO) == 0) {
+                    data_QUALYPSO = tmp
+                } else {
+                    for (k in 1:length(tmp)) {
+                        data_QUALYPSO[[k]]$spread$inside =
+                            bind_rows(data_QUALYPSO[[k]]$spread$inside,
+                                      tmp[[k]]$spread$inside)
+                        data_QUALYPSO[[k]]$spread$outside =
+                            bind_rows(data_QUALYPSO[[k]]$spread$outside,
+                                      tmp[[k]]$spread$outside)
+                        data_QUALYPSO[[k]]$signe =
+                            bind_rows(data_QUALYPSO[[k]]$signe,
+                                      tmp[[k]]$signe)
+                    }
+                }
+            }
+
+            write_tibble(data_QUALYPSO,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type),
+                         paste0("data_QUALYPSO_",
+                                subset_name, ".fst"))
         }
 
         if (any(grepl("criteria", extract_data))) {
@@ -1228,13 +1290,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
                                    type), "metaEX_criteria.fst")
-
-            meta_tmp = filter(codes_selection_data, code %in% meta$code)
-            write_tibble(meta_tmp,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type),
-                         paste0("meta_", subset_name, ".fst"))
         }
     }
 

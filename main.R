@@ -214,7 +214,7 @@ to_do = c(
     # 'read_saving'
 
     ## all
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -471,13 +471,13 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     c(
         # "all"
-        "K298191001" #ref
+        # "K298191001" #ref
         # "K294401001"
         # "O036251010"
         # "A105003001"
         # "^H"
         # "^D"
-        # "^K29"
+        "^K29"
         # "^K"
         
         # "A882000101"
@@ -1899,6 +1899,10 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                     extract_data =
                         extract_data_save[grepl("serie",
                                                 extract_data_save)]
+                    variable2search = c('meta[.]',
+                                        'dataEX',
+                                        'metaEX')
+                    
                     Code_selection = CodeSUB10
                     
                     source(file.path(lib_path, 'script_management.R'),
@@ -1968,10 +1972,13 @@ if (any(c('create_data', 'extract_data', 'save_extract',
 }
 
 
-# summarise(group_by(filter(dataEX_serie$QA, historical[1]<=date&date<=historical[2] & code == "K294401001"), HM), meanQA=mean(QA, na.rm=TRUE))
 
 if ('find_chain_out' %in% to_do |
-    'reshape_extracted_data_for_figure' %in% to_do) {
+    'reshape_extracted_data_for_figure' %in% to_do
+    ## to rm
+    # & FALSE #####
+    ##
+    ) {
     ## to rm 
     # extract_data_save = extract_data #####
     # to_do_save = to_do #####
@@ -1983,7 +1990,8 @@ if ('find_chain_out' %in% to_do |
         to_do = c(to_do_save, 'read_saving')
         extract_data = extract_data_save[grepl("criteria",
                                                extract_data_save)]
-    
+        variable2search = c('dataEX', 'metaEX')
+        
         source(file.path(lib_path, 'script_management.R'),
                encoding='UTF-8')
 
