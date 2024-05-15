@@ -939,21 +939,22 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 dataEX_tmp_mean$ratio =
                     dataEX_tmp_mean$meanQA / dataEX_tmp_mean$medmeanQA
 
-                dataEX_serieQA_ALL = dplyr::bind_rows(dataEX_serieQA_ALL,
-                                                      dataEX_tmp_mean)
+                # dataEX_serieQA_ALL = dplyr::bind_rows(dataEX_serieQA_ALL,
+                #                                       dataEX_tmp_mean)
                 
-                dataEX_to_remove_tmp =
+                chain_to_remove_tmp =
                     dplyr::filter(dataEX_tmp_mean,
                                   ratio < 1/ratio_lim |
                                   ratio_lim < ratio)
 
-                dataEX_to_remove_tmp = dplyr::select(dataEX_to_remove_tmp,
-                                                     code, Chain,
-                                                     GCM, EXP, RCM,
-                                                     BC, HM)
-                dataEX_to_remove_tmp$on = "serie" 
-                dataEX_to_remove = dplyr::bind_rows(dataEX_to_remove,
-                                                    dataEX_to_remove_tmp)
+                chain_to_remove_tmp =
+                    dplyr::select(chain_to_remove_tmp,
+                                  code, Chain,
+                                  GCM, EXP, RCM,
+                                  BC, HM)
+                chain_to_remove_tmp$on = "serie" 
+                chain_to_remove = dplyr::bind_rows(chain_to_remove,
+                                                    chain_to_remove_tmp)
             } else {
                 stop("You need to have QA variable in dataEX_serie")
             }
@@ -972,21 +973,22 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     dplyr::full_join(dataEX_tmp,
                                      dataEX_tmp_stat,
                                      by="code")
-                dataEX_criteriaQA_ALL =
-                    dplyr::bind_rows(dataEX_criteriaQA_ALL,
-                                     dataEX_tmp)
-                dataEX_to_remove_tmp =
+                # dataEX_criteriaQA_ALL =
+                    # dplyr::bind_rows(dataEX_criteriaQA_ALL,
+                                     # dataEX_tmp)
+                chain_to_remove_tmp =
                     dplyr::filter(dataEX_tmp,
                                   deltaQA_H3 < medQA-fact*stdQA |
                                   medQA+fact*stdQA < deltaQA_H3)
 
-                dataEX_to_remove_tmp = dplyr::select(dataEX_to_remove_tmp,
-                                                     code, Chain,
-                                                     GCM, EXP, RCM,
-                                                     BC, HM)
-                dataEX_to_remove_tmp$on = "criteria"
-                dataEX_to_remove = dplyr::bind_rows(dataEX_to_remove,
-                                                    dataEX_to_remove_tmp)
+                chain_to_remove_tmp =
+                    dplyr::select(chain_to_remove_tmp,
+                                  code, Chain,
+                                  GCM, EXP, RCM,
+                                  BC, HM)
+                chain_to_remove_tmp$on = "criteria"
+                chain_to_remove = dplyr::bind_rows(chain_to_remove,
+                                                    chain_to_remove_tmp)
             } else {
                 stop("You need to have deltaQA_H3 variable in dataEX_criteria")
             }
@@ -995,8 +997,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
 
     if ('add_more_info_to_metadata' %in% to_do) {
-        Projections = Projections[Projections$EXP != "SAFRAN",]
-        DirPaths = Projections$path
+        DirPaths = filter(Projections, EXP != "SAFRAN")$path
         nDirPath = length(DirPaths)
         
         meta_ALL = dplyr::tibble()
@@ -1019,34 +1020,31 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                  "surface_MORDOR_TS_km2"=
                                      "surface_MORDOR-TS_km2")
 
-        meta_ALL =
-            dplyr::mutate(
-                       meta_ALL,
-                       n_input_CTRIP=as.numeric(!is.na(surface_CTRIP_km2)),
-                       n_input_EROS=as.numeric(!is.na(surface_EROS_km2)),
-                       n_input_GRSD=as.numeric(!is.na(surface_GRSD_km2)),
-                       n_input_J2000=as.numeric(!is.na(surface_J2000_km2)),
-                       n_input_MORDOR_SD=as.numeric(!is.na(surface_MORDOR_SD_km2)),
-                       n_input_MORDOR_TS=as.numeric(!is.na(surface_MORDOR_TS_km2)),
-                       n_input_ORCHIDEE=as.numeric(!is.na(surface_ORCHIDEE_km2)),
-                       n_input_SIM2=as.numeric(!is.na(surface_SIM2_km2)),
-                       n_input_SMASH=as.numeric(!is.na(surface_SMASH_km2)))
-        meta_ALL =
-            dplyr::mutate(meta_ALL,
-                          n_input=n_input_CTRIP + n_input_EROS + n_input_GRSD +
-                              n_input_J2000 + n_input_MORDOR_SD + n_input_MORDOR_TS +
-                              n_input_ORCHIDEE + n_input_SIM2 + n_input_SMASH)
+        HM_mod = gsub("[-]", "_", unique(Projections$HM))
+
+        for (hm in HM_mod) {
+            meta_ALL =
+                dplyr::mutate(
+                           meta_ALL,
+                           !!paste0("n_", hm):=
+                               as.numeric(!is.na(get(paste0("surface_",
+                                                            hm, "_km2")))))
+        }
+        meta_ALL = mutate(meta_ALL,
+                          n=rowSums(select(meta_ALL, starts_with("n_")),
+                                    na.rm=TRUE))
+
         meta_ALL = dplyr::relocate(meta_ALL,
-                                   n_input, .before=code)
+                                   n, .before=code)
         meta_ALL = left_join(meta_ALL,
-                             select(codes_selection_data, code, n_raw_input=n),
+                             select(codes_selection_data, code, n_input=n),
                              by="code")
 
-        if (!all(meta_ALL$n_raw_input == meta_ALL$n_input)) {
+        if (!all(meta_ALL$n == meta_ALL$n_input)) {
             stop("issue with n")
         }
 
-        meta_ALL = select(meta_ALL, -n_raw_input)
+        meta_ALL = select(meta_ALL, -n_input)
         meta_ALL$is_reference = as.logical(meta_ALL$reference)
         meta_ALL = dplyr::select(meta_ALL, -reference)
         meta_ALL =
@@ -1086,31 +1084,36 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                         mode,
                                                         type),
                                       filename="chain_to_remove.csv")
-        N_max = tibble(HM=c("CTRIP", "EROS", "GRSD",
-                            "J2000", "MORDOR-SD", "MORDOR-TS",
-                            "ORCHIDEE", "SIM2", "SMASH"),
-                       N_max=c(17, 34, 34, 34, 34, 34, 17, 17, 34))
+
+
+        N_max = summarise(group_by(filter(Projections, EXP!="SAFRAN"),
+                                   HM, EXP), N_max=n())        
         N_chain_to_remove =
             summarise(group_by(filter(chain_to_remove, EXP!="SAFRAN"),
-                               code, HM), N=n())
+                               code, HM, EXP), N=n())
         N_chain_to_remove = full_join(N_chain_to_remove,
-                                      N_max, by="HM")
-
+                                      N_max, by=c("HM", "EXP"))
         N_chain_to_remove = filter(N_chain_to_remove,
                                    N > N_max/2)
+        N_chain_to_remove = select(N_chain_to_remove, code, HM, EXP)
+        HM_EXP_code_to_remove = N_chain_to_remove
         N_chain_to_remove$n = -1
-        N_chain_to_remove = select(N_chain_to_remove, code, HM, n)
         N_chain_to_remove = arrange(N_chain_to_remove, HM)
-        
         N_chain_to_remove$HM = gsub("[-]", "_",
                                     N_chain_to_remove$HM)
+        
         N_chain_to_remove =
             tidyr::pivot_wider(N_chain_to_remove,
-                               names_from=HM, values_from=n,
-                               names_glue="n_{HM}",
+                               names_from=c(HM, EXP),
+                               values_from=n,
+                               names_glue=
+                                   "n_{gsub('.*[-]', '', EXP)}_{HM}",
                                values_fill=0)
         N_chain_to_remove = arrange(N_chain_to_remove, code)
-        n_HM = paste0("n_", gsub("[-]", "_", N_max$HM))
+
+        EXP_short = c("rcp26", "rcp45", "rcp85")
+        n_HM = paste0("n_", EXP_short, "_",
+                      gsub("[-]", "_", N_max$HM))
         for (n_hm in n_HM) {
             if (!(n_hm %in% names(N_chain_to_remove))) {
                 N_chain_to_remove[[n_hm]] = 0
@@ -1124,27 +1127,44 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         meta_ALL = mutate(meta_ALL,
                           across(starts_with("n_"),
                                  ~ifelse(is.na(.), 0, .)))
+
+        for (exp in EXP_short) {
+            for (hm in HM_mod) {
+                meta_ALL =
+                    dplyr::mutate(
+                               meta_ALL,
+                               !!paste0("n_", exp, "_", hm):=
+                                   get(paste0("n_", hm)) +
+                                   get(paste0("n_", exp, "_", hm)))
+            }
+            meta_ALL = mutate(meta_ALL,
+                              !!paste0("n_", exp):=
+                                  rowSums(
+                                      select(meta_ALL,
+                                             starts_with(paste0("n_", exp))),
+                                      na.rm=TRUE))
+            meta_ALL = dplyr::relocate(meta_ALL,
+                                       paste0("n_", exp),
+                                       .before=code)
+        }
         
-        meta_ALL =
-            dplyr::mutate(
-                       meta_ALL,
-                       n_CTRIP=n_CTRIP + n_input_CTRIP,
-                       n_EROS=n_EROS + n_input_EROS,
-                       n_GRSD=n_GRSD + n_input_GRSD,
-                       n_J2000=n_J2000 + n_input_J2000,
-                       n_MORDOR_SD=n_MORDOR_SD + n_input_MORDOR_SD,
-                       n_MORDOR_TS=n_MORDOR_TS + n_input_MORDOR_TS,
-                       n_ORCHIDEE=n_ORCHIDEE + n_input_ORCHIDEE,
-                       n_SIM2=n_SIM2 + n_input_SIM2,
-                       n_SMASH=n_SMASH + n_input_SMASH)
-        meta_ALL =
-            dplyr::mutate(meta_ALL,
-                          n=n_CTRIP + n_EROS + n_GRSD +
-                              n_J2000 + n_MORDOR_SD + n_MORDOR_TS +
-                              n_ORCHIDEE + n_SIM2 + n_SMASH)
-        meta_ALL = dplyr::relocate(meta_ALL,
-                                   n, .before=n_input)
+        HM_EXP_code_to_remove =
+            inner_join(select(Projections, GCM, RCM,
+                              EXP, BC, HM, Chain),
+                       HM_EXP_code_to_remove,
+                       by=c("HM", "EXP"),
+                       relationship="many-to-many")
+        HM_EXP_code_to_remove$on = "too much chain already out"
         
+        chain_to_remove = bind_rows(chain_to_remove,
+                                    HM_EXP_code_to_remove)
+        chain_to_remove$code_Chain = paste0(chain_to_remove$code, "_", 
+                                            chain_to_remove$Chain)
+        chain_to_remove = filter(chain_to_remove, !duplicated(code_Chain))
+        
+        write_tibble(chain_to_remove,
+                     filedir=today_resdir,
+                     filename="chain_to_remove_adjust.csv")
         write_tibble(meta_ALL,
                      filedir=today_resdir,
                      filename="stations_selection.csv")
@@ -1155,6 +1175,15 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
     if ('reshape_extracted_data_for_figure' %in% to_do) {
 
         if (any(grepl("serie", extract_data))) {
+            for (k in 1:length(dataEX_serie)) {
+                dataEX_serie[[k]]$code_Chain =
+                    paste0(dataEX_serie[[k]]$code, "_",
+                           dataEX_serie[[k]]$Chain)
+                dataEX_serie[[k]] = filter(dataEX_serie[[k]],
+                                           !(code_Chain %in% chain_to_remove$code_Chain))
+                dataEX_serie[[k]] = select(dataEX_serie[[k]], -code_Chain)
+            }
+            
             write_tibble(dataEX_serie,
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
@@ -1165,30 +1194,31 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
                                    type), "metaEX_serie.fst")
-            meta =
-                mutate(meta,
-                       across(starts_with("surface"),
-                              ~ as.numeric(!is.na(.x)),
-                              .names=
-                                  "is_{gsub('(surface)|([_])|(km2)', '', .col)}"))
-            meta = select(meta, -"is_")
-            meta =
-                mutate(meta,
-                       n=rowSums(select(meta,
-                                        starts_with("is_"))))
-            meta =
-                mutate(meta,
-                       n=rowSums(select(meta, starts_with("is_"))))
-            
-            meta = dplyr::relocate(meta, n, .before=code)
-            write_tibble(meta,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type),
-                         paste0("meta_", subset_name, ".fst"))
+            # meta =
+            #     mutate(meta,
+            #            across(starts_with("surface"),
+            #                   ~ as.numeric(!is.na(.x)),
+            #                   .names=
+            #                       "is_{gsub('(surface)|([_])|(km2)', '', .col)}"))
+            # meta = select(meta, -"is_")
+            # meta =
+            #     mutate(meta,
+            #            n=rowSums(select(meta,
+            #                             starts_with("is_"))))
+            # meta =
+            #     mutate(meta,
+            #            n=rowSums(select(meta, starts_with("is_"))))
+            # meta = dplyr::relocate(meta, n, .before=code)
         }
 
         if (any(grepl("criteria", extract_data))) {
+            dataEX_criteria$code_Chain =
+                paste0(dataEX_criteria$code, "_",
+                       dataEX_criteria$Chain)
+            dataEX_criteria = filter(dataEX_criteria,
+                                     !(code_Chain %in% chain_to_remove$code_Chain))
+            dataEX_criteria = select(dataEX_criteria, -code_Chain)
+
             write_tibble(dataEX_criteria,
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
@@ -1198,6 +1228,13 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
                                    type), "metaEX_criteria.fst")
+
+            meta_tmp = filter(codes_selection_data, code %in% meta$code)
+            write_tibble(meta_tmp,
+                         file.path(resdir,
+                                   paste0(mode, "_for_figure"),
+                                   type),
+                         paste0("meta_", subset_name, ".fst"))
         }
     }
 

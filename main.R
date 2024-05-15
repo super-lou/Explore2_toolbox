@@ -207,14 +207,14 @@ to_do = c(
     # 'extract_data',
     # 'save_extract'
     # 'find_chain_out'
-    'add_more_info_to_metadata'
+    # 'add_more_info_to_metadata'
     # 'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'read_tmp'
     # 'read_saving'
 
     ## all
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -231,20 +231,20 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    # 'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_HF',
     'Explore2_serie_projection_MF',
-    # 'Explore2_serie_projection_LF',
-    # 'Explore2_serie_projection_LF_summer',
+    'Explore2_serie_projection_LF',
+    'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
-    # 'Explore2_serie_projection_medQJ',
+    'Explore2_serie_projection_medQJ',
     # 'Explore2_serie_projection_QM',
     
-    # 'Explore2_criteria_projection_HF',
-    'Explore2_criteria_projection_MF'
-    # 'Explore2_criteria_projection_LF',
-    # 'Explore2_criteria_projection_LF_summer',
+    'Explore2_criteria_projection_HF',
+    'Explore2_criteria_projection_MF',
+    'Explore2_criteria_projection_LF',
+    'Explore2_criteria_projection_LF_summer'
     # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
 )
@@ -413,13 +413,13 @@ projs_type =
 
 projections_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
         ## figure ##
-        # "rcp85",
-        # "SAFRAN"
+        "rcp85",
+        "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -470,8 +470,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        "all"
-        # "K298191001" #ref
+        # "all"
+        "K298191001" #ref
         # "K294401001"
         # "O036251010"
         # "A105003001"
@@ -497,8 +497,8 @@ codes_to_use =
         # "Moselle"="A886006000"
     )
 n_projections_by_code =
-    NULL
-    # 4
+    # NULL
+    4
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
@@ -530,16 +530,16 @@ variables_to_use =
         # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
 
         ## to find out chain ##
-        "^QA$", "^deltaQA_H3$"
+        # "^QA$", "^deltaQA_H3$"
         
         ## fiche resultats ##
-        # "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
+        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
         
-        # "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
+        "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
 
-        # "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
+        "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
 
-        # "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
+        "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
         ## MEANDRE ##
         # "^QJXA$",
@@ -1485,11 +1485,14 @@ if (type == "hydrologie") {
                                   levels=projections_to_use))
 
         Projections$storylines = ""
-        ok = match(names(storylines),
-                   Projections$climateChain)
-        Projections$storylines[ok[!is.na(ok)]] =
-            storylines[!is.na(ok)]
-
+        for (s in 1:length(storylines)) {
+            OK = Projections$climateChain == names(storylines[s])
+            if (!any(OK)) {
+                next
+            }
+            Projections$storylines[OK] = storylines[s]
+        }
+        
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
 
@@ -1520,6 +1523,7 @@ if (type == "hydrologie") {
     nFiles_to_use = length(files_to_use)
 
     if (projs_type != "extracted" |
+        'find_chain_out' %in% to_do |
         'add_more_info_to_metadata' %in% to_do) {
         codes_selection_data = read_tibble(file.path(
             computer_data_path, type,
@@ -1559,7 +1563,7 @@ if (type == "hydrologie") {
         chain_to_remove =
             read_tibble(filedir=file.path(resdir,
                                           mode, type),
-                        filename="chain_to_remove.csv")
+                        filename="chain_to_remove_adjust.csv")
     }
 
     if (grepl("diagnostic", mode)) {
@@ -1776,9 +1780,10 @@ if ('reshape_piezo_data' %in% to_do) {
 }
 
 if ('find_chain_out' %in% to_do) {
-    dataEX_to_remove = dplyr::tibble()
-    dataEX_serieQA_ALL = dplyr::tibble()
-    dataEX_criteriaQA_ALL = dplyr::tibble()
+    variable2search = 'dataEX'
+    chain_to_remove = dplyr::tibble()
+    # dataEX_serieQA_ALL = dplyr::tibble()
+    # dataEX_criteriaQA_ALL = dplyr::tibble()
 }
     
 
@@ -1882,13 +1887,11 @@ if (any(c('create_data', 'extract_data', 'save_extract',
 
                 if ('find_chain_out' %in% to_do |
                     'reshape_extracted_data_for_figure' %in% to_do
-                    
                     ## to rm
                     # & FALSE #####
                     ## 
                     ) {
                     if (ss == 1) {
-                        # extract_data_save = extract_data
                         to_do_save = to_do
                     }
                     to_do = c(to_do_save,
@@ -1987,18 +1990,18 @@ if ('find_chain_out' %in% to_do |
         to_do = to_do_save
     }
 
-    OK = !duplicated(paste0(dataEX_to_remove$code,
-                            dataEX_to_remove$Chain))
-    dataEX_to_remove = dataEX_to_remove[OK,]
-    
-    write_tibble(dataEX_serieQA_ALL, today_resdir,
-                 "dataEX_serieQA_ALL.fst")
-    write_tibble(dataEX_criteriaQA_ALL, today_resdir,
-                 "dataEX_criteriaQA_ALL.fst")
-    write_tibble(dataEX_to_remove, today_resdir,
-                 "chain_to_remove.fst")
-    write_tibble(dataEX_to_remove, today_resdir,
-                 "chain_to_remove.csv")
+    if ('find_chain_out' %in% to_do) {
+        OK = !duplicated(paste0(chain_to_remove$code,
+                                chain_to_remove$Chain))
+        chain_to_remove = chain_to_remove[OK,]
+        
+        # write_tibble(dataEX_serieQA_ALL, today_resdir,
+        # "dataEX_serieQA_ALL.fst")
+        # write_tibble(dataEX_criteriaQA_ALL, today_resdir,
+        # "dataEX_criteriaQA_ALL.fst")
+        write_tibble(chain_to_remove, today_resdir,
+                     "chain_to_remove.csv")
+    }
 }
 
 
