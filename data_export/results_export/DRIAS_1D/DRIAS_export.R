@@ -170,7 +170,6 @@ post(paste0(Chain_dirpath, collapse=" "))
 nChain_dirpath = length(Chain_dirpath)
 
 
-
 ## PROCESS ___________________________________________________________
 for (i in 1:nChain_dirpath) {
     if (nChain_dirpath == 0) {
@@ -184,7 +183,8 @@ for (i in 1:nChain_dirpath) {
     regexp = gsub("historical[[][-][]]", "",
                   Projection$regexp[Projection$dir ==
                                     basename(chain_dirpath)])
-    data_path = data_Paths[grepl(regexp, basename(data_Paths))]
+    data_paths = data_Paths[grepl(regexp, basename(data_Paths))]
+    data_path = data_paths[1]
     NC = ncdf4::nc_open(data_path)
 
     Var_path = list.files(chain_dirpath,
@@ -363,7 +363,7 @@ for (i in 1:nChain_dirpath) {
             dir.create(out_dir)
         }
 
-        generate_NCf(out_dir=out_dir, verbose=TRUE)
+        generate_NCf(out_dir=out_dir, verbose=FALSE)
     }
 
     ncdf4::nc_close(NC)
