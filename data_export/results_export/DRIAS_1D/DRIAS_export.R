@@ -46,6 +46,18 @@ verbose = TRUE
 
 
 ## MPI _______________________________________________________________
+post = function(x, ...) {
+    if (verbose) {
+        if (MPI != "") {
+            print(paste0(formatC(as.character(rank),
+                                 width=3, flag=" "),
+                         "/", size-1, " > ", x), ...)
+        } else {
+            print(x, ...)
+        }
+    }
+}
+
 if (MPI != "") {
     library(Rmpi)
     rank = mpi.comm.rank(comm=0)
@@ -70,7 +82,7 @@ if (MPI != "") {
         Rrank = 0
     }
     print(Rrank)
-    ASHE::post(paste0("Random rank attributed : ", Rrank))
+    post(paste0("Random rank attributed : ", Rrank))
     
 } else {
     rank = 0
@@ -141,7 +153,7 @@ if (MPI == "file") {
         end = c(start[-1]-1, nChain_dirpath)
     }
     if (rank == 0) {
-        ASHE::post(paste0(paste0("rank ", 0:(size-1), " get ",
+        post(paste0(paste0("rank ", 0:(size-1), " get ",
                                  end-start+1, " files"),
                           collapse="    "))
     }
@@ -162,7 +174,7 @@ for (i in 1:nChain_dirpath) {
     }
     chain_dirpath =  Chain_dirpath[i]
 
-    ASHE::post(paste0("* ", i, " -> ",
+    post(paste0("* ", i, " -> ",
                       round(i/nChain_dirpath*100, 1), "%"))
 
     regexp = gsub("historical[[][-][]]", "",
@@ -190,7 +202,7 @@ for (i in 1:nChain_dirpath) {
         var_path = Var_path[j]
         var = gsub("[.]fst", "", basename(var_path))
 
-        ASHE::post(paste0("** ", j, " -> ",
+        post(paste0("** ", j, " -> ",
                           round(j/nVar_path*100, 1), "%"))
         
         if (is_month_done & grepl(Month_pattern, var)) {
