@@ -30,6 +30,7 @@ computer = Sys.info()["nodename"]
 
 if (grepl("botan", computer)) {
     out_dir = "NetCDF"
+    script_dirpath = "."
     data_dirpath = "/home/louis/Documents/bouleau/INRAE/data/Explore2/hydrologie/projection_merge"
     results_dirpath = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/results/projection/hydrologie"
     MPI = ""
@@ -37,10 +38,16 @@ if (grepl("botan", computer)) {
 
 if (grepl("spiritx", computer)) {
     out_dir = "/scratchx/lheraut/NetCDF"
+    script_dirpath = "/home/lheraut/library/Explore2_toolbox/data_export/results_export/DRIAS_1D"
     data_dirpath = "/scratchx/lheraut/data/Explore2/hydrologie/projection_merge"
     results_dirpath = "/scratchx/lheraut/projection"
     MPI = "file"
 }
+
+meta_projection_file = "tableau_metadata_EXPLORE2.csv"
+Projection_file = "projections_selection.csv"
+chain_to_remove_file = "chain_to_remove_adjust.csv"
+meta_ALL_file = "stations_selection.csv"
 
 verbose = TRUE
 
@@ -113,12 +120,9 @@ Month_pattern = paste0("(", paste0(Month, collapse=")|("), ")")
 
 date_min = "1975-01-01"
 
-meta_projection_file = "tableau_metadata_EXPLORE2.csv"
-Projection_file = "projections_selection.csv"
-chain_to_remove_file = "chain_to_remove_adjust.csv"
-meta_ALL_file = "stations_selection.csv"
 
-meta_projection = ASHE::read_tibble(meta_projection_file)
+meta_projection = ASHE::read_tibble(file.path(script_dirpath,
+                                              meta_projection_file))
 Projection = ASHE::read_tibble(file.path(results_dirpath,
                                          Projection_file))
 chain_to_remove = ASHE::read_tibble(file.path(results_dirpath,
