@@ -81,7 +81,6 @@ if (MPI != "") {
     } else {
         Rrank = 0
     }
-    print(Rrank)
     post(paste0("Random rank attributed : ", Rrank))
     
 } else {
