@@ -166,9 +166,9 @@ if (MPI == "file") {
         Chain_dirpath = Chain_dirpath[start[Rrank+1]:end[Rrank+1]]
     }
 }
-
+post(paste0(Chain_dirpath, collapse=" "))
 nChain_dirpath = length(Chain_dirpath)
-post(paste0(nChain_dirpath, collapse=" "))
+
 
 
 ## PROCESS ___________________________________________________________
