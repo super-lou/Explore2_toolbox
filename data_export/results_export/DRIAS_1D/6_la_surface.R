@@ -41,22 +41,30 @@
 
 # 1. TOPOLOGICAL SURFACE OF STATION __________________________________
 ## 1.1. Real _________________________________________________________
-NCf$topologicalSurface.name = "topologicalSurface"
-NCf$topologicalSurface.dimension = "station"
-NCf$topologicalSurface.precision = "double"
-NCf$topologicalSurface.value =
-    ncdf4::ncvar_get(NC, "topologicalSurface")[idCode_match]
-NCf$topologicalSurface.01.long_name =
-    "topological surface of the watershed"
-NCf$topologicalSurface.02.units = "km2"
+surface = c("topologicalSurface", "surface")
+if (any(surface %in% names(NC$var))) {
+    NCf$topologicalSurface.name = "topologicalSurface"
+    NCf$topologicalSurface.dimension = "station"
+    NCf$topologicalSurface.precision = "double"
+    NCf$topologicalSurface.value =
+        ncdf4::ncvar_get(NC, surface[surface %in%
+                                     names(NC$var)])[idCode_match]
+    NCf$topologicalSurface.01.long_name =
+        "topological surface of the watershed"
+    NCf$topologicalSurface.02.units = "km2"
+}
 
 ## 1.2. Model ________________________________________________________
-NCf$topologicalSurface_model.name =
-    "topologicalSurface_model"
-NCf$topologicalSurface_model.dimension = "station"
-NCf$topologicalSurface_model.precision = "double"
-NCf$topologicalSurface_model.value =
-    ncdf4::ncvar_get(NC, "topologicalSurface_model")[idCode_match]
-NCf$topologicalSurface_model.01.long_name =
-    "topological surface of the watershed in the model world"
-NCf$topologicalSurface_model.02.units = "km2"
+surface_model = c("topologicalSurface_model", "surface_model")
+if (any(surface_model %in% names(NC$var))) {
+    NCf$topologicalSurface_model.name =
+        "topologicalSurface_model"
+    NCf$topologicalSurface_model.dimension = "station"
+    NCf$topologicalSurface_model.precision = "double"
+    NCf$topologicalSurface_model.value =
+        ncdf4::ncvar_get(NC, surface_model[surface_model %in%
+                                           names(NC$var)])[idCode_match]
+    NCf$topologicalSurface_model.01.long_name =
+        "topological surface of the watershed in the model world"
+    NCf$topologicalSurface_model.02.units = "km2"
+}
