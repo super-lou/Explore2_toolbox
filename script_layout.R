@@ -91,15 +91,23 @@ plot_sheet_projection_station = function (Code_to_plot,
                                           "metaEX_serie.fst")
             metaEX_serie_tmp = read_tibble(metaEX_serie_path)
 
+            code_letter = substr(Code_tmp[1], 1, 1)
             dataEX_criteria_path = file.path(dirname(path),
                                              paste0("dataEX_criteria_",
-                                                    substr(Code_tmp[1],
-                                                           1, 1),
+                                                    code_letter,
                                                     ".fst"))
             dataEX_criteria_tmp = read_tibble(dataEX_criteria_path)
             metaEX_criteria_path = file.path(dirname(path),
                                              "metaEX_criteria.fst")
             metaEX_criteria_tmp = read_tibble(metaEX_criteria_path)
+
+            data_QUALYPSO_path =
+                file.path(dirname(path),
+                          paste0(gsub("EX[_]serie",
+                                      "_QUALYPSO",
+                                      basename(path)),
+                                 ".fst"))
+            data_QUALYPSO_tmp = read_tibble(data_QUALYPSO_path)
 
             Pages = sheet_projection_station(
                 meta_tmp,
@@ -107,6 +115,7 @@ plot_sheet_projection_station = function (Code_to_plot,
                 metaEX_serie_tmp,
                 dataEX_criteria_tmp,
                 metaEX_criteria_tmp,
+                data_QUALYPSO_tmp,
                 Colors=Colors_of_storylines,
                 Colors_light=Colors_light_of_storylines,
                 Names=storylines,

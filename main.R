@@ -214,7 +214,7 @@ to_do = c(
     # 'read_saving'
 
     ## all
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -471,13 +471,13 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     c(
         # "all"
-        # "K298191001" #ref
+        "K298191001" #ref
         # "K294401001"
         # "O036251010"
         # "A105003001"
         # "^H"
         # "^D"
-        "^K29"
+        # "^K29"
         # "^K"
         
         # "A882000101"
@@ -915,7 +915,7 @@ toleranceRel =
 
 # Which logo do you want to show in the footnote
 logo_info = list(
-    "EX2"=c(file='LogoExplore2.png', y=0.4, height=0.8, width=1)
+    "EX2"=c(file='LogoExplore2.png', y=0.4, height=0.8, width=0.5)
 )
 
 # Probability used to define the min and max quantile needed for
