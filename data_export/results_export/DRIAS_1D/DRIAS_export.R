@@ -168,6 +168,7 @@ if (MPI == "file") {
 }
 
 nChain_dirpath = length(Chain_dirpath)
+post(paste0(nChain_dirpath, collapse=" "))
 
 
 ## PROCESS ___________________________________________________________
