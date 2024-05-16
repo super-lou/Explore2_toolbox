@@ -355,14 +355,14 @@ for (i in 1:nChain_dirpath) {
                                full.names=TRUE)
         list_path = list_path[!grepl("DRIAS_export.R", list_path)]
         for (path in list_path) {
-            source(path, encoding='UTF-8')    
+            source(path, encoding='UTF-8')   
         }
 
         if (!(file.exists(out_dir))) {
             dir.create(out_dir)
         }
 
-        generate_NCf(out_dir=out_dir, verbose=FALSE)
+        generate_NCf(out_dir=out_dir, verbose=TRUE)
     }
 
     ncdf4::nc_close(NC)
