@@ -350,7 +350,9 @@ for (i in 1:nChain_dirpath) {
 
         initialise_NCf()
 
-        list_path = list.files(getwd(), pattern='*.R$', full.names=TRUE)
+        list_path = list.files(script_dirpath,
+                               pattern='*.R$',
+                               full.names=TRUE)
         list_path = list_path[!grepl("DRIAS_export.R", list_path)]
         for (path in list_path) {
             source(path, encoding='UTF-8')    
