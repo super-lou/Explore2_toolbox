@@ -166,8 +166,13 @@ if (MPI == "file") {
         Chain_dirpath = Chain_dirpath[start[Rrank+1]:end[Rrank+1]]
     }
 }
+
+
 post(paste0(Chain_dirpath, collapse=" "))
 nChain_dirpath = length(Chain_dirpath)
+
+
+# stop()
 
 
 ## PROCESS ___________________________________________________________
@@ -197,7 +202,7 @@ for (i in 1:nChain_dirpath) {
     nVar_path = length(Var_path)
     
     is_month_done = FALSE
-    
+
     for (j in 1:nVar_path) {
         ###
         # var_path = Var_path[grepl("QSA_JJA", Var_path)]
@@ -349,6 +354,8 @@ for (i in 1:nChain_dirpath) {
         dataEX_matrix = dplyr::select(dataEX_matrix, -date)
         dataEX_matrix = t(as.matrix(dataEX_matrix))
 
+        
+        ##
         initialise_NCf()
 
         list_path = list.files(script_dirpath,

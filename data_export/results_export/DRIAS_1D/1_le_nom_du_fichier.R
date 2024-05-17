@@ -34,8 +34,11 @@
 #     Indicator_TimeFrequency_StartTime-EndTime_Domain_ModelXXX.nc
 
 projection_ok =
-    grepl(dataEX$GCM[1], meta_projection$gcm.short) &
-    grepl(dataEX$RCM[1], meta_projection$rcm.short)
+    grepl(dataEX$GCM[1], meta_projection$gcm) &
+    grepl(dataEX$RCM[1], meta_projection$rcm)
+if (!any(projection_ok)) {
+    stop(paste0(dataEX$GCM[1], " ", dataEX$RCM[1]))
+}
 
 ## 1. Indicateur _____________________________________________________
 # Le nom de l’indicateur
