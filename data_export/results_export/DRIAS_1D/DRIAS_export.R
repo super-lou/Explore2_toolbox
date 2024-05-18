@@ -308,8 +308,6 @@ for (i in 1:nChain_dirpath) {
             is_month_done = TRUE
             timestep = "month"
 
-            print(dplyr::filter(dataEX, code=="K127311001"), n=Inf)
-            
         } else {
             dataEX = ASHE::read_tibble(var_path)
             dataEX = add_chain(dataEX)
@@ -411,9 +409,6 @@ for (i in 1:nChain_dirpath) {
         # }
 
         
-        print(dplyr::filter(dataEX, code=="K127311001"), n=Inf)
-
-        
         Code = levels(factor(dataEX$code))
         
         dataEX_matrix = dplyr::select(dataEX, code, date,
@@ -425,6 +420,8 @@ for (i in 1:nChain_dirpath) {
         dataEX_matrix = dplyr::select(dataEX_matrix, -date)
         dataEX_matrix = t(as.matrix(dataEX_matrix))
 
+
+        print(dataEX_matrix[Code=="K127311001",])
         
         ###
         initialise_NCf()
