@@ -194,6 +194,7 @@ for (i in 1:nChain_dirpath) {
 
     post(paste0("* ", i, " -> ",
                 round(i/nChain_dirpath*100, 1), "%"))
+    post(chain_dirpath)
     
     regexp = gsub("historical[[][-][]]", "",
                   Projection$regexp[Projection$dir ==
@@ -223,6 +224,7 @@ for (i in 1:nChain_dirpath) {
 
         post(paste0("** ", j, " -> ",
                           round(j/nVar_path*100, 1), "%"))
+        post(var_path)
         
         if (is_month_done & grepl(Month_pattern, var)) {
             next
