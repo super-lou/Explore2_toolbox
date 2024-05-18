@@ -93,9 +93,7 @@ to = as.Date(max(Date))
 origin = as.Date("1950-01-01")
 units = paste0("days since ", origin)
 time = seq.Date(from=from, to=to, by=timestep)
-# print(tail(time))
 time = as.integer(time - origin)
-# print(tail(time))
 
 
 NCf$time.name = "time"

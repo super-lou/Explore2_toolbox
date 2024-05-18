@@ -98,6 +98,46 @@ if (MPI != "") {
     Rrank = 0
 }
 
+## Tool ______________________________________________________________
+add_chain = function (dataEX) {
+    if ("GCM" %in% names(dataEX)) {
+        dataEX = tidyr::unite(dataEX,
+                              "Chain",
+                              "GCM", "EXP",
+                              "RCM", "BC",
+                              "HM", sep="|",
+                              remove=FALSE)
+    } else {
+        dataEX = tidyr::unite(dataEX,
+                              "Chain",
+                              "EXP", "HM", sep="|",
+                              remove=FALSE)
+    }
+    return (dataEX) 
+}
+
+debug_years = function (dataEX, var) {
+    Date = seq.Date(min(dataEX$date),
+                    max(dataEX$date),
+                    by="years")
+    tmp = dplyr::distinct(dplyr::select(dataEX, -date))
+    tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
+                         date=Date)
+
+    if (nrow(tmp) != nrow(dataEX)) {
+        dataEX = dplyr::select(dataEX, Chain, code, date,
+                               dplyr::all_of(var))
+        dataEX = dplyr::full_join(dataEX, tmp,
+                                  by=c("Chain", "code", "date"))
+        dataEX = tidyr::separate(dataEX, "Chain",
+                                 c("GCM", "EXP",
+                                   "RCM", "BC",
+                                   "HM"), sep="[|]",
+                                 remove=FALSE)
+        dataEX = dplyr::arrange(dataEX, Chain, code, date)
+    }
+    return (dataEX)
+}
 
 
 ## INTRO _____________________________________________________________
@@ -171,59 +211,18 @@ if (MPI == "file") {
 
 # EC-EARTH_historical-rcp26_HadREM3-GA7_ADAMONT_EROS
 ### /!\ ###
-OK = grepl("ADAMONT", Chain_dirpath) &
-    grepl("rcp26", Chain_dirpath) &
-    grepl("EARTH", Chain_dirpath) &
-    grepl("HadREM3", Chain_dirpath) &
-    grepl("EROS", Chain_dirpath)
-Chain_dirpath = Chain_dirpath[OK] 
+# OK = grepl("ADAMONT", Chain_dirpath) &
+#     grepl("rcp26", Chain_dirpath) &
+#     grepl("EARTH", Chain_dirpath) &
+#     grepl("HadREM3", Chain_dirpath) &
+#     grepl("EROS", Chain_dirpath)
+# Chain_dirpath = Chain_dirpath[OK] 
 ###########
 
 nChain_dirpath = length(Chain_dirpath)
 
 
 # stop()
-
-add_chain = function (dataEX) {
-    if ("GCM" %in% names(dataEX)) {
-        dataEX = tidyr::unite(dataEX,
-                              "Chain",
-                              "GCM", "EXP",
-                              "RCM", "BC",
-                              "HM", sep="|",
-                              remove=FALSE)
-    } else {
-        dataEX = tidyr::unite(dataEX,
-                              "Chain",
-                              "EXP", "HM", sep="|",
-                              remove=FALSE)
-    }
-    return (dataEX) 
-}
-
-debug_years = function (dataEX, var) {
-    Date = seq.Date(min(dataEX$date),
-                    max(dataEX$date),
-                    by="years")
-    tmp = dplyr::distinct(dplyr::select(dataEX, -date))
-    tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
-                         date=Date)
-
-    if (nrow(tmp) != nrow(dataEX)) {
-        dataEX = dplyr::select(dataEX, Chain, code, date,
-                               dplyr::all_of(var))
-        dataEX = dplyr::full_join(dataEX, tmp,
-                                  by=c("Chain", "code", "date"))
-        dataEX = tidyr::separate(dataEX, "Chain",
-                                 c("GCM", "EXP",
-                                   "RCM", "BC",
-                                   "HM"), sep="[|]",
-                                 remove=FALSE)
-        dataEX = dplyr::arrange(dataEX, Chain, code, date)
-    }
-    return (dataEX)
-}
-
 
 ## PROCESS ___________________________________________________________
 for (i in 1:nChain_dirpath) {
@@ -253,7 +252,7 @@ for (i in 1:nChain_dirpath) {
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
 
     ### /!\ ###
-    Var_path = Var_path[grepl("QMA", Var_path)]
+    # Var_path = Var_path[grepl("QMA", Var_path)]
     ###########
     nVar_path = length(Var_path)
     
@@ -264,7 +263,6 @@ for (i in 1:nChain_dirpath) {
 
         post(paste0("** ", j, " -> ",
                           round(j/nVar_path*100, 1), "%"))
-        post(var_path)
         
         if (is_month_done & grepl(Month_pattern, var)) {
             next
@@ -421,9 +419,6 @@ for (i in 1:nChain_dirpath) {
         dataEX_matrix = t(as.matrix(dataEX_matrix))
 
 
-        # id=which(lubridate::month(Date) == 4)
-        # print(dataEX_matrix[Code=="K127311001",id])
-        
         ###
         initialise_NCf()
 
@@ -444,9 +439,8 @@ for (i in 1:nChain_dirpath) {
                                verbose=FALSE)
         
         ### verif ###
-        # NC_path = gsub("[.]nc", "_MESO.nc", NC_path)
         NC_test = ncdf4::nc_open(NC_path)
-        code_test = "K127311001"#Code[runif(1, 1, length(Code))]
+        code_test = Code[runif(1, 1, length(Code))]
         Code_test = ncdf4::ncvar_get(NC_test, "code")
         Date_test = ncdf4::ncvar_get(NC_test, "time") +
             as.Date("1950-01-01")
