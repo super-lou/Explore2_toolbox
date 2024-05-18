@@ -167,12 +167,14 @@ if (MPI == "file") {
     }
 }
 
+
+
 ### /!\ ###
-# OK = grepl("EROS", Chain_dirpath) &
-#     grepl("HadGEM2", Chain_dirpath) &
+# OK = grepl("ADAMONT", Chain_dirpath) &
 #     grepl("rcp26", Chain_dirpath) &
-#     grepl("CDFt", Chain_dirpath) &
-#     grepl("HadREM3", Chain_dirpath)
+#     grepl("CNRM", Chain_dirpath) &
+#     grepl("ALADIN63", Chain_dirpath) &
+#     grepl("MORDOR-TS", Chain_dirpath)
 # Chain_dirpath = Chain_dirpath[OK] 
 ###########
 
@@ -416,21 +418,19 @@ for (i in 1:nChain_dirpath) {
         L93_X_test = ncdf4::ncvar_get(NC_test, "L93_X")[id_code]
 
         meta_ALL_test = dplyr::filter(meta_ALL, code==code_test)
-        hm_test = dataEX_test$HM[1]
+        hm_test = gsub("[-]", "_", dataEX_test$HM[1])
         surface_var = paste0("surface_", hm_test, "_km2")
 
-        valEX = round(dataEX_test[[var]], 3)
+        valEX = dataEX_test[[var]]
         dateEX = dataEX_test$date
         dateEX = dateEX[!is.na(valEX)]
         valEX = valEX[!is.na(valEX)]
         
-        valNC = round(Value_test, 3)
-        dateNC = Date_test
-        dateNC = dateNC[!is.na(valNC)]
-        valNC = valNC[!is.na(valNC)]
+        Date_test = Date_test[!is.na(Value_test)]
+        Value_test = Value_test[!is.na(Value_test)]
         
-        ok1 = all(dateEX == dateNC)
-        ok2 = all(valEX == valNC)
+        ok1 = all(dateEX == Date_test)
+        ok2 = all.equal(valEX, Value_test, 0.001)
         ok3 = all.equal(meta_ALL_test[[surface_var]],
                         surface_test,
                         0.1)
