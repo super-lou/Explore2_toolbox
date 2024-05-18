@@ -169,20 +169,61 @@ if (MPI == "file") {
     }
 }
 
+
 # EC-EARTH_historical-rcp26_HadREM3-GA7_ADAMONT_EROS
 ### /!\ ###
-# OK = grepl("EARTH", Chain_dirpath) &
-#     grepl("rcp26", Chain_dirpath) &
-#     grepl("HadREM3", Chain_dirpath) &
-#     grepl("ADAMONT", Chain_dirpath) &
-#     grepl("EROS", Chain_dirpath)
-# Chain_dirpath = Chain_dirpath[OK] 
+OK = grepl("ADAMONT", Chain_dirpath) &
+    grepl("rcp26", Chain_dirpath) &
+    grepl("EARTH", Chain_dirpath) &
+    grepl("HadREM3", Chain_dirpath) &
+    grepl("EROS", Chain_dirpath)
+Chain_dirpath = Chain_dirpath[OK] 
 ###########
 
 nChain_dirpath = length(Chain_dirpath)
 
 
 # stop()
+
+add_chain = function (dataEX) {
+    if ("GCM" %in% names(dataEX)) {
+        dataEX = tidyr::unite(dataEX,
+                              "Chain",
+                              "GCM", "EXP",
+                              "RCM", "BC",
+                              "HM", sep="|",
+                              remove=FALSE)
+    } else {
+        dataEX = tidyr::unite(dataEX,
+                              "Chain",
+                              "EXP", "HM", sep="|",
+                              remove=FALSE)
+    }
+    return (dataEX) 
+}
+
+debug_years = function (dataEX, var) {
+    Date = seq.Date(min(dataEX$date),
+                    max(dataEX$date),
+                    by="years")
+    tmp = dplyr::distinct(dplyr::select(dataEX, -date))
+    tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
+                         date=Date)
+
+    if (nrow(tmp) != nrow(dataEX)) {
+        dataEX = dplyr::select(dataEX, Chain, code, date,
+                               dplyr::all_of(var))
+        dataEX = dplyr::full_join(dataEX, tmp,
+                                  by=c("Chain", "code", "date"))
+        dataEX = tidyr::separate(dataEX, "Chain",
+                                 c("GCM", "EXP",
+                                   "RCM", "BC",
+                                   "HM"), sep="[|]",
+                                 remove=FALSE)
+        dataEX = dplyr::arrange(dataEX, Chain, code, date)
+    }
+    return (dataEX)
+}
 
 
 ## PROCESS ___________________________________________________________
@@ -213,7 +254,7 @@ for (i in 1:nChain_dirpath) {
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
 
     ### /!\ ###
-    # Var_path = Var_path[grepl("QMA", Var_path)]
+    Var_path = Var_path[grepl("QMA", Var_path)]
     ###########
     nVar_path = length(Var_path)
     
@@ -256,6 +297,8 @@ for (i in 1:nChain_dirpath) {
                                                   var_month),
                                         ".fst")
                 dataEX_tmp = ASHE::read_tibble(var_month_path)
+                dataEX_tmp = add_chain(dataEX_tmp)
+                dataEX_tmp = debug_years(dataEX_tmp, var_month)
                 dataEX_tmp = dplyr::rename(dataEX_tmp,
                                            !!var_no_pattern:=
                                                dplyr::all_of(var_month))
@@ -268,6 +311,7 @@ for (i in 1:nChain_dirpath) {
             
         } else {
             dataEX = ASHE::read_tibble(var_path)
+            dataEX = add_chain(dataEX)
             dataEX = dplyr::filter(dataEX, date_min <= date)
 
             exp = gsub(".*[-]", "", dataEX$EXP[1])
@@ -291,6 +335,9 @@ for (i in 1:nChain_dirpath) {
                                   start=metaEX_var$sampling_period_en[1],
                                   end=metaEX_var$sampling_period_en[2])
             }
+            dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
+                                         "-01-01"))
+            dataEX = debug_years(dataEX, var)
             
             if (grepl("summer", var)) {
                 season = "MJJASON"
@@ -311,19 +358,6 @@ for (i in 1:nChain_dirpath) {
             dataEX = dplyr::rename(dataEX, !!var_no_pattern:=var)
         }
 
-        if ("GCM" %in% names(dataEX)) {
-            dataEX = tidyr::unite(dataEX,
-                                  "Chain",
-                                  "GCM", "EXP",
-                                  "RCM", "BC",
-                                  "HM", sep="|",
-                                  remove=FALSE)
-        } else {
-            dataEX = tidyr::unite(dataEX,
-                                  "Chain",
-                                  "EXP", "HM", sep="|",
-                                  remove=FALSE)
-        }
         dataEX$code_Chain = paste0(dataEX$code, "_",
                                    dataEX$Chain)
         dataEX = dplyr::filter(dataEX,
@@ -337,39 +371,43 @@ for (i in 1:nChain_dirpath) {
         if (!("date" %in% names(dataEX))) {
             next
         }
+
         Date = dataEX$date
-        if (timestep == "year") {
-            Date = seq.Date(as.Date(paste0(lubridate::year(min(Date)),
-                                           "-01-01")),
-                            as.Date(paste0(lubridate::year(max(Date)),
-                                           "-01-01")),
-                            by=timestep)
-            Date_tmp = as.Date(levels(factor(dataEX$date)))
-            if (length(Date_tmp) != length(Date)) {
-                dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
-                                             "-01-01"))
-            }
-
-            tmp = dplyr::distinct(dplyr::select(dataEX, -date))
-            tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
-                                 date=Date)
-
-            if (nrow(tmp) != nrow(dataEX)) {
-                dataEX = dplyr::select(dataEX, Chain, code, date,
-                                       dplyr::all_of(var_no_pattern))
-                dataEX = dplyr::full_join(dataEX, tmp,
-                                          by=c("Chain", "code", "date"))
-                dataEX = tidyr::separate(dataEX, "Chain",
-                                         c("GCM", "EXP",
-                                           "RCM", "BC",
-                                           "HM"), sep="[|]",
-                                         remove=FALSE)
-                dataEX = dplyr::arrange(dataEX, Chain, code, date)
-            }
+        Date = seq.Date(min(Date), max(Date), by=timestep)
+        # if (timestep == "year") {
             
-        } else if (timestep == "month") {
-            Date = seq.Date(min(Date), max(Date), by=timestep)
-        }
+            # Date = seq.Date(as.Date(paste0(lubridate::year(min(Date)),
+            #                                "-01-01")),
+            #                 as.Date(paste0(lubridate::year(max(Date)),
+            #                                "-01-01")),
+            #                 by=timestep)
+            # Date_tmp = as.Date(levels(factor(dataEX$date)))
+            # if (length(Date_tmp) != length(Date)) {
+            #     dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
+            #                                  "-01-01"))
+            # }
+
+            # tmp = dplyr::distinct(dplyr::select(dataEX, -date))
+            # tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
+            #                      date=Date)
+
+            # if (nrow(tmp) != nrow(dataEX)) {
+            #     dataEX = dplyr::select(dataEX, Chain, code, date,
+            #                            dplyr::all_of(var_no_pattern))
+            #     dataEX = dplyr::full_join(dataEX, tmp,
+            #                               by=c("Chain", "code", "date"))
+            #     dataEX = tidyr::separate(dataEX, "Chain",
+            #                              c("GCM", "EXP",
+            #                                "RCM", "BC",
+            #                                "HM"), sep="[|]",
+            #                              remove=FALSE)
+            #     dataEX = dplyr::arrange(dataEX, Chain, code, date)
+            # }
+            
+        # }
+        # else if (timestep == "month") {
+            # Date = seq.Date(min(Date), max(Date), by=timestep)
+        # }
 
         
         Code = levels(factor(dataEX$code))
@@ -464,7 +502,7 @@ for (i in 1:nChain_dirpath) {
             post(code_test)
             post(chain_dirpath)
             post(var_path)
-            stop(NC_path)
+            stop(paste0("1 ", NC_path))
         }
         if (!is.logical(ok2)) {
             post(ok2)
@@ -473,21 +511,21 @@ for (i in 1:nChain_dirpath) {
             post(code_test)
             post(chain_dirpath)
             post(var_path)
-            stop(NC_path)
+            stop(paste0("2 ", NC_path))
         }
         if (!is.logical(ok3)) {
             post(ok3)
             post(code_test)
             post(chain_dirpath)
             post(var_path)
-            stop(NC_path)
+            stop(paste0("3 ", NC_path))
         }
         if (!is.logical(ok4)) {
             post(ok4)
             post(code_test)
             post(chain_dirpath)
             post(var_path)
-            stop(NC_path)
+            stop(paste0("4 ", NC_path))
         }
 
         is_ok = ok1 & ok2 & ok3 & ok4
@@ -500,7 +538,7 @@ for (i in 1:nChain_dirpath) {
             post(code_test)
             post(chain_dirpath)
             post(var_path)
-            stop(NC_path)
+            stop(paste0("all ", NC_path))
         }
         ### end verif ###
     }
