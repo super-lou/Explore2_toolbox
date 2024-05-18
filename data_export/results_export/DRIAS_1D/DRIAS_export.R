@@ -307,6 +307,8 @@ for (i in 1:nChain_dirpath) {
             dataEX = dplyr::arrange(dataEX, code, date)
             is_month_done = TRUE
             timestep = "month"
+
+            print(dataEX, n=150)
             
         } else {
             dataEX = ASHE::read_tibble(var_path)
@@ -409,6 +411,9 @@ for (i in 1:nChain_dirpath) {
         # }
 
         
+        print(dataEX, n=150)
+
+        
         Code = levels(factor(dataEX$code))
         
         dataEX_matrix = dplyr::select(dataEX, code, date,
@@ -441,6 +446,7 @@ for (i in 1:nChain_dirpath) {
                                verbose=FALSE)
         
         ### verif ###
+        # NC_path = gsub("[.]nc", "_MESO.nc", NC_path)
         NC_test = ncdf4::nc_open(NC_path)
         code_test = "K127311001"#Code[runif(1, 1, length(Code))]
         Code_test = ncdf4::ncvar_get(NC_test, "code")
