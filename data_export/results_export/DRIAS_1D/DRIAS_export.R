@@ -195,7 +195,8 @@ for (i in 1:nChain_dirpath) {
 
     post(paste0("* ", i, " -> ",
                       round(i/nChain_dirpath*100, 1), "%"))
-
+    post(chain_dirpath)
+    
     regexp = gsub("historical[[][-][]]", "",
                   Projection$regexp[Projection$dir ==
                                     basename(chain_dirpath)])
