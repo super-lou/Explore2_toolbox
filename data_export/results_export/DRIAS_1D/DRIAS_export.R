@@ -169,15 +169,14 @@ if (MPI == "file") {
     }
 }
 
-
-# dtFlood_yr_1975-2100_TIMEseries_GEOstation_FR-Rhone-Loire_EXPLORE2-2024_LSCE-IPSL-CDFt_historical-rcp45_EC-EARTH_RACMO22E_J2000.nc
+# EC-EARTH_historical-rcp45_RACMO22E_CDFt_J2000
 ### /!\ ###
-OK = grepl("CDFt", Chain_dirpath) &
-    grepl("rcp45", Chain_dirpath) &
-    grepl("EARTH", Chain_dirpath) &
-    grepl("RACMO22E", Chain_dirpath) &
-    grepl("J2000", Chain_dirpath)
-Chain_dirpath = Chain_dirpath[OK] 
+# OK = grepl("CDFt", Chain_dirpath) &
+#     grepl("rcp45", Chain_dirpath) &
+#     grepl("EARTH", Chain_dirpath) &
+#     grepl("RACMO22E", Chain_dirpath) &
+#     grepl("J2000", Chain_dirpath)
+# Chain_dirpath = Chain_dirpath[OK] 
 ###########
 
 nChain_dirpath = length(Chain_dirpath)
@@ -225,6 +224,7 @@ for (i in 1:nChain_dirpath) {
 
         post(paste0("** ", j, " -> ",
                           round(j/nVar_path*100, 1), "%"))
+        post(var)
         
         if (is_month_done & grepl(Month_pattern, var)) {
             next
