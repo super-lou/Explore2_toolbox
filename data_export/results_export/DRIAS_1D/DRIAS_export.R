@@ -26,6 +26,8 @@
 # |___/ |_|_\|___|/_/ \_\|___/   \___|/_\_\| .__/\___/|_|   \__| ______
 # Export pour le portail DRIAS des données |_| hydro-climatiques 
 library(NCf)
+library(dplyr)
+library(ncdf4)
 computer = Sys.info()["nodename"]
 
 if (grepl("botan", computer)) {
@@ -347,7 +349,8 @@ for (i in 1:nChain_dirpath) {
                                              "-01-01"))
             }
             tmp = dplyr::distinct(dplyr::select(dataEX, -date))
-            tmp = dplyr::reframe(group_by(tmp, code, Chain), date=Date)
+            tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
+                                 date=Date)
             tmp = tidyr::separate(tmp, "Chain",
                                   c("GCM", "EXP",
                                     "RCM", "BC",
