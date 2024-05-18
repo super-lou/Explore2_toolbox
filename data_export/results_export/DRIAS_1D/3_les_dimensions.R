@@ -88,15 +88,14 @@
 #
 #              axis : Axe associé à la variable
 
-fuseau_horaire = "UTC"
-from = as.POSIXct(min(Date), tz=fuseau_horaire)
-to = as.POSIXct(max(Date), tz=fuseau_horaire)
-origin = as.POSIXct("1950-01-01", tz=fuseau_horaire)
+from = as.Date(min(Date))
+to = as.Date(max(Date))
+origin = as.Date("1950-01-01")
 units = paste0("days since ", origin)
-time = seq.POSIXt(from=from, to=to, by=timestep)
-print(tail(time))
+time = seq.Date(from=from, to=to, by=timestep)
+# print(tail(time))
 time = as.integer(time - origin)
-print(tail(time))
+# print(tail(time))
 
 
 NCf$time.name = "time"
