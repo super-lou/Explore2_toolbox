@@ -308,7 +308,7 @@ for (i in 1:nChain_dirpath) {
             is_month_done = TRUE
             timestep = "month"
 
-            print(dataEX, n=150)
+            print(dplyr::filter(dataEX, code=="K127311001"), n=Inf)
             
         } else {
             dataEX = ASHE::read_tibble(var_path)
@@ -411,7 +411,7 @@ for (i in 1:nChain_dirpath) {
         # }
 
         
-        print(dataEX, n=150)
+        print(dplyr::filter(dataEX, code=="K127311001"), n=Inf)
 
         
         Code = levels(factor(dataEX$code))
