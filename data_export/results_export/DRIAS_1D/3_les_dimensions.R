@@ -94,7 +94,10 @@ to = as.POSIXct(max(Date), tz=fuseau_horaire)
 origin = as.POSIXct("1950-01-01", tz=fuseau_horaire)
 units = paste0("days since ", origin)
 time = seq.POSIXt(from=from, to=to, by=timestep)
+print(tail(time))
 time = as.integer(time - origin)
+print(tail(time))
+
 
 NCf$time.name = "time"
 NCf$time.value = time

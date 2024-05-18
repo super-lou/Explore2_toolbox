@@ -83,3 +83,7 @@ assign(paste0(metaEX_var$variable_en, ".02.units"),
 assign(paste0(metaEX_var$variable_en, ".03.missing_value"),
        NaN, envir=NCf)
 
+
+
+id=which(lubridate::month(Date) == 4)
+print(get(paste0(metaEX_var$variable_en, ".value"), envir=NCf)[Code=="K127311001", id])
