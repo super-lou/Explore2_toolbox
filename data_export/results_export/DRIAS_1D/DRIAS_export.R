@@ -169,13 +169,12 @@ if (MPI == "file") {
     }
 }
 
-# HadGEM2-ES_historical-rcp45_CCLM4-8-17_CDFt_EROS
-# EC-EARTH_historical-rcp45_RACMO22E_CDFt_J2000
+# EC-EARTH_historical-rcp26_HadREM3-GA7_ADAMONT_EROS
 ### /!\ ###
-# OK = grepl("HadGEM2", Chain_dirpath) &
-#     grepl("rcp45", Chain_dirpath) &
-#     grepl("CCLM4", Chain_dirpath) &
-#     grepl("CDFt", Chain_dirpath) &
+# OK = grepl("EARTH", Chain_dirpath) &
+#     grepl("rcp26", Chain_dirpath) &
+#     grepl("HadREM3", Chain_dirpath) &
+#     grepl("ADAMONT", Chain_dirpath) &
 #     grepl("EROS", Chain_dirpath)
 # Chain_dirpath = Chain_dirpath[OK] 
 ###########
@@ -195,7 +194,6 @@ for (i in 1:nChain_dirpath) {
 
     post(paste0("* ", i, " -> ",
                 round(i/nChain_dirpath*100, 1), "%"))
-    post(chain_dirpath)
     
     regexp = gsub("historical[[][-][]]", "",
                   Projection$regexp[Projection$dir ==
@@ -214,7 +212,7 @@ for (i in 1:nChain_dirpath) {
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
 
     ### /!\ ###
-    # Var_path = Var_path[grepl("QMA_apr", Var_path)]
+    # Var_path = Var_path[grepl("QMA", Var_path)]
     ###########
     nVar_path = length(Var_path)
     
@@ -405,7 +403,7 @@ for (i in 1:nChain_dirpath) {
         
         ### verif ###
         NC_test = ncdf4::nc_open(NC_path)
-        code_test = Code[runif(1, 1, length(Code))]
+        code_test = "J360181001"#Code[runif(1, 1, length(Code))]
         Code_test = ncdf4::ncvar_get(NC_test, "code")
         Date_test = ncdf4::ncvar_get(NC_test, "time") +
             as.Date("1950-01-01")
@@ -459,22 +457,34 @@ for (i in 1:nChain_dirpath) {
         
         if (!is.logical(ok1)) {
             post(ok1)
+            print(dateEX)
+            print(Date_test)
             post(code_test)
+            post(chain_dirpath)
+            post(var_path)
             stop(NC_path)
         }
         if (!is.logical(ok2)) {
             post(ok2)
+            print(valEX)
+            print(Value_test)
             post(code_test)
+            post(chain_dirpath)
+            post(var_path)
             stop(NC_path)
         }
         if (!is.logical(ok3)) {
             post(ok3)
             post(code_test)
+            post(chain_dirpath)
+            post(var_path)
             stop(NC_path)
         }
         if (!is.logical(ok4)) {
             post(ok4)
             post(code_test)
+            post(chain_dirpath)
+            post(var_path)
             stop(NC_path)
         }
 
@@ -486,6 +496,8 @@ for (i in 1:nChain_dirpath) {
             post(ok3)
             post(ok4)
             post(code_test)
+            post(chain_dirpath)
+            post(var_path)
             stop(NC_path)
         }
         ### end verif ###
