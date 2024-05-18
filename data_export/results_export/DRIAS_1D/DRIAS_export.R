@@ -169,13 +169,14 @@ if (MPI == "file") {
     }
 }
 
+# HadGEM2-ES_historical-rcp45_CCLM4-8-17_CDFt_EROS
 # EC-EARTH_historical-rcp45_RACMO22E_CDFt_J2000
 ### /!\ ###
-# OK = grepl("CDFt", Chain_dirpath) &
+# OK = grepl("HadGEM2", Chain_dirpath) &
 #     grepl("rcp45", Chain_dirpath) &
-#     grepl("EARTH", Chain_dirpath) &
-#     grepl("RACMO22E", Chain_dirpath) &
-#     grepl("J2000", Chain_dirpath)
+#     grepl("CCLM4", Chain_dirpath) &
+#     grepl("CDFt", Chain_dirpath) &
+#     grepl("EROS", Chain_dirpath)
 # Chain_dirpath = Chain_dirpath[OK] 
 ###########
 
@@ -193,7 +194,7 @@ for (i in 1:nChain_dirpath) {
     chain_dirpath =  Chain_dirpath[i]
 
     post(paste0("* ", i, " -> ",
-                      round(i/nChain_dirpath*100, 1), "%"))
+                round(i/nChain_dirpath*100, 1), "%"))
     post(chain_dirpath)
     
     regexp = gsub("historical[[][-][]]", "",
@@ -211,20 +212,19 @@ for (i in 1:nChain_dirpath) {
     Var_path = Var_path[grepl(Variable_pattern,
                               basename(gsub("[.]fst", "", Var_path)))]
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
+
     ### /!\ ###
     # Var_path = Var_path[grepl("QMA_apr", Var_path)]
     ###########
     nVar_path = length(Var_path)
     
     is_month_done = FALSE
-
     for (j in 1:nVar_path) {
         var_path = Var_path[j]
         var = gsub("[.]fst", "", basename(var_path))
 
         post(paste0("** ", j, " -> ",
                           round(j/nVar_path*100, 1), "%"))
-        post(var)
         
         if (is_month_done & grepl(Month_pattern, var)) {
             next
@@ -349,16 +349,23 @@ for (i in 1:nChain_dirpath) {
                 dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
                                              "-01-01"))
             }
+
             tmp = dplyr::distinct(dplyr::select(dataEX, -date))
             tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
                                  date=Date)
-            tmp = tidyr::separate(tmp, "Chain",
-                                  c("GCM", "EXP",
-                                    "RCM", "BC",
-                                    "HM"), sep="[|]",
-                                  remove=FALSE)
-            dataEX = dplyr::full_join(dataEX, tmp)
-            dataEX = dplyr::arrange(dataEX, Chain, code, date)
+
+            if (nrow(tmp) != nrow(dataEX)) {
+                dataEX = dplyr::select(dataEX, Chain, code, date,
+                                       dplyr::all_of(var_no_pattern))
+                dataEX = dplyr::full_join(dataEX, tmp,
+                                          by=c("Chain", "code", "date"))
+                dataEX = tidyr::separate(dataEX, "Chain",
+                                         c("GCM", "EXP",
+                                           "RCM", "BC",
+                                           "HM"), sep="[|]",
+                                         remove=FALSE)
+                dataEX = dplyr::arrange(dataEX, Chain, code, date)
+            }
             
         } else if (timestep == "month") {
             Date = seq.Date(min(Date), max(Date), by=timestep)
