@@ -421,7 +421,8 @@ for (i in 1:nChain_dirpath) {
         dataEX_matrix = t(as.matrix(dataEX_matrix))
 
 
-        print(dataEX_matrix[Code=="K127311001",])
+        id=which(lubridate::month(Date) == 4)
+        print(dataEX_matrix[Code=="K127311001",id])
         
         ###
         initialise_NCf()
