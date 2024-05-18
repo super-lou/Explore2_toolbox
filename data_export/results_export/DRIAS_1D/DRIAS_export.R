@@ -405,7 +405,7 @@ for (i in 1:nChain_dirpath) {
         
         ### verif ###
         NC_test = ncdf4::nc_open(NC_path)
-        code_test = "J360181001"#Code[runif(1, 1, length(Code))]
+        code_test = Code[runif(1, 1, length(Code))]
         Code_test = ncdf4::ncvar_get(NC_test, "code")
         Date_test = ncdf4::ncvar_get(NC_test, "time") +
             as.Date("1950-01-01")
