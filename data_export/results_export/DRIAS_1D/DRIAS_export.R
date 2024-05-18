@@ -168,14 +168,14 @@ if (MPI == "file") {
 }
 
 
-
+# dtFlood_yr_1975-2100_TIMEseries_GEOstation_FR-Rhone-Loire_EXPLORE2-2024_LSCE-IPSL-CDFt_historical-rcp45_EC-EARTH_RACMO22E_J2000.nc
 ### /!\ ###
-# OK = grepl("ADAMONT", Chain_dirpath) &
-#     grepl("rcp26", Chain_dirpath) &
-#     grepl("CNRM", Chain_dirpath) &
-#     grepl("ALADIN63", Chain_dirpath) &
-#     grepl("MORDOR-TS", Chain_dirpath)
-# Chain_dirpath = Chain_dirpath[OK] 
+OK = grepl("CDFt", Chain_dirpath) &
+    grepl("rcp45", Chain_dirpath) &
+    grepl("EARTH", Chain_dirpath) &
+    grepl("RACMO22E", Chain_dirpath) &
+    grepl("J2000", Chain_dirpath)
+Chain_dirpath = Chain_dirpath[OK] 
 ###########
 
 nChain_dirpath = length(Chain_dirpath)
@@ -326,7 +326,6 @@ for (i in 1:nChain_dirpath) {
         dataEX = dplyr::filter(dataEX,
                                !(code_Chain %in%
                                  chain_to_remove$code_Chain))
-        dataEX = dplyr::select(dataEX, -Chain, -code_Chain)
         
         meta_path = file.path(dirname(dirname(var_path)), "meta.fst")
         meta = ASHE::read_tibble(meta_path)
@@ -347,11 +346,21 @@ for (i in 1:nChain_dirpath) {
                 dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
                                              "-01-01"))
             }
+            tmp = dplyr::distinct(dplyr::select(dataEX, -date))
+            tmp = dplyr::reframe(group_by(tmp, code, Chain), date=Date)
+            tmp = tidyr::separate(tmp, "Chain",
+                                  c("GCM", "EXP",
+                                    "RCM", "BC",
+                                    "HM"), sep="[|]",
+                                  remove=FALSE)
+            dataEX = dplyr::full_join(dataEX, tmp)
+            dataEX = dplyr::arrange(dataEX, Chain, code, date)
             
         } else if (timestep == "month") {
             Date = seq.Date(min(Date), max(Date), by=timestep)
         }
 
+        
         Code = levels(factor(dataEX$code))
         
         dataEX_matrix = dplyr::select(dataEX, code, date,
@@ -390,28 +399,33 @@ for (i in 1:nChain_dirpath) {
         Date_test = ncdf4::ncvar_get(NC_test, "time") +
             as.Date("1950-01-01")
         id_code = which(Code_test == code_test)
-        Value_test = ncdf4::ncvar_get(NC_test,
-                                      metaEX_var$variable_en)[id_code,]
+        Value_test =
+            ncdf4::ncvar_get(NC_test,
+                             metaEX_var$variable_en)[id_code,]
         Value_test[!is.finite(Value_test)] = NA
         if (grepl("QMA_apr", var_path)) {
             ok = lubridate::month(Date_test) == 4
             Date_test = Date_test[ok]
             Value_test = Value_test[ok]
         }
-        min_year = min(lubridate::year(Date_test))
-        max_year = max(lubridate::year(Date_test))
-
+        Date_test = Date_test[!is.na(Value_test)]
+        Value_test = Value_test[!is.na(Value_test)]
+        
         dataEX_test = ASHE::read_tibble(var_path)
+        dataEX_test = dplyr::filter(dataEX_test, date_min <= date)
+        dataEX_test = dplyr::filter(dataEX_test,
+                                    code==code_test)
         dataEX_test$year = lubridate::year(dataEX_test$date)
         if (!grepl("QMA_apr", var_path)) {
             dataEX_test$date =
                 as.Date(paste0(dataEX_test$year, "-01-01"))
         }
-        dataEX_test = dplyr::filter(dataEX_test,
-                                    code==code_test,
-                                    min_year <= year &
-                                    year <= max_year)
-
+        
+        valEX = dataEX_test[[var]]
+        dateEX = dataEX_test$date
+        dateEX = dateEX[!is.na(valEX)]
+        valEX = valEX[!is.na(valEX)]
+        
         surface_test =
             ncdf4::ncvar_get(NC_test,
                              "topologicalSurface_model")[id_code]
@@ -420,14 +434,6 @@ for (i in 1:nChain_dirpath) {
         meta_ALL_test = dplyr::filter(meta_ALL, code==code_test)
         hm_test = gsub("[-]", "_", dataEX_test$HM[1])
         surface_var = paste0("surface_", hm_test, "_km2")
-
-        valEX = dataEX_test[[var]]
-        dateEX = dataEX_test$date
-        dateEX = dateEX[!is.na(valEX)]
-        valEX = valEX[!is.na(valEX)]
-        
-        Date_test = Date_test[!is.na(Value_test)]
-        Value_test = Value_test[!is.na(Value_test)]
         
         ok1 = all(dateEX == Date_test)
         ok2 = all.equal(valEX, Value_test, 0.001)
@@ -442,18 +448,22 @@ for (i in 1:nChain_dirpath) {
         
         if (!is.logical(ok1)) {
             post(ok1)
+            post(code_test)
             stop(NC_path)
         }
         if (!is.logical(ok2)) {
             post(ok2)
+            post(code_test)
             stop(NC_path)
         }
         if (!is.logical(ok3)) {
             post(ok3)
+            post(code_test)
             stop(NC_path)
         }
         if (!is.logical(ok4)) {
             post(ok4)
+            post(code_test)
             stop(NC_path)
         }
 
@@ -464,6 +474,7 @@ for (i in 1:nChain_dirpath) {
             post(ok2)
             post(ok3)
             post(ok4)
+            post(code_test)
             stop(NC_path)
         }
         ### end verif ###
