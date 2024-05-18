@@ -443,10 +443,10 @@ projections_to_remove =
       "IPSL[-]IPSL[-]CM5A[-]MR.*IPSL[-]WRF381P")
 
 storylines =
-    c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Chaud et humide à toutes les saisons", #vert
-      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Modéré en réchauffement et en changement de précipitations", #jaune
-      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Sec toute l’année, précipitations moindre en hiver", #orange
-      "HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et fort assèchement en été" #violet
+    c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="Réchauffement marqué et augmentation des précipitations", #vert
+      "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="Changements futurs relativement peu marqués", #jaune
+      "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="Fort réchauffement et fort assèchement en été (et en annuel)", #orange
+      "HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="Fort réchauffement et forts contrastes saisonniers en précipitations" #violet
       )
 
 
@@ -473,6 +473,7 @@ codes_to_use =
         # "all"
         "K298191001" #ref
         # "K294401001"
+        # "K297031001"
         # "O036251010"
         # "A105003001"
         # "^H"
@@ -941,12 +942,6 @@ Colors_of_HM = c(
     "EROS Bretagne"="#CECD8D", #vert clair
     "MONA"="#F5D80E" #jaune
 )
-
-# Colors_of_storylines = # initial
-#     c("HadGEM2-ES|historical-rcp85|CCLM4-8-17|ADAMONT"="#70194E",
-#       "EC-EARTH|historical-rcp85|HadREM3-GA7|ADAMONT"="#E2A13B",
-#       "HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#447C57",
-#       "CNRM-CM5|historical-rcp85|ALADIN63|ADAMONT"="#E5E840")
 
 Colors_of_storylines =
     c("HadGEM2-ES|historical-rcp85|ALADIN63|ADAMONT"="#569A71", #vert

@@ -167,8 +167,15 @@ if (MPI == "file") {
     }
 }
 
+### /!\ ###
+# OK = grepl("EROS", Chain_dirpath) &
+#     grepl("HadGEM2", Chain_dirpath) &
+#     grepl("rcp26", Chain_dirpath) &
+#     grepl("CDFt", Chain_dirpath) &
+#     grepl("HadREM3", Chain_dirpath)
+# Chain_dirpath = Chain_dirpath[OK] 
+###########
 
-post(paste0(Chain_dirpath, collapse=" "))
 nChain_dirpath = length(Chain_dirpath)
 
 
@@ -188,7 +195,8 @@ for (i in 1:nChain_dirpath) {
     regexp = gsub("historical[[][-][]]", "",
                   Projection$regexp[Projection$dir ==
                                     basename(chain_dirpath)])
-    data_paths = data_Paths[grepl(regexp, basename(data_Paths))]
+    data_paths = data_Paths[grepl(regexp,
+                                  basename(data_Paths))]
     data_path = data_paths[1]
     NC = ncdf4::nc_open(data_path)
 
@@ -199,15 +207,14 @@ for (i in 1:nChain_dirpath) {
     Var_path = Var_path[grepl(Variable_pattern,
                               basename(gsub("[.]fst", "", Var_path)))]
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
+    ### /!\ ###
+    # Var_path = Var_path[grepl("QMA_apr", Var_path)]
+    ###########
     nVar_path = length(Var_path)
     
     is_month_done = FALSE
 
     for (j in 1:nVar_path) {
-        ###
-        # var_path = Var_path[grepl("QSA_JJA", Var_path)]
-        # var_path = Var_path[grepl("QA.fst", Var_path)]
-        ###
         var_path = Var_path[j]
         var = gsub("[.]fst", "", basename(var_path))
 
@@ -355,7 +362,7 @@ for (i in 1:nChain_dirpath) {
         dataEX_matrix = t(as.matrix(dataEX_matrix))
 
         
-        ##
+        ###
         initialise_NCf()
 
         list_path = list.files(script_dirpath,
@@ -370,7 +377,78 @@ for (i in 1:nChain_dirpath) {
             dir.create(out_dir)
         }
 
-        generate_NCf(out_dir=out_dir, verbose=FALSE)
+        NC_path = generate_NCf(out_dir=out_dir,
+                               return_path=TRUE,
+                               verbose=FALSE)
+        
+        ### verif ###
+        NC_test = ncdf4::nc_open(NC_path)
+        code_test = Code[runif(1, 1, length(Code))]
+        Code_test = ncdf4::ncvar_get(NC_test, "code")
+        Date_test = ncdf4::ncvar_get(NC_test, "time") +
+            as.Date("1950-01-01")
+        id_code = which(Code_test == code_test)
+        Value_test = ncdf4::ncvar_get(NC_test,
+                                      metaEX_var$variable_en)[id_code,]
+        Value_test[!is.finite(Value_test)] = NA
+        if (grepl("QMA_apr", var_path)) {
+            ok = lubridate::month(Date_test) == 4
+            Date_test = Date_test[ok]
+            Value_test = Value_test[ok]
+        }
+        min_year = min(lubridate::year(Date_test))
+        max_year = max(lubridate::year(Date_test))
+
+        dataEX_test = ASHE::read_tibble(var_path)
+        dataEX_test$year = lubridate::year(dataEX_test$date)
+        if (!grepl("QMA_apr", var_path)) {
+            dataEX_test$date =
+                as.Date(paste0(dataEX_test$year, "-01-01"))
+        }
+        dataEX_test = dplyr::filter(dataEX_test,
+                                    code==code_test,
+                                    min_year <= year &
+                                    year <= max_year)
+
+        surface_test =
+            ncdf4::ncvar_get(NC_test,
+                             "topologicalSurface_model")[id_code]
+        L93_X_test = ncdf4::ncvar_get(NC_test, "L93_X")[id_code]
+
+        meta_ALL_test = dplyr::filter(meta_ALL, code==code_test)
+        hm_test = dataEX_test$HM[1]
+        surface_var = paste0("surface_", hm_test, "_km2")
+
+        valEX = round(dataEX_test[[var]], 3)
+        dateEX = dataEX_test$date
+        dateEX = dateEX[!is.na(valEX)]
+        valEX = valEX[!is.na(valEX)]
+        
+        valNC = round(Value_test, 3)
+        dateNC = Date_test
+        dateNC = dateNC[!is.na(valNC)]
+        valNC = valNC[!is.na(valNC)]
+        
+        ok1 = all(dateEX == dateNC)
+        ok2 = all(valEX == valNC)
+        ok3 = all.equal(meta_ALL_test[[surface_var]],
+                        surface_test,
+                        0.1)
+        ok4 = all.equal(meta_ALL_test$XL93_m,
+                        L93_X_test,
+                        0.1)
+        is_ok = ok1 & ok2 & ok3 & ok4
+
+        ncdf4::nc_close(NC_test)
+        
+        if (!is_ok) {
+            print(ok1)
+            print(ok2)
+            print(ok3)
+            print(ok4)
+            stop(NC_path)
+        }
+        ### end verif ###
     }
 
     ncdf4::nc_close(NC)
