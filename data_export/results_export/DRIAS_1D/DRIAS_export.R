@@ -437,15 +437,33 @@ for (i in 1:nChain_dirpath) {
         ok4 = all.equal(meta_ALL_test$XL93_m,
                         L93_X_test,
                         0.1)
-        is_ok = ok1 & ok2 & ok3 & ok4
 
         ncdf4::nc_close(NC_test)
         
+        if (!is.logical(ok1)) {
+            post(ok1)
+            stop(NC_path)
+        }
+        if (!is.logical(ok2)) {
+            post(ok2)
+            stop(NC_path)
+        }
+        if (!is.logical(ok3)) {
+            post(ok3)
+            stop(NC_path)
+        }
+        if (!is.logical(ok4)) {
+            post(ok4)
+            stop(NC_path)
+        }
+
+        is_ok = ok1 & ok2 & ok3 & ok4
+        
         if (!is_ok) {
-            print(ok1)
-            print(ok2)
-            print(ok3)
-            print(ok4)
+            post(ok1)
+            post(ok2)
+            post(ok3)
+            post(ok4)
             stop(NC_path)
         }
         ### end verif ###
