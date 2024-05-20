@@ -143,6 +143,7 @@ add_path = function (x) {
 logo_info = lapply(logo_info, add_path)
 icon_path = file.path(resources_path, icon_dir)
 
+
 if (!exists("Shapefiles")) {
     post("### Loading shapefiles")
 

@@ -1180,7 +1180,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     paste0(dataEX_serie[[k]]$code, "_",
                            dataEX_serie[[k]]$Chain)
                 dataEX_serie[[k]] = filter(dataEX_serie[[k]],
-                                           !(code_Chain %in% chain_to_remove$code_Chain))
+                                           !(code_Chain %in%
+                                             chain_to_remove$code_Chain))
                 dataEX_serie[[k]] = select(dataEX_serie[[k]], -code_Chain)
             }
             

@@ -209,12 +209,12 @@ to_do = c(
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
     # 'reshape_extracted_data_for_figure'
-    # 'create_database'
+    'create_database'
     # 'read_tmp'
     # 'read_saving'
 
     ## all
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -233,7 +233,7 @@ extract_data = c(
     
     'Explore2_serie_projection_HF',
     'Explore2_serie_projection_MF',
-    'Explore2_serie_projection_LF',
+    # 'Explore2_serie_projection_LF',
     'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
@@ -243,7 +243,7 @@ extract_data = c(
     
     'Explore2_criteria_projection_HF',
     'Explore2_criteria_projection_MF',
-    'Explore2_criteria_projection_LF',
+    # 'Explore2_criteria_projection_LF',
     'Explore2_criteria_projection_LF_summer'
     # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
@@ -413,13 +413,13 @@ projs_type =
 
 projections_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
         ## figure ##
-        "rcp85",
-        "SAFRAN"
+        # "rcp85",
+        # "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -470,8 +470,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # "all"
-        "K298191001" #ref
+        "all"
+        # "K298191001" #ref
         # "K294401001"
         # "K297031001"
         # "O036251010"
@@ -497,9 +497,6 @@ codes_to_use =
         # "Loire"="M842001000",
         # "Moselle"="A886006000"
     )
-n_projections_by_code =
-    # NULL
-    4
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
@@ -534,21 +531,20 @@ variables_to_use =
         # "^QA$", "^deltaQA_H3$"
         
         ## fiche resultats ##
-        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
-        
-        "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
-
-        "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
-
-        "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
+        # "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
+        # "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
+        # "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
+        # "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
         ## MEANDRE ##
-        # "^QJXA$",
+        "medQJ", 
+        "^QJXA$", "deltaQJXA_H",
         # "^fQ10A$",
-        # "^QA$",
+        "^QA$", "deltaQA_H",
         # "^QSA_DJF$", "^QSA_MAM$", "^QSA_JJA$", "^QSA_SON$",
-        # "^VCN10[_]summer$"
-        # "^startLF[_]summer$", "^dtLF[_]summer$"
+        "^VCN10_summer$", "deltaVCN10_summer_H",
+        "^startLF_summer$", "delta{startLF}_summer_H",
+        "^dtLF_summer$", "delta{dtLF}_summer_H"
 
         ## Flora ##
         # "^QA$",
@@ -897,6 +893,8 @@ diag_station_selection =
 
 
 ## 6. PLOT_SHEET _____________________________________________________
+n_projections_by_code = 4
+
 # If the hydrological network needs to be plot
 river_selection =
     NULL
@@ -1324,7 +1322,7 @@ if (type == "hydrologie") {
         names(Projections)[3:6] = EXP
         Projections =
             dplyr::mutate(Projections,
-                          dplyr::across(.cols=EXP,
+                          dplyr::across(.cols=dplyr::all_of(EXP),
                                         .fns=convert2bool, true="x"))
         Projections =
             tidyr::pivot_longer(data=Projections,
@@ -1567,12 +1565,6 @@ if (type == "hydrologie") {
         ref = c(0, 1)
     }
 
-    if (!is.null(n_projections_by_code)) {
-        codes_selection_data =
-            dplyr::filter(codes_selection_data,
-                          n >= n_projections_by_code)
-    }
-
     codes_selection_data =
         codes_selection_data[codes_selection_data$is_reference %in%
                              ref,]
@@ -1712,7 +1704,7 @@ if (type == "hydrologie") {
     
     codes_selection_data = read_tibble(file.path(
         computer_data_path, type,
-        codes_piezo_selection_file))
+        codes_piezo_selection_file), sep=";")
     
     codes10_selection = codes_selection_data$code_bss
 
@@ -1780,7 +1772,14 @@ if ('find_chain_out' %in% to_do) {
     # dataEX_serieQA_ALL = dplyr::tibble()
     # dataEX_criteriaQA_ALL = dplyr::tibble()
 }
-    
+
+if (any(c('plot_sheet', 'plot_doc',
+          'reshape_extracted_data_for_figure') %in% to_do)) {
+    codes_selection_data =
+        dplyr::filter(codes_selection_data,
+                      n_rcp85 >= n_projections_by_code)
+}
+
 
 if (any(c('create_data', 'extract_data', 'save_extract',
           'reshape_extracted_data_for_figure', 'find_chain_out') %in% to_do)) {
