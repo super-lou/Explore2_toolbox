@@ -98,47 +98,6 @@ if (MPI != "") {
     Rrank = 0
 }
 
-## Tool ______________________________________________________________
-add_chain = function (dataEX) {
-    if ("GCM" %in% names(dataEX)) {
-        dataEX = tidyr::unite(dataEX,
-                              "Chain",
-                              "GCM", "EXP",
-                              "RCM", "BC",
-                              "HM", sep="|",
-                              remove=FALSE)
-    } else {
-        dataEX = tidyr::unite(dataEX,
-                              "Chain",
-                              "EXP", "HM", sep="|",
-                              remove=FALSE)
-    }
-    return (dataEX) 
-}
-
-debug_years = function (dataEX, var) {
-    Date = seq.Date(min(dataEX$date),
-                    max(dataEX$date),
-                    by="years")
-    tmp = dplyr::distinct(dplyr::select(dataEX, -date))
-    tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
-                         date=Date)
-
-    if (nrow(tmp) != nrow(dataEX)) {
-        dataEX = dplyr::select(dataEX, Chain, code, date,
-                               dplyr::all_of(var))
-        dataEX = dplyr::full_join(dataEX, tmp,
-                                  by=c("Chain", "code", "date"))
-        dataEX = tidyr::separate(dataEX, "Chain",
-                                 c("GCM", "EXP",
-                                   "RCM", "BC",
-                                   "HM"), sep="[|]",
-                                 remove=FALSE)
-        dataEX = dplyr::arrange(dataEX, Chain, code, date)
-    }
-    return (dataEX)
-}
-
 
 ## INTRO _____________________________________________________________
 Variable = c(
@@ -222,7 +181,63 @@ if (MPI == "file") {
 nChain_dirpath = length(Chain_dirpath)
 
 
-# stop()
+## Tool ______________________________________________________________
+add_chain = function (dataEX) {
+    if ("GCM" %in% names(dataEX)) {
+        dataEX = tidyr::unite(dataEX,
+                              "Chain",
+                              "GCM", "EXP",
+                              "RCM", "BC",
+                              "HM", sep="|",
+                              remove=FALSE)
+    } else {
+        dataEX = tidyr::unite(dataEX,
+                              "Chain",
+                              "EXP", "HM", sep="|",
+                              remove=FALSE)
+    }
+    return (dataEX) 
+}
+
+debug_years = function (dataEX, var) {
+    Date = seq.Date(min(dataEX$date),
+                    max(dataEX$date),
+                    by="years")
+    tmp = dplyr::distinct(dplyr::select(dataEX, -date))
+    tmp = dplyr::reframe(dplyr::group_by(tmp, code, Chain),
+                         date=Date)
+
+    if (nrow(tmp) != nrow(dataEX)) {
+        dataEX = dplyr::select(dataEX, Chain, code, date,
+                               dplyr::all_of(var))
+        dataEX = dplyr::full_join(dataEX, tmp,
+                                  by=c("Chain", "code", "date"))
+        dataEX = tidyr::separate(dataEX, "Chain",
+                                 c("GCM", "EXP",
+                                   "RCM", "BC",
+                                   "HM"), sep="[|]",
+                                 remove=FALSE)
+        dataEX = dplyr::arrange(dataEX, Chain, code, date)
+    }
+    dataEX = dplyr::filter(dataEX, date_min <= date)
+    return (dataEX)
+}
+
+filter_code = function (dataEX) {
+    exp = gsub(".*[-]", "", dataEX$EXP[1])
+    Code_selection =
+        dplyr::filter(meta_ALL,
+                      get(paste0("n_", exp)) >= n_lim)$code
+    dataEX = dplyr::filter(dataEX, code %in% Code_selection)
+
+    dataEX$code_Chain = paste0(dataEX$code, "_",
+                               dataEX$Chain)
+    dataEX = dplyr::filter(dataEX,
+                           !(code_Chain %in%
+                             chain_to_remove$code_Chain))
+    return (dataEX)
+}
+
 
 ## PROCESS ___________________________________________________________
 for (i in 1:nChain_dirpath) {
@@ -295,6 +310,7 @@ for (i in 1:nChain_dirpath) {
                                         ".fst")
                 dataEX_tmp = ASHE::read_tibble(var_month_path)
                 dataEX_tmp = add_chain(dataEX_tmp)
+                dataEX_tmp = filter_code(dataEX_tmp)
                 dataEX_tmp = debug_years(dataEX_tmp, var_month)
                 dataEX_tmp = dplyr::rename(dataEX_tmp,
                                            !!var_no_pattern:=
@@ -309,16 +325,7 @@ for (i in 1:nChain_dirpath) {
         } else {
             dataEX = ASHE::read_tibble(var_path)
             dataEX = add_chain(dataEX)
-            dataEX = dplyr::filter(dataEX, date_min <= date)
-
-            exp = gsub(".*[-]", "", dataEX$EXP[1])
-            Code_selection =
-                dplyr::filter(meta_ALL,
-                              get(paste0("n_", exp)) >= 4)$code
-            dataEX = dplyr::filter(dataEX, code %in% Code_selection)
-            dataEX = dplyr::arrange(dataEX, code)
-
-            timestep = "year"
+            dataEX = filter_code(dataEX)
 
             if (length(metaEX_var$sampling_period_en) != 2) {
                 SamplingPeriod =
@@ -335,6 +342,9 @@ for (i in 1:nChain_dirpath) {
             dataEX$date = as.Date(paste0(lubridate::year(dataEX$date),
                                          "-01-01"))
             dataEX = debug_years(dataEX, var)
+            dataEX = dplyr::arrange(dataEX, code, date)
+            
+            timestep = "year"
             
             if (grepl("summer", var)) {
                 season = "MJJASON"
@@ -354,12 +364,6 @@ for (i in 1:nChain_dirpath) {
             metaEX_var$variable_en = var_no_pattern
             dataEX = dplyr::rename(dataEX, !!var_no_pattern:=var)
         }
-
-        dataEX$code_Chain = paste0(dataEX$code, "_",
-                                   dataEX$Chain)
-        dataEX = dplyr::filter(dataEX,
-                               !(code_Chain %in%
-                                 chain_to_remove$code_Chain))
         
         meta_path = file.path(dirname(dirname(var_path)), "meta.fst")
         meta = ASHE::read_tibble(meta_path)
@@ -406,9 +410,8 @@ for (i in 1:nChain_dirpath) {
             # Date = seq.Date(min(Date), max(Date), by=timestep)
         # }
 
-        
         Code = levels(factor(dataEX$code))
-        
+
         dataEX_matrix = dplyr::select(dataEX, code, date,
                                       dplyr::all_of(var_no_pattern))
         dataEX_matrix =
