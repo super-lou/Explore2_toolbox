@@ -209,12 +209,12 @@ to_do = c(
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
     # 'reshape_extracted_data_for_figure'
-    'create_database'
+    # 'create_database'
     # 'read_tmp'
     # 'read_saving'
 
     ## all
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -243,7 +243,7 @@ extract_data = c(
     
     'Explore2_criteria_projection_HF',
     'Explore2_criteria_projection_MF',
-    # 'Explore2_criteria_projection_LF',
+    'Explore2_criteria_projection_LF',
     'Explore2_criteria_projection_LF_summer'
     # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
@@ -413,13 +413,13 @@ projs_type =
 
 projections_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
         ## figure ##
-        # "rcp85",
-        # "SAFRAN"
+        "rcp85",
+        "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -470,8 +470,10 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        "all"
+        # "all"
         # "K298191001" #ref
+        "O200001001" #ref
+        
         # "K294401001"
         # "K297031001"
         # "O036251010"
@@ -531,20 +533,20 @@ variables_to_use =
         # "^QA$", "^deltaQA_H3$"
         
         ## fiche resultats ##
-        # "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
-        # "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
-        # "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
-        # "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
+        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
+        "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
+        "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
+        "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
         ## MEANDRE ##
-        "medQJ", 
-        "^QJXA$", "deltaQJXA_H",
-        # "^fQ10A$",
-        "^QA$", "deltaQA_H",
-        # "^QSA_DJF$", "^QSA_MAM$", "^QSA_JJA$", "^QSA_SON$",
-        "^VCN10_summer$", "deltaVCN10_summer_H",
-        "^startLF_summer$", "delta{startLF}_summer_H",
-        "^dtLF_summer$", "delta{dtLF}_summer_H"
+        # "medQJ", 
+        # "^QJXA$", "deltaQJXA_H",
+        # # "^fQ10A$",
+        # "^QA$", "deltaQA_H",
+        # # "^QSA_DJF$", "^QSA_MAM$", "^QSA_JJA$", "^QSA_SON$",
+        # "^VCN10_summer$", "deltaVCN10_summer_H",
+        # "^startLF_summer$", "delta{startLF}_summer_H",
+        # "^dtLF_summer$", "delta{dtLF}_summer_H"
 
         ## Flora ##
         # "^QA$",
@@ -914,7 +916,7 @@ toleranceRel =
 
 # Which logo do you want to show in the footnote
 logo_info = list(
-    "EX2"=c(file='LogoExplore2.png', y=0.4, height=0.8, width=0.5)
+    "EX2"=c(file='LogoExplore2.png', y=0.4, height=0.7, width=0.5)
 )
 
 # Probability used to define the min and max quantile needed for
