@@ -1427,6 +1427,8 @@ if (type == "hydrologie") {
 
         print(Projections)
         print(proj_path)
+        print(pattern)
+        print(include.dirs)
         
         Paths = list.files(proj_path,
                            pattern=pattern,
