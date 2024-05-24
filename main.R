@@ -44,9 +44,10 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./"
+    # "./" #botan
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/media/dora/SUPER_LOU/backup/project/Explore2_project/Explore2_toolbox/' #sacados
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -208,13 +209,13 @@ to_do = c(
     # 'save_extract'
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
-    # 'reshape_extracted_data_for_figure'
+    'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'read_tmp'
     # 'read_saving'
 
     ## all
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -367,9 +368,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -398,7 +399,7 @@ propagate_NA = TRUE
 # nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 25
+nCode4RAM = 2
 
 # Directory where to search for projections structures:
 # - 'raw' is for computer_data_path/projection/
@@ -472,7 +473,7 @@ codes_to_use =
     c(
         # "all"
         # "K298191001" #ref
-        "O200001001" #ref
+        # "O200001001" #ref
         
         # "K294401001"
         # "K297031001"
@@ -480,7 +481,7 @@ codes_to_use =
         # "A105003001"
         # "^H"
         # "^D"
-        # "^K29"
+        "^K29"
         # "^K"
         
         # "A882000101"
@@ -1211,13 +1212,13 @@ if (any(grepl("plot", to_do))) {
     library(gridExtra)
     library(gridtext)
     library(ggh4x)
-    require(rgdal)
     library(shadowtext)
     library(png)
     library(ggrepel)
     library(latex2exp)
-    require(sf) #nope
     library(ggtext)
+    require(sf) #nope
+    # require(rgdal)
     
     assign_colors_and_fonts("EXPLORE2")
 }

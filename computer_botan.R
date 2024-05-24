@@ -106,13 +106,13 @@ now = format(Sys.time(), "%H_%M_%S")
 
 ### 3.1. Results _____________________________________________________
 resdir = file.path(computer_work_path, 'results')
-today_resdir = file.path(computer_work_path, 'results', today)
-now_resdir = file.path(computer_work_path, 'results', today, now)
+today_resdir = file.path(resdir, today)
+now_resdir = file.path(today_resdir, now)
 
 ### 3.2. Figures  ____________________________________________________
 figdir = file.path(computer_work_path, 'figures')
-today_figdir = file.path(computer_work_path, 'figures', today)
-now_figdir = file.path(computer_work_path, 'figures', today, now)
+today_figdir = file.path(figdir, today)
+now_figdir = file.path(today_figdir, now)
 
 ### 3.3. Tmp  ________________________________________________________
 tmpdir = "tmp"
