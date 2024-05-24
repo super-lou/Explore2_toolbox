@@ -143,6 +143,9 @@ logo_info = lapply(logo_info, add_path)
 icon_path = file.path(resources_path, icon_dir)
 
 
+
+stop()
+
 if (!exists("Shapefiles")) {
     post("### Loading shapefiles")
 
@@ -151,7 +154,6 @@ if (!exists("Shapefiles")) {
     } else if (type == "piezometrie") {
         Code_shp = CodeALL
     }
-    
     Shapefiles = load_shapefile(
         computer_shp_path, Code_shp,
         france_shp_path=france_shp_path,

@@ -398,7 +398,7 @@ propagate_NA = TRUE
 # nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 25
+nCode4RAM = 100
 
 # Directory where to search for projections structures:
 # - 'raw' is for computer_data_path/projection/
@@ -899,15 +899,18 @@ n_projections_by_code = 4
 
 # If the hydrological network needs to be plot
 river_selection =
-    NULL
-    # c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$',
-    #   '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$',
-    #   '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$',
-    #   'Le Tarn$', 'Le Rhône$', 'La Saône$')
-
+    # NULL
+    c("la Durance", "la Marne", "la Vienne", "le Loir", "la Loire",
+      "l'Oise", "la Seine", "le Lot", "l'Adour", "le Rhône",
+      "la Moselle", "l'Aisne", "la Garonne", "le Tarn", "le Doubs",
+      "la Dordogne", "la Charente", "le Cher", "la Saône", "l'Allier",
+      "Fleuve la Loire", "la Meuse", "la Sarthe", "la Somme",
+      "l'Isère", "la Vilaine", "l'Aude", "l'Yonne")
+river_selection = paste0("^", river_selection, "$")
 river_length =
     # NULL
-    300000
+    30000
+    # 300000
     
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
@@ -1317,15 +1320,10 @@ if (type == "hydrologie") {
     }
 
 
-    post("a")
-
     if (grepl("projection", mode)) {
         Projections = read_tibble(file.path(
             computer_data_path,
             projs_selection_file))
-
-        print(Projections)
-        
         EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
         names(Projections)[3:6] = EXP
         Projections =
@@ -1339,8 +1337,6 @@ if (type == "hydrologie") {
         Projections$value = as.logical(Projections$value)
         Projections = dplyr::filter(Projections, value)
         Projections = dplyr::select(Projections, -"value")
-
-         post("aa")
 
         BC = c("ADAMONT", "CDFt")
         Projections = tidyr::crossing(Projections,
@@ -1371,10 +1367,6 @@ if (type == "hydrologie") {
                                 Projections$RCM,
                                 Projections$BC,
                                 Projections$HM, sep="_")
-
-
-        post("bb")
-        
         Projections =
             dplyr::bind_rows(
                        Projections,
@@ -1422,22 +1414,12 @@ if (type == "hydrologie") {
             pattern = NULL
             include.dirs = TRUE
         }
-
-        post("cc")
-
-        print(Projections)
-        print(proj_path)
-        print(pattern)
-        print(include.dirs)
         
         Paths = list.files(proj_path,
                            pattern=pattern,
                            include.dirs=include.dirs,
                            full.names=TRUE,
                            recursive=TRUE)
-
-        
-        print(length(Paths))
         
         Files = basename(Paths)
         Paths = Paths[!duplicated(Files)]
@@ -1461,8 +1443,6 @@ if (type == "hydrologie") {
         Projections = tidyr::unnest(Projections,
                                     c(file, path))
 
-        post("dd")
-
         if (nrow(Projections) == 1) { #### MOCHE ####
             nOK = apply(as.matrix(
                 sapply(projections_to_remove, grepl,
@@ -1479,9 +1459,6 @@ if (type == "hydrologie") {
             Projections = Projections[OK,]
         }
 
-
-        post("ee")
-        
         if (all(projections_to_use != "all")) {
             OK = apply(as.matrix(
                 sapply(projections_to_use, grepl,
@@ -1514,8 +1491,6 @@ if (type == "hydrologie") {
             }
             Projections$storylines[OK] = storylines[s]
         }
-
-        post("c")
         
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
@@ -1579,10 +1554,7 @@ if (type == "hydrologie") {
                                         gsub("L'", "L ",
                                              codes_selection_data$name
                                              )))))
-
-        post("d")
     } else {
-        post("e")
         codes_selection_data =
             read_tibble(filedir=file.path(resdir,
                                           mode, type),
@@ -1598,8 +1570,6 @@ if (type == "hydrologie") {
     } else if (grepl("projection", mode)) {
         ref = c(0, 1)
     }
-
-    post("f")
 
     codes_selection_data =
         codes_selection_data[codes_selection_data$is_reference %in%
@@ -1637,8 +1607,6 @@ if (type == "hydrologie") {
     
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
-
-    post("g")
     
     Subsets = list()
     for (i in 1:length(IdCode)) {
