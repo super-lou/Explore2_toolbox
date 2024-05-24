@@ -1323,6 +1323,9 @@ if (type == "hydrologie") {
         Projections = read_tibble(file.path(
             computer_data_path,
             projs_selection_file))
+
+        print(Projections)
+        
         EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
         names(Projections)[3:6] = EXP
         Projections =
@@ -1336,6 +1339,8 @@ if (type == "hydrologie") {
         Projections$value = as.logical(Projections$value)
         Projections = dplyr::filter(Projections, value)
         Projections = dplyr::select(Projections, -"value")
+
+         post("aa")
 
         BC = c("ADAMONT", "CDFt")
         Projections = tidyr::crossing(Projections,
@@ -1366,6 +1371,9 @@ if (type == "hydrologie") {
                                 Projections$RCM,
                                 Projections$BC,
                                 Projections$HM, sep="_")
+
+
+        post("bb")
         
         Projections =
             dplyr::bind_rows(
@@ -1414,6 +1422,8 @@ if (type == "hydrologie") {
             pattern = NULL
             include.dirs = TRUE
         }
+
+        post("cc")
         
         Paths = list.files(proj_path,
                            pattern=pattern,
@@ -1442,6 +1452,8 @@ if (type == "hydrologie") {
         Projections = tidyr::unnest(Projections,
                                     c(file, path))
 
+        post("dd")
+
         if (nrow(Projections) == 1) { #### MOCHE ####
             nOK = apply(as.matrix(
                 sapply(projections_to_remove, grepl,
@@ -1459,7 +1471,7 @@ if (type == "hydrologie") {
         }
 
 
-        post("b")
+        post("ee")
         
         if (all(projections_to_use != "all")) {
             OK = apply(as.matrix(
