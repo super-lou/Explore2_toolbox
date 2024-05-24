@@ -1424,12 +1424,19 @@ if (type == "hydrologie") {
         }
 
         post("cc")
+
+        print(Projections)
+        print(proj_path)
         
         Paths = list.files(proj_path,
                            pattern=pattern,
                            include.dirs=include.dirs,
                            full.names=TRUE,
                            recursive=TRUE)
+
+        
+        print(length(Paths))
+        
         Files = basename(Paths)
         Paths = Paths[!duplicated(Files)]
         Files = Files[!duplicated(Files)]
