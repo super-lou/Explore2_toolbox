@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./" #botan
+    "./" #botan
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -1961,55 +1961,47 @@ if (any(c('create_data', 'extract_data', 'save_extract',
             }
             print("")
         }
-
         timer$time = as.numeric(timer$stop - timer$start)
+
+        if ('find_chain_out' %in% to_do |
+            'reshape_extracted_data_for_figure' %in% to_do
+            ## to rm
+            # & FALSE #####
+            ##
+            ) {
+            ## to rm 
+            # extract_data_save = extract_data #####
+            # to_do_save = to_do #####
+            ##
+            
+            firstLetters = unique(firstLetterALL)
+            for (letter in firstLetters) {
+                Code_selection = CodeALL10[firstLetterALL == letter]
+                to_do = c(to_do_save, 'read_saving')
+                extract_data = extract_data_save[grepl("criteria",
+                                                       extract_data_save)]
+                variable2search = c('dataEX', 'metaEX')
+                
+                source(file.path(lib_path, 'script_management.R'),
+                       encoding='UTF-8')
+
+                to_do = to_do_save
+            }
+            if ('find_chain_out' %in% to_do) {
+                OK = !duplicated(paste0(chain_to_remove$code,
+                                        chain_to_remove$Chain))
+                chain_to_remove = chain_to_remove[OK,]
+                write_tibble(chain_to_remove, today_resdir,
+                             "chain_to_remove.csv")
+            }
+        }
+        
     } else {
         warning ("No files")
     }
 
     write_tibble(timer, today_resdir,
                  paste0("timer_", rank, ".txt"))
-}
-
-
-
-if ('find_chain_out' %in% to_do |
-    'reshape_extracted_data_for_figure' %in% to_do
-    ## to rm
-    # & FALSE #####
-    ##
-    ) {
-    ## to rm 
-    # extract_data_save = extract_data #####
-    # to_do_save = to_do #####
-    ##
-    
-    firstLetters = unique(firstLetterALL)
-    for (letter in firstLetters) {
-        Code_selection = CodeALL10[firstLetterALL == letter]
-        to_do = c(to_do_save, 'read_saving')
-        extract_data = extract_data_save[grepl("criteria",
-                                               extract_data_save)]
-        variable2search = c('dataEX', 'metaEX')
-        
-        source(file.path(lib_path, 'script_management.R'),
-               encoding='UTF-8')
-
-        to_do = to_do_save
-    }
-
-    if ('find_chain_out' %in% to_do) {
-        OK = !duplicated(paste0(chain_to_remove$code,
-                                chain_to_remove$Chain))
-        chain_to_remove = chain_to_remove[OK,]
-        
-        # write_tibble(dataEX_serieQA_ALL, today_resdir,
-        # "dataEX_serieQA_ALL.fst")
-        # write_tibble(dataEX_criteriaQA_ALL, today_resdir,
-        # "dataEX_criteriaQA_ALL.fst")
-        write_tibble(chain_to_remove, today_resdir,
-                     "chain_to_remove.csv")
-    }
 }
 
 
