@@ -143,9 +143,6 @@ logo_info = lapply(logo_info, add_path)
 icon_path = file.path(resources_path, icon_dir)
 
 
-
-stop()
-
 if (!exists("Shapefiles")) {
     post("### Loading shapefiles")
 

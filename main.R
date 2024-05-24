@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./" #botan
+    "./" #botan
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -208,13 +208,13 @@ to_do = c(
     # 'save_extract'
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
-    'reshape_extracted_data_for_figure'
+    # 'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'read_tmp'
     # 'read_saving'
 
     ## all
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -367,9 +367,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -472,7 +472,7 @@ codes_to_use =
     c(
         # "all"
         # "K298191001" #ref
-        # "O200001001" #ref
+        "O200001001" #ref
         
         # "K294401001"
         # "K297031001"
@@ -481,7 +481,7 @@ codes_to_use =
         # "^H"
         # "^D"
         # "^K29"
-        "^K"
+        # "^K"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -1652,6 +1652,12 @@ if (type == "hydrologie") {
             
             if (Rrank+1 > nFiles_to_use) {
                 Files = NULL
+                if (any(c('extract_data', 'save_extract') %in% to_do)) {
+                    Rmpi::mpi.send(as.integer(1), type=1,
+                                   dest=0, tag=1, comm=0)
+                }
+                post(paste0("End signal from rank ", rank))
+                
             } else {
                 Files = files_to_use[start[Rrank+1]:end[Rrank+1]]
             }
@@ -1689,7 +1695,10 @@ if (type == "hydrologie") {
         nSubsets = length(Subsets)
 
         if (nSubsets == 0) {
-            Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
+            if (any(c('extract_data', 'save_extract') %in% to_do)) {
+                Rmpi::mpi.send(as.integer(1), type=1,
+                               dest=0, tag=1, comm=0)
+            }
             post(paste0("End signal from rank ", rank)) 
         }
     }
