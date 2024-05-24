@@ -47,7 +47,6 @@ lib_path =
     # "./" #botan
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
     '/home/herautl/library/Explore2_toolbox' #MUSE
-    # '/media/dora/SUPER_LOU/backup/project/Explore2_project/Explore2_toolbox/' #sacados
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -399,7 +398,7 @@ propagate_NA = TRUE
 # nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 2
+nCode4RAM = 25
 
 # Directory where to search for projections structures:
 # - 'raw' is for computer_data_path/projection/
@@ -481,8 +480,8 @@ codes_to_use =
         # "A105003001"
         # "^H"
         # "^D"
-        "^K29"
-        # "^K"
+        # "^K29"
+        "^K"
         
         # "A882000101"
         # LETTERS[11:26]
@@ -1317,6 +1316,9 @@ if (type == "hydrologie") {
         }
     }
 
+
+    post("a")
+
     if (grepl("projection", mode)) {
         Projections = read_tibble(file.path(
             computer_data_path,
@@ -1456,6 +1458,9 @@ if (type == "hydrologie") {
             Projections = Projections[OK,]
         }
 
+
+        post("b")
+        
         if (all(projections_to_use != "all")) {
             OK = apply(as.matrix(
                 sapply(projections_to_use, grepl,
@@ -1488,6 +1493,8 @@ if (type == "hydrologie") {
             }
             Projections$storylines[OK] = storylines[s]
         }
+
+        post("c")
         
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
@@ -1551,7 +1558,10 @@ if (type == "hydrologie") {
                                         gsub("L'", "L ",
                                              codes_selection_data$name
                                              )))))
+
+        post("d")
     } else {
+        post("e")
         codes_selection_data =
             read_tibble(filedir=file.path(resdir,
                                           mode, type),
@@ -1567,6 +1577,8 @@ if (type == "hydrologie") {
     } else if (grepl("projection", mode)) {
         ref = c(0, 1)
     }
+
+    post("f")
 
     codes_selection_data =
         codes_selection_data[codes_selection_data$is_reference %in%
@@ -1605,6 +1617,8 @@ if (type == "hydrologie") {
     firstLetterALL = substr(CodeALL10, 1, 1)
     IdCode = cumsum(table(firstLetterALL))
 
+    post("g")
+    
     Subsets = list()
     for (i in 1:length(IdCode)) {
         Id = IdCode[i]
