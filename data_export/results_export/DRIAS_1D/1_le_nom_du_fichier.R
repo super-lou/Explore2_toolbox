@@ -33,7 +33,7 @@
 #
 #     Indicator_TimeFrequency_StartTime-EndTime_Domain_ModelXXX.nc
 
-if (is_SAFRAN) {
+if (!is_SAFRAN) {
     projection_ok =
         grepl(dataEX$GCM[1], meta_projection$gcm) &
         grepl(dataEX$RCM[1], meta_projection$rcm)
