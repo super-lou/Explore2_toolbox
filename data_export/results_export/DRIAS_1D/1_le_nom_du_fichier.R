@@ -33,11 +33,13 @@
 #
 #     Indicator_TimeFrequency_StartTime-EndTime_Domain_ModelXXX.nc
 
-projection_ok =
-    grepl(dataEX$GCM[1], meta_projection$gcm) &
-    grepl(dataEX$RCM[1], meta_projection$rcm)
-if (!any(projection_ok)) {
-    stop(paste0(dataEX$GCM[1], " ", dataEX$RCM[1]))
+if (is_SAFRAN) {
+    projection_ok =
+        grepl(dataEX$GCM[1], meta_projection$gcm) &
+        grepl(dataEX$RCM[1], meta_projection$rcm)
+    if (!any(projection_ok)) {
+        stop(paste0(dataEX$GCM[1], " ", dataEX$RCM[1]))
+    }
 }
 
 ## 1. Indicateur _____________________________________________________
@@ -68,15 +70,14 @@ NCf$title.04.type = "TIMEseries_GEOstation"
 
 ## 5. Domain _________________________________________________________
 #  Couverture spatiale des données
-if (dataEX$HM[1] %in%
-    c("CTRIP", "GRSD", "MORDOR-SD", "ORCHIDEE", "SIM2", "SMAHS")) {
-    NCf$title.05.Domain = "FR-METRO"
-} else if (dataEX$HM[1] == "EROS") {
+if (dataEX$HM[1] == "EROS") {
     NCf$title.05.Domain = "FR-Bretagne-Loire"
 } else if (dataEX$HM[1] == "J2000") {
     NCf$title.05.Domain = "FR-Rhone-Loire"
 } else if (dataEX$HM[1] == "MORDOR-TS") {
     NCf$title.05.Domain = "FR-Loire"
+} else {
+    NCf$title.05.Domain = "FR-METRO"
 }
 
 ## 6. Dataset ________________________________________________________
@@ -87,7 +88,11 @@ NCf$title.06.dataset = "EXPLORE2-2024"
 # Institut-Méthode-Réanalyse-Période
 BC_short = c('ADAMONT', 'CDFt')
 BC_name = c('MF-ADAMONT', 'LSCE-IPSL-CDFt')
-NCf$title.07.Bc_Inst_Method = BC_name[BC_short == dataEX$BC[1]]
+if (is_SAFRAN) {
+    NCf$title.07.Bc_Inst_Method = ""
+} else {
+    NCf$title.07.Bc_Inst_Method = BC_name[BC_short == dataEX$BC[1]]
+}
 
 ## 8. Experiment _____________________________________________________
 # Identifiant de l’expérience historique ou future via le scénario
@@ -95,11 +100,19 @@ NCf$title.08.Experiment = dataEX$EXP[1]
 
 ## 9. GCM-Model _________________________________________________
 # Identifiant du GCM forçeur
-NCf$title.09.GCM_Model = meta_projection$gcm.short[projection_ok]
+if (is_SAFRAN) {
+    NCf$title.09.GCM_Model = ""
+} else {
+    NCf$title.09.GCM_Model = meta_projection$gcm.short[projection_ok]
+}
 
 ## 10. RCM-Model _________________________________________________
 # Identifiant du RCM
-NCf$title.10.RCM_Model = meta_projection$rcm.short[projection_ok]
+if (is_SAFRAN) {
+    NCf$title.10.RCM_Model = ""
+} else {
+    NCf$title.10.RCM_Model = meta_projection$rcm.short[projection_ok] 
+}
 
 ## 11. HYDRO-Inst-Model _______________________________________________
 # Identifiant du HYDRO = Institut-Modèle

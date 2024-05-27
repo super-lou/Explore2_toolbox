@@ -141,8 +141,10 @@ Chain_dirpath = list.dirs(results_dirpath, recursive=FALSE)
 Chain_dirpath = list.dirs(Chain_dirpath, recursive=FALSE)
 
 ### NOT SAFRAN
-Chain_dirpath = Chain_dirpath[!grepl("^SAFRAN[_]",
-                                     basename(Chain_dirpath))]
+# Chain_dirpath = Chain_dirpath[!grepl("^SAFRAN[_]",
+                                     # basename(Chain_dirpath))]
+# Chain_dirpath = Chain_dirpath[grepl("^SAFRAN[_]",
+                                    # basename(Chain_dirpath))]
 ###
 
 nChain_dirpath = length(Chain_dirpath)
@@ -183,7 +185,7 @@ nChain_dirpath = length(Chain_dirpath)
 
 ## Tool ______________________________________________________________
 add_chain = function (dataEX) {
-    if ("GCM" %in% names(dataEX)) {
+    if (!is_SAFRAN) {
         dataEX = tidyr::unite(dataEX,
                               "Chain",
                               "GCM", "EXP",
@@ -212,11 +214,18 @@ debug_years = function (dataEX, var) {
                                dplyr::all_of(var))
         dataEX = dplyr::full_join(dataEX, tmp,
                                   by=c("Chain", "code", "date"))
-        dataEX = tidyr::separate(dataEX, "Chain",
-                                 c("GCM", "EXP",
-                                   "RCM", "BC",
-                                   "HM"), sep="[|]",
-                                 remove=FALSE)
+        if (!is_SAFRAN) {
+            dataEX = tidyr::separate(dataEX, "Chain",
+                                     c("GCM", "EXP",
+                                       "RCM", "BC",
+                                       "HM"), sep="[|]",
+                                     remove=FALSE)
+        } else {
+            dataEX = tidyr::separate(dataEX, "Chain",
+                                     c("EXP", "HM"),
+                                     sep="[|]",
+                                     remove=FALSE)
+        }
         dataEX = dplyr::arrange(dataEX, Chain, code, date)
     }
     dataEX = dplyr::filter(dataEX, date_min <= date)
@@ -225,9 +234,16 @@ debug_years = function (dataEX, var) {
 
 filter_code = function (dataEX) {
     exp = gsub(".*[-]", "", dataEX$EXP[1])
-    Code_selection =
-        dplyr::filter(meta_ALL,
-                      get(paste0("n_", exp)) >= n_lim)$code
+    if (is_SAFRAN) {
+        Code_selection =
+            dplyr::filter(meta_ALL,
+                          get(paste0("n")) >= n_lim)$code
+    } else {
+        Code_selection =
+            dplyr::filter(meta_ALL,
+                          get(paste0("n_", exp)) >= n_lim)$code
+    }
+
     dataEX = dplyr::filter(dataEX, code %in% Code_selection)
 
     dataEX$code_Chain = paste0(dataEX$code, "_",
@@ -245,6 +261,7 @@ for (i in 1:nChain_dirpath) {
         break
     }
     chain_dirpath =  Chain_dirpath[i]
+    is_SAFRAN = grepl("SAFRAN", basename(chain_dirpath))
 
     post(paste0("* ", i, " -> ",
                 round(i/nChain_dirpath*100, 1), "%"))
@@ -345,7 +362,7 @@ for (i in 1:nChain_dirpath) {
             dataEX = dplyr::arrange(dataEX, code, date)
             
             timestep = "year"
-            
+
             if (grepl("summer", var)) {
                 season = "MJJASON"
                 var_no_pattern = gsub("summer", "", var)
@@ -542,7 +559,6 @@ for (i in 1:nChain_dirpath) {
         }
         ### end verif ###
     }
-
     ncdf4::nc_close(NC)
 }
 

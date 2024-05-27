@@ -42,65 +42,79 @@
 # Identification du projet
 NCf$global.01.project_id =
     ncdf4::ncatt_get(NC, 0, "project_id")$value
-    # "DRIAS-2020"
 
+if (is_SAFRAN) {
+    NCf$global.02.observation_id =
+        ncdf4::ncatt_get(NC, 0, "observation_id")$value
+
+    NCf$global.03.observation =
+        ncdf4::ncatt_get(NC, 0, "observation")$value
+
+    NCf$global.04.institution =
+        ncdf4::ncatt_get(NC, 0, "institution")$value
+
+    NCf$global.05.institution_id =
+        ncdf4::ncatt_get(NC, 0, "institution_id")$value
+    
+} else {
 ### 1.2. forcing _____________________________________________________
-# Une chaîne de caractères indiquant le modèle de forçage de cette
-# simulation
-NCf$global.02.forcing = 
-    # paste0(dataEX$RCM[1], " with ",
-           # dataEX$GCM[1], " forcing data")
+    # Une chaîne de caractères indiquant le modèle de forçage de cette
+    # simulation
+    NCf$global.02.forcing = 
+        paste0(dataEX$RCM[1], " with ",
+               dataEX$GCM[1], " forcing data")
 
 ### 1.3. driving_* ___________________________________________________
-# Des chaînes de caractères caractérisant le modèle forçeur dans la
-# descente d’échelle dynamique
-NCf$global.03.driving_model_id =
-    ncdf4::ncatt_get(NC, 0, "driving_model_id")$value
+    # Des chaînes de caractères caractérisant le modèle forçeur dans la
+    # descente d’échelle dynamique
+    NCf$global.03.driving_model_id =
+        ncdf4::ncatt_get(NC, 0, "driving_model_id")$value
     # meta_projection$gcm[projection_ok]
     #"CNRM-CERFACS-CNRM-CM5"
-NCf$global.04.driving_model_ensemble_member =
-    ncdf4::ncatt_get(NC, 0, "driving_model_ensemble_member")$value
-# meta_projection$member[projection_ok]
+    NCf$global.04.driving_model_ensemble_member =
+        ncdf4::ncatt_get(NC, 0, "driving_model_ensemble_member")$value
+    # meta_projection$member[projection_ok]
     # "r1i1p1"
-NCf$global.05.driving_experiment_name =
-    dataEX$EXP[1]
+    NCf$global.05.driving_experiment_name =
+        dataEX$EXP[1]
     # "rcp85"
-NCf$global.06.driving_experiment =
-    paste0(NCf$global.03.driving_model_id, ", ",
-           NCf$global.05.driving_experiment_name, ", ",
-           NCf$global.04.driving_model_ensemble_member)
+    NCf$global.06.driving_experiment =
+        paste0(NCf$global.03.driving_model_id, ", ",
+               NCf$global.05.driving_experiment_name, ", ",
+               NCf$global.04.driving_model_ensemble_member)
     # "CNRM-CERFACS-CNRM-CM5, rcp85, r1i1p1"
 
-### 1.4. institute_id ________________________________________________
-# Un nom court du centre de modélisation contribuant aux données avant
-# correction
-NCf$global.07.institution =
-    ncdf4::ncatt_get(NC, 0, "institution")$value
+ ### 1.4. institute_id ________________________________________________
+    # Un nom court du centre de modélisation contribuant aux données avant
+    # correction
+    NCf$global.07.institution =
+        ncdf4::ncatt_get(NC, 0, "institution")$value
     # meta_projection$institution[projection_ok]
-# "CNRM (Centre National de Recherches Meteorologiques, Toulouse 31057, France)"
-NCf$global.08.institute_id =
-    ncdf4::ncatt_get(NC, 0, "institute_id")$value
+    # "CNRM (Centre National de Recherches Meteorologiques, Toulouse 31057, France)"
+    NCf$global.08.institute_id =
+        ncdf4::ncatt_get(NC, 0, "institute_id")$value
     # meta_projection$institution.id[projection_ok]
     # "CNRM"
 
 ### 1.5. model_id ____________________________________________________
-# Un acronyme qui identifie le modèle utilisé pour générer les
-# données avant correction
-NCf$global.09.model_id = ncdf4::ncatt_get(NC, 0, "model_id")$value
+    # Un acronyme qui identifie le modèle utilisé pour générer les
+    # données avant correction
+    NCf$global.09.model_id = ncdf4::ncatt_get(NC, 0, "model_id")$value
     # meta_projection$rcm[projection_ok]
     # "CNRM-ALADIN63"
-NCf$global.10.rcm_version_id =
-    ncdf4::ncatt_get(NC, 0, "rcm_version_id")$value
+    NCf$global.10.rcm_version_id =
+        ncdf4::ncatt_get(NC, 0, "rcm_version_id")$value
     # meta_projection$version[projection_ok]
     # "v2"
 
 ### 1.6. experiment_id _______________________________________________
-# Un nom d’identification court de l’expérience (scénario ou historique)
-RCP = toupper(gsub(".*[-]", "", dataEX$EXP[1]))
-RCP = paste0(substr(RCP, 1, 4), ".", substr(RCP, 5, 5))
-NCf$global.11.experiment = paste0("historical+", RCP,
-                                  " run with GCM forcing")
-NCf$global.12.experiment_id = dataEX$EXP[1]
+    # Un nom d’identification court de l’expérience (scénario ou historique)
+    RCP = toupper(gsub(".*[-]", "", dataEX$EXP[1]))
+    RCP = paste0(substr(RCP, 1, 4), ".", substr(RCP, 5, 5))
+    NCf$global.11.experiment = paste0("historical+", RCP,
+                                      " run with GCM forcing")
+    NCf$global.12.experiment_id = dataEX$EXP[1]
+}
 
 ### 1.7. frequency ___________________________________________________
 # L’intervalle de temps d’échantillonnage de la série de données
@@ -120,80 +134,81 @@ NCf$global.15.creation_date =
     ncdf4::ncatt_get(NC, 0, "creation_date")$value
     # meta_projection$creation[projection_ok]
     # "2018-11-19T14:35:23Z"
-    
+
+if (!is_SAFRAN) {
 ### 1.10. comment ____________________________________________________
-# Informations sur l’initialisation de la simulation ou fournit des
-# références littéraires
-NCf$global.16.comment = ncdf4::ncatt_get(NC, 0, "comment")$value
+    # Informations sur l’initialisation de la simulation ou fournit des
+    # références littéraires
+    NCf$global.16.comment = ncdf4::ncatt_get(NC, 0, "comment")$value
     # "CORDEX Europe EUR-11 CNRM-ALADIN 6.3 L91 CNRM-CERFACS-CNRM-CM5: EUC12v63-3.02. Reference : Daniel M., Lemonsu A., Déqué M., Somot S., Alias A., Masson V. (2018) Benefits of explicit urban parametrization in regional climate modelling to study climate and city interactions. Climate Dynamics, 1-20, doi:10.1007/s00382-018-4289-x"
-NCf$global.17.driving_experiment_comment =
-    ncdf4::ncatt_get(NC, 0, "driving_experiment_comment")$value
+    NCf$global.17.driving_experiment_comment =
+        ncdf4::ncatt_get(NC, 0, "driving_experiment_comment")$value
     # "Known issue correction: this simulation (named v2) is not affected by the error previously identified in the lateral boundary conditions files of CNRM-CERFACS-CNRM-CM5"
 
 
 ## 2. CORRECTION DE BIAIS ATMOSPHÉRIQUE ______________________________
 ### 2.1. product _____________________________________________________
-# Une chaîne de caractères indiquant la méthodologie pour créer cet
-# ensemble de données.
-NCf$global.18.product = "bias-correction"
+    # Une chaîne de caractères indiquant la méthodologie pour créer cet
+    # ensemble de données.
+    NCf$global.18.product = "bias-correction"
 
 ### 2.2. bc_institute_id _____________________________________________
-# Un nom d’identification court du centre qui a mis en œuvre la
-# correction de biais
-NCf$global.19.bc_institute_id =
-    ncdf4::ncatt_get(NC, 0, "bc_institute_id")$value
+    # Un nom d’identification court du centre qui a mis en œuvre la
+    # correction de biais
+    NCf$global.19.bc_institute_id =
+        ncdf4::ncatt_get(NC, 0, "bc_institute_id")$value
 
 ### 2.3. bc_contact_id _______________________________________________
-# Fournit l’adresse électronique de la personne responsable des données
-NCf$global.20.bc_contact =
-    ncdf4::ncatt_get(NC, 0, "bc_contact")$value
+    # Fournit l’adresse électronique de la personne responsable des données
+    NCf$global.20.bc_contact =
+        ncdf4::ncatt_get(NC, 0, "bc_contact")$value
 
 ### 2.4. bc_creation_date ____________________________________________
-# La date à laquelle la correction de biais a été faite
-NCf$global.21.bc_creation_date =
-    ncdf4::ncatt_get(NC, 0, "bc_creation_date")$value
+    # La date à laquelle la correction de biais a été faite
+    NCf$global.21.bc_creation_date =
+        ncdf4::ncatt_get(NC, 0, "bc_creation_date")$value
 
 ### 2.5. bc_method_id ________________________________________________
-# Une chaîne de caractères indiquant la méthode de correction de biais
-NCf$global.22.bc_method =
-    ncdf4::ncatt_get(NC, 0, "bc_method")$value
-NCf$global.23.bc_method_id =
-    ncdf4::ncatt_get(NC, 0, "bc_method_id")$value
+    # Une chaîne de caractères indiquant la méthode de correction de biais
+    NCf$global.22.bc_method =
+        ncdf4::ncatt_get(NC, 0, "bc_method")$value
+    NCf$global.23.bc_method_id =
+        ncdf4::ncatt_get(NC, 0, "bc_method_id")$value
 
 ### 2.6. bc_observation_id ___________________________________________
-# Une chaîne de caractères de la base d’observation utilisée pour
-# corriger les données
-NCf$global.24.bc_observation =
-    ncdf4::ncatt_get(NC, 0, "bc_observation")$value
-NCf$global.25.bc_observation_id =
-    ncdf4::ncatt_get(NC, 0, "bc_observation_id")$value
+    # Une chaîne de caractères de la base d’observation utilisée pour
+    # corriger les données
+    NCf$global.24.bc_observation =
+        ncdf4::ncatt_get(NC, 0, "bc_observation")$value
+    NCf$global.25.bc_observation_id =
+        ncdf4::ncatt_get(NC, 0, "bc_observation_id")$value
 
 ### 2.7. bc_domain ___________________________________________________
-# Une chaîne de caractères indiquant le domaine d’application de la
-# méthode de correction
-NCf$global.26.bc_domain = ncdf4::ncatt_get(NC, 0, "bc_domain")$value
+    # Une chaîne de caractères indiquant le domaine d’application de la
+    # méthode de correction
+    NCf$global.26.bc_domain = ncdf4::ncatt_get(NC, 0, "bc_domain")$value
 
 ### 2.8. bc_period ___________________________________________________
-# Période sur laquelle a été appliqué la phase d’apprentissage de la
-# méthode de correction
-NCf$global.27.bc_period_ref =
-    ncdf4::ncatt_get(NC, 0, "bc_period_ref")$value
-NCf$global.28.bc_period_rcm =
-    ncdf4::ncatt_get(NC, 0, "bc_period_rcm")$value
+    # Période sur laquelle a été appliqué la phase d’apprentissage de la
+    # méthode de correction
+    NCf$global.27.bc_period_ref =
+        ncdf4::ncatt_get(NC, 0, "bc_period_ref")$value
+    NCf$global.28.bc_period_rcm =
+        ncdf4::ncatt_get(NC, 0, "bc_period_rcm")$value
 
 ### 2.9. bc_info _____________________________________________________
-# Une compilation des attributs : bc_institute_id "-" bc_method_id
-# "-" bc_observation_id en accord avec Bc-Inst-Method
-NCf$global.29.bc_info = ncdf4::ncatt_get(NC, 0, "bc_info")$value
+    # Une compilation des attributs : bc_institute_id "-" bc_method_id
+    # "-" bc_observation_id en accord avec Bc-Inst-Method
+    NCf$global.29.bc_info = ncdf4::ncatt_get(NC, 0, "bc_info")$value
 
 ### 2.10. bc_comment _________________________________________________
-# Complément d’information sur la méthode de correction ou fournit
-# des références littéraires
-NCf$global.30.bc_comment =
-    ncdf4::ncatt_get(NC, 0, "bc_comment")$value
-NCf$global.31.Conventions =
-    ncdf4::ncatt_get(NC, 0, "bc_Conventions")$value
-
+    # Complément d’information sur la méthode de correction ou fournit
+    # des références littéraires
+    NCf$global.30.bc_comment =
+        ncdf4::ncatt_get(NC, 0, "bc_comment")$value
+    NCf$global.31.Conventions =
+        ncdf4::ncatt_get(NC, 0, "bc_Conventions")$value
+}
 
 
 ## 3. MODÉLISATION HYDROLOGIQUE ______________________________________
