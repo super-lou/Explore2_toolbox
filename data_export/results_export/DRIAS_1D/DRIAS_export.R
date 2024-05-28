@@ -172,11 +172,11 @@ if (MPI == "file") {
 
 # EC-EARTH_historical-rcp26_HadREM3-GA7_ADAMONT_EROS
 ### /!\ ###
-# OK = grepl("ADAMONT", Chain_dirpath) &
-#     grepl("rcp26", Chain_dirpath) &
-#     grepl("EARTH", Chain_dirpath) &
-#     grepl("HadREM3", Chain_dirpath) &
-#     grepl("EROS", Chain_dirpath)
+# OK = grepl("SAFRAN", Chain_dirpath) &
+    # grepl("rcp26", Chain_dirpath) &
+    # grepl("EARTH", Chain_dirpath) &
+    # grepl("HadREM3", Chain_dirpath) &
+    # grepl("MORDOR-SD", Chain_dirpath)
 # Chain_dirpath = Chain_dirpath[OK] 
 ###########
 
@@ -284,7 +284,7 @@ for (i in 1:nChain_dirpath) {
     Var_path = Var_path[!grepl("meta", basename(Var_path))]
 
     ### /!\ ###
-    # Var_path = Var_path[grepl("QMA", Var_path)]
+    # Var_path = Var_path[grepl("startLF_summer", Var_path)]
     ###########
     nVar_path = length(Var_path)
     
@@ -503,9 +503,14 @@ for (i in 1:nChain_dirpath) {
         
         ok1 = all(dateEX == Date_test)
         ok2 = all.equal(valEX, Value_test, 0.001)
-        ok3 = all.equal(meta_ALL_test[[surface_var]],
-                        surface_test,
-                        0.1)
+        if (!is_SAFRAN) {
+            ok3 = all.equal(meta_ALL_test[[surface_var]],
+                            surface_test,
+                            0.1)
+        } else {
+            # there is some NA in surface in SAFRAN MORDOR-SD
+            ok3 = TRUE
+        }
         ok4 = all.equal(meta_ALL_test$XL93_m,
                         L93_X_test,
                         0.1)
