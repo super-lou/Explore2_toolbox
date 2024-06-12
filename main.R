@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./" #botan / sacados
+    # "./" #botan / sacados
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -398,7 +398,7 @@ propagate_NA = TRUE
 # nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 50
+nCode4RAM = 100
 
 # Directory where to search for projections structures:
 # - 'raw' is for computer_data_path/projection/
@@ -1940,6 +1940,7 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                     # extract_data =
                     #     extract_data_save[grepl("serie",
                     #                             extract_data_save)]
+                    extract_data = extract_data_save
                     variable2search = c('meta[.]',
                                         'dataEX',
                                         'metaEX')

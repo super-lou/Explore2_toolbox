@@ -1,5 +1,5 @@
 run:
-	nohup mpirun -np 4 Rscript main.R > output.txt 2> error.txt &
+	nohup mpirun -np 3 Rscript main.R > output.txt 2> error.txt &
 
 clean:
 	rm -rf tmp_*
