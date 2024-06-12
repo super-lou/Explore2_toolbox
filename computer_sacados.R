@@ -46,13 +46,13 @@
 #  \___|\___/|_|_|_|| .__/ \_,_| \__|\___||_|  
 ## 1. INFO ________ |_| ______________________________________________
 # Work path
-computer_work_path = '/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox'
+computer_work_path = '/media/dora/SUPER_LOU/backup/project/Explore2_project/Explore2_toolbox/'
 # Library path for package dev
-dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
+dev_lib_path = '/media/dora/SUPER_LOU/backup/project/'
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
-computer_data_path = '/home/louis/Documents/bouleau/INRAE/data/Explore2'
+computer_data_path = '/media/dora/SUPER_LOU/backup/data/Explore2'
 projs_selection_file = "ensembleProjectionClimatExplore2.txt"
 #### 2.1.1 Hydro _____________________________________________________
 obs_hydro_dir = "Explore2 HYDRO QJM critiques 2023"
@@ -66,9 +66,7 @@ codes_piezo_selection_file = "piezometres_references_hubeau.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
-CARD_path = file.path(dev_lib_path,
-                      "CARD_project",
-                      "CARD")
+CARD_path = file.path(dev_lib_path, "CARD")
 # Name of the tool directory that includes all the functions needed to
 # calculate a variable
 init_tools_dir = '__tools__'
@@ -82,7 +80,7 @@ icon_dir = 'icon/SVG'
 
 ### 2.4. Shapefile ________________________________________________
 computer_shp_path =
-    '/home/louis/Documents/bouleau/INRAE/data/map'
+    '/media/dora/SUPER_LOU/backup/data/map'
 # Path to the shapefile for france contour from 'computer_data_path' 
 france_shp_path = 'france/gadm36_FRA_0.shp'
 # Path to the shapefile for basin shape from 'computer_data_path' 
@@ -94,6 +92,7 @@ secteurHydro_shp_path = 'secteurHydro/secteurHydro.shp'
 # Path to the shapefile for station basins shape from 'computer_data_path' 
 entiteHydro_shp_path = c('entiteHydro/BV_4207_stations.shp',
                          'entiteHydro/3BVs_FRANCE_L2E_2018.shp')
+entiteHydro_coord = c('L93', 'L2')
 river_shp_path = 'coursEau/CoursEau_FXX.shp'
 # piezo
 entitePiezo_shp_path = "entitePiezo_niveau1_extension/entitePiezo_niveau1_extension.shp"

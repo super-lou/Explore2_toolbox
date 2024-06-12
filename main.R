@@ -472,7 +472,7 @@ codes_to_use =
     c(
         # "all"
         # "K298191001" #ref
-        # "O200001001" #ref
+        "O200001001" #ref
 
         # "K294401001"
         # "K297031001"
@@ -486,9 +486,9 @@ codes_to_use =
         # LETTERS[11:26]
 
         ## Agnès
-        "H552201001"
-        "K268081001"
-        "Y046403002"
+        # "H552201001"
+        # "K268081001"
+        # "Y046403002"
         
         
         ## Flora
@@ -765,7 +765,7 @@ Explore2_serie_projection_medQJ =
 #                      "BFI_Wal_H2", "BFI_Wal_H3",
 #                      "BFI_LH_H0", "BFI_LH_H1",
 #                      "BFI_LH_H2", "BFI_LH_H3"),
-#          suffix="sim")
+#          suffix="sim") 51 15 4 12
 
 Explore2_criteria_projection_HF =
     list(name='Explore2_criteria_projection_HF',

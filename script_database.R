@@ -320,130 +320,130 @@ CREATE TABLE IF NOT EXISTS ", table_name, " (
                     ###
                 }
 
-                index_name = paste0("idx_chain_n_", table_name)
-                query = paste0("CREATE INDEX ", index_name,
-                               " ON ", table_name, " (chain, n);")
-                dbExecute(con, query)
+                # index_name = paste0("idx_chain_n_", table_name)
+                # query = paste0("CREATE INDEX ", index_name,
+                #                " ON ", table_name, " (chain, n);")
+                # dbExecute(con, query)
 
-                index_name = paste0("idx_code_gcm_rcm_bc_", table_name)
-                query = paste0("CREATE INDEX ", index_name,
-                               " ON ", table_name, " (code, gcm, rcm, bc);")
-                dbExecute(con, query)
+                # index_name = paste0("idx_code_gcm_rcm_bc_", table_name)
+                # query = paste0("CREATE INDEX ", index_name,
+                #                " ON ", table_name, " (code, gcm, rcm, bc);")
+                # dbExecute(con, query)
             }
         }
 
         
         ## Serie
-#         for (var in Variables_serie) {
-#             print(paste0(exp, " ", var))
+        for (var in Variables_serie) {
+            print(paste0(exp, " ", var))
             
-#             Paths = list.files(Projections_exp$path,
-#                                pattern="dataEX",
-#                                include.dirs=TRUE,
-#                                full.names=TRUE)
-#             pattern = paste0("^", var, "[.]fst")
-#             Paths = list.files(Paths,
-#                                pattern=pattern,
-#                                full.names=TRUE)
-#             Paths = Paths[!duplicated(Paths)]
-#             nPath = length(Paths)
+            Paths = list.files(Projections_exp$path,
+                               pattern="dataEX",
+                               include.dirs=TRUE,
+                               full.names=TRUE)
+            pattern = paste0("^", var, "[.]fst")
+            Paths = list.files(Paths,
+                               pattern=pattern,
+                               full.names=TRUE)
+            Paths = Paths[!duplicated(Paths)]
+            nPath = length(Paths)
 
-#             data_id = tolower(paste0(gsub("[-]", "_", exp), "_", var))
-#             table_name = paste0("delta_", data_id)
-#             query = paste0("
-# CREATE TABLE IF NOT EXISTS ", table_name, " (
-#     id SERIAL PRIMARY KEY,
-#     chain VARCHAR(255) REFERENCES projections(chain),
-#     exp VARCHAR(255),    
-#     gcm VARCHAR(255),
-#     rcm VARCHAR(255),
-#     bc VARCHAR(255),
-#     hm VARCHAR(255),
-#     variable_en VARCHAR(255) REFERENCES variables(variable_en),
-#     code VARCHAR(255) REFERENCES stations(code),
-#     n INT,
-#     date DATE,
-#     value DOUBLE PRECISION
-# );
-# ")
-#             dbExecute(con, query)
+            data_id = tolower(paste0(gsub("[-]", "_", exp), "_", var))
+            table_name = paste0("delta_", data_id)
+            query = paste0("
+CREATE TABLE IF NOT EXISTS ", table_name, " (
+    id SERIAL PRIMARY KEY,
+    chain VARCHAR(255) REFERENCES projections(chain),
+    exp VARCHAR(255),    
+    gcm VARCHAR(255),
+    rcm VARCHAR(255),
+    bc VARCHAR(255),
+    hm VARCHAR(255),
+    variable_en VARCHAR(255) REFERENCES variables(variable_en),
+    code VARCHAR(255) REFERENCES stations(code),
+    n INT,
+    date DATE,
+    value DOUBLE PRECISION
+);
+")
+            dbExecute(con, query)
 
-#             for (j in 1:nPath) {
-#                 print(paste0(j, "/", nPath, " -> ",
-#                              round(j/nPath*100, 1), " %"))
+            for (j in 1:nPath) {
+                print(paste0(j, "/", nPath, " -> ",
+                             round(j/nPath*100, 1), " %"))
                 
-#                 path = Paths[j]
-#                 dataEX = read_tibble(path)
-#                 dataEX = dplyr::select(dataEX,
-#                                        EXP, GCM, RCM, BC, HM,
-#                                        code, date,
-#                                        value=dplyr::all_of(var))
-#                 dataEX$variable_en = var
-#                 dataEX = tidyr::unite(dataEX,
-#                                       "Chain",
-#                                       "EXP", "GCM", 
-#                                       "RCM", "BC",
-#                                       "HM", sep="_",
-#                                       remove=FALSE)
+                path = Paths[j]
+                dataEX = read_tibble(path)
+                dataEX = dplyr::select(dataEX,
+                                       EXP, GCM, RCM, BC, HM,
+                                       code, date,
+                                       value=dplyr::all_of(var))
+                dataEX$variable_en = var
+                dataEX = tidyr::unite(dataEX,
+                                      "Chain",
+                                      "EXP", "GCM", 
+                                      "RCM", "BC",
+                                      "HM", sep="_",
+                                      remove=FALSE)
 
-#                 dataEX$code_Chain = paste0(dataEX$code, "_",
-#                                            dataEX$Chain)
-#                 dataEX = filter(dataEX,
-#                                 !(code_Chain %in%
-#                                   chain_to_remove$code_Chain))
-#                 dataEX = select(dataEX, -code_Chain)
+                dataEX$code_Chain = paste0(dataEX$code, "_",
+                                           dataEX$Chain)
+                dataEX = filter(dataEX,
+                                !(code_Chain %in%
+                                  chain_to_remove$code_Chain))
+                dataEX = select(dataEX, -code_Chain)
                 
-#                 dataEX =
-#                     left_join(dataEX,
-#                               select(Stations,
-#                                      code, n=all_of(n_exp)),
-#                               by="code")
-#                 dataEX = relocate(dataEX,
-#                                   variable_en, .before=code)
-#                 dataEX = relocate(dataEX, n, .before=date)
+                dataEX =
+                    left_join(dataEX,
+                              select(Stations,
+                                     code, n=all_of(n_exp)),
+                              by="code")
+                dataEX = relocate(dataEX,
+                                  variable_en, .before=code)
+                dataEX = relocate(dataEX, n, .before=date)
 
-#                 if (!grepl("medQJ", var)) {
-#                     dataEX_historical =
-#                         summarise(group_by(filter(dataEX,
-#                                                   historical[1] <= date &
-#                                                   date <= historical[2]),
-#                                            Chain, code),
-#                                   mean_value=mean(value, na.rm=TRUE),
-#                                   .groups="drop")
+                if (!grepl("medQJ", var)) {
+                    dataEX_historical =
+                        summarise(group_by(filter(dataEX,
+                                                  historical[1] <= date &
+                                                  date <= historical[2]),
+                                           Chain, code),
+                                  mean_value=mean(value, na.rm=TRUE),
+                                  .groups="drop")
                     
-#                     dataEX = dplyr::left_join(dataEX, dataEX_historical,
-#                                               by=c("Chain", "code"))
-#                     dataEX$value =
-#                         (dataEX$value - dataEX$mean_value) /
-#                         dataEX$mean_value * 100
-#                     dataEX = select(dataEX, -mean_value)
-#                     dataEX$date =
-#                         as.Date(paste0(lubridate::year(dataEX$date), "-01-01"))
-#                     date_stat =
-#                         summarise(group_by(filter(dataEX, !is.na(value)),
-#                                            Chain, code),
-#                                   min_date=min(date, na.rm=TRUE),
-#                                   max_date=max(date, na.rm=TRUE),
-#                                   .groups="drop")
-#                     min_date = max(date_stat$min_date)
-#                     max_date = min(date_stat$max_date)
-#                     dataEX = dplyr::filter(dataEX,
-#                                            min_date <= date &
-#                                            date <= max_date)
-#                 }
+                    dataEX = dplyr::left_join(dataEX, dataEX_historical,
+                                              by=c("Chain", "code"))
+                    dataEX$value =
+                        (dataEX$value - dataEX$mean_value) /
+                        dataEX$mean_value * 100
+                    dataEX = select(dataEX, -mean_value)
+                    dataEX$date =
+                        as.Date(paste0(lubridate::year(dataEX$date), "-01-01"))
+                    date_stat =
+                        summarise(group_by(filter(dataEX, !is.na(value)),
+                                           Chain, code),
+                                  min_date=min(date, na.rm=TRUE),
+                                  max_date=max(date, na.rm=TRUE),
+                                  .groups="drop")
+                    min_date = max(date_stat$min_date)
+                    max_date = min(date_stat$max_date)
+                    dataEX = dplyr::filter(dataEX,
+                                           min_date <= date &
+                                           date <= max_date)
+                }
 
-#                 names(dataEX) = tolower(names(dataEX))
-#                 ###
-#                 dbWriteTable(con, table_name, dataEX,
-#                              append=TRUE, row.names=FALSE)
-#                 ###
-#             }
+                names(dataEX) = tolower(names(dataEX))
+                ###
+                dbWriteTable(con, table_name, dataEX,
+                             append=TRUE, row.names=FALSE)
+                ###
+            }
             
-#             index_name = paste0("idx_chain_code_", table_name)
-#             query = paste0("CREATE INDEX ", index_name,
-#                            " ON ", table_name, " (chain, code);")
-#             dbExecute(con, query)
-#         }
+            index_name = paste0("idx_chain_code_", table_name)
+            query = paste0("CREATE INDEX ", index_name,
+                           " ON ", table_name, " (chain, code);")
+            dbExecute(con, query)
+        }
     }
     dbDisconnect(con)  
 }
