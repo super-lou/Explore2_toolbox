@@ -1222,6 +1222,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     spread_name = c("inside", "outside")
                     names(tmp[[k]]$spread) = spread_name
 
+                    print(tmp[[k]])
+                    
                     for (x in spread_name) {
                         tmp[[k]]$spread[[x]] = 
                             tibble(tmp[[k]]$spread[[x]]) %>%
