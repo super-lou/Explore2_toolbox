@@ -1222,9 +1222,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     spread_name = c("inside", "outside")
                     names(tmp[[k]]$spread) = spread_name
 
+                    post("full")
                     print(tmp[[k]])
                     
                     for (x in spread_name) {
+
+                        post("spread")
+                        print(tmp[[k]]$spread[[x]])
+                        
                         tmp[[k]]$spread[[x]] = 
                             tibble(tmp[[k]]$spread[[x]]) %>%
                             filter(rcp=="rcp85") %>%
@@ -1239,6 +1244,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                  names(tmp[[k]]$spread[[x]]))
 
                     }
+
+                    post("signe")
+                    print(tmp[[k]]$signe)
+
                     tmp[[k]]$signe = 
                         tmp[[k]]$signe %>%
                         filter(rcp=="rcp85") %>%
