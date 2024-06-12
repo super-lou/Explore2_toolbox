@@ -44,8 +44,8 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./" #botan
-    '/home/lheraut/library/Explore2_toolbox' #ESPRI
+    "./" #botan / sacados
+    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
     # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
@@ -208,13 +208,13 @@ to_do = c(
     # 'save_extract'
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
-    # 'reshape_extracted_data_for_figure'
+    'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'read_tmp'
     # 'read_saving'
 
     ## all
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -367,9 +367,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -470,9 +470,9 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # "all"
+        "all"
         # "K298191001" #ref
-        "O200001001" #ref
+        # "O200001001" #ref
 
         # "K294401001"
         # "K297031001"
