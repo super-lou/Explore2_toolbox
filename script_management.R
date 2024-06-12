@@ -1286,7 +1286,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
                                    type),
-                         paste0("dataEX_criteria_", letter, ".fst"))
+                         paste0("dataEX_criteria_",
+                                subset_name, ".fst"))
             write_tibble(metaEX_criteria,
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),

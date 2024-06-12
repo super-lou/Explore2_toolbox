@@ -1691,25 +1691,52 @@ if (type == "hydrologie") {
         Files_name = list(Files_name)
     }
     nFiles = length(Files)
+    post(paste0("All ", nFiles, " files: ",
+                paste0(names(Files), collapse=" ")))
 
+    
     Subsets_save = Subsets
     nSubsets_save = nSubsets
     if (MPI == "code") {
-        Subsets = Subsets[rank+1]
-        Subsets = Subsets[!is.na(names(Subsets))]
-        nSubsets = length(Subsets)
+        # Subsets = Subsets[rank+1]
+        # Subsets = Subsets[!is.na(names(Subsets))]
+        # nSubsets = length(Subsets)
 
-        if (nSubsets == 0) {
+        # if (nSubsets == 0) {
+        #     if (any(c('extract_data', 'save_extract') %in% to_do)) {
+        #         Rmpi::mpi.send(as.integer(1), type=1,
+        #                        dest=0, tag=1, comm=0)
+        #     }
+        #     post(paste0("End signal from rank ", rank)) 
+        # }
+        start = ceiling(seq(1, nSubsets,
+                            by=(nSubsets/size)))
+        if (any(diff(start) == 0)) {
+            start = 1:nSubsets
+            end = start
+        } else {
+            end = c(start[-1]-1, nSubsets)
+        }
+        if (rank == 0) {
+            post(paste0(paste0("rank ", 0:(size-1), " get ",
+                               end-start+1, " files"),
+                        collapse="    "))
+        }
+        if (Rrank+1 > nSubsets) {
+            Subsets = NULL
             if (any(c('extract_data', 'save_extract') %in% to_do)) {
                 Rmpi::mpi.send(as.integer(1), type=1,
                                dest=0, tag=1, comm=0)
             }
-            post(paste0("End signal from rank ", rank)) 
+            post(paste0("End signal from rank ", rank))
+            
+        } else {
+            Subsets = Subsets[start[Rrank+1]:end[Rrank+1]]
         }
     }
-
-    post(paste0("All ", nFiles, " files: ",
-                paste0(names(Files), collapse=" ")))
+    nSubsets = length(Subsets)
+    post(paste0("All ", nSubsets, " subsets: ",
+                paste0(names(Subsets), collapse=" ")))
 
     
 } else if (type == "piezometrie") {
@@ -1910,9 +1937,9 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                     }
                     to_do = c(to_do_save,
                               'read_saving')
-                    extract_data =
-                        extract_data_save[grepl("serie",
-                                                extract_data_save)]
+                    # extract_data =
+                    #     extract_data_save[grepl("serie",
+                    #                             extract_data_save)]
                     variable2search = c('meta[.]',
                                         'dataEX',
                                         'metaEX')
@@ -1977,8 +2004,8 @@ if (any(c('create_data', 'extract_data', 'save_extract',
         }
         timer$time = as.numeric(timer$stop - timer$start)
 
-        if ('find_chain_out' %in% to_do |
-            'reshape_extracted_data_for_figure' %in% to_do
+        if (('find_chain_out' %in% to_do |
+            'reshape_extracted_data_for_figure' %in% to_do)
             ## to rm
             # & FALSE #####
             ##
@@ -1988,19 +2015,19 @@ if (any(c('create_data', 'extract_data', 'save_extract',
             # to_do_save = to_do #####
             ##
             
-            firstLetters = unique(firstLetterALL)
-            for (letter in firstLetters) {
-                Code_selection = CodeALL10[firstLetterALL == letter]
-                to_do = c(to_do_save, 'read_saving')
-                extract_data = extract_data_save[grepl("criteria",
-                                                       extract_data_save)]
-                variable2search = c('dataEX', 'metaEX')
+            # firstLetters = unique(firstLetterALL)
+            # for (letter in firstLetters) {
+            #     Code_selection = CodeALL10[firstLetterALL == letter]
+            #     to_do = c(to_do_save, 'read_saving')
+            #     extract_data = extract_data_save[grepl("criteria",
+            #                                            extract_data_save)]
+            #     variable2search = c('dataEX', 'metaEX')
                 
-                source(file.path(lib_path, 'script_management.R'),
-                       encoding='UTF-8')
+            #     source(file.path(lib_path, 'script_management.R'),
+            #            encoding='UTF-8')
 
-                to_do = to_do_save
-            }
+            #     to_do = to_do_save
+            # }
             if ('find_chain_out' %in% to_do) {
                 OK = !duplicated(paste0(chain_to_remove$code,
                                         chain_to_remove$Chain))
