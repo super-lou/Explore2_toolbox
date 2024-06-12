@@ -1,2 +1,2 @@
 mpi:
-	mpirun -n 4 Rscript main.R 
+	nohup mpirun -np 4 Rscript main.R > output.txt 2> error.txt &
