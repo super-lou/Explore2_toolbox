@@ -398,7 +398,7 @@ propagate_NA = TRUE
 # nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 50
 
 # Directory where to search for projections structures:
 # - 'raw' is for computer_data_path/projection/
