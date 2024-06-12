@@ -130,7 +130,7 @@ NCf$time.05.axis = "T"
 # Paramètres :
 #         long_name : Un nom d’identification long de la variable
 
-match_code = match(Code, meta$code)
+match_code = match(Code, meta_ALL$code)
 
 ### 2.1. La dimension station ________________________________________
 NCf$station.name = "station"
@@ -140,7 +140,7 @@ NCf$station.value = 1:length(Code)
 NCf$name.name = "name"
 NCf$name.dimension = "name_strlen, station"
 NCf$name.precision = "char"
-NCf$name.value = meta$name[match_code]
+NCf$name.value = meta_ALL$name[match_code]
 NCf$name.01.long_name = "name of stations"
 NCf$name_strlen.name = "name_strlen"
 NCf$name_strlen.value = 1:max(nchar(NCf$name.value))
@@ -172,7 +172,7 @@ NCf$code_type_strlen.is_nchar_dimension = TRUE
 NCf$network_origin.name = "network_origin"
 NCf$network_origin.dimension = "network_origin_strlen, station"
 NCf$network_origin.precision = "char"
-NCf$network_origin.value = meta$source[match_code]
+NCf$network_origin.value = meta_ALL$source[match_code]
 NCf$network_origin.01.long_name = "origin of network for stations"
 NCf$network_origin_strlen.name = "network_origin_strlen"
 NCf$network_origin_strlen.value = 1:max(nchar(NCf$network_origin.value))

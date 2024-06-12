@@ -171,8 +171,10 @@ if (MPI == "file") {
 }
 
 # EC-EARTH_historical-rcp26_HadREM3-GA7_ADAMONT_EROS
+# MORDOR-SD/SAFRAN_MORDOR-SD"
 ### /!\ ###
-# OK = grepl("SAFRAN", Chain_dirpath) &
+# OK =
+    # grepl("SAFRAN", Chain_dirpath) &
     # grepl("rcp26", Chain_dirpath) &
     # grepl("EARTH", Chain_dirpath) &
     # grepl("HadREM3", Chain_dirpath) &

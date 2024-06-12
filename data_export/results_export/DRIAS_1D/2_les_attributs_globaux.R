@@ -61,8 +61,8 @@ if (is_SAFRAN) {
     # Une chaîne de caractères indiquant le modèle de forçage de cette
     # simulation
     NCf$global.02.forcing = 
-        paste0(dataEX$RCM[1], " with ",
-               dataEX$GCM[1], " forcing data")
+        paste0(meta_projection$rcm.short[projection_ok], " with ",
+               meta_projection$gcm.short[projection_ok], " forcing data")
 
 ### 1.3. driving_* ___________________________________________________
     # Des chaînes de caractères caractérisant le modèle forçeur dans la
