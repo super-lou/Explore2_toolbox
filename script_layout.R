@@ -91,11 +91,11 @@ plot_sheet_projection_station = function (Code_to_plot,
                                           "metaEX_serie.fst")
             metaEX_serie_tmp = read_tibble(metaEX_serie_path)
 
-            code_letter = substr(Code_tmp[1], 1, 1)
-            dataEX_criteria_path = file.path(dirname(path),
-                                             paste0("dataEX_criteria_",
-                                                    code_letter,
-                                                    ".fst"))
+            dataEX_criteria_path =
+                file.path(dirname(path),
+                          paste0(gsub("serie", "criteria",
+                                      basename(path)),
+                                 ".fst"))
             dataEX_criteria_tmp = read_tibble(dataEX_criteria_path)
             metaEX_criteria_path = file.path(dirname(path),
                                              "metaEX_criteria.fst")
