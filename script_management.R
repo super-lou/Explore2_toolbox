@@ -1173,8 +1173,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
     
     if ('reshape_extracted_data_for_figure' %in% to_do) {
-
-        if (any(grepl("serie", extract_data))) {
+        meta_tmp = dplyr::filter(codes_selection_data,
+                                 code %in% meta$code)
+        
+        if (any(grepl("serie", extract_data)) & nrow(meta_tmp) > 0) {
             for (k in 1:length(dataEX_serie)) {
                 dataEX_serie[[k]]$code_Chain =
                     paste0(dataEX_serie[[k]]$code, "_",
@@ -1196,8 +1198,6 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                    paste0(mode, "_for_figure"),
                                    type), "metaEX_serie.fst")
 
-            meta_tmp = dplyr::filter(codes_selection_data,
-                                     code %in% meta$code)
             write_tibble(meta_tmp,
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
@@ -1290,7 +1290,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 subset_name, ".fst"))
         }
 
-        if (any(grepl("criteria", extract_data))) {
+        if (any(grepl("criteria", extract_data)) & nrow(meta_tmp) > 0) {
             dataEX_criteria$code_Chain =
                 paste0(dataEX_criteria$code, "_",
                        dataEX_criteria$Chain)

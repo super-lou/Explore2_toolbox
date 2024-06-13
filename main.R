@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./" #botan / sacados
+    # "./" #botan / sacados
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -367,9 +367,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -418,8 +418,8 @@ projections_to_use =
         # "ADAMONT"
 
         ## figure ##
-        # "rcp85",
-        # "SAFRAN"
+        "rcp85",
+        "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -432,7 +432,7 @@ projections_to_use =
         # "HadGEM2.*rcp85.*CCLM4.*ADAMONT",
         # "EARTH.*rcp85.*HadREM3.*ADAMONT"
         # "CNRM.*rcp85.*ALADIN63.*ADAMONT",
-        "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
+        # "HadGEM2.*rcp85.*ALADIN63.*ADAMONT"
     )
 except_SAFRAN =
     # TRUE
@@ -452,14 +452,14 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP",
-        # "EROS",
-        # "GRSD",
-        # "J2000",
-        # "MORDOR-SD",
-        # "MORDOR-TS",
-        # "ORCHIDEE",
-        # "SIM2",
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
         "SMASH"
 
         # "AquiFR",
@@ -470,7 +470,7 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # "all"
+        "all"
         # "K298191001" #ref
         # "O200001001" #ref
 
@@ -479,7 +479,7 @@ codes_to_use =
         # "O036251010"
         # "A105003001"
         # "^H"
-        "^R"
+        # "^R"
         # "^K29"
         # "^K"
         # "A882000101"
