@@ -1229,17 +1229,17 @@ if (any(grepl("plot", to_do))) {
     # require(rgdal)
     library(Cairo)
 
-    # if (exists("font")) {
-    #     library(extrafont)
-    #     font_import(paths=file.path(resources_path,
-    #                                 "/fonts"),
-    #                 prompt=FALSE)
-    #     loadfonts(device="pdf")
-    #     font = TRUE
-    # }
+    if (!exists("font")) {
+        library(extrafont)
+        font_import(paths=file.path(resources_path,
+                                    "fonts"),
+                    prompt=FALSE)
+        loadfonts(device="pdf")
+        font = TRUE
+    }
     
     assign_colors_and_fonts("EXPLORE2")
-    theme_set(theme(text=element_text(family="TeX Gyre Heros")))
+    theme_set(theme(text=element_text(family="Lato")))
 }
 
 if (MPI != "") {
