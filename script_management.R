@@ -1196,7 +1196,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                    paste0(mode, "_for_figure"),
                                    type), "metaEX_serie.fst")
 
-            meta_tmp = filter(codes_selection_data, code %in% meta$code)
+            meta_tmp = dplyr::filter(codes_selection_data,
+                                     code %in% meta$code)
             write_tibble(meta_tmp,
                          file.path(resdir,
                                    paste0(mode, "_for_figure"),
@@ -1222,13 +1223,15 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     spread_name = c("inside", "outside")
                     names(tmp[[k]]$spread) = spread_name
 
-                    post("full")
-                    print(tmp[[k]])
+                    # post("full")
+                    # print(tmp[[k]])
                     
                     for (x in spread_name) {
 
-                        post("spread")
-                        print(tmp[[k]]$spread[[x]])
+                        # post("spread")
+                        # print(tmp[[k]]$spread[[x]])
+
+                        # stop()
                         
                         tmp[[k]]$spread[[x]] = 
                             tibble(tmp[[k]]$spread[[x]]) %>%
@@ -1245,8 +1248,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                     }
 
-                    post("signe")
-                    print(tmp[[k]]$signe)
+                    
+
+                    # post("signe")
+                    # print(tmp[[k]]$signe)
 
                     tmp[[k]]$signe = 
                         tmp[[k]]$signe %>%
