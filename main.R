@@ -1227,6 +1227,7 @@ if (any(grepl("plot", to_do))) {
     library(ggtext)
     require(sf) #nope
     # require(rgdal)
+    library(Cairo)
     
     assign_colors_and_fonts("EXPLORE2")
     theme_set(theme(text=element_text(family="TeX Gyre Heros")))
