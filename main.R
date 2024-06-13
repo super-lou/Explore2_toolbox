@@ -471,10 +471,10 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     c(
         # "all"
-        # "K298191001" #ref
+        "K298191001" #ref
         # "O200001001" #ref
 
-        "A105003001"
+        # "A105003001"
         # "K294401001"
         # "K297031001"
         # "O036251010"
@@ -1228,9 +1228,18 @@ if (any(grepl("plot", to_do))) {
     require(sf) #nope
     # require(rgdal)
     library(Cairo)
+
+    # if (exists("font")) {
+    #     library(extrafont)
+    #     font_import(paths=file.path(resources_path,
+    #                                 "/fonts"),
+    #                 prompt=FALSE)
+    #     loadfonts(device="pdf")
+    #     font = TRUE
+    # }
     
     assign_colors_and_fonts("EXPLORE2")
-    theme_set(theme(text=element_text(family="DejaVu Sans")))
+    theme_set(theme(text=element_text(family="TeX Gyre Heros")))
 }
 
 if (MPI != "") {
