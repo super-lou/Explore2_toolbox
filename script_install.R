@@ -26,9 +26,9 @@
 # module load proj
 # module load gdal
 # module load R/3.6.3
-# if (!require(fst)) install.packages("fst")
-# if (!require(dplyr)) install.packages("dplyr")
-# if (!require(tidyr)) install.packages("tidyr")
+if (!require(fst)) install.packages("fst")
+if (!require(dplyr)) install.packages("dplyr")
+if (!require(tidyr)) install.packages("tidyr")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(qpdf)) install.packages("qpdf")
 if (!require(gridExtra)) install.packages("gridExtra")
@@ -40,9 +40,12 @@ if (!require(png)) install.packages("png")
 if (!require(ggrepel)) install.packages("ggrepel")
 if (!require(latex2exp)) install.packages("latex2exp")
 if (!require(sf)) install.packages("sf")
-# if (!require(stringr)) install.packages("stringr")
+if (!require(stringr)) install.packages("stringr")
 if (!require(ggtext)) install.packages("ggtext")
-# if (!require(ncdf4)) install.packages("ncdf4")
+if (!require(ncdf4)) install.packages("ncdf4")
 if (!require(rgeos)) install.packages("rgeos")
-# if (!require(lubridate)) install.packages("lubridate")
-# if (!require(RcppRoll)) install.packages("RcppRoll")
+if (!require(lubridate)) install.packages("lubridate")
+if (!require(RcppRoll)) install.packages("RcppRoll")
+
+
+remotes::install_github("coolbutuseless/svgparser")
