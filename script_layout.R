@@ -124,6 +124,7 @@ plot_sheet_projection_station = function (Code_to_plot,
                 Warnings=Warnings,
                 logo_info=logo_info,
                 Shapefiles=Shapefiles,
+                alt_config=computer!="botan",
                 figdir=today_figdir_leaf,
                 Pages=Pages,
                 verbose=subverbose)
