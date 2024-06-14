@@ -1225,7 +1225,7 @@ if (any(grepl("plot", to_do))) {
     library(ggrepel)
     library(latex2exp)
     library(ggtext)
-    require(sf) #nope
+    library(sf) #nope
     # require(rgdal)
     library(Cairo)
 

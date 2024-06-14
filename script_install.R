@@ -34,7 +34,6 @@ if (!require(qpdf)) install.packages("qpdf")
 if (!require(gridExtra)) install.packages("gridExtra")
 if (!require(gridtext)) install.packages("gridtext") #nope
 if (!require(ggh4x)) install.packages("ggh4x")
-if (!require(rgdal)) install.packages("rgdal")
 if (!require(shadowtext)) install.packages("shadowtext")
 if (!require(png)) install.packages("png")
 if (!require(ggrepel)) install.packages("ggrepel")
