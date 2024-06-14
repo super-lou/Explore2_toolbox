@@ -471,10 +471,10 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     c(
         # "all"
-        "K298191001" #ref
+        # "K298191001" #ref
         # "O200001001" #ref
 
-        # "A105003001"
+        "A105003001"
         # "K294401001"
         # "K297031001"
         # "O036251010"
@@ -1231,9 +1231,7 @@ if (any(grepl("plot", to_do))) {
 
     if (!exists("font")) {
         library(extrafont)
-        font_import(paths=file.path(resources_path,
-                                    "fonts"),
-                    prompt=FALSE)
+        font_import(paths=file.path(resources_path, "fonts"))
         loadfonts(device="pdf")
         font = TRUE
         # Cairo::CairoFonts(regular="Lato",
