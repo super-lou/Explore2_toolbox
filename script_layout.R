@@ -101,9 +101,9 @@ plot_sheet_projection_station = function (today_figdir_leaf,
                 france_shp_path=france_shp_path,
                 bassinHydro_shp_path=bassinHydro_shp_path,
                 regionHydro_shp_path=regionHydro_shp_path,
-                secteurHydro_shp_path=secteurHydro_shp_path,
+                # secteurHydro_shp_path=secteurHydro_shp_path,
                 entiteHydro_shp_path=entiteHydro_shp_path,
-                entitePiezo_shp_path=entitePiezo_shp_path,
+                # entitePiezo_shp_path=entitePiezo_shp_path,
                 river_shp_path=river_shp_path,
                 river_selection=river_selection,
                 river_length=river_length,
@@ -152,15 +152,17 @@ if (!exists("Shapefiles") & MPI != "code") {
 
     if (type == "hydrologie") {
         Code_shp = CodeALL8
+        entitePiezo_shp_path = NULL
     } else if (type == "piezometrie") {
         Code_shp = CodeALL
     }
+    
     Shapefiles = load_shapefile(
         computer_shp_path, Code_shp,
         france_shp_path=france_shp_path,
         bassinHydro_shp_path=bassinHydro_shp_path,
         regionHydro_shp_path=regionHydro_shp_path,
-        secteurHydro_shp_path=secteurHydro_shp_path,
+        # secteurHydro_shp_path=secteurHydro_shp_path,
         entiteHydro_shp_path=entiteHydro_shp_path,
         entitePiezo_shp_path=entitePiezo_shp_path,
         river_shp_path=river_shp_path,

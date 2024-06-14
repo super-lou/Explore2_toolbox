@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./" #botan / sacados
+    # "./" #botan / sacados
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -208,13 +208,13 @@ to_do = c(
     # 'save_extract'
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
-    # 'reshape_extracted_data_for_figure'
+    'reshape_extracted_data_for_figure'
     # 'create_database'
     # 'read_tmp'
     # 'read_saving'
 
     ## all
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -398,7 +398,7 @@ propagate_NA = TRUE
 # nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 100
+nCode4RAM = 25
 
 # Directory where to search for projections structures:
 # - 'raw' is for computer_data_path/projection/
