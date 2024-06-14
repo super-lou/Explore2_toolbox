@@ -1217,6 +1217,7 @@ library(stringr)
 if (any(grepl("plot", to_do))) {
     library(ggplot2)
     library(qpdf)
+    library(grid)
     library(gridExtra)
     library(gridtext)
     library(ggh4x)
@@ -1233,7 +1234,8 @@ if (any(grepl("plot", to_do))) {
         library(extrafont)
         font_import(paths=file.path(resources_path, "fonts"),
                     prompt=FALSE)
-        loadfonts(device="pdf")
+        # loadfonts(device="pdf")
+        loadfonts()
         font = TRUE
         # Cairo::CairoFonts(regular="Lato",
                           # bold="Lato Black",
