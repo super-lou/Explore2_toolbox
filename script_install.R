@@ -26,6 +26,11 @@
 # module load proj
 # module load gdal
 # module load R/3.6.3
+
+sudo apt install libcurl4-openssl-dev libxml2-dev libudunits2-dev libssl-dev
+sudo apt-get install libgdal-dev gdal-bin
+sudo apt-get install libcairo2-dev
+
 if (!require(fst)) install.packages("fst")
 if (!require(dplyr)) install.packages("dplyr")
 if (!require(tidyr)) install.packages("tidyr")
@@ -41,10 +46,10 @@ if (!require(latex2exp)) install.packages("latex2exp")
 if (!require(sf)) install.packages("sf")
 if (!require(stringr)) install.packages("stringr")
 if (!require(ggtext)) install.packages("ggtext")
-if (!require(ncdf4)) install.packages("ncdf4")
-if (!require(rgeos)) install.packages("rgeos")
+# if (!require(ncdf4)) install.packages("ncdf4")
 if (!require(lubridate)) install.packages("lubridate")
-if (!require(RcppRoll)) install.packages("RcppRoll")
-
+if (!require(Cairo)) install.packages("Cairo")
+if (!require(extrafont)) install.packages("extrafont")
+if (!require(remotes)) install.packages("remotes")
 
 remotes::install_github("coolbutuseless/svgparser")

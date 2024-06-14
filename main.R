@@ -471,10 +471,10 @@ complete_by = c("SMASH", "GRSD")
 codes_to_use =
     c(
         # "all"
-        # "K298191001" #ref
+        "K298191001" #ref
         # "O200001001" #ref
 
-        "A105003001"
+        # "A105003001"
         # "K294401001"
         # "K297031001"
         # "O036251010"
@@ -1220,9 +1220,9 @@ if (any(grepl("plot", to_do))) {
     library(gridExtra)
     library(gridtext)
     library(ggh4x)
-    library(shadowtext)
+    # library(shadowtext)
     library(png)
-    library(ggrepel)
+    # library(ggrepel)
     library(latex2exp)
     library(ggtext)
     library(sf) #nope
