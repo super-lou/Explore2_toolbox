@@ -1231,7 +1231,8 @@ if (any(grepl("plot", to_do))) {
 
     if (!exists("font")) {
         library(extrafont)
-        font_import(paths=file.path(resources_path, "fonts"))
+        font_import(paths=file.path(resources_path, "fonts"),
+                    prompt=FALSE)
         loadfonts(device="pdf")
         font = TRUE
         # Cairo::CairoFonts(regular="Lato",
