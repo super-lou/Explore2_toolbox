@@ -367,9 +367,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
@@ -470,8 +470,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        # "all"
-        "K298191001" #ref
+        "all"
+        # "K298191001" #ref
         # "O200001001" #ref
 
         # "A105003001"
