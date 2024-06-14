@@ -1236,10 +1236,10 @@ if (any(grepl("plot", to_do))) {
                     prompt=FALSE)
         loadfonts(device="pdf")
         font = TRUE
-        Cairo::CairoFonts(regular="Lato",
-                          bold="Lato Black",
-                          italic="Lato Italic",
-                          bolditalic="Lato Bold Italic")
+        # Cairo::CairoFonts(regular="Lato",
+                          # bold="Lato Black",
+                          # italic="Lato Italic",
+                          # bolditalic="Lato Bold Italic")
     }
     
     assign_colors_and_fonts("EXPLORE2")
