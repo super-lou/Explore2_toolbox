@@ -46,13 +46,13 @@
 #  \___|\___/|_|_|_|| .__/ \_,_| \__|\___||_|  
 ## 1. INFO ________ |_| ______________________________________________
 # Work path
-computer_work_path = '/home/dora/library/Explore2_toolbox/'
+computer_work_path = '/home/popi/library/Explore2_toolbox/'
 # Library path for package dev
-dev_lib_path = '/home/dora/library/'
+dev_lib_path = '/home/popi/library/'
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
-computer_data_path = '/home/dora//data/Explore2'
+computer_data_path = '/home/popi/data/Explore2'
 projs_selection_file = "ensembleProjectionClimatExplore2.txt"
 #### 2.1.1 Hydro _____________________________________________________
 obs_hydro_dir = "Explore2 HYDRO QJM critiques 2023"
@@ -80,7 +80,7 @@ icon_dir = 'icon/SVG'
 
 ### 2.4. Shapefile ________________________________________________
 computer_shp_path =
-    '/home/dora/data/map'
+    '/home/popi/data/map'
 # Path to the shapefile for france contour from 'computer_data_path' 
 france_shp_path = 'france/gadm36_FRA_0.shp'
 # Path to the shapefile for basin shape from 'computer_data_path' 
