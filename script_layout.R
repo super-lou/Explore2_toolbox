@@ -95,6 +95,25 @@ plot_sheet_projection_station = function (today_figdir_leaf,
         metaEX_criteria_tmp = read_tibble(metaEX_criteria_path)
         data_QUALYPSO_tmp = read_tibble(data_QUALYPSO_path)
 
+        if (MPI == "code") {
+            Shapefiles = load_shapefile(
+                computer_shp_path, meta_tmp$code_hydro2,
+                france_shp_path=france_shp_path,
+                bassinHydro_shp_path=bassinHydro_shp_path,
+                regionHydro_shp_path=regionHydro_shp_path,
+                secteurHydro_shp_path=secteurHydro_shp_path,
+                entiteHydro_shp_path=entiteHydro_shp_path,
+                entitePiezo_shp_path=entitePiezo_shp_path,
+                river_shp_path=river_shp_path,
+                river_selection=river_selection,
+                river_length=river_length,
+                toleranceRel=toleranceRel)
+            
+            Shapefiles$entiteHydro$code =
+                codes10_selection[match(Shapefiles$entiteHydro$code,
+                                        codes8_selection)]
+        }
+        
         Pages = sheet_projection_station(
             meta_tmp,
             dataEX_serie_tmp,
@@ -128,7 +147,7 @@ logo_info = lapply(logo_info, add_path)
 icon_path = file.path(resources_path, icon_dir)
 
 
-if (!exists("Shapefiles")) {
+if (!exists("Shapefiles") & MPI != "code") {
     post("### Loading shapefiles")
 
     if (type == "hydrologie") {
