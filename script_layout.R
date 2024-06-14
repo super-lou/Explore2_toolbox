@@ -59,77 +59,61 @@ plot_sheet_diagnostic_station = function (dataEX_criteria_chunk,
     return (Pages)
 }
 
-plot_sheet_projection_station = function (Code_to_plot,
-                                          today_figdir_leaf,
+plot_sheet_projection_station = function (today_figdir_leaf,
                                           Pages=NULL,
                                           subverbose=FALSE) {
+
+    dirpath = file.path(resdir,
+                        gsub("projection",
+                             "projection_for_figure",
+                             read_saving))
     
-    Paths = list.files(file.path(resdir,
-                                 gsub("projection",
-                                      "projection_for_figure",
-                                      read_saving)),
-                       pattern="^dataEX[_]serie.*$",
-                       include.dirs=TRUE,
-                       full.names=TRUE)
-    letterPaths = gsub("(.*[_])|([[:digit:]]+)", "", Paths)
-    Paths = Paths[letterPaths %in% substr(Code_to_plot, 1, 1)]
-    for (path in Paths) {
-        meta_path = paste0(gsub("dataEX[_]serie",
-                                "meta", path), ".fst")
+    for (ss in 1:nSubsets) {
+        subset = Subsets[[ss]]
+        subset_name = names(Subsets)[ss]
+
+        meta_path = file.path(dirpath,
+                              paste0("meta_", subset_name, ".fst"))
+        dataEX_serie_path = file.path(dirpath,
+                                      paste0("dataEX_serie_",
+                                             subset_name, ".fst"))
+        metaEX_serie_path = file.path(dirpath,
+                                      "metaEX_serie.fst")
+        dataEX_criteria_path = file.path(dirpath,
+                                         paste0("dataEX_criteria_",
+                                                subset_name, ".fst"))
+        metaEX_criteria_path = file.path(dirpath,
+                                         "metaEX_criteria.fst")
+        data_QUALYPSO_path = file.path(dirpath,
+                                       paste0("data_QUALYPSO_",
+                                              subset_name, ".fst"))
+        
         meta_tmp = read_tibble(meta_path)
-        Code_tmp = levels(factor(meta_tmp$code))
+        dataEX_serie_tmp = read_tibble(dataEX_serie_path)
+        metaEX_serie_tmp = read_tibble(metaEX_serie_path)
+        dataEX_criteria_tmp = read_tibble(dataEX_criteria_path)
+        metaEX_criteria_tmp = read_tibble(metaEX_criteria_path)
+        data_QUALYPSO_tmp = read_tibble(data_QUALYPSO_path)
 
-        if (any(Code_tmp %in% Code_to_plot)) {
-            meta_tmp = meta_tmp[meta_tmp$code %in% Code_to_plot,]
-            dataEX_serie_tmp = read_tibble(paste0(path, ".fst"))
-            for (k in 1:length(dataEX_serie_tmp)) {
-                dataEX_serie_tmp[[k]] =
-                    dplyr::filter(dataEX_serie_tmp[[k]],
-                                  code %in% Code_to_plot)
-            }
-            metaEX_serie_path = file.path(dirname(path),
-                                          "metaEX_serie.fst")
-            metaEX_serie_tmp = read_tibble(metaEX_serie_path)
-
-            dataEX_criteria_path =
-                file.path(dirname(path),
-                          paste0(gsub("serie", "criteria",
-                                      basename(path)),
-                                 ".fst"))
-            dataEX_criteria_tmp = read_tibble(dataEX_criteria_path)
-            metaEX_criteria_path = file.path(dirname(path),
-                                             "metaEX_criteria.fst")
-            metaEX_criteria_tmp = read_tibble(metaEX_criteria_path)
-
-            data_QUALYPSO_path =
-                file.path(dirname(path),
-                          paste0(gsub("EX[_]serie",
-                                      "_QUALYPSO",
-                                      basename(path)),
-                                 ".fst"))
-            data_QUALYPSO_tmp = read_tibble(data_QUALYPSO_path)
-
-            Pages = sheet_projection_station(
-                meta_tmp,
-                dataEX_serie_tmp,
-                metaEX_serie_tmp,
-                dataEX_criteria_tmp,
-                metaEX_criteria_tmp,
-                data_QUALYPSO_tmp,
-                Colors=Colors_of_storylines,
-                Colors_light=Colors_light_of_storylines,
-                Names=storylines,
-                historical=historical,
-                icon_path=icon_path,
-                Warnings=Warnings,
-                logo_info=logo_info,
-                Shapefiles=Shapefiles,
-                alt_config=computer!="botan",
-                figdir=today_figdir_leaf,
-                Pages=Pages,
-                verbose=subverbose)
-            break
-        }
+        Pages = sheet_projection_station(
+            meta_tmp,
+            dataEX_serie_tmp,
+            metaEX_serie_tmp,
+            dataEX_criteria_tmp,
+            metaEX_criteria_tmp,
+            data_QUALYPSO_tmp,
+            Colors=Colors_of_storylines,
+            Colors_light=Colors_light_of_storylines,
+            Names=storylines,
+            historical=historical,
+            icon_path=icon_path,
+            Warnings=Warnings,
+            logo_info=logo_info,
+            Shapefiles=Shapefiles,
+            alt_config=computer!="botan",
+            figdir=today_figdir_leaf,
+            Pages=Pages,
+            verbose=subverbose)
     }
     return (Pages)
 }
@@ -543,7 +527,7 @@ for (i in 1:nChunk) {
         if (sheet == 'fiche_projection_station') {
             post("### Plotting sheet projection station")
             Pages = plot_sheet_projection_station(
-                Code_to_plot,
+                # Code_to_plot,
                 today_figdir_leaf=today_figdir_leaf,
                 Pages=Pages,
                 subverbose=subverbose)
