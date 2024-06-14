@@ -1222,29 +1222,23 @@ if (any(grepl("plot", to_do))) {
     library(gridtext)
     library(ggh4x)
     # library(shadowtext)
-    library(png)
     # library(ggrepel)
+    library(png)
     library(latex2exp)
     library(ggtext)
-    library(sf) #nope
-    # require(rgdal)
+    library(sf)
     library(Cairo)
 
     if (!exists("font")) {
         library(extrafont)
         font_import(paths=file.path(resources_path, "fonts"),
                     prompt=FALSE)
-        # loadfonts(device="pdf")
         loadfonts()
         font = TRUE
-        # Cairo::CairoFonts(regular="Lato",
-                          # bold="Lato Black",
-                          # italic="Lato Italic",
-                          # bolditalic="Lato Bold Italic")
     }
     
     assign_colors_and_fonts("EXPLORE2")
-    theme_set(theme(text=element_text(family="Lato")))
+    # theme_set(theme(text=element_text(family="Lato")))
 }
 
 if (MPI != "") {
