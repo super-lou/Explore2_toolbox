@@ -69,7 +69,7 @@ plot_sheet_projection_station = function (today_figdir_leaf,
                              read_saving))
 
     # restart = 1
-    restart = 34
+    restart = 58
     
     for (ss in restart:nSubsets) {
         subset = Subsets[[ss]]
