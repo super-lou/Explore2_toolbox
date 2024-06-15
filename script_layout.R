@@ -72,6 +72,8 @@ plot_sheet_projection_station = function (today_figdir_leaf,
         subset = Subsets[[ss]]
         subset_name = names(Subsets)[ss]
 
+        post(paste0(ss, " ", subset_name, " ", subset, " "))
+
         meta_path = file.path(dirpath,
                               paste0("meta_", subset_name, ".fst"))
         dataEX_serie_path = file.path(dirpath,
