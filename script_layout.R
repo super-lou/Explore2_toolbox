@@ -67,8 +67,11 @@ plot_sheet_projection_station = function (today_figdir_leaf,
                         gsub("projection",
                              "projection_for_figure",
                              read_saving))
+
+    # restart = 1
+    restart = 34
     
-    for (ss in 1:nSubsets) {
+    for (ss in restart:nSubsets) {
         subset = Subsets[[ss]]
         subset_name = names(Subsets)[ss]
 
