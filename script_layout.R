@@ -114,7 +114,7 @@ plot_sheet_projection_station = function (today_figdir_leaf,
                                         codes8_selection)]
         }
         
-        Pages = sheet_projection_station(
+        sheet_projection_station(
             meta_tmp,
             dataEX_serie_tmp,
             metaEX_serie_tmp,
@@ -131,10 +131,10 @@ plot_sheet_projection_station = function (today_figdir_leaf,
             Shapefiles=Shapefiles,
             alt_config=computer!="botan",
             figdir=today_figdir_leaf,
-            Pages=Pages,
+            Pages=NULL,
             verbose=subverbose)
     }
-    return (Pages)
+    return (NULL)
 }
 
 
