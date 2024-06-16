@@ -206,7 +206,7 @@ to_do = c(
     # 'create_data',
     # 'extract_data',
     # 'save_extract'
-    # 'find_chain_out'
+    'find_chain_out'
     # 'add_more_info_to_metadata'
     # 'reshape_extracted_data_for_figure'
     # 'create_database'
@@ -214,7 +214,7 @@ to_do = c(
     # 'read_saving'
 
     ## all
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -231,20 +231,20 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
+    # 'Explore2_serie_projection_HF',
     'Explore2_serie_projection_MF',
     # 'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ',
+    # 'Explore2_serie_projection_medQJ',
     # 'Explore2_serie_projection_QM',
     
-    'Explore2_criteria_projection_HF',
-    'Explore2_criteria_projection_MF',
-    'Explore2_criteria_projection_LF',
-    'Explore2_criteria_projection_LF_summer'
+    # 'Explore2_criteria_projection_HF',
+    'Explore2_criteria_projection_MF'
+    # 'Explore2_criteria_projection_LF',
+    # 'Explore2_criteria_projection_LF_summer'
     # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
 )
@@ -367,9 +367,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    # ""
+    ""
     # "file"
-    "code"
+    # "code"
 
 
 #  ___  _                  
@@ -398,7 +398,7 @@ propagate_NA = TRUE
 # nCode4RAM | 25 | 25
 # nodes     |  3 |  2
 # tasks     | 28 | 28
-nCode4RAM = 25
+nCode4RAM = 100
 
 # Directory where to search for projections structures:
 # - 'raw' is for computer_data_path/projection/
@@ -413,13 +413,13 @@ projs_type =
 
 projections_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
         ## figure ##
-        "rcp85",
-        "SAFRAN"
+        # "rcp85",
+        # "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -2016,37 +2016,20 @@ if (any(c('create_data', 'extract_data', 'save_extract',
         }
         timer$time = as.numeric(timer$stop - timer$start)
 
-        if (('find_chain_out' %in% to_do |
-            'reshape_extracted_data_for_figure' %in% to_do)
-            ## to rm
-            # & FALSE #####
-            ##
-            ) {
-            ## to rm 
-            # extract_data_save = extract_data #####
-            # to_do_save = to_do #####
-            ##
+        if ('find_chain_out' %in% to_do) {
+            chain_to_remove$code_Chain =
+                paste0(chain_to_remove$code, "_", 
+                       chain_to_remove$Chain)
             
-            # firstLetters = unique(firstLetterALL)
-            # for (letter in firstLetters) {
-            #     Code_selection = CodeALL10[firstLetterALL == letter]
-            #     to_do = c(to_do_save, 'read_saving')
-            #     extract_data = extract_data_save[grepl("criteria",
-            #                                            extract_data_save)]
-            #     variable2search = c('dataEX', 'metaEX')
-                
-            #     source(file.path(lib_path, 'script_management.R'),
-            #            encoding='UTF-8')
-
-            #     to_do = to_do_save
-            # }
-            if ('find_chain_out' %in% to_do) {
-                OK = !duplicated(paste0(chain_to_remove$code,
-                                        chain_to_remove$Chain))
-                chain_to_remove = chain_to_remove[OK,]
-                write_tibble(chain_to_remove, today_resdir,
-                             "chain_to_remove.csv")
-            }
+            OK_dup = duplicated(chain_to_remove$code_Chain)
+            chain_to_remove_dup = dplyr::filter(chain_to_remove, OK_dup)
+            chain_to_remove_dup$on = "both"
+            OK = !(chain_to_remove$code_Chain %in% chain_to_remove_dup$code_Chain)
+            chain_to_remove = chain_to_remove[OK,]
+            chain_to_remove = dplyr::bind_rows(chain_to_remove,
+                                               chain_to_remove_dup)
+            write_tibble(chain_to_remove, today_resdir,
+                         "chain_to_remove.csv")
         }
         
     } else {
