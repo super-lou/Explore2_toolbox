@@ -68,14 +68,15 @@ plot_sheet_projection_station = function (today_figdir_leaf,
                              "projection_for_figure",
                              read_saving))
 
-    # restart = 1
-    restart = 58
+    restart = 1
+    # restart = 58
     
     for (ss in restart:nSubsets) {
         subset = Subsets[[ss]]
         subset_name = names(Subsets)[ss]
 
-        post(paste0(ss, " ", subset_name, " ", subset, " "))
+        post(paste0(ss, " ", subset_name, " ",
+                    paste0(subset, collapse=" -> "), " "))
 
         meta_path = file.path(dirpath,
                               paste0("meta_", subset_name, ".fst"))

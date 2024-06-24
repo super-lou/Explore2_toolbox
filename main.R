@@ -206,7 +206,7 @@ to_do = c(
     # 'create_data',
     # 'extract_data',
     # 'save_extract'
-    'find_chain_out'
+    # 'find_chain_out'
     # 'add_more_info_to_metadata'
     # 'reshape_extracted_data_for_figure'
     # 'create_database'
@@ -214,7 +214,7 @@ to_do = c(
     # 'read_saving'
 
     ## all
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
@@ -231,20 +231,20 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    # 'Explore2_serie_projection_HF',
+    'Explore2_serie_projection_HF',
     'Explore2_serie_projection_MF',
     # 'Explore2_serie_projection_LF',
-    # 'Explore2_serie_projection_LF_summer',
+    'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
     # 'Explore2_serie_projection_BF',
     # 'Explore2_serie_projection_FDC',
-    # 'Explore2_serie_projection_medQJ',
+    'Explore2_serie_projection_medQJ',
     # 'Explore2_serie_projection_QM',
     
-    # 'Explore2_criteria_projection_HF',
-    'Explore2_criteria_projection_MF'
-    # 'Explore2_criteria_projection_LF',
-    # 'Explore2_criteria_projection_LF_summer'
+    'Explore2_criteria_projection_HF',
+    'Explore2_criteria_projection_MF',
+    'Explore2_criteria_projection_LF',
+    'Explore2_criteria_projection_LF_summer'
     # 'Explore2_criteria_projection_LF_winter',
     # 'Explore2_criteria_projection_BF'
 )
@@ -367,9 +367,9 @@ subverbose =
 
 # Which type of MPI is used
 MPI =
-    ""
+    # ""
     # "file"
-    # "code"
+    "code"
 
 
 #  ___  _                  
