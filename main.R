@@ -1538,6 +1538,11 @@ if (type == "hydrologie") {
 
     nFiles_to_use = length(files_to_use)
 
+    
+    post(nFiles_to_use)
+    
+
+    
     if (projs_type != "extracted" |
         'find_chain_out' %in% to_do |
         'add_more_info_to_metadata' %in% to_do) {
