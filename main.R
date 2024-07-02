@@ -219,7 +219,7 @@ to_do = c(
 )
 
 extract_data = c(
-    'WIP'
+    # 'WIP'
     # 'Explore2_criteria_diagnostic_performance',
     # 'Explore2_criteria_diagnostic_sensibility',
     # 'Explore2_criteria_diagnostic_sensibility_RAT',
@@ -452,15 +452,15 @@ storylines =
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
-        "SMASH"
+        "CTRIP"
+        # "EROS"
+        # "GRSD"
+        # "J2000"
+        # "MORDOR-SD"
+        # "MORDOR-TS"
+        # "ORCHIDEE"
+        # "SIM2"
+        # "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
