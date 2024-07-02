@@ -87,22 +87,23 @@ create_data = function () {
             isSim = FALSE
         } else {
             id = match(CodeSUB10, CodeALL10)
-            meta_sim =
-                dplyr::tibble(
-                           code=CodeSUB10,
-                           name=codes_selection_data$SuggestionNOM[id],
-                           hydrological_region=
-                               iRegHydro()[substr(CodeSUB10, 1, 1)],
-                           source=codes_selection_data$SOURCE[id],
-                           reference=
-                               codes_selection_data$Référence[id],
-                           XL93_m=
-                               as.numeric(codes_selection_data$XL93[id]),
-                           YL93_m=
-                               as.numeric(codes_selection_data$YL93[id]),
-                           surface_km2=
-                               as.numeric(codes_selection_data$S_HYDRO[id]))
+            # meta_sim =
+            #     dplyr::tibble(
+            #                code=CodeSUB10,
+            #                name=codes_selection_data$SuggestionNOM[id],
+            #                hydrological_region=
+            #                    iRegHydro()[substr(CodeSUB10, 1, 1)],
+            #                source=codes_selection_data$SOURCE[id],
+            #                reference=
+            #                    codes_selection_data$Référence[id],
+            #                XL93_m=
+            #                    as.numeric(codes_selection_data$XL93[id]),
+            #                YL93_m=
+            #                    as.numeric(codes_selection_data$YL93[id]),
+            #                surface_km2=
+            #                    as.numeric(codes_selection_data$S_HYDRO[id]))
 
+            meta_sim = codes_selection_data[id,]
             meta_sim_tmp = dplyr::summarise(dplyr::group_by(data_sim,
                                                             HM,
                                                             code),

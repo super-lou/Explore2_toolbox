@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./" #botan / sacados
+    "./" #botan / sacados
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -1548,8 +1548,6 @@ if (type == "hydrologie") {
                                              !grepl("Supprimer",
                                                     PointsSupprimes))
 
-        print(codes_selection_data)
-        
         codes_selection_data =
             dplyr::select(n=n,
                           codes_selection_data,
