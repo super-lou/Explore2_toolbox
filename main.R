@@ -1547,6 +1547,8 @@ if (type == "hydrologie") {
         codes_selection_data = dplyr::filter(codes_selection_data,
                                              !grepl("Supprimer",
                                                     PointsSupprimes))
+
+        print(codes_selection_data)
         
         codes_selection_data =
             dplyr::select(n=n,
