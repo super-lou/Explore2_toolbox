@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    "./" #botan / sacados
+    # "./" #botan / sacados
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+    '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -203,9 +203,9 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'delete_tmp',
-    # 'create_data',
-    # 'extract_data',
-    # 'save_extract'
+    'create_data',
+    'extract_data',
+    'save_extract'
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
     # 'reshape_extracted_data_for_figure'
@@ -214,7 +214,7 @@ to_do = c(
     # 'read_saving'
 
     ## all
-    'plot_sheet'
+    # 'plot_sheet'
     # 'plot_doc'
 )
 
@@ -231,20 +231,21 @@ extract_data = c(
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
     
-    'Explore2_serie_projection_HF',
-    'Explore2_serie_projection_MF',
+    # 'Explore2_serie_projection_HF',
+    # 'Explore2_serie_projection_MF',
     # 'Explore2_serie_projection_LF',
-    'Explore2_serie_projection_LF_summer',
+    # 'Explore2_serie_projection_LF_summer',
     # 'Explore2_serie_projection_LF_winter',
-    # 'Explore2_serie_projection_BF',
+    # 'Explore2_serie_projection_BFI',
     # 'Explore2_serie_projection_FDC',
-    'Explore2_serie_projection_medQJ',
+    # 'Explore2_serie_projection_medQJ',
     # 'Explore2_serie_projection_QM',
+    'Explore2_serie_projection_BF'
     
-    'Explore2_criteria_projection_HF',
-    'Explore2_criteria_projection_MF',
-    'Explore2_criteria_projection_LF',
-    'Explore2_criteria_projection_LF_summer'
+    # 'Explore2_criteria_projection_HF',
+    # 'Explore2_criteria_projection_MF',
+    # 'Explore2_criteria_projection_LF',
+    # 'Explore2_criteria_projection_LF_summer'
     # 'Explore2_criteria_projection_LF_winter'
     # 'Explore2_criteria_projection_BF'
 )
@@ -368,8 +369,8 @@ subverbose =
 # Which type of MPI is used
 MPI =
     # ""
-    # "file"
-    "code"
+    "file"
+    # "code"
 
 
 #  ___  _                  
@@ -408,18 +409,18 @@ nCode4RAM = 25
 projs_type =
     # "raw"
     # "cleaned"
-    # "merged"
-    "extracted"
+    "merged"
+    # "extracted"
 
 projections_to_use =
     c(
-        # 'all'
+        'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
         ## figure ##
-        "rcp85",
-        "SAFRAN"
+        # "rcp85",
+        # "SAFRAN"
 
         # "SAFRAN-France-20"
         
@@ -507,6 +508,7 @@ codes_to_use =
         # "Loire"="M842001000",
         # "Moselle"="A886006000"
     )
+codes_to_use_only_ref = TRUE
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
@@ -835,13 +837,16 @@ Explore2_criteria_projection_BF =
              "delta{BFI}_LH_H", "delta{BFI}_Wal_H"),
          suffix="sim")
 
-
-
 Explore2_serie_projection_QM =
     list(name='Explore2_serie_projection_QM',
          type="serie",
-         variables=c(
-             "QM_H0", "QM_H1", "QM_H2", "QM_H3"),
+         variables=c("QM_H0", "QM_H1", "QM_H2", "QM_H3"),
+         suffix="sim")
+
+Explore2_serie_projection_BF =
+    list(name='Explore2_serie_projection_BF',
+         type="serie",
+         variables=c("BF_LH"),
          suffix="sim")
 
 
@@ -1595,6 +1600,9 @@ if (type == "hydrologie") {
         ref = 1
     } else if (grepl("projection", mode)) {
         ref = c(0, 1)
+    }
+    if (codes_to_use_only_ref) {
+        ref = 1
     }
 
     codes_selection_data =

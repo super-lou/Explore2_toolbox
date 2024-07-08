@@ -13,21 +13,21 @@ BASE_URL = Sys.getenv("BASE_URL")
 
 
 
-# search_metadata_blocks <- function() {
-#     search_url <- "https://entrepot.recherche.data.gouv.fr/api/metadatablocks/citation"
-#     # search_url <- modify_url(base_url, query=query_params)
-#     response <- GET(search_url)
+search_metadata_blocks <- function() {
+    search_url <- "https://entrepot.recherche.data.gouv.fr/api/metadatablocks/citation"
+    # search_url <- modify_url(base_url, query=query_params)
+    response <- GET(search_url)
     
-#     if (status_code(response) == 200) {
-#         metadata_blocks <- content(response, "parsed")
-#         return(metadata_blocks)
-#     } else {
-#         cat("Failed to retrieve metadata blocks.\n")
-#         cat("Status code: ", status_code(response), "\n")
-#         cat("Response content: ", content(response, as = "text", encoding = "UTF-8"), "\n")
-#         stop("Error during API request.")
-#     }
-# }
+    if (status_code(response) == 200) {
+        metadata_blocks <- content(response, "parsed")
+        return(metadata_blocks)
+    } else {
+        cat("Failed to retrieve metadata blocks.\n")
+        cat("Status code: ", status_code(response), "\n")
+        cat("Response content: ", content(response, as = "text", encoding = "UTF-8"), "\n")
+        stop("Error during API request.")
+    }
+}
 
 
 
@@ -165,21 +165,66 @@ get_doi_from_datasets = function (datasets) {
     names(DOI) = name
     return (DOI)
 }
-dataset_DOI_list = get_doi_from_datasets(datasets)
 
-not_keep = c("A", "U", "V", "Q", "O", "L", "J")
-not_keep = paste0(" ", not_keep, " ")
-not_keep = gsub("[ ]", "[ ]", not_keep)
-not_keep = paste0("(", paste0(not_keep, collapse=")|("), ")")
-dataset_DOI_list =
-    dataset_DOI_list[!grepl(not_keep, names(dataset_DOI_list))]
 
-for (k in 1:length(dataset_DOI_list)) {
-    dataset_name = names(dataset_DOI_list)[k]
-    dataset_DOI = dataset_DOI_list[k]
-    print(dataset_name)
+add_dataset_files <- function(BASE_URL, API_TOKEN, dataset_DOI, paths) {
+    url <- paste0(BASE_URL, '/api/datasets/:persistentId/add?persistentId=', dataset_DOI)
     
-    delete_dataset_files(BASE_URL, API_TOKEN, dataset_DOI)
-    publish_dataset(BASE_URL, API_TOKEN, dataset_DOI, type="major")
+    for (path in paths) {
+        response <- POST(url,
+                         add_headers("X-Dataverse-key" = API_TOKEN),
+                         body=list(file = upload_file(path)),
+                         encode="multipart")
+        
+        print(paste(status_code(response), content(response, "text")))
+    }
 }
 
+
+dataset_DOI_list = get_doi_from_datasets(datasets)
+
+# not_keep = c("A", "U", "V", "Q", "O", "L", "J")
+# not_keep = paste0(" ", not_keep, " ")
+# not_keep = gsub("[ ]", "[ ]", not_keep)
+# not_keep = paste0("(", paste0(not_keep, collapse=")|("), ")")
+# dataset_DOI_list =
+    # dataset_DOI_list[!grepl(not_keep, names(dataset_DOI_list))]
+
+
+to_do = c(
+    # "delete",
+    "add")
+
+if ("delete" %in% to_do) {
+    for (k in 1:length(dataset_DOI_list)) {
+        dataset_name = names(dataset_DOI_list)[k]
+        dataset_DOI = dataset_DOI_list[k]
+        print(dataset_name)
+        
+        delete_dataset_files(BASE_URL, API_TOKEN, dataset_DOI)
+        publish_dataset(BASE_URL, API_TOKEN, dataset_DOI, type="major")
+    }
+}
+
+
+
+figure_dir = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/figures/projection/fiche"
+figure_dirs = list.dirs(figure_dir, recursive=FALSE)
+figure_letters = substr(basename(figure_dirs), 1, 1)
+names(figure_dirs) = figure_letters
+
+
+if ("add" %in% to_do) {
+    for (k in 1:length(dataset_DOI_list)) {
+        dataset_name = names(dataset_DOI_list)[k]
+        dataset_DOI = dataset_DOI_list[k]
+        letter = gsub(".*[:][ ]", "", dataset_name)
+        letter = substr(letter, 1, 1)
+        dir = figure_dirs[names(figure_dirs) == letter]
+        paths = list.files(dir, full.names=TRUE)
+        print(letter)
+        
+        add_dataset_files(BASE_URL, API_TOKEN, dataset_DOI, paths)
+        publish_dataset(BASE_URL, API_TOKEN, dataset_DOI, type="major")
+    }   
+}
