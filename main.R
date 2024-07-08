@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./" #botan / sacados
+    "./" #botan / sacados
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -2110,5 +2110,5 @@ if ('create_database' %in% to_do) {
 
 if (MPI != "") {
     Sys.sleep(10)
-    mpi.finalize()
+    # mpi.finalize()
 }
