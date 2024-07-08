@@ -453,14 +453,14 @@ storylines =
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SIM2"
         "SMASH"
 
         # "AquiFR",
@@ -508,6 +508,7 @@ codes_to_use =
         # "Loire"="M842001000",
         # "Moselle"="A886006000"
     )
+codes_to_use_only_ref = TRUE
 
 diag_station_to_remove =
     c("ORCHIDEE"="K649*",
@@ -1599,6 +1600,9 @@ if (type == "hydrologie") {
         ref = 1
     } else if (grepl("projection", mode)) {
         ref = c(0, 1)
+    }
+    if (codes_to_use_only_ref) {
+        ref = 1
     }
 
     codes_selection_data =
