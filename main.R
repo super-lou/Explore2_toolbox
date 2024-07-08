@@ -423,6 +423,8 @@ projections_to_use =
         # "SAFRAN"
 
         # "SAFRAN-France-20"
+
+        # "NorESM1-M.*historical-rcp26.*REMO.*ADAMONT.*SIM2"
         
         ## story lines ##
         # "HadGEM2.*historical.*CCLM4.*ADAMONT"
