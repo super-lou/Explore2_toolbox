@@ -458,10 +458,10 @@ HM_to_use =
         # "GRSD"
         # "J2000"
         # "MORDOR-SD"
-        "MORDOR-TS"
+        # "MORDOR-TS"
         # "ORCHIDEE"
         # "SIM2"
-        # "SMASH"
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
