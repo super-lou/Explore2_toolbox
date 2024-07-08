@@ -414,7 +414,7 @@ projs_type =
 
 projections_to_use =
     c(
-        'all'
+        # 'all'
         # "(rcp26)|(rcp45)|(rcp85")
         # "ADAMONT"
 
@@ -427,7 +427,7 @@ projections_to_use =
         # "NorESM1-M.*historical-rcp26.*REMO.*ADAMONT.*SIM2"
         
         ## story lines ##
-        # "HadGEM2.*historical.*CCLM4.*ADAMONT"
+        "HadGEM2.*historical.*CCLM4.*ADAMONT"
         # "EARTH.*historical.*HadREM3.*ADAMONT",
         # "CNRM.*historical.*ALADIN63.*ADAMONT",
         # "HadGEM2.*historical.*ALADIN63.*ADAMONT",
@@ -455,14 +455,14 @@ storylines =
 
 HM_to_use = 
     c(
-        "CTRIP",
-        "EROS",
-        "GRSD",
-        "J2000",
-        "MORDOR-SD",
-        "MORDOR-TS",
-        "ORCHIDEE",
-        "SIM2",
+        # "CTRIP",
+        # "EROS",
+        # "GRSD",
+        # "J2000",
+        # "MORDOR-SD",
+        # "MORDOR-TS",
+        # "ORCHIDEE",
+        # "SIM2",
         "SMASH"
 
         # "AquiFR",
@@ -473,8 +473,8 @@ complete_by = c("SMASH", "GRSD")
 
 codes_to_use =
     c(
-        "all"
-        # "K298191001" #ref
+        # "all"
+        "K298191001" #ref
         # "O200001001" #ref
 
         # "W101401002"
@@ -2110,5 +2110,5 @@ if ('create_database' %in% to_do) {
 
 if (MPI != "") {
     Sys.sleep(10)
-    # mpi.finalize()
+    mpi.finalize()
 }
