@@ -453,15 +453,15 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP" ok
-        # "EROS" ok
-        # "GRSD" ok
-        # "J2000" ok
-        # "MORDOR-SD" ok
-        # "MORDOR-TS" ok
-        "ORCHIDEE"
-        # "SIM2" ok
-        # "SMASH" ok
+        # "CTRIP"
+        # "EROS"
+        # "GRSD"
+        # "J2000"
+        # "MORDOR-SD"
+        # "MORDOR-TS"
+        # "ORCHIDEE"
+        # "SIM2"
+        "SMASH" 
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -847,6 +847,7 @@ Explore2_serie_projection_BF =
     list(name='Explore2_serie_projection_BF',
          type="serie",
          variables=c("BF_LH"),
+         expand=FALSE,
          suffix="sim")
 
 
