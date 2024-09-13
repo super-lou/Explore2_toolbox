@@ -42,6 +42,7 @@ list_dataset_files = function(BASE_URL, API_TOKEN, dataset_DOI) {
         dataset_info = fromJSON(response_content)
         files = dataset_info$data$latestVersion$files
         files = files %>%
+            dplyr::select(-description) %>%
             tidyr::unnest(cols=c(dataFile))
         return(files)
     } else {
@@ -145,9 +146,69 @@ search <- function(BASE_URL, API_TOKEN,
     }
 }
 
-query = '"Fiches de résultats des modèles hydrologiques de surface du projet Explore2"'
+get_doi_from_datasets = function (datasets) {
+    name = sapply(datasets$items, function (x) x$name)
+    DOI = sapply(datasets$items, function (x) x$global_id)
+    names(DOI) = name
+    return (DOI)
+}
+
+
+# add_dataset_files <- function(BASE_URL, API_TOKEN, dataset_DOI, paths) {
+#     url <- paste0(BASE_URL, '/api/datasets/:persistentId/add?persistentId=', dataset_DOI)
+    
+#     for (path in paths) {
+#         response <- POST(url,
+#                          add_headers("X-Dataverse-key" = API_TOKEN),
+#                          body=list(file = upload_file(path)),
+#                          encode="multipart")
+        
+#         print(paste(status_code(response), content(response, "text")))
+#     }
+# }
+
+add_dataset_files <- function(BASE_URL, API_TOKEN, dataset_DOI, paths) {
+    url <- paste0(BASE_URL, '/api/datasets/:persistentId/add?persistentId=', dataset_DOI)
+    
+    for (i in 1:length(paths)) {
+        path = paths[i]
+        directory_label = names(paths)[i]
+        # Prepare the relative path if base_path is provided
+        # if (!is.null(names(paths))) {
+            # directory_label <- names(path)
+        # } else {
+            # directory_label <- NULL
+        # }
+        
+        # Prepare the JSON data for metadata
+        json_data <- list(
+            description = "",
+            directoryLabel = directory_label,
+            restrict = "false",
+            tabIngest = "true"
+        )
+        
+        # Send the POST request
+        response <- POST(url,
+                         add_headers("X-Dataverse-key" = API_TOKEN),
+                         body = list(
+                             file = upload_file(path),
+                             jsonData = I(jsonlite::toJSON(json_data, auto_unbox=TRUE))
+                         ),
+                         encode = "multipart")
+        
+        # Print the status code and response
+        print(paste(status_code(response), content(response, "text")))
+    }
+}
+
+
+
+query = '"Fiches de diagnostic régional des modèles hydrologiques de surface du projet Explore2"'
 query = gsub("[ ]", "+", query)
-publication_status = "RELEASED"
+publication_status =
+    # "RELEASED"
+    "DRAFT"
 type = "dataset"
 collection = "Explore2"
 n_search = 40
@@ -159,28 +220,6 @@ datasets = search(BASE_URL, API_TOKEN,
                   collection=collection,
                   n_search=n_search)
 
-get_doi_from_datasets = function (datasets) {
-    name = sapply(datasets$items, function (x) x$name)
-    DOI = sapply(datasets$items, function (x) x$global_id)
-    names(DOI) = name
-    return (DOI)
-}
-
-
-add_dataset_files <- function(BASE_URL, API_TOKEN, dataset_DOI, paths) {
-    url <- paste0(BASE_URL, '/api/datasets/:persistentId/add?persistentId=', dataset_DOI)
-    
-    for (path in paths) {
-        response <- POST(url,
-                         add_headers("X-Dataverse-key" = API_TOKEN),
-                         body=list(file = upload_file(path)),
-                         encode="multipart")
-        
-        print(paste(status_code(response), content(response, "text")))
-    }
-}
-
-
 dataset_DOI_list = get_doi_from_datasets(datasets)
 
 # not_keep = c("A", "U", "V", "Q", "O", "L", "J")
@@ -191,9 +230,14 @@ dataset_DOI_list = get_doi_from_datasets(datasets)
     # dataset_DOI_list[!grepl(not_keep, names(dataset_DOI_list))]
 
 
+# stop()
+
 to_do = c(
-    # "delete",
-    "add")
+    # "delete"
+    "add diagnostic"
+    # "add projection"
+    # "publish"
+)
 
 if ("delete" %in% to_do) {
     for (k in 1:length(dataset_DOI_list)) {
@@ -202,19 +246,46 @@ if ("delete" %in% to_do) {
         print(dataset_name)
         
         delete_dataset_files(BASE_URL, API_TOKEN, dataset_DOI)
-        publish_dataset(BASE_URL, API_TOKEN, dataset_DOI, type="major")
+        if ("publish" %in% to_do) {
+            publish_dataset(BASE_URL, API_TOKEN,
+                            dataset_DOI, type="major")
+        }
     }
 }
 
 
+figure_dir = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/figures/diagnostic/Fiche_diagnostic_région"
+paths = list.files(figure_dir, recursive=TRUE, full.names=TRUE)
+paths = paths[!grepl("sommaire", paths)]
 
-figure_dir = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/figures/projection/fiche"
+name_paths = gsub("[/].*", "", gsub("^[/]", "", gsub(figure_dir, "", paths)))
+# name_paths = gsub("([(])|([)])", "", name_paths)
+# name_paths = gsub("é|è|ê", "e", name_paths)
+# name_paths = gsub("à", "a", name_paths)
+# name_paths = gsub("[']", "_", name_paths)
+# name_paths = gsub("ô", "o", name_paths)
+names(paths) = name_paths
+
+if ("add diagnostic" %in% to_do) {
+    for (k in 1:length(dataset_DOI_list)) {
+        dataset_name = names(dataset_DOI_list)[k]
+        dataset_DOI = dataset_DOI_list[k]
+
+        add_dataset_files(BASE_URL, API_TOKEN, dataset_DOI, paths=paths)
+        if ("publish" %in% to_do) {
+            publish_dataset(BASE_URL, API_TOKEN,
+                            dataset_DOI, type="major")
+        }
+    }
+}
+
+
+figure_dir = "/home/louis/Documents/bouleau/INRAE/project/Explore2_project/Explore2_toolbox/figures/diagnostic/Fiche_diagnostic_région"
 figure_dirs = list.dirs(figure_dir, recursive=FALSE)
 figure_letters = substr(basename(figure_dirs), 1, 1)
 names(figure_dirs) = figure_letters
 
-
-if ("add" %in% to_do) {
+if ("add projection" %in% to_do) {
     for (k in 1:length(dataset_DOI_list)) {
         dataset_name = names(dataset_DOI_list)[k]
         dataset_DOI = dataset_DOI_list[k]
@@ -223,8 +294,11 @@ if ("add" %in% to_do) {
         dir = figure_dirs[names(figure_dirs) == letter]
         paths = list.files(dir, full.names=TRUE)
         print(letter)
-        
-        add_dataset_files(BASE_URL, API_TOKEN, dataset_DOI, paths)
-        publish_dataset(BASE_URL, API_TOKEN, dataset_DOI, type="major")
-    }   
+        add_dataset_files(BASE_URL, API_TOKEN, dataset_DOI,
+                          paths=paths)
+        if ("publish" %in% to_do) {
+            publish_dataset(BASE_URL, API_TOKEN,
+                            dataset_DOI, type="major")
+        }
+    }
 }

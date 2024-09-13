@@ -72,8 +72,8 @@ CARD_extract_data = function () {
 
         res = CARD_extraction(data,
                               CARD_path=CARD_path,
-                              CARD_dir=paste0(extract$name, "_", rank),
                               CARD_tmp=tmppath,
+                              CARD_dir=paste0(extract$name, "_", rank),
                               period_default=period_extract,
                               simplify=simplify,
                               suffix=suffix,
