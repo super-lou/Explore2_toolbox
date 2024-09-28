@@ -44,9 +44,9 @@
 ## 1. REQUIREMENTS ___________________________________________________
 # Explore2_toolbox path
 lib_path =
-    # "./" #botan / sacados
+    "./" #botan / sacados
     # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    '/home/herautl/library/Explore2_toolbox' #MUSE
+    # '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -203,9 +203,9 @@ to_do = c(
     # 'clean_nc'
     # 'merge_nc'
     # 'delete_tmp',
-    'create_data',
-    'extract_data',
-    'save_extract'
+    # 'create_data',
+    # 'extract_data',
+    # 'save_extract'
     # 'find_chain_out'
     # 'add_more_info_to_metadata'
     # 'reshape_extracted_data_for_figure'
@@ -214,7 +214,7 @@ to_do = c(
     # 'read_saving'
 
     ## all
-    # 'plot_sheet'
+    'plot_sheet'
     # 'plot_doc'
 )
 
