@@ -20,8 +20,20 @@
 
 
 if(!require(ncdf4)) install.packages("ncdf4", dependencies=TRUE)
+if(!require(lubridate)) install.packages("lubridate", dependencies=TRUE)
+if(!require(dplyr)) install.packages("dplyr", dependencies=TRUE)
+if(!require(tidyr)) install.packages("tidyr", dependencies=TRUE)
+if(!require(ggh4x)) install.packages("ggh4x", dependencies=TRUE)
+if(!require(latex2exp)) install.packages("latex2exp", dependencies=TRUE)
+
+library(ncdf4)
+library(dplyr)
+library(ggplot2)
+library(ggh4x)
+library(latex2exp)
 
 source("tools.R")
+
 
 
 ## 0. INFO ___________________________________________________________
@@ -29,27 +41,43 @@ source("tools.R")
 # concernants
 Storylines = list(
     vert=list(
+        name="vert",
         EXP="(historical)|(rcp85)",
         GCM="HadGEM2-ES", RCM="ALADIN63", BC="ADAMONT",
-        color="#569A71",
+        climate_chain=c(
+            "historical|MOHC-HadGEM2-ES|CNRM-ALADIN63|MF-ADAMONT-SAFRAN-1980-2011",
+            "rcp85|MOHC-HadGEM2-ES|CNRM-ALADIN63|MF-ADAMONT-SAFRAN-1980-2011"),
+        color="#569A71", color_light="#BAD8C6",
         info="Réchauffement marqué et augmentation des précipitations"
     ),
     jaune=list(
+        name="jaune",
         EXP="(historical)|(rcp85)",
         GCM="CNRM-CM5", RCM="ALADIN63", BC="ADAMONT",
-        color="#EECC66",
+        climate_chain=c(
+            "historical|CNRM-CERFACS-CNRM-CM5|CNRM-ALADIN63|MF-ADAMONT-SAFRAN-1980-2011",
+            "rcp85|CNRM-CERFACS-CNRM-CM5|CNRM-ALADIN63|MF-ADAMONT-SAFRAN-1980-2011"),
+        color="#EECC66", color_light="#F8EBC2",
         info="Changements futurs relativement peu marqués"
     ),
     orange=list(
+        name="orange",
         EXP="(historical)|(rcp85)",
         GCM="EC-EARTH", RCM="HadREM3-GA7", BC="ADAMONT",
-        color="#E09B2F",
+        climate_chain=c(
+            "historical|ICHEC-EC-EARTH|MOHC-HadREM3-GA7-05|MF-ADAMONT-SAFRAN-1980-2011",
+            "rcp85|ICHEC-EC-EARTH|MOHC-HadREM3-GA7-05|MF-ADAMONT-SAFRAN-1980-2011"),
+        color="#E09B2F", color_light="#F3D7AC",
         info="Fort réchauffement et fort assèchement en été (et en annuel)"
     ),
     violet=list(
+        name="violet",
         EXP="(historical)|(rcp85)",
         GCM="HadGEM2-ES", RCM="CCLM4-8-17", BC="ADAMONT",
-        color="#791F5D",
+        climate_chain=c(
+            "historical|MOHC-HadGEM2-ES|CLMcom-CCLM4-8-17|MF-ADAMONT-SAFRAN-1980-2011",
+            "rcp85|MOHC-HadGEM2-ES|CLMcom-CCLM4-8-17|MF-ADAMONT-SAFRAN-1980-2011"),
+        color="#791F5D", color_light="#E9A9D5",
         info="Fort réchauffement et forts contrastes saisonniers en précipitations"
     )
 )
@@ -109,22 +137,22 @@ Paths = list.files(file.path("DRIAS_projections"),
                    full.names=TRUE)
 
 # Le package ncdf4 permet de lire un NetCDF
-NC = ncdf4::nc_open(Paths[1])
+NC = nc_open(Paths[1])
 
 # Dans un premier temps, il est possible d'obtenir la liste des
 # attributs globaux ...
-ncdf4::ncatt_get(NC, "")$value
+ncatt_get(NC, "")$value
 # ou un seul spécifiquement
-ncdf4::ncatt_get(NC, "", "hy_institute_id")$value
+ncatt_get(NC, "", "hy_institute_id")$value
 # De la même manière, il est possible d'obtenir les attributs
 # d'une dimension ou d'une variable
-ncdf4::ncatt_get(NC, "time", "units")$value
+ncatt_get(NC, "time", "units")$value
 
 # Dans un second temps, il est possible d'obtenir une variable
 # contenue dans la liste des variables disponibles
 names(NC$var)
 # Donc par exemple pour obtenir le code des stations :
-Codes_NC = ncdf4::ncvar_get(NC, "code")
+Codes_NC = ncvar_get(NC, "code")
 
 # De cette manière, pour la Dore à Dora ...
 code = "K298191001"
@@ -132,7 +160,7 @@ code = "K298191001"
 id = match(code, Codes_NC)
 # Cet id permet donc d'aller chercher les informations d'intérêts dans
 # ce NetCDF et uniquement dans celui-ci
-ncdf4::ncvar_get(NC, "topologicalSurface_model")[id]
+ncvar_get(NC, "topologicalSurface_model")[id]
 
 # Cependant, il est plus périlleux de vouloir répéter l'opération
 # précédente pour obtenir l'entierté de la matrice des débits.
@@ -145,20 +173,110 @@ start = c(id, 1)
 # l'entiereté de la dimension "time"
 count = c(1, -1)
 # Ainsi, on peut obtenir les débits de la Dore à Dora pour ce NetCDF
-Q = ncdf4::ncvar_get(NC, "debit",
-                     start=start,
-                     count=count)
+Q = ncvar_get(NC, "debit",
+              start=start,
+              count=count)
 
 # et son vecteur temps associé
-Date = ncdf4::ncvar_get(NC, "time") + as.Date("1950-01-01")
+Date = ncvar_get(NC, "time") + as.Date("1950-01-01")
 
 # Cette fonction reprend ce procédé avec une liste de station pour
 # obtenir un tibble près à être traiter
 Codes = c("K297031001", "K298191001", "K299401001")
 data = read_netcdf_projections(Paths, Codes)
 
-### 1.5. Afficher les projections ____________________________________
+# Mais pour simplifier le traitement, il est important de regrouper
+# la partie historique et la partie projeté de chaque chaîne de
+# modélisation
+data = merge_data_projections(data)
 
+
+### 1.5. Afficher les projections ____________________________________
+# Pour la Dora à Dora
+data_code = dplyr::filter(data, code=="K298191001")
+
+min_date = data_code %>%
+    dplyr::filter(EXP == "historical") %>%
+    dplyr::group_by(chain) %>%
+    dplyr::summarise(min=min(date, na.rm=TRUE))
+min_date = max(min_date$min, na.rm=TRUE)
+
+max_date = data_code %>%
+    dplyr::filter(EXP != "historical") %>%
+    dplyr::group_by(chain) %>%
+    dplyr::summarise(max=max(date, na.rm=TRUE))
+max_date = min(max_date$max, na.rm=TRUE)
+
+data_code = dplyr::filter(data_code,
+                          min_date <= date &
+                          date <= max_date)
+
+data_code_med = 
+    dplyr::summarise(dplyr::group_by(data_code,
+                                     climate_chain,
+                                     date),
+                     Q=median(Q, na.rm=TRUE),
+                     .groups="drop")
+
+figdir = "figures"
+if (!dir.exists(figdir)) {
+    dir.create(figdir)
+}
+
+for (storyline in Storylines) {
+    
+    data_code_med_storyline =
+        dplyr::filter(data_code_med,
+                      climate_chain %in% storyline$climate_chain)
+    
+    plot = ggplot() +
+        theme_minimal() +
+        theme(panel.grid.major.x=element_blank(),
+              panel.grid.minor.x=element_blank(),
+              axis.line.x=element_line(color="grey65",
+                                       linewidth=0.5,
+                                       lineend="round"),
+              axis.ticks.x=element_line(color="grey80"),
+              axis.ticks.length=unit(0.2, "cm"),
+              plot.title=element_text(color=storyline$color)) +
+        
+        ggtitle(TeX(paste0("\\textbf{", storyline$info, "}"))) +
+        
+        geom_line(data=data_code,
+                  aes(x=date,
+                      y=Q,
+                      group=chain),
+                  color="grey65",
+                  linewidth=0.8,
+                  alpha=0.15,
+                  lineend="round") +
+        geom_line(data=data_code_med_storyline,
+                  aes(x=date,
+                      y=Q),
+                  color=storyline$color,
+                  linewidth=0.25,
+                  alpha=1,
+                  lineend="round")
+
+    plot = plot +
+        xlab(NULL) +
+        scale_x_date(
+            breaks=get_breaks,
+            minor_breaks=get_minor_breaks,
+            guide="axis_minor",
+            date_labels="%Y",
+            expand=c(0, 0)) +
+        ylab(TeX("débit \\small{en m$^{3}$.s$^{-1}$}")) +
+        scale_y_sqrt(limits=c(0, NA),
+                     expand=c(0, 0))
+  
+
+    ggsave(plot=plot,
+           filename=file.path(figdir,
+                              paste0("DRIAS_projection_",
+                                     storyline$name, ".pdf")),
+           width=50, height=10, units="cm")
+}
 
 
 ## 2. INDICATEURS ____________________________________________________

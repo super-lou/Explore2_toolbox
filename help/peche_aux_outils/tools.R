@@ -83,12 +83,63 @@ read_netcdf_projections = function (Paths, Codes) {
         ncdf4::nc_close(NC)
     }
 
-    data$chain = paste(data$EXP,
-                       data$GCM,
-                       data$RCM,
-                       data$BC,
+    # Il y a une erreur dans le formatage des noms de fichier pour J2000
+    data$BC = gsub("MF-ADAMONT-SAFRAN-France-1980-2011",
+                   "MF-ADAMONT-SAFRAN-1980-2011", data$BC)
+
+    data$climate_chain = paste(data$EXP,
+                               data$GCM,
+                               data$RCM,
+                               data$BC,
+                               sep="|")
+    data = dplyr::relocate(data, climate_chain, .after=HM)
+    data$chain = paste(data$climate_chain,
                        data$HM,
                        sep="|")
-    data = dplyr::relocate(data, chain, .after=HM)
+    data = dplyr::relocate(data, chain, .after=climate_chain)
     return (data)
+}
+
+
+merge_data_projections = function (data) {
+    
+    Chain = data$chain
+    
+    
+    return (data)
+}
+
+
+
+get_breaks = function(X) {
+    breaks = "10 years"
+    Xmin = round(lubridate::year(min(X)), -1)
+    Xmax = round(lubridate::year(max(X)), -1)
+    if (Xmax-Xmin <= 1) {
+        Xmin = lubridate::year(X)[1]
+        Xmax = lubridate::year(X)[1] + 1
+    }
+    res = seq.Date(from=as.Date(paste0(Xmin, "-01-01")),
+                   to=as.Date(paste0(Xmax, "-01-01")),
+                   by=breaks)
+    return (res)
+}
+
+get_minor_breaks = function(X) {
+    breaks = "10 years"
+    minor_breaks = "2 years"
+    Xmin = round(lubridate::year(min(X)), -1)
+    Xmax = round(lubridate::year(max(X)), -1)
+    if (Xmax-Xmin <= 1) {
+        Xmin = lubridate::year(X)[1]
+        Xmax = lubridate::year(X)[1] + 1
+    }
+    res = seq.Date(from=as.Date(
+                       as.Date(paste0(Xmin, "-01-01")) -
+                       lubridate::duration(breaks)),
+                   to=as.Date(
+                       as.Date(paste0(Xmax, "-01-01")) +
+                       lubridate::duration(breaks)),
+                   by=minor_breaks)
+    return (res)
 }
