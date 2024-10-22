@@ -1,0 +1,95 @@
+{
+    "title": "Fiches de résultats des modèles hydrologiques de surface du projet Explore2 : N Fleuves côtiers au sud de la Loire",
+    "datasetContact": {
+	"datasetContactName": "Héraut, Louis",
+	"datasetContactAffiliation": "INRAE, UR RiverLy, Villeurbanne, France",
+	"datasetContactEmail": "louis.heraut@inrae.fr"
+    },
+    "author": [
+	{
+	    "authorName": "Héraut, Louis",
+	    "authorAffiliation": "INRAE, UR RiverLy, Villeurbanne, France",
+	    "authorIdentifierScheme": "ORCID",
+	    "authorIdentifier": "0009-0006-4372-0923"
+	},
+	{
+	    "authorName": "Vidal, Jean-Philippe",
+	    "authorAffiliation": "INRAE, UR RiverLy, Villeurbanne, France",
+	    "authorIdentifierScheme": "ORCID",
+	    "authorIdentifier": "0000-0002-3748-6150"
+	},
+	{
+	    "authorName": "Évin, Guillaume",
+	    "authorAffiliation": "INRAE, UMR IGE, Grenoble, France",
+	    "authorIdentifierScheme": "ORCID",
+	    "authorIdentifier": "0000-0003-3456-9441"
+	},
+	{
+	    "authorName": "Sauquet, Éric",
+	    "authorAffiliation": "INRAE, UR RiverLy, Villeurbanne, France",
+	    "authorIdentifierScheme": "ORCID",
+	    "authorIdentifier": "0000-0001-9539-7730"
+	}
+    ],
+    "producer": {
+	"producerName": "Explore2",
+	"producerURL": "https://professionnels.ofb.fr/fr/node/1244",
+	"producerLogoURL": "https://entrepot.recherche.data.gouv.fr/logos/202158/LogoExplore2.png"
+    },
+    "productionDate": "2024-06-24",
+    "distributor": {
+	"distributorName": "Entrepôt-Catalogue Recherche Data Gouv",
+	"distributorURL": "https://entrepot.recherche.data.gouv.fr",
+	"distributorLogoURL": "https://s3.fr-par.scw.cloud/rdg-portal/logos-macarons/Macarons%20Recherche%20Data%20Gouv_Entrep%C3%B4t.png"
+    },
+    "dsDescription": {
+	"dsDescriptionValue": "Ensemble de fiche descriptives des résultats du projet Explore2 aux points de simulation pour la région hydrologique <b>N Fleuves côtiers au sud de la Loire</b><br>\n<hr>\n<a href=\"https://doi.org/10.57745/6YNIUF\" target=\"_blank\">Notice de lecture des fiches de résultats des modèles hydrologiques de surface</a>\n<br>\nLe projet Explore2 a produit une quantité inédite de données hydrologiques. Ainsi, des ensembles de projections hydrologiques ont été élaborés sur près de 4000 points de simulation répartis en France hexagonale. Dans un esprit de faciliter la diffusion des résultats et suite à des recommandations faites post-Explore2070, des fiches de synthèse viennent décrire les évolutions de statistiques de débit (descripteurs du régime hydrologique). Ces fiches sont toutes construites sur un schéma identique et privilégient des représentations graphiques. Elles se focalisent sur les résultats concernant les débits obtenus avec le scénario d’émission le plus émetteur (RCP8.5) et aux points disposant de projections issus d’au moins quatre modèles hydrologiques de surface. L’objectif visé des fiches est de donner à voir l’évolution de quelques variables clefs descriptives du régime hydrologique. Les valeurs numériques ne doivent pas être lues sur ces fiches, mais dans les fichiers de données brutes ou d’indicateurs pré-calculés mis à disposition, comme les fiches de synthèse, sur le portail « DRIAS les futurs de l’eau ». Ce document a pour objectif d’expliciter le contenu de ces fiches de synthèse des résultats.\n<hr>",
+	"dsDescriptionLanguage": "French",
+	"dsDescriptionDate": "2024-06-18"
+    },
+    "language": "French",
+    "subject": "Earth and Environmental Sciences",
+    "keyword": [
+	{
+	    "keywordValue": "fiche résultat"
+	},
+	{
+	    "keywordValue": "synthèse graphique"
+	},
+	{
+	    "keywordValue": "modélisation hydrologique",
+	    "keywordVocabulary": "INRAE Thesaurus",
+	    "keywordVocabularyURI": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/",
+	    "keywordTermURL": "http://opendata.inrae.fr/thesaurusINRAE/c_15613"
+	},
+	{
+	    "keywordValue": "changement climatique",
+	    "keywordVocabulary": "INRAE Thesaurus",
+	    "keywordVocabularyURI": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/",
+	    "keywordTermURL": "http://opendata.inrae.fr/thesaurusINRAE/c_11564"
+	},
+	{
+	    "keywordValue": "adaptation au changement climatique",
+	    "keywordVocabulary": "INRAE Thesaurus",
+	    "keywordVocabularyURI": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/",
+	    "keywordTermURL": "http://opendata.inrae.fr/thesaurusINRAE/c_1070"
+	},
+	{
+	    "keywordValue": "atténuation du changement climatique",
+	    "keywordVocabulary": "INRAE Thesaurus",
+	    "keywordVocabularyURI": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/",
+	    "keywordTermURL": "http://opendata.inrae.fr/thesaurusINRAE/c_d23aa503"
+	}
+    ],
+    "topicClassification": {
+	"topicClassValue": "Hydrologie",
+	"topicClassVocab": "INRAE Thésaurus",
+	"topicClassVocabURI": "http://opendata.inrae.fr/thesaurusINRAE/c_1108"
+    },
+    "kindOfData": "Image",
+    "kindOfDataOther": "Fiche résultat",
+    "publication": {
+	"publicationCitation": "Notice de lecture des fiches de résultats des modèles hydrologiques de surface",
+	"publicationURL": "https://doi.org/10.57745/6YNIUF"
+    }
+}

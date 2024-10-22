@@ -30,7 +30,7 @@ if ('create_database' %in% to_do) {
     db_host = "127.0.0.1"
     db_port = 5432
     db_name = "explore2"
-    db_user = "dora"
+    db_user = "super_dora"
     db_password = Sys.getenv("DB_PASSWORD")
 
     con = dbConnect(

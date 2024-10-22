@@ -1,2 +1,0 @@
-https://climatedata.umr-cnrm.fr/public/dcsc/projects/DRIAS/EXPLORE2-Hydro/EXPLORE2-2024_GRSD/Indicateurs_Debit/rcp85/Indicateurs_Debit-VCN10_Saisonnier_EXPLORE2-2024_MF-ADAMONT_historical-rcp85_GRSD_serie-temporelle_modeles-individuels_NetCDF.zip
-https://climatedata.umr-cnrm.fr/public/dcsc/projects/DRIAS/EXPLORE2-Hydro/EXPLORE2-2024_J2000/Indicateurs_Debit/rcp85/Indicateurs_Debit-VCN10_Saisonnier_EXPLORE2-2024_MF-ADAMONT_historical-rcp85_J2000_serie-temporelle_modeles-individuels_NetCDF.zip 
