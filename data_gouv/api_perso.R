@@ -23,25 +23,26 @@ to_do = c(
 
 
 
-dataset_DOI = "doi:10.57745/ZTO7RB"
-metadata = get_dataset_metadata(BASE_URL, API_TOKEN, dataset_DOI)
+# dataset_DOI = "doi:10.57745/ZTO7RB"
+# metadata = get_dataset_metadata(BASE_URL, API_TOKEN, dataset_DOI)
 
 
 
 
 
 
-metadata = jsonlite::fromJSON("template.json",
-                              simplifyDataFrame=FALSE)
+# metadata = jsonlite::fromJSON("template.json",
+#                               simplifyDataFrame=FALSE)
 
-metadata_dataverse = convert_metadata_for_dataverse(metadata)
+# metadata_dataverse = convert_metadata_for_dataverse(metadata)
 
-metadata_dataverse_json = toJSON(metadata_dataverse,
-                                 auto_unbox=TRUE,
-                                 pretty=TRUE)
+# metadata_dataverse_json = toJSON(metadata_dataverse,
+#                                  auto_unbox=TRUE,
+#                                  pretty=TRUE)
 
 
 
+stop()
 
 
 
@@ -58,9 +59,10 @@ metadata = jsonlite::fromJSON(
                                    "rechercheDataGouv-full-metadata.json"),
                          simplifyDataFrame=FALSE)
 
-clean_json <- function(json_data) {
+format_full_metadata <- function (json_data) {
     if (is.list(json_data)) {
         return(lapply(json_data, function(x) {
+            
             if ("multiple" %in% names(x) && x$multiple) {
                 x$value <- x$value[[1]]
             }
@@ -68,13 +70,13 @@ clean_json <- function(json_data) {
                 x$value = ""
             }
             x[] <- clean_json(x)
-            return(x)
+            return (x)
         }))
     }
-    return(json_data)
+    return (json_data)
 }
 
-cleaned_metadata <- clean_json(metadata)
+cleaned_metadata <- format_full_metadata(metadata)
 cleaned_json_output <- toJSON(cleaned_metadata,
                               pretty=TRUE,
                               auto_unbox=TRUE)
@@ -87,12 +89,12 @@ write(cleaned_json_output, "RDG_template.json")
 
 metadata = jsonlite::fromJSON(
                          file.path("RDG_template.json"),
+                         simplifyVector=FALSE,
                          simplifyDataFrame=FALSE)
 
 
 
 initialise_RDGf = function (environment_name="RDGf") {
-    # Creation of the environment
     assign(environment_name, new.env(), envir=as.environment(1))
 }
 
@@ -100,8 +102,8 @@ initialise_RDGf()
 source("template.R")
 
 
-TypeNames_All = ls(envir=RDGf)
-TypeNames_Num = TypeNames_All[grepl("[[:digit:]]+$", TypeNames_All)]
+TypeNames = ls(envir=RDGf)
+TypeNames_Num = TypeNames[grepl("[[:digit:]]+$", TypeNames)]
 
 TypeNames_Num_noNum = unique(gsub("[[:digit:]]+$", "", TypeNames_Num))
 
@@ -115,8 +117,7 @@ TypeNames_Num_noNum_n = sapply(TypeNames_Num_noNum,
                                All=TypeNames_Num)
 
 
-
-replicate_typeName = function(metadata, typeName, n) {
+replicate_typeName = function (metadata, typeName, n) {
     if (is.list(metadata)) {
         return (lapply(metadata, function(x) {
 
@@ -135,10 +136,101 @@ replicate_typeName = function(metadata, typeName, n) {
             }
             x[] = replicate_typeName(x, typeName, n)
             return (x)
-            
         }))
     }
-    return(metadata)
+    return (metadata)
+}
+
+add_typeName = function (metadata, typeName, value) {
+    if (is.list(metadata)) {
+        return (lapply(metadata, function(x) {
+
+            if ("typeName" %in% names(x)) {
+                if (x$typeName == typeName) {
+                    x$value = value
+                    if (grepl("[[:digit:]]+$", x$typeName)) {
+                        x$typeName = gsub("[[:digit:]]+$", "", x$typeName)
+                    }
+                }
+            }
+            x[] = add_typeName(x, typeName, value)
+            return (x)
+        }))
+    }
+    return (metadata)
+}
+
+
+clean_metadata_hide = function (metadata) {
+    tmpAll = c("value", "fields")
+
+    if (is.list(metadata)) {
+        return (lapply(metadata, function(x) {
+
+            for (name in names(x)) {
+                if (is.list(x[[name]])) {
+                    get_n = function (xx) {
+                        ok = tmpAll %in% names(xx)
+                        if (any(ok)) {
+                            tmp = tmpAll[ok]
+                            if (is.character(xx[[tmp]])) {
+                                n = nchar(xx[[tmp]])
+                            } else {
+                                n = 888
+                            }
+                        } else {
+                            n = 999
+                        }
+                        return (n)
+                    }
+
+                    ok = names(x[[name]]) %in% tmpAll
+                    if (sum(ok) == 1) {
+                        tmp = names(x[[name]])[ok]
+                        if (!is.list(x[[name]][[tmp]])) {
+                            if (nchar(x[[name]][[tmp]]) == 0) {
+                                x = x[names(x) != name]
+                            }
+                        }
+                        
+                    } else {
+                        n = sapply(x[[name]], get_n)
+                        if (all(n == 0)) {
+                            x[[name]] = ""
+                        } else {
+                            x[[name]] = x[[name]][n > 0]
+                        }
+                    }
+                }
+            }
+            if (length(x) == 0) {
+                x = c(value="")
+            }
+            x[] = clean_metadata_hide(x)
+            return (x)
+        }))
+    }
+    return (metadata)
+}
+
+
+
+clean_metadata = function (metadata) {
+    get_condition = function (x) {
+        if (is.list(x$fields)) {
+            ok = any(nchar(unlist(x$fields)) == 0)
+        } else {
+            ok = x$fields != ""
+        }
+    }
+    ok = any(sapply(metadata$datasetVersion$metadataBlocks,
+                    get_condition))
+    while (ok) {
+        metadata = clean_metadata_hide(metadata)
+        ok = any(sapply(metadata$datasetVersion$metadataBlocks,
+                        get_condition))
+    }
+    return (metadata)
 }
 
 
@@ -146,66 +238,24 @@ for (i in 1:length(TypeNames_Num_noNum_n)) {
     n = TypeNames_Num_noNum_n[i]
     typeName = names(TypeNames_Num_noNum_n)[i]
     if (!(paste0(typeName, n) %in% unlist(metadata))) {
-        
-        
+        metadata = replicate_typeName(metadata, typeName, n)
     }
+}
+
+for (typeName in TypeNames) {
+    value = get(typeName, envir=RDGf)
+    metadata = add_typeName(metadata, typeName, value)
 }
 
 
 
-TypeNames = unique(gsub("[[:digit:]]+$", "", TypeNamesAll))
+metadata_tmp = clean_metadata(metadata)
 
+write(toJSON(metadata_tmp, pretty=TRUE, auto_unbox=TRUE),
+      "RDG_template_tmp.json")
 
+rm (list=ls(envir=RDGf), envir=RDGf)
 
-
-for (typeName in TypeNames) {
-
-    typeName_list = TypeNamesAll[grepl(typeName, TypeNamesAll)]
-
-    typeName_list = gsub(typeName_list)
-    
-    nTypeName_list = length(typeName_list)
-    
-    if (nTypeName_list > 1) {
-        for (i in 1:nTypeName_list) {
-            
-            
-        }
-        
-        
-    } else {
-        value = get(paste0(typeName, envir=RDGf)   
-    }
-    }
-
-    
-
-
-
-
-
-
-for (typeName in TypeNames) {
-
-    typeName_list = TypeNamesAll[grepl(typeName, TypeNamesAll)]
-
-    typeName_list = gsub(typeName_list)
-    
-    nTypeName_list = length(typeName_list)
-    
-    if (nTypeName_list > 1) {
-        for (i in 1:nTypeName_list) {
-            
-            
-        }
-        
-        
-    } else {
-        value = get(paste0(typeName, envir=RDGf)   
-    }
-}
-
-# rm (list=ls(envir=RDGf), envir=RDGf)
 
 
 

@@ -1,1439 +1,430 @@
 {
-    "metadataLanguage": "en",
-    "datasetVersion": {
-	"license": "etalab 2.0",
-	"metadataBlocks": {
-	    "citation": {
-		"fields": [
-		    {
-			"typeName": "title",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "subtitle",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "alternativeTitle",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "alternativeURL",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "otherId",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "otherIdAgency": {
-				"typeName": "otherIdAgency",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "otherIdValue": {
-				"typeName": "otherIdValue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "datasetContact",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "datasetContactName": {
-				"typeName": "datasetContactName",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "datasetContactAffiliation": {
-				"typeName": "datasetContactAffiliation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "datasetContactEmail": {
-				"typeName": "datasetContactEmail",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "author",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": [
-			    {
-				"authorName": {
-				    "typeName": "authorName1",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorAffiliation": {
-				    "typeName": "authorAffiliation1",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorIdentifierScheme": {
-				    "typeName": "authorIdentifierScheme1",
-				    "multiple": false,
-				    "typeClass": "controlledVocabulary",
-				    "value": ""
-				},
-				"authorIdentifier": {
-				    "typeName": "authorIdentifier1",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				}
-			    },
-			    {
-				"authorName": {
-				    "typeName": "authorName2",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorAffiliation": {
-				    "typeName": "authorAffiliation2",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorIdentifierScheme": {
-				    "typeName": "authorIdentifierScheme2",
-				    "multiple": false,
-				    "typeClass": "controlledVocabulary",
-				    "value": ""
-				},
-				"authorIdentifier": {
-				    "typeName": "authorIdentifier2",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				}
-			    },
-			    {
-				"authorName": {
-				    "typeName": "authorName3",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorAffiliation": {
-				    "typeName": "authorAffiliation3",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorIdentifierScheme": {
-				    "typeName": "authorIdentifierScheme3",
-				    "multiple": false,
-				    "typeClass": "controlledVocabulary",
-				    "value": ""
-				},
-				"authorIdentifier": {
-				    "typeName": "authorIdentifier3",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				}
-			    },
-			    {
-				"authorName": {
-				    "typeName": "authorName4",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorAffiliation": {
-				    "typeName": "authorAffiliation4",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"authorIdentifierScheme": {
-				    "typeName": "authorIdentifierScheme4",
-				    "multiple": false,
-				    "typeClass": "controlledVocabulary",
-				    "value": ""
-				},
-				"authorIdentifier": {
-				    "typeName": "authorIdentifier4",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				}
-			    }
-			]
-		    },
-		    {
-			"typeName": "contributor",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "contributorType": {
-				"typeName": "contributorType",
-				"multiple": false,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    },
-			    "contributorName": {
-				"typeName": "contributorName",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "contributorAffiliation": {
-				"typeName": "contributorAffiliation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "contributorIdentifierScheme": {
-				"typeName": "contributorIdentifierScheme",
-				"multiple": false,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    },
-			    "contributorIdentifier": {
-				"typeName": "contributorIdentifier",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "producer",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "producerName": {
-				"typeName": "producerName",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "producerAffiliation": {
-				"typeName": "producerAffiliation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "producerAbbreviation": {
-				"typeName": "producerAbbreviation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "producerURL": {
-				"typeName": "producerURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "producerLogoURL": {
-				"typeName": "producerLogoURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "productionDate",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "productionPlace",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "distributor",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "distributorName": {
-				"typeName": "distributorName",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "distributorAffiliation": {
-				"typeName": "distributorAffiliation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "distributorAbbreviation": {
-				"typeName": "distributorAbbreviation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "distributorURL": {
-				"typeName": "distributorURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "distributorLogoURL": {
-				"typeName": "distributorLogoURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "distributionDate",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "dsDescription",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "dsDescriptionValue": {
-				"typeName": "dsDescriptionValue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "dsDescriptionLanguage": {
-				"typeName": "dsDescriptionLanguage",
-				"multiple": false,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    },
-			    "dsDescriptionDate": {
-				"typeName": "dsDescriptionDate",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "language",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "subject",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "keyword",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "keywordValue": {
-				"typeName": "keywordValue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "keywordTermURI": {
-				"typeName": "keywordTermURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "keywordVocabulary": {
-				"typeName": "keywordVocabulary",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "keywordVocabularyURI": {
-				"typeName": "keywordVocabularyURI",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "topicClassification",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "topicClassValue": {
-				"typeName": "topicClassValue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "topicClassVocab": {
-				"typeName": "topicClassVocab",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "topicClassVocabURI": {
-				"typeName": "topicClassVocabURI",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "kindOfData",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "kindOfDataOther",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "dataOrigin",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "dataSources",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "originOfSources",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "characteristicOfSources",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "accessToSources",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "software",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "softwareName": {
-				"typeName": "softwareName",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "softwareVersion": {
-				"typeName": "softwareVersion",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "series",
-			"multiple": false,
-			"typeClass": "compound",
-			"value": [
-			    {
-				"seriesName": {
-				    "typeName": "seriesName",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"seriesInformation": {
-				    "typeName": "seriesInformation",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				}
-			    },
-			    {
-				"seriesName": {
-				    "typeName": "seriesName",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				},
-				"seriesInformation": {
-				    "typeName": "seriesInformation",
-				    "multiple": false,
-				    "typeClass": "primitive",
-				    "value": ""
-				}
-			    }
-			]
-		    },
-		    {
-			"typeName": "lifeCycleStep",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "notesText",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "publication",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "publicationCitation": {
-				"typeName": "publicationCitation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "publicationIDType": {
-				"typeName": "publicationIDType",
-				"multiple": false,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    },
-			    "publicationIDNumber": {
-				"typeName": "publicationIDNumber",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "publicationURL": {
-				"typeName": "publicationURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "relatedMaterial",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "relatedDataset",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "relatedDatasetCitation": {
-				"typeName": "relatedDatasetCitation",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "relatedDatasetIDType": {
-				"typeName": "relatedDatasetIDType",
-				"multiple": false,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    },
-			    "relatedDatasetIDNumber": {
-				"typeName": "relatedDatasetIDNumber",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "relatedDatasetURL": {
-				"typeName": "relatedDatasetURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "otherReferences",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "grantNumber",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "grantNumberAgency": {
-				"typeName": "grantNumberAgency",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "grantNumberValue": {
-				"typeName": "grantNumberValue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "project",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "projectAcronym": {
-				"typeName": "projectAcronym",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "projectTitle": {
-				"typeName": "projectTitle",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "projectId": {
-				"typeName": "projectId",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "projectURL": {
-				"typeName": "projectURL",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "projectWorkPackage": {
-				"typeName": "projectWorkPackage",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "projectTask": {
-				"typeName": "projectTask",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "timePeriodCovered",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "timePeriodCoveredStart": {
-				"typeName": "timePeriodCoveredStart",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "timePeriodCoveredEnd": {
-				"typeName": "timePeriodCoveredEnd",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "dateOfCollection",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "dateOfCollectionStart": {
-				"typeName": "dateOfCollectionStart",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "dateOfCollectionEnd": {
-				"typeName": "dateOfCollectionEnd",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "depositor",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "dateOfDeposit",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    }
-		]
-	    },
-	    "geospatial": {
-		"displayName": "Geospatial Metadata",
-		"fields": [
-		    {
-			"typeName": "geographicCoverage",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "country": {
-				"typeName": "country",
-				"multiple": false,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    },
-			    "state": {
-				"typeName": "state",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "city": {
-				"typeName": "city",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "otherGeographicCoverage": {
-				"typeName": "otherGeographicCoverage",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "geographicUnit",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "geographicBoundingBox",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "westLongitude": {
-				"typeName": "westLongitude",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "eastLongitude": {
-				"typeName": "eastLongitude",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "northLongitude": {
-				"typeName": "northLongitude",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "southLongitude": {
-				"typeName": "southLongitude",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "qualityValidity",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "lineage": {
-				"typeName": "lineage",
-				"multiple": true,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "spatialResolution": {
-				"typeName": "spatialResolution",
-				"multiple": true,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "conformity",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "specification": {
-				"typeName": "specification",
-				"multiple": true,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "degree": {
-				"typeName": "degree",
-				"multiple": false,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    }
-			}
-		    }
-		]
-	    },
-	    "socialscience": {
-		"displayName": "Social Science and Humanities Metadata",
-		"fields": [
-		    {
-			"typeName": "unitOfAnalysis",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "unitOfAnalysisOther",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "universe",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "timeMethod",
-			"multiple": false,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "timeMethodOther",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "dataCollector",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "collectorTraining",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "frequencyOfDataCollection",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "samplingProcedure",
-			"multiple": false,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "samplingProcedureOther",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "targetSampleSize",
-			"multiple": false,
-			"typeClass": "compound",
-			"value": {
-			    "targetSampleActualSize": {
-				"typeName": "targetSampleActualSize",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "targetSampleSizeFormula": {
-				"typeName": "targetSampleSizeFormula",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "deviationsFromSampleDesign",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "collectionMode",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "collectionModeOther",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "researchInstrument",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "dataCollectionSituation",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "actionsToMinimizeLoss",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "controlOperations",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "weighting",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "cleaningOperations",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "datasetLevelErrorNotes",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "responseRate",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "samplingErrorEstimates",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "otherDataAppraisal",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "socialScienceNotes",
-			"multiple": false,
-			"typeClass": "compound",
-			"value": {
-			    "socialScienceNotesType": {
-				"typeName": "socialScienceNotesType",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "socialScienceNotesSubject": {
-				"typeName": "socialScienceNotesSubject",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "socialScienceNotesText": {
-				"typeName": "socialScienceNotesText",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "geographicalReferential",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "level": {
-				"typeName": "level",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "version": {
-				"typeName": "version",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    }
-		]
-	    },
-	    "biomedical": {
-		"displayName": "Life Sciences Metadata",
-		"fields": [
-		    {
-			"typeName": "studyDesignType",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyDesignTypeOther",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyFactorType",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyFactorTypeOther",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayOrganism",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayOtherOrganism",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayMeasurementType",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayOtherMeasurmentType",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayTechnologyType",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayTechnologyTypeOther",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayPlatform",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayPlatformOther",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyAssayCellType",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studySampleType",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "studyProtocolType",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    }
-		]
-	    },
-	    "journal": {
-		"displayName": "Journal Metadata",
-		"fields": [
-		    {
-			"typeName": "journalVolumeIssue",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "journalVolume": {
-				"typeName": "journalVolume",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "journalIssue": {
-				"typeName": "journalIssue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "journalPubDate": {
-				"typeName": "journalPubDate",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "journalArticleType",
-			"multiple": false,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    }
-		]
-	    },
-	    "semantics": {
-		"displayName": "Semantic resource",
-		"fields": [
-		    {
-			"typeName": "hasFormalityLevel",
-			"multiple": false,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "hasOntologyLanguage",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "typeOfSR",
-			"multiple": false,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "designedForOntologyTask",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "knownUsage",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "resourceVersion",
-			"multiple": false,
-			"typeClass": "compound",
-			"value": {
-			    "versionStatus": {
-				"typeName": "versionStatus",
-				"multiple": true,
-				"typeClass": "controlledVocabulary",
-				"value": ""
-			    },
-			    "versionInfo": {
-				"typeName": "versionInfo",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "priorVersion": {
-				"typeName": "priorVersion",
-				"multiple": true,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "modificationDate": {
-				"typeName": "modificationDate",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "changes": {
-				"typeName": "changes",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "imports",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "bugDatabase",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "endpoint",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "URI",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    }
-		]
-	    },
-	    "astrophysics": {
-		"displayName": "Astronomy and Astrophysics Metadata",
-		"fields": [
-		    {
-			"typeName": "astroType",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "astroFacility",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "astroInstrument",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "astroObject",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "resolution.Spatial",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "resolution.Spectral",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "resolution.Temporal",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.Spectral.Bandpass",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.Spectral.CentralWavelength",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.Spectral.Wavelength",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "coverage.Spectral.MinimumWavelength": {
-				"typeName": "coverage.Spectral.MinimumWavelength",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "coverage.Spectral.MaximumWavelength": {
-				"typeName": "coverage.Spectral.MaximumWavelength",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "coverage.Temporal",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "coverage.Temporal.StartTime": {
-				"typeName": "coverage.Temporal.StartTime",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "coverage.Temporal.StopTime": {
-				"typeName": "coverage.Temporal.StopTime",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    },
-		    {
-			"typeName": "coverage.Spatial",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.Depth",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.ObjectDensity",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.ObjectCount",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.SkyFraction",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.Polarization",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "redshiftType",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "resolution.Redshift",
-			"multiple": false,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "coverage.RedshiftValue",
-			"multiple": true,
-			"typeClass": "compound",
-			"value": {
-			    "coverage.Redshift.MinimumValue": {
-				"typeName": "coverage.Redshift.MinimumValue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    },
-			    "coverage.Redshift.MaximumValue": {
-				"typeName": "coverage.Redshift.MaximumValue",
-				"multiple": false,
-				"typeClass": "primitive",
-				"value": ""
-			    }
-			}
-		    }
-		]
-	    },
-	    "computationalworkflow": {
-		"displayName": "Computational Workflow Metadata",
-		"name": "computationalworkflow",
-		"fields": [
-		    {
-			"typeName": "workflowType",
-			"multiple": true,
-			"typeClass": "controlledVocabulary",
-			"value": ""
-		    },
-		    {
-			"typeName": "workflowCodeRepository",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    },
-		    {
-			"typeName": "workflowDocumentation",
-			"multiple": true,
-			"typeClass": "primitive",
-			"value": ""
-		    }
-		]
-	    }
-	}
+  "metadataLanguage": "en",
+  "datasetVersion": {
+    "license": "etalab 2.0",
+    "metadataBlocks": {
+      "citation": {
+        "fields": [
+          {
+            "typeName": "title",
+            "multiple": false,
+            "typeClass": "primitive",
+            "value": "Fiches de résultats des modèles hydrologiques de surface du projet Explore2 : N Fleuves côtiers au sud de la Loire"
+          },
+          {
+            "typeName": "datasetContact",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": {
+              "datasetContactName": {
+                "typeName": "datasetContactName",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "Héraut, Louis"
+              },
+              "datasetContactAffiliation": {
+                "typeName": "datasetContactAffiliation",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "INRAE, UR RiverLy, Villeurbanne, France"
+              },
+              "datasetContactEmail": {
+                "typeName": "datasetContactEmail",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "louis.heraut@inrae.fr"
+              }
+            }
+          },
+          {
+            "typeName": "author",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": [
+              {
+                "authorName": {
+                  "typeName": "authorName",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "Héraut, Louis"
+                },
+                "authorAffiliation": {
+                  "typeName": "authorAffiliation",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE, UR RiverLy, Villeurbanne, France"
+                },
+                "authorIdentifierScheme": {
+                  "typeName": "authorIdentifierScheme",
+                  "multiple": false,
+                  "typeClass": "controlledVocabulary",
+                  "value": "ORCID"
+                },
+                "authorIdentifier": {
+                  "typeName": "authorIdentifier",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "0009-0006-4372-0923"
+                }
+              },
+              {
+                "authorName": {
+                  "typeName": "authorName",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "Vidal, Jean-Philippe"
+                },
+                "authorAffiliation": {
+                  "typeName": "authorAffiliation",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE, UR RiverLy, Villeurbanne, France"
+                },
+                "authorIdentifierScheme": {
+                  "typeName": "authorIdentifierScheme",
+                  "multiple": false,
+                  "typeClass": "controlledVocabulary",
+                  "value": "ORCID"
+                },
+                "authorIdentifier": {
+                  "typeName": "authorIdentifier",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "0000-0002-3748-6150"
+                }
+              },
+              {
+                "authorName": {
+                  "typeName": "authorName",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "Évin, Guillaume"
+                },
+                "authorAffiliation": {
+                  "typeName": "authorAffiliation",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE, UMR IGE, Grenoble, France"
+                },
+                "authorIdentifierScheme": {
+                  "typeName": "authorIdentifierScheme",
+                  "multiple": false,
+                  "typeClass": "controlledVocabulary",
+                  "value": "ORCID"
+                },
+                "authorIdentifier": {
+                  "typeName": "authorIdentifier",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "0000-0003-3456-9441"
+                }
+              },
+              {
+                "authorName": {
+                  "typeName": "authorName",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "Sauquet, Éric"
+                },
+                "authorAffiliation": {
+                  "typeName": "authorAffiliation",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE, UR RiverLy, Villeurbanne, France"
+                },
+                "authorIdentifierScheme": {
+                  "typeName": "authorIdentifierScheme",
+                  "multiple": false,
+                  "typeClass": "controlledVocabulary",
+                  "value": "ORCID"
+                },
+                "authorIdentifier": {
+                  "typeName": "authorIdentifier",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "0000-0001-9539-7730"
+                }
+              }
+            ]
+          },
+          {
+            "typeName": "producer",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": {
+              "producerName": {
+                "typeName": "producerName",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "Explore2"
+              },
+              "producerURL": {
+                "typeName": "producerURL",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "https://professionnels.ofb.fr/fr/node/1244"
+              },
+              "producerLogoURL": {
+                "typeName": "producerLogoURL",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "https://entrepot.recherche.data.gouv.fr/logos/202158/LogoExplore2.png"
+              }
+            }
+          },
+          {
+            "typeName": "productionDate",
+            "multiple": false,
+            "typeClass": "primitive",
+            "value": "2024-06-24"
+          },
+          {
+            "typeName": "distributor",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": {
+              "distributorName": {
+                "typeName": "distributorName",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "Entrepôt-Catalogue Recherche Data Gouv"
+              },
+              "distributorURL": {
+                "typeName": "distributorURL",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "https://entrepot.recherche.data.gouv.fr"
+              },
+              "distributorLogoURL": {
+                "typeName": "distributorLogoURL",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "https://s3.fr-par.scw.cloud/rdg-portal/logos-macarons/Macarons%20Recherche%20Data%20Gouv_Entrep%C3%B4t.png"
+              }
+            }
+          },
+          {
+            "typeName": "dsDescription",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": {
+              "dsDescriptionValue": {
+                "typeName": "dsDescriptionValue",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "Ensemble de fiche descriptives des résultats du projet Explore2 aux points de simulation pour la région hydrologique <b>N Fleuves côtiers au sud de la Loire<\/b><br>\n<hr>\n<a href=\"https://doi.org/10.57745/6YNIUF\" target=\"_blank\">Notice de lecture des fiches de résultats des modèles hydrologiques de surface<\/a>\n<br>\nLe projet Explore2 a produit une quantité inédite de données hydrologiques. Ainsi, des ensembles de projections hydrologiques ont été élaborés sur près de 4000 points de simulation répartis en France hexagonale. Dans un esprit de faciliter la diffusion des résultats et suite à des recommandations faites post-Explore2070, des fiches de synthèse viennent décrire les évolutions de statistiques de débit (descripteurs du régime hydrologique). Ces fiches sont toutes construites sur un schéma identique et privilégient des représentations graphiques. Elles se focalisent sur les résultats concernant les débits obtenus avec le scénario d’émission le plus émetteur (RCP8.5) et aux points disposant de projections issus d’au moins quatre modèles hydrologiques de surface. L’objectif visé des fiches est de donner à voir l’évolution de quelques variables clefs descriptives du régime hydrologique. Les valeurs numériques ne doivent pas être lues sur ces fiches, mais dans les fichiers de données brutes ou d’indicateurs pré-calculés mis à disposition, comme les fiches de synthèse, sur le portail « DRIAS les futurs de l’eau ». Ce document a pour objectif d’expliciter le contenu de ces fiches de synthèse des résultats.\n<hr>"
+              },
+              "dsDescriptionLanguage": {
+                "typeName": "dsDescriptionLanguage",
+                "multiple": false,
+                "typeClass": "controlledVocabulary",
+                "value": "French"
+              },
+              "dsDescriptionDate": {
+                "typeName": "dsDescriptionDate",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "2024-06-18"
+              }
+            }
+          },
+          {
+            "typeName": "language",
+            "multiple": true,
+            "typeClass": "controlledVocabulary",
+            "value": "French"
+          },
+          {
+            "typeName": "subject",
+            "multiple": true,
+            "typeClass": "controlledVocabulary",
+            "value": "Earth and Environmental Sciences"
+          },
+          {
+            "typeName": "keyword",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": [
+              {
+                "keywordValue": {
+                  "typeName": "keywordValue",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "fiche résultat"
+                }
+              },
+              {
+                "keywordValue": {
+                  "typeName": "keywordValue",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "synthèse graphique"
+                }
+              },
+              {
+                "keywordValue": {
+                  "typeName": "keywordValue",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "modélisation hydrologique"
+                },
+                "keywordTermURI": {
+                  "typeName": "keywordTermURL",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "http://opendata.inrae.fr/thesaurusINRAE/c_15613"
+                },
+                "keywordVocabulary": {
+                  "typeName": "keywordVocabulary",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE Thesaurus"
+                },
+                "keywordVocabularyURI": {
+                  "typeName": "keywordVocabularyURI",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/"
+                }
+              },
+              {
+                "keywordValue": {
+                  "typeName": "keywordValue",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "changement climatique"
+                },
+                "keywordTermURI": {
+                  "typeName": "keywordTermURL",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "http://opendata.inrae.fr/thesaurusINRAE/c_11564"
+                },
+                "keywordVocabulary": {
+                  "typeName": "keywordVocabulary",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE Thesaurus"
+                },
+                "keywordVocabularyURI": {
+                  "typeName": "keywordVocabularyURI",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/"
+                }
+              },
+              {
+                "keywordValue": {
+                  "typeName": "keywordValue",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "adaptation au changement climatique"
+                },
+                "keywordTermURI": {
+                  "typeName": "keywordTermURL",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "http://opendata.inrae.fr/thesaurusINRAE/c_1070"
+                },
+                "keywordVocabulary": {
+                  "typeName": "keywordVocabulary",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE Thesaurus"
+                },
+                "keywordVocabularyURI": {
+                  "typeName": "keywordVocabularyURI",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/"
+                }
+              },
+              {
+                "keywordValue": {
+                  "typeName": "keywordValue",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "atténuation du changement climatique"
+                },
+                "keywordTermURI": {
+                  "typeName": "keywordTermURL",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "http://opendata.inrae.fr/thesaurusINRAE/c_d23aa503"
+                },
+                "keywordVocabulary": {
+                  "typeName": "keywordVocabulary",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "INRAE Thesaurus"
+                },
+                "keywordVocabularyURI": {
+                  "typeName": "keywordVocabularyURI",
+                  "multiple": false,
+                  "typeClass": "primitive",
+                  "value": "https://thesaurus.inrae.fr/thesaurus-inrae/fr/"
+                }
+              }
+            ]
+          },
+          {
+            "typeName": "topicClassification",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": {
+              "topicClassValue": {
+                "typeName": "topicClassValue",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "Hydrologie"
+              },
+              "topicClassVocab": {
+                "typeName": "topicClassVocab",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "INRAE Thésaurus"
+              },
+              "topicClassVocabURI": {
+                "typeName": "topicClassVocabURI",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "http://opendata.inrae.fr/thesaurusINRAE/c_1108"
+              }
+            }
+          },
+          {
+            "typeName": "kindOfData",
+            "multiple": true,
+            "typeClass": "controlledVocabulary",
+            "value": "Image"
+          },
+          {
+            "typeName": "kindOfDataOther",
+            "multiple": true,
+            "typeClass": "primitive",
+            "value": "Fiche résultat"
+          },
+          {
+            "typeName": "publication",
+            "multiple": true,
+            "typeClass": "compound",
+            "value": {
+              "publicationCitation": {
+                "typeName": "publicationCitation",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "Notice de lecture des fiches de résultats des modèles hydrologiques de surface"
+              },
+              "publicationURL": {
+                "typeName": "publicationURL",
+                "multiple": false,
+                "typeClass": "primitive",
+                "value": "https://doi.org/10.57745/6YNIUF"
+              }
+            }
+          }
+        ]
+      }
     }
+  }
 }
