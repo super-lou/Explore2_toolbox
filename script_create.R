@@ -41,7 +41,7 @@ create_data = function () {
     data = dplyr::tibble()
 
     if (isSim) {
-        post("### Simulated data")
+        ASHE::post("### Simulated data")
         Chain = c()
         data_sim = tibble()
         
@@ -54,8 +54,8 @@ create_data = function () {
                 
                 if (file.exists(p)) {
                     Chain = c(Chain, chain)
-                    post(paste0("Get simulated data from ", chain,
-                                " in ", p))
+                    ASHE::post(paste0("Get simulated data from ", chain,
+                                      " in ", p))
 
                     if (grepl(".*[.]nc", p)) {
                         data_sim_tmp = NetCDF_to_tibble(p,
@@ -153,7 +153,7 @@ create_data = function () {
                             for (hm in HM) {
                                 data_hm = data_sim[data_sim$HM == hm,]
                                 data_hm = dplyr::select(data_hm,
-                                                           -HM)
+                                                        -HM)
 
                                 for (i in 1:nVal2check) {
                                     col = val2check[i]
@@ -170,7 +170,7 @@ create_data = function () {
                                     }
                                 }
                                 data_hm = dplyr::bind_cols(HM=hm,
-                                                              data_hm)
+                                                           data_hm)
                                 data_hm = data_hm[names(data_sim)]
                                 data_sim[data_sim$HM == hm,] = data_hm
 
@@ -215,7 +215,7 @@ create_data = function () {
     
     # if (nrow(data_sim) > 0 | isObs & !isSim) {
     if (isObs) {
-        post("### Observation data")
+        ASHE::post("### Observation data")
         
         if (isSim) {
             Code10_available = levels(factor(data_sim$code))

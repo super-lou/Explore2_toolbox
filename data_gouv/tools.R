@@ -64,10 +64,10 @@ delete_dataset_files = function(BASE_URL, API_TOKEN, dataset_DOI) {
 
 publish_dataset = function(BASE_URL, API_TOKEN, dataset_DOI, type="major") {
     publish_url = paste0(BASE_URL, "/api/datasets/:persistentId/actions/:publish?persistentId=",
-                          dataset_DOI, "&type=", type)
+                         dataset_DOI, "&type=", type)
     
     response = POST(publish_url,
-                     add_headers("X-Dataverse-key" = API_TOKEN))
+                    add_headers("X-Dataverse-key" = API_TOKEN))
     
     if (status_code(response) == 200) {
         cat("Dataset published successfully.\n")
@@ -99,17 +99,17 @@ search = function(BASE_URL, API_TOKEN,
     
     type = paste0(paste0("type=", type), collapse="&")
     subtree = paste0(paste0("subtree=", collection), collapse="&")
-     # &metadata_fields=citation:author
+    # &metadata_fields=citation:author
     
     search_url = paste0(BASE_URL, "/api/search?",
-                         q, "&",
-                         fq, "&",
-                         type, "&",
-                         subtree, "&",
-                         "per_page=", n_search)
+                        q, "&",
+                        fq, "&",
+                        type, "&",
+                        subtree, "&",
+                        "per_page=", n_search)
 
     response = GET(search_url,
-                    add_headers("X-Dataverse-key" = API_TOKEN))
+                   add_headers("X-Dataverse-key" = API_TOKEN))
     
     if (status_code(response) == 200) {
         datasets = content(response, "parsed")$data
@@ -154,12 +154,12 @@ add_dataset_files = function(BASE_URL, API_TOKEN, dataset_DOI, paths) {
             tabIngest = "true"
         )
         response = POST(url,
-                         add_headers("X-Dataverse-key" = API_TOKEN),
-                         body = list(
-                             file = upload_file(path),
-                             jsonData = I(jsonlite::toJSON(json_data, auto_unbox=TRUE))
-                         ),
-                         encode = "multipart")
+                        add_headers("X-Dataverse-key" = API_TOKEN),
+                        body = list(
+                            file = upload_file(path),
+                            jsonData = I(jsonlite::toJSON(json_data, auto_unbox=TRUE))
+                        ),
+                        encode = "multipart")
 
         if (status_code(response) == 200) {
             print(paste0(i, ": ", path, " -> ok"))
@@ -178,8 +178,6 @@ add_dataset_files = function(BASE_URL, API_TOKEN, dataset_DOI, paths) {
 
 
 
-library(httr)
-library(jsonlite)
 
 get_dataset_metadata = function(BASE_URL, API_TOKEN, dataset_DOI) {
     # Construct the API URL using the provided DOI
@@ -203,3 +201,72 @@ get_dataset_metadata = function(BASE_URL, API_TOKEN, dataset_DOI) {
         stop("Error during metadata retrieval.")
     }
 }
+
+
+
+
+
+create_dataset_in_dataverse <- function(BASE_URL, API_TOKEN,
+                                        dataverse_name,
+                                        metadata_path) {
+    # Read the metadata JSON file
+    metadata_json <- fromJSON(metadata_path,
+                              simplifyDataFrame=FALSE,
+                              simplifyVector=FALSE)
+
+    # Construct the URL for dataset creation
+    create_url <- paste0(BASE_URL, "/api/dataverses/",
+                         dataverse_name, "/datasets")
+
+    # Make the POST request to create the dataset
+    response <- POST(create_url,
+                     add_headers("X-Dataverse-key" = API_TOKEN),
+                     body = metadata_json,
+                     encode = "json")  # Use 'json' to encode the body as JSON
+
+    # Check the response status
+    if (status_code(response) == 200) {  # 201 Created
+        cat("Dataset created successfully.\n")
+        dataset_info <- content(response, "parsed")
+        return(dataset_info)
+    } else {
+        cat("Failed to create dataset.\n")
+        cat("Status code: ", status_code(response), "\n")
+        cat("Response content: ", content(response, as = "text", encoding = "UTF-8"), "\n")
+        stop("Error during dataset creation.")
+    }
+}
+
+# create_dataset_in_dataverse <- function(BASE_URL, API_TOKEN,
+#                                         dataverse_name,
+#                                         metadata_path) {
+    
+#     # Read the JSON file containing the dataset metadata
+#     dataset_metadata <- fromJSON(metadata_path,
+#                                  simplifyDataFrame=FALSE,
+#                                  simplifyVector=FALSE)
+    
+#     # Set up the API endpoint URL
+#     url <- paste0(BASE_URL, "/api/dataverses/", dataverse_name, "/datasets")
+    
+#     # Make the POST request to Dataverse API
+#     response <- POST(
+#         url = url,
+#         add_headers(`X-Dataverse-key`=API_TOKEN,
+#                     `Content-type`="application/json"),
+#         body = toJSON(dataset_metadata, auto_unbox = TRUE),
+#         encode = "json"
+#     )
+    
+#     # Check response status and print results
+#     if (status_code(response) == 200) {
+#         # Successful response
+#         response_content <- content(response, as = "parsed", type = "application/json")
+#         print("Dataset created successfully!")
+#         print(response_content)
+#     } else {
+#         # Error handling
+#         print(paste("Failed to create dataset. HTTP Status:", status_code(response)))
+#         print(content(response, as = "text"))
+#     }
+# }

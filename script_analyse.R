@@ -24,13 +24,13 @@
 if ('analyse_data' %in% to_do) {
 
     # if (mode == "diagnostic") {
-    #     post("### Analaysing data")
-        
+    #     ASHE::post("### Analaysing data")
+    
     #     print("number of simulated station")
     #     print(summarise(group_by(dataEX_criteria, HM),
     #                     n=length(unique(code))))
     #     print("")
-        
+    
     #     print("Choice of best modele for complete")
     #     # which(is.na(meta$Surface_km2))
     #     # which(is.na(meta[["Surface_MORDOR-SD_km2"]]))
@@ -48,7 +48,7 @@ if ('analyse_data' %in% to_do) {
     #     print("MORDOR-SD")
     #     print(MORDOR_SD_surface)
     #     print("")
-        
+    
     #     print("Surface relative supérieur à 50 %")
     #     for (hm in HM_to_use) {
     #         dS_rel = abs(meta[[paste0("surface_", hm, "_km2")]] - meta$surface_km2)/meta$surface_km2
@@ -72,7 +72,7 @@ if ('analyse_data' %in% to_do) {
     #             code, Chain, GCM, RCM, BC, HM),
     #             historical=mean(get(var)),
     #             .groups="drop"),
-            
+    
     #         summarise(group_by(
     #             filter(dataEX,
     #                    futur[1] <= date &
@@ -80,7 +80,7 @@ if ('analyse_data' %in% to_do) {
     #             code, Chain),
     #             futur=mean(get(var)),
     #             .groups="drop"),
-            
+    
     #         by=c("code", "Chain"))
 
 
@@ -134,7 +134,7 @@ if ('analyse_data' %in% to_do) {
             dataEX = ASHE::read_tibble(path)
             var = gsub("[.]fst", "", basename(path))
             
-                
+            
             for (j in 1:nFuturs) {
                 futur = Futurs[[j]]
                 name_futur = names(Futurs)[j]

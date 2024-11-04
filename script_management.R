@@ -408,22 +408,22 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         if (rank == 0) {
             Root = rep(0, times=size)
             Root[1] = 1
-            post(paste0(gsub("1", "-", 
-                             gsub("0", "_",
-                                  Root)), collapse=""))
+            ASHE::post(paste0(gsub("1", "-", 
+                                   gsub("0", "_",
+                                        Root)), collapse=""))
             for (root in 1:(size-1)) {
                 Root[root+1] = Rmpi::mpi.recv(as.integer(0),
                                               type=1,
                                               source=root,
                                               tag=1, comm=0)
-                post(paste0("End signal for extract received from rank ", root))
-                post(paste0(gsub("1", "-", 
-                                 gsub("0", "_",
-                                      Root)), collapse=""))
+                ASHE::post(paste0("End signal for extract received from rank ", root))
+                ASHE::post(paste0(gsub("1", "-", 
+                                       gsub("0", "_",
+                                            Root)), collapse=""))
             }
         } else {
             Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-            post(paste0("End signal for extract from rank ", rank)) 
+            ASHE::post(paste0("End signal for extract from rank ", rank)) 
         }
     }
     
@@ -437,9 +437,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
     if ('save_extract' %in% to_do) {
         if (MPI == "code" & rank == 0 |
             MPI != "code") {
-            post("### Saving extracts")
-            post(paste0("Save extracted data and metadata in ",
-                        paste0(saving_format, collapse=", ")))
+            ASHE::post("### Saving extracts")
+            ASHE::post(paste0("Save extracted data and metadata in ",
+                              paste0(saving_format, collapse=", ")))
             
             save_data()
         }
@@ -450,9 +450,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
         # stop()
         
-        post("### Reading saving")
-        post(paste0("Reading extracted data and metadata in ",
-                    read_saving))
+        ASHE::post("### Reading saving")
+        ASHE::post(paste0("Reading extracted data and metadata in ",
+                          read_saving))
 
         data = dplyr::tibble()
         meta = dplyr::tibble()
@@ -517,9 +517,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             dataEX_criteria_extract = dplyr::tibble()
             
             for (ii in 1:nFile) {
-                post(paste0(gsub("([_].*)|([.].*)",
-                                 "", Filenames[ii]), " reads in ",
-                            Paths[ii]))
+                ASHE::post(paste0(gsub("([_].*)|([.].*)",
+                                       "", Filenames[ii]), " reads in ",
+                                  Paths[ii]))
 
                 
                 if (grepl("projection", mode) &
@@ -651,12 +651,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                       pattern=variables_regexp)
                     tmp = tmp[row2keep,]
 
-                
+                    
                 } else if (grepl("metaEX.*serie", Filenames[ii])) {
                     row2keep = sapply(tmp$variable_en, any_grepl,
                                       pattern=variables_regexp)
                     tmp = tmp[row2keep,]
-                
+                    
 
                 } else if (grepl("meta", Filenames[ii])) {
                     tmp = dplyr::filter(tmp, code %in% Code_selection)
@@ -684,49 +684,49 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         #     dataEX_criteria = tmp
 
                         # } else {
-                            # character_cols =
-                            #     names(tmp)[sapply(tmp, is.character)]
+                        # character_cols =
+                        #     names(tmp)[sapply(tmp, is.character)]
 
-                            # cols2join = names(tmp)[!(names(tmp) %in%
-                            #                          names(dataEX_criteria))]
-                            # cols2join = cols2join[!(cols2join %in%
-                            #                         character_cols)]
+                        # cols2join = names(tmp)[!(names(tmp) %in%
+                        #                          names(dataEX_criteria))]
+                        # cols2join = cols2join[!(cols2join %in%
+                        #                         character_cols)]
 
-                            # if (length(cols2join) > 0) {
-                            #     print("join")
-                            #     stop()
-                                
-                            #     dataEX_criteria =
-                            #         dplyr::full_join(
-                            #                    dataEX_criteria,
-                            #                    dplyr::select(tmp,
-                            #                                  dplyr::all_of(c(character_cols,
-                            #                                                  cols2join))),
-                            #                    by=character_cols)
-                            # }
+                        # if (length(cols2join) > 0) {
+                        #     print("join")
+                        #     stop()
+                        
+                        #     dataEX_criteria =
+                        #         dplyr::full_join(
+                        #                    dataEX_criteria,
+                        #                    dplyr::select(tmp,
+                        #                                  dplyr::all_of(c(character_cols,
+                        #                                                  cols2join))),
+                        #                    by=character_cols)
+                        # }
 
-                            # cols2bind = names(tmp)[(names(tmp) %in%
-                            #                          names(dataEX_criteria))]
-                            # cols2bind = cols2bind[!(cols2bind %in%
-                            #                         character_cols)]
+                        # cols2bind = names(tmp)[(names(tmp) %in%
+                        #                          names(dataEX_criteria))]
+                        # cols2bind = cols2bind[!(cols2bind %in%
+                        #                         character_cols)]
 
-                            # if (length(cols2bind) > 0) {
-                            #     print("bind")
-                            #     # stop()
-                                
-                            #     dataEX_criteria =
-                            #         dplyr::bind_rows(
-                            #                    dataEX_criteria,
-                            #                    dplyr::select(tmp,
-                            #                                  dplyr::all_of(c(character_cols,
-                            #                                                  cols2bind))))
-                            # }
+                        # if (length(cols2bind) > 0) {
+                        #     print("bind")
+                        #     # stop()
+                        
+                        #     dataEX_criteria =
+                        #         dplyr::bind_rows(
+                        #                    dataEX_criteria,
+                        #                    dplyr::select(tmp,
+                        #                                  dplyr::all_of(c(character_cols,
+                        #                                                  cols2bind))))
+                        # }
 
-                            
-                            # dataEX_criteria =
-                            #     dplyr::full_join(
-                            #                dataEX_criteria,
-                            #                tmp,
+                        
+                        # dataEX_criteria =
+                        #     dplyr::full_join(
+                        #                dataEX_criteria,
+                        #                tmp,
                         #                by=character_cols)
 
                         if (grepl("projection", mode)) {
@@ -954,7 +954,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                   BC, HM)
                 chain_to_remove_tmp$on = "serie" 
                 chain_to_remove = dplyr::bind_rows(chain_to_remove,
-                                                    chain_to_remove_tmp)
+                                                   chain_to_remove_tmp)
             } else {
                 stop("You need to have QA variable in dataEX_serie")
             }
@@ -974,8 +974,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                      dataEX_tmp_stat,
                                      by="code")
                 # dataEX_criteriaQA_ALL =
-                    # dplyr::bind_rows(dataEX_criteriaQA_ALL,
-                                     # dataEX_tmp)
+                # dplyr::bind_rows(dataEX_criteriaQA_ALL,
+                # dataEX_tmp)
                 chain_to_remove_tmp =
                     dplyr::filter(dataEX_tmp,
                                   deltaQA_H3 < medQA-fact*stdQA |
@@ -988,7 +988,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                   BC, HM)
                 chain_to_remove_tmp$on = "criteria"
                 chain_to_remove = dplyr::bind_rows(chain_to_remove,
-                                                    chain_to_remove_tmp)
+                                                   chain_to_remove_tmp)
             } else {
                 stop("You need to have deltaQA_H3 variable in dataEX_criteria")
             }
@@ -1223,12 +1223,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     spread_name = c("inside", "outside")
                     names(tmp[[k]]$spread) = spread_name
 
-                    # post("full")
+                    # ASHE::post("full")
                     # print(tmp[[k]])
                     
                     for (x in spread_name) {
 
-                        # post("spread")
+                        # ASHE::post("spread")
                         # print(tmp[[k]]$spread[[x]])
 
                         # stop()
@@ -1250,7 +1250,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
                     
 
-                    # post("signe")
+                    # ASHE::post("signe")
                     # print(tmp[[k]]$signe)
 
                     tmp[[k]]$signe = 
@@ -1313,7 +1313,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
 
     if ('write_warnings' %in% to_do) {
-        post("### Writing warnings")
+        ASHE::post("### Writing warnings")
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
 
@@ -1328,7 +1328,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
     }
 
     if ('add_regime_hydro' %in% to_do) {
-        post("### Add hydro regime")
+        ASHE::post("### Add hydro regime")
 
         for (i in 1:length(extract_data)) {
             extract = extract_data[[i]]
@@ -1384,8 +1384,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
     
 } else {
     if (read_tmp) {
-        post("### Reading tmp")
-        post(paste0("Reading tmp data in ", tmppath))
+        ASHE::post("### Reading tmp")
+        ASHE::post(paste0("Reading tmp data in ", tmppath))
         Paths = list.files(tmppath,
                            pattern=paste0("(",
                                           paste0(variable2search,
@@ -1400,7 +1400,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         Filenames = gsub("[.].*$", "", Filenames)
         nFile = length(Filenames)
         for (i in 1:nFile) {
-            post(paste0(Filenames[i], " reads in ", Paths[i]))
+            ASHE::post(paste0(Filenames[i], " reads in ", Paths[i]))
             assign(Filenames[i], read_tibble(filepath=Paths[i]))
         }
         read_tmp = FALSE
@@ -1408,7 +1408,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
 
     if (clean_nc) {
-        post("### Cleaning NetCDF file")
+        ASHE::post("### Cleaning NetCDF file")
         proj_clean_dirpath = file.path(computer_data_path,
                                        type,
                                        "projection_clean")
@@ -1458,7 +1458,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 proj_clean_path = file.path(proj_clean_dirpath,
                                             proj_clean_file)
                 
-                post(paste0("#### Cleaning ", proj_file))
+                ASHE::post(paste0("#### Cleaning ", proj_file))
 
                 code_rm_data_path = file.path(computer_data_path,
                                               type,
@@ -1553,20 +1553,20 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 id_mv = NA
                             }
                             if (is.na(id_mv)) {
-                                post(paste0("### mv WARNING ",
-                                            Code_mv_input[j],
-                                            " not identified for ",
-                                            proj_file))
+                                ASHE::post(paste0("### mv WARNING ",
+                                                  Code_mv_input[j],
+                                                  " not identified for ",
+                                                  proj_file))
                             } else {
-                                post(paste0("### mv ",
-                                            Code_mv_input[j],
-                                            " in ", id_mv))
+                                ASHE::post(paste0("### mv ",
+                                                  Code_mv_input[j],
+                                                  " in ", id_mv))
                             }
                             Id_mv = c(Id_mv, id_mv)
                         }
 
-                        post(paste0("to move ",
-                                    paste0(Id_mv, collapse=" ")))
+                        ASHE::post(paste0("to move ",
+                                          paste0(Id_mv, collapse=" ")))
                         
                         Code[Id_mv[!is.na(Id_mv)]] =
                             Code_mv_output[!is.na(Id_mv)]
@@ -1608,21 +1608,21 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                 id_rm = NA
                             }
                             if (is.na(id_rm)) {
-                                post(paste0("### rm WARNING ",
-                                            Code_rm[j],
-                                            " not identified for ",
-                                            proj_file))
+                                ASHE::post(paste0("### rm WARNING ",
+                                                  Code_rm[j],
+                                                  " not identified for ",
+                                                  proj_file))
                             } else {
-                                post(paste0("### rm ",
-                                            Code_rm[j],
-                                            " in ", id_rm))
+                                ASHE::post(paste0("### rm ",
+                                                  Code_rm[j],
+                                                  " in ", id_rm))
                             }
                             Id_rm = c(Id_rm, max(id_rm))
                         }
 
                         Id_rm = Id_rm[!is.na(Id_rm)]
-                        post(paste0("to remove ",
-                                    paste0(Id_rm, collapse=" ")))
+                        ASHE::post(paste0("to remove ",
+                                          paste0(Id_rm, collapse=" ")))
 
                         # stop()
 
@@ -1720,7 +1720,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
     
     if (merge_nc) {
-        post("### Merging NetCDF file by time for projection")
+        ASHE::post("### Merging NetCDF file by time for projection")
         proj_merge_dirpath = file.path(computer_data_path,
                                        type,
                                        "projection_merge")
@@ -1777,7 +1777,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 historical = Historicals[i,]
                 historical_path = historical$path
 
-                post(historical_path)
+                ASHE::post(historical_path)
                 NC_historical = ncdf4::nc_open(historical_path)
                 Date = NetCDF_extrat_time(NC_historical)
                 ncdf4::nc_close(NC_historical)
@@ -1817,7 +1817,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         file.path(proj_merge_dirpath,
                                   proj_merge_file)
 
-                    post(proj_path)
+                    ASHE::post(proj_path)
                     NC_proj = ncdf4::nc_open(proj_path)
                     Date = NetCDF_extrat_time(NC_proj)
                     minDate_proj = min(Date)
@@ -1838,10 +1838,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                     gap=minDate_proj -
                                                         maxDate_historical))
                     
-                    post(paste0("#### Merging ",
-                                historical$file, " with ",
-                                proj$file, " in ",
-                                proj_merge_file))
+                    ASHE::post(paste0("#### Merging ",
+                                      historical$file, " with ",
+                                      proj$file, " in ",
+                                      proj_merge_file))
 
                     # cdoCmd = paste0("cdo", " ",
                     # "--sortname --history -O mergetime", " ",
@@ -1862,7 +1862,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                     "-O ", proj_merge_path)
                     system(ncoCmd)
 
-                    post(proj_merge_path)
+                    ASHE::post(proj_merge_path)
                     NC = ncdf4::nc_open(proj_merge_path,
                                         write=TRUE)
                     if (!ncdf4::ncatt_get(NC, 0,
@@ -1895,20 +1895,20 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         if (MPI == "file" & rank == 0) {
             Root = rep(0, times=size)
             Root[1] = 1
-            post("Waiting for rank 1 : ")
-            post(paste0(gsub("1", "-", 
-                             gsub("0", "_",
-                                  Root)), collapse=""))
+            ASHE::post("Waiting for rank 1 : ")
+            ASHE::post(paste0(gsub("1", "-", 
+                                   gsub("0", "_",
+                                        Root)), collapse=""))
             for (root in 1:(size-1)) {
                 Root[root+1] = Rmpi::mpi.recv(as.integer(0),
                                               type=1,
                                               source=root,
                                               tag=1, comm=0)
-                post(paste0("End signal received from rank ", root))
-                post(paste0("Waiting for rank ", root+1, " : "))
-                post(paste0(gsub("1", "-", 
-                                 gsub("0", "_",
-                                      Root)), collapse=""))
+                ASHE::post(paste0("End signal received from rank ", root))
+                ASHE::post(paste0("Waiting for rank ", root+1, " : "))
+                ASHE::post(paste0(gsub("1", "-", 
+                                       gsub("0", "_",
+                                            Root)), collapse=""))
             }
 
             flag = dplyr::tibble()
@@ -1923,7 +1923,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             
         } else if (MPI == "file") {
             Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
-            post(paste0("End signal from rank ", rank))
+            ASHE::post(paste0("End signal from rank ", rank))
 
         } else {
             write_tibble(flag, today_resdir, "flag.txt")
@@ -1934,7 +1934,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
     
     if (delete_tmp) {
-        post("### Deleting tmp")
+        ASHE::post("### Deleting tmp")
         if (file.exists(tmppath) & rank == 0) {
             unlink(tmppath, recursive=TRUE)
         }

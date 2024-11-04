@@ -52,7 +52,7 @@ CARD_extract_data = function () {
         } else if (extract$type == "serie") {
             simplify = FALSE
             if ("expand" %in% names(extract)) {
-               expand = extract$expand
+                expand = extract$expand
             } else {
                 expand = TRUE
             }
@@ -106,6 +106,6 @@ CARD_extract_data = function () {
 
 ## 1. EXTRACTION OF DATA ______________________________________________
 if ('extract_data' %in% to_do) {
-    post("### Extracting data")
+    ASHE::post("### Extracting data")
     CARD_extract_data()    
 }

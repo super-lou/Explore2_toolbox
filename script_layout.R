@@ -75,8 +75,8 @@ plot_sheet_projection_station = function (today_figdir_leaf,
         subset = Subsets[[ss]]
         subset_name = names(Subsets)[ss]
 
-        post(paste0(ss, " ", subset_name, " ",
-                    paste0(subset, collapse=" -> "), " "))
+        ASHE::post(paste0(ss, " ", subset_name, " ",
+                          paste0(subset, collapse=" -> "), " "))
 
         meta_path = file.path(dirpath,
                               paste0("meta_", subset_name, ".fst"))
@@ -154,7 +154,7 @@ icon_path = file.path(resources_path, icon_dir)
 
 
 if (!exists("Shapefiles") & MPI != "code") {
-    post("### Loading shapefiles")
+    ASHE::post("### Loading shapefiles")
 
     if (type == "hydrologie") {
         Code_shp = CodeALL8
@@ -248,15 +248,15 @@ if (doc_chunk == "") {
     
 } else if (doc_chunk == "hm") {
     chunkCode = replicate(length(group_of_HM_to_use),
-                         codes10_selection,
-                         simplify=FALSE)
+                          codes10_selection,
+                          simplify=FALSE)
     names(chunkCode) = names(group_of_HM_to_use)
     plotCode = chunkCode
 
 } else if (doc_chunk == "critere") {
     chunkCode = replicate(length(metaEX_criteria$variable_en),
-                         codes10_selection,
-                         simplify=FALSE)
+                          codes10_selection,
+                          simplify=FALSE)
     names(chunkCode) = metaEX_criteria$variable_en
     plotCode = chunkCode
 }
@@ -324,7 +324,7 @@ for (i in 1:nChunk) {
                 dataEX_serie_chunk = append(
                     dataEX_serie_chunk,
                     list(dataEX_serie[[j]][dataEX_serie[[j]]$code %in%
-                                          chunk,]))
+                                           chunk,]))
             }
             names(dataEX_serie_chunk) = names(dataEX_serie)
         }
@@ -334,14 +334,14 @@ for (i in 1:nChunk) {
     for (sheet in sheet_list) {
         
         if (sheet == 'sommaire') {
-            post("### Plotting summary")
+            ASHE::post("### Plotting summary")
             Pages = tibble(section='Sommaire', subsection=NA, n=1)
         }
 
 
-## DIAGNOSTIC ________________________________________________________
+        ## DIAGNOSTIC ________________________________________________________
         if (sheet == 'correlation_matrix') {
-            post("### Plotting correlation matrix")
+            ASHE::post("### Plotting correlation matrix")
 
             group_of_HM_to_use = as.list(HM_to_use)
             names(group_of_HM_to_use) = HM_to_use
@@ -369,7 +369,7 @@ for (i in 1:nChunk) {
 
 
         if (sheet == 'carte_regime') {
-            post("### Plotting regime map")
+            ASHE::post("### Plotting regime map")
             sheet_regime_map(meta,
                              icon_path=icon_path,
                              logo_path=logo_path,
@@ -382,7 +382,7 @@ for (i in 1:nChunk) {
         }
         
         if (grepl('carte[_]critere', sheet)) {
-            post("### Plotting map")
+            ASHE::post("### Plotting map")
             one_colorbar = FALSE
             if (doc_chunk == "hm") {
                 HMSelection = group_of_HM_to_use[chunkname]
@@ -464,7 +464,7 @@ for (i in 1:nChunk) {
         }
         
         if (sheet == 'fiche_diagnostic_regime') {
-            post("### Plotting sheet diagnostic regime")
+            ASHE::post("### Plotting sheet diagnostic regime")
             Pages = sheet_diagnostic_regime(
                 meta,
                 dataEX_criteria_chunk,
@@ -481,7 +481,7 @@ for (i in 1:nChunk) {
         }
 
         if (sheet == 'fiche_diagnostic_piezometre') {
-            post("### Plotting sheet diagnostic couche")
+            ASHE::post("### Plotting sheet diagnostic couche")
             Pages = sheet_diagnostic_couche(
                 data_chunk,
                 meta_chunk,
@@ -498,7 +498,7 @@ for (i in 1:nChunk) {
         }
 
         if (sheet == 'fiche_diagnostic_region') {
-            post("### Plotting sheet diagnostic region")
+            ASHE::post("### Plotting sheet diagnostic region")
             Pages = sheet_diagnostic_region(
                 meta,
                 dataEX_criteria_chunk,
@@ -515,7 +515,7 @@ for (i in 1:nChunk) {
         }
 
         if (sheet == 'fiche_diagnostic_station') {
-            post("### Plotting sheet diagnostic station")
+            ASHE::post("### Plotting sheet diagnostic station")
             Pages = plot_sheet_diagnostic_station(
                 dataEX_criteria_chunk,
                 dataEX_serie_chunk,
@@ -528,12 +528,12 @@ for (i in 1:nChunk) {
         if (sheet == 'fiche_precip_ratio') {            
             HMGroup = lapply(HM_to_use, c, "SAFRAN")       
             Pages = sheet_precip_ratio(dataEX_serie_chunk,
-                                         HMGroup=HMGroup,
-                                         Colors=Colors_of_HM,
-                                         refCOL=refCOL,
-                                         figdir=today_figdir_leaf,
-                                         Pages=Pages,
-                                         verbose=subverbose)
+                                       HMGroup=HMGroup,
+                                       Colors=Colors_of_HM,
+                                       refCOL=refCOL,
+                                       figdir=today_figdir_leaf,
+                                       Pages=Pages,
+                                       verbose=subverbose)
         }
 
         if (sheet == 'stripes') {
@@ -550,9 +550,9 @@ for (i in 1:nChunk) {
         }
         
 
-## PROJECTIONS _______________________________________________________
+        ## PROJECTIONS _______________________________________________________
         if (sheet == 'fiche_projection_station') {
-            post("### Plotting sheet projection station")
+            ASHE::post("### Plotting sheet projection station")
             Pages = plot_sheet_projection_station(
                 # Code_to_plot,
                 today_figdir_leaf=today_figdir_leaf,
@@ -583,7 +583,7 @@ for (i in 1:nChunk) {
 
     
     if ('plot_doc' %in% to_do) {
-        post("### Merging pdf")
+        ASHE::post("### Merging pdf")
         details = file.info(list.files(today_figdir_leaf,
                                        recursive=TRUE,
                                        full.names=TRUE))
@@ -609,7 +609,7 @@ for (i in 1:nChunk) {
                         output=file.path(today_figdir,
                                          doc_title_ns,
                                          paste0(doc_title_ns,
-                                                    ".pdf")))
+                                                ".pdf")))
         }
     }
 }

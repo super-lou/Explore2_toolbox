@@ -45,8 +45,8 @@
 # Explore2_toolbox path
 lib_path =
     "./" #botan / sacados
-    # '/home/lheraut/library/Explore2_toolbox' #ESPRI
-    # '/home/herautl/library/Explore2_toolbox' #MUSE
+# '/home/lheraut/library/Explore2_toolbox' #ESPRI
+# '/home/herautl/library/Explore2_toolbox' #MUSE
 
 ## 2. GENERAL PROCESSES ______________________________________________
 # This to_do vector regroups all the different step you want to do.
@@ -183,8 +183,8 @@ mode =
 
 type =
     "hydrologie"
-    # "piezometrie"
-    # "climat"
+# "piezometrie"
+# "climat"
 
 to_do = c(
     ## diagnostic
@@ -364,13 +364,13 @@ verbose =
     TRUE
 subverbose =
     FALSE
-    # TRUE
+# TRUE
 
 # Which type of MPI is used
 MPI =
     # ""
     "file"
-    # "code"
+# "code"
 
 
 #  ___  _                  
@@ -410,7 +410,7 @@ projs_type =
     # "raw"
     # "cleaned"
     "merged"
-    # "extracted"
+# "extracted"
 
 projections_to_use =
     c(
@@ -591,11 +591,11 @@ WIP =
              "delta{allLF}_summer_H"
          ),
          # variables=c("T_chronique",
-                     # "R_chronique"),
+         # "R_chronique"),
          # variables=c("dtRA50mm"),
          # suffix=c("obs", "sim"))
          suffix=c("sim"))
-         # suffix=NULL)
+# suffix=NULL)
 
 # diag
 Explore2_criteria_diagnostic_performance = 
@@ -868,13 +868,13 @@ variable2save =
 # Saving format to use to save extract data
 saving_format =
     ""
-    # c('Rdata', 'txt')
+# c('Rdata', 'txt')
 
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving =
     file.path(mode, type)
-    # "proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
+# "proj/SMASH/CNRM-CM5_historical_ALADIN63_ADAMONT_SMASH"
 
 variable2search =
     c(
@@ -888,13 +888,13 @@ variable2search =
     )
 
 # merge_read_saving =
-    # TRUE
-    # FALSE
+# TRUE
+# FALSE
 
 ## 5. SELECTION ______________________________________________________
 selection_before_reading_for_projection =
     TRUE
-    # FALSE
+# FALSE
 
 diag_period_selection =
     list(
@@ -925,8 +925,8 @@ river_selection = paste0("^", river_selection, "$")
 river_length =
     # NULL
     30000
-    # 300000
-    
+# 300000
+
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
     # 1000 # normal map
@@ -943,7 +943,7 @@ logo_info = list(
 # to minmimal maximum colors.
 prob_of_quantile_for_palette =
     0.01
-    # 0
+# 0
 
 Colors_of_HM = c(
     "CTRIP"="#A88D72", #marron
@@ -1273,7 +1273,7 @@ if (MPI != "") {
     } else {
         Rrank = 0
     }
-    post(paste0("Random rank attributed : ", Rrank))
+    ASHE::post(paste0("Random rank attributed : ", Rrank))
     
 } else {
     rank = 0
@@ -1414,9 +1414,9 @@ if (type == "hydrologie") {
                                          HM_to_use)))
         
         Projections$regexp = gsub("[-]", "[-]",
-                                           Projections$regexp)
+                                  Projections$regexp)
         Projections$regexp = gsub("[_]", "[_]",
-                                           Projections$regexp)
+                                  Projections$regexp)
         
 
         if (projs_type == "raw") {
@@ -1502,7 +1502,7 @@ if (type == "hydrologie") {
 
         climateChain = unique(Projections$climateChain)
         projections_to_use = sapply(projections_to_use, apply_grepl,
-                              climateChain)
+                                    climateChain)
         Projections =
             dplyr::arrange(Projections,
                            factor(climateChain,
@@ -1531,9 +1531,9 @@ if (type == "hydrologie") {
         diag_path = file.path(computer_data_path, type, mode)
         HM_to_use_name = HM_to_use
         HM_path = list.files(file.path(computer_data_path,
-                                           type,
-                                           mode),
-                                 full.names=TRUE)
+                                       type,
+                                       mode),
+                             full.names=TRUE)
         HM_file = basename(HM_path)
         files_to_use = lapply(HM_to_use, apply_grepl,
                               table=HM_file, target=HM_path)
@@ -1623,13 +1623,13 @@ if (type == "hydrologie") {
         CodeALL10 = codes10_selection
     } else {
         # codes_to_use_regexp = convert_codeNtoM(codes_to_use, 8,
-                                               # 10, crop=FALSE, top=NULL)
+        # 10, crop=FALSE, top=NULL)
         CodeALL10 = c(sapply(paste0("(" ,
                                     paste0(codes_to_use,
                                            collapse=")|("),
-                               ")"),
-                        apply_grepl,
-                        table=codes10_selection))
+                                    ")"),
+                             apply_grepl,
+                             table=codes10_selection))
         CodeALL8 = convert_codeNtoM(CodeALL10, 10, 8)
     }
     
@@ -1680,9 +1680,9 @@ if (type == "hydrologie") {
             }
 
             if (rank == 0) {
-                post(paste0(paste0("rank ", 0:(size-1), " get ",
-                                   end-start+1, " files"),
-                            collapse="    "))
+                ASHE::post(paste0(paste0("rank ", 0:(size-1), " get ",
+                                         end-start+1, " files"),
+                                  collapse="    "))
             }
             
             if (Rrank+1 > nFiles_to_use) {
@@ -1691,7 +1691,7 @@ if (type == "hydrologie") {
                     Rmpi::mpi.send(as.integer(1), type=1,
                                    dest=0, tag=1, comm=0)
                 }
-                post(paste0("End signal from rank ", rank))
+                ASHE::post(paste0("End signal from rank ", rank))
                 
             } else {
                 Files = files_to_use[start[Rrank+1]:end[Rrank+1]]
@@ -1721,8 +1721,8 @@ if (type == "hydrologie") {
         Files_name = list(Files_name)
     }
     nFiles = length(Files)
-    post(paste0("All ", nFiles, " files: ",
-                paste0(names(Files), collapse=" ")))
+    ASHE::post(paste0("All ", nFiles, " files: ",
+                      paste0(names(Files), collapse=" ")))
 
     
     Subsets_save = Subsets
@@ -1737,7 +1737,7 @@ if (type == "hydrologie") {
         #         Rmpi::mpi.send(as.integer(1), type=1,
         #                        dest=0, tag=1, comm=0)
         #     }
-        #     post(paste0("End signal from rank ", rank)) 
+        #     ASHE::post(paste0("End signal from rank ", rank)) 
         # }
         start = ceiling(seq(1, nSubsets,
                             by=(nSubsets/size)))
@@ -1748,9 +1748,9 @@ if (type == "hydrologie") {
             end = c(start[-1]-1, nSubsets)
         }
         if (rank == 0) {
-            post(paste0(paste0("rank ", 0:(size-1), " get ",
-                               end-start+1, " files"),
-                        collapse="    "))
+            ASHE::post(paste0(paste0("rank ", 0:(size-1), " get ",
+                                     end-start+1, " files"),
+                              collapse="    "))
         }
         if (Rrank+1 > nSubsets) {
             Subsets = NULL
@@ -1758,15 +1758,15 @@ if (type == "hydrologie") {
                 Rmpi::mpi.send(as.integer(1), type=1,
                                dest=0, tag=1, comm=0)
             }
-            post(paste0("End signal from rank ", rank))
+            ASHE::post(paste0("End signal from rank ", rank))
             
         } else {
             Subsets = Subsets[start[Rrank+1]:end[Rrank+1]]
         }
     }
     nSubsets = length(Subsets)
-    post(paste0("All ", nSubsets, " subsets: ",
-                paste0(names(Subsets), collapse=" ")))
+    ASHE::post(paste0("All ", nSubsets, " subsets: ",
+                      paste0(names(Subsets), collapse=" ")))
 
     
 } else if (type == "piezometrie") {
@@ -1812,7 +1812,7 @@ Code_selection = CodeALL10
 if ("delete_tmp" %in% to_do) {
     delete_tmp = TRUE
     to_do = to_do[to_do != "delete_tmp"]
-    post("## MANAGING DATA")
+    ASHE::post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
@@ -1824,7 +1824,7 @@ if (!(file.exists(tmppath)) & rank == 0) {
 if ("clean_nc" %in% to_do) {
     clean_nc = TRUE
     to_do = to_do[to_do != "clean_nc"]
-    post("## MANAGING DATA")
+    ASHE::post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
@@ -1832,13 +1832,13 @@ if ("clean_nc" %in% to_do) {
 if ("merge_nc" %in% to_do) {
     merge_nc = TRUE
     to_do = to_do[to_do != "merge_nc"]
-    post("## MANAGING DATA")
+    ASHE::post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
 
 if ('reshape_piezo_data' %in% to_do) {
-    post("## RESHAPE DATA")
+    ASHE::post("## RESHAPE DATA")
     source(file.path(lib_path, 'script_reshape_data.R'),
            encoding='UTF-8')
 }
@@ -1855,11 +1855,11 @@ if (any(c('create_data', 'extract_data', 'save_extract',
           'reshape_extracted_data_for_figure', 'find_chain_out') %in% to_do)) {
 
     if (all(c('create_data', 'extract_data') %in% to_do)) {
-        post("## CREATING AND EXTRACTING DATA")
+        ASHE::post("## CREATING AND EXTRACTING DATA")
     } else if ('create_data' %in% to_do) {
-        post("## CREATING DATA")
+        ASHE::post("## CREATING DATA")
     } else if ('extract_data' %in% to_do) {
-        post("## EXTRACTING DATA")   
+        ASHE::post("## EXTRACTING DATA")   
     }
     
     timer = dplyr::tibble()
@@ -1903,9 +1903,9 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                     subset_next_name = "!"
                 }
 
-                post(paste0("For subset ", files_name_opt.,
-                            subset_name, ": ",
-                            paste0(subset, collapse=" -> ")))
+                ASHE::post(paste0("For subset ", files_name_opt.,
+                                  subset_name, ": ",
+                                  paste0(subset, collapse=" -> ")))
                 
                 file_test = c()
                 if ('create_data' %in% to_do) {
@@ -1934,9 +1934,9 @@ if (any(c('create_data', 'extract_data', 'save_extract',
                     }
                 }
                 
-                post(paste0(ss, "/", nSubsets,
-                            " chunks of stations -> ",
-                            round(ss/nSubsets*100, 1), "%"))
+                ASHE::post(paste0(ss, "/", nSubsets,
+                                  " chunks of stations -> ",
+                                  round(ss/nSubsets*100, 1), "%"))
 
                 if (type == "hydrologie") {
                     CodeSUB8 = CodeALL8[subset[1]:subset[2]]
@@ -2013,7 +2013,7 @@ if (any(c('create_data', 'extract_data', 'save_extract',
 
             if (any(Create_ok)) {
                 if (any(c('extract_data', 'save_extract') %in% to_do)) {
-                    post("## MANAGING DATA")
+                    ASHE::post("## MANAGING DATA")
                     timer = start_timer(timer, rank, "save",
                                         paste0(files_name_opt.,
                                                subset_name))
@@ -2055,7 +2055,7 @@ if (any(c('create_data', 'extract_data', 'save_extract',
 
 if (any(c('write_warnings', 'add_more_info_to_metadata',
           'add_regime_hydro', 'read_saving') %in% to_do)) {
-    post("## MANAGING DATA")
+    ASHE::post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
@@ -2063,25 +2063,25 @@ if (any(c('write_warnings', 'add_more_info_to_metadata',
 if ("read_tmp" %in% to_do) {
     read_tmp = TRUE
     to_do = to_do[to_do != "read_tmp"]
-    post("## MANAGING DATA")
+    ASHE::post("## MANAGING DATA")
     source(file.path(lib_path, 'script_management.R'),
            encoding='UTF-8')
 }
 
 if (any(c('plot_sheet', 'plot_doc') %in% to_do)) {
-    post("## PLOTTING DATA")
+    ASHE::post("## PLOTTING DATA")
     source(file.path(lib_path, 'script_layout.R'),
            encoding='UTF-8')
 }
 
 if ('create_database' %in% to_do) {
-    post("## DATABASE")
+    ASHE::post("## DATABASE")
     source(file.path(lib_path, 'script_database.R'),
            encoding='UTF-8')
 }
 
 # print(sort(sapply(ls(), function(x) {    
-    # object.size(get(x))})))
+# object.size(get(x))})))
 
 
 
@@ -2091,7 +2091,7 @@ if ('create_database' %in% to_do) {
 #                         by=(nFiles_to_use/size)))
 #     end = c(start[-1]-1, nFiles_to_use)
 #     if (rank == 0) {
-#         post(paste0(paste0("rank ", 0:(size-1), " get ",
+#         ASHE::post(paste0(paste0("rank ", 0:(size-1), " get ",
 #                            end-start+1, " files"),
 #                     collapse="    "))
 #     }
