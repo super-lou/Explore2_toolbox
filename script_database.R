@@ -73,7 +73,7 @@ if ('create_database' %in% to_do) {
     nPath = length(Paths)
     Variables = dplyr::tibble()
     for (j in 1:nPath) {
-        Variables_tmp = read_tibble(Paths[j])
+        Variables_tmp = ASHE::read_tibble(Paths[j])
         Variables_tmp =
             Variables_tmp[grepl(variables_regexp,
                                 Variables_tmp$variable_en),]
@@ -86,125 +86,125 @@ if ('create_database' %in% to_do) {
     # stop()
     
 
-#     # Table for stations
-#     query = '
-# CREATE TABLE IF NOT EXISTS stations (
-#     n INT,
-#     n_rcp26 INT,    
-#     n_rcp45 INT,
-#     n_rcp85 INT,
-#     code VARCHAR(255) PRIMARY KEY,
-#     code_hydro2 VARCHAR(255),
-#     is_reference BOOLEAN,
-#     name VARCHAR(255),
-#     hydrological_region VARCHAR(255),
-#     source VARCHAR(255),
-#     xl93_m DOUBLE PRECISION,
-#     yl93_m DOUBLE PRECISION,
-#     lon_deg DOUBLE PRECISION,
-#     lat_deg DOUBLE PRECISION,
-#     surface_km2 DOUBLE PRECISION,
-#     surface_ctrip_km2 DOUBLE PRECISION,
-#     surface_eros_km2 DOUBLE PRECISION,
-#     surface_grsd_km2 DOUBLE PRECISION,
-#     surface_j2000_km2 DOUBLE PRECISION,
-#     surface_mordor_sd_km2 DOUBLE PRECISION,
-#     surface_mordor_ts_km2 DOUBLE PRECISION,
-#     surface_orchidee_km2 DOUBLE PRECISION,
-#     surface_sim2_km2 DOUBLE PRECISION,
-#     surface_smash_km2 DOUBLE PRECISION,
-#     n_ctrip INT,
-#     n_eros INT,
-#     n_grsd INT,
-#     n_j2000 INT,
-#     n_mordor_sd INT,
-#     n_mordor_ts INT,
-#     n_orchidee INT,
-#     n_sim2 INT,
-#     n_smash INT,
-#     n_rcp26_ctrip INT,
-#     n_rcp26_eros INT,
-#     n_rcp26_grsd INT,
-#     n_rcp26_j2000 INT,
-#     n_rcp26_mordor_sd INT,
-#     n_rcp26_mordor_ts INT,
-#     n_rcp26_orchidee INT,
-#     n_rcp26_sim2 INT,
-#     n_rcp26_smash INT,
-#     n_rcp45_ctrip INT,
-#     n_rcp45_eros INT,
-#     n_rcp45_grsd INT,
-#     n_rcp45_j2000 INT,
-#     n_rcp45_mordor_sd INT,
-#     n_rcp45_mordor_ts INT,
-#     n_rcp45_orchidee INT,
-#     n_rcp45_sim2 INT,
-#     n_rcp45_smash INT,
-#     n_rcp85_ctrip INT,
-#     n_rcp85_eros INT,
-#     n_rcp85_grsd INT,
-#     n_rcp85_j2000 INT,
-#     n_rcp85_mordor_sd INT,
-#     n_rcp85_mordor_ts INT,
-#     n_rcp85_orchidee INT,
-#     n_rcp85_sim2 INT,
-#     n_rcp85_smash INT
-# );
-# '
-#     dbExecute(con, query)
+    #     # Table for stations
+    #     query = '
+    # CREATE TABLE IF NOT EXISTS stations (
+    #     n INT,
+    #     n_rcp26 INT,    
+    #     n_rcp45 INT,
+    #     n_rcp85 INT,
+    #     code VARCHAR(255) PRIMARY KEY,
+    #     code_hydro2 VARCHAR(255),
+    #     is_reference BOOLEAN,
+    #     name VARCHAR(255),
+    #     hydrological_region VARCHAR(255),
+    #     source VARCHAR(255),
+    #     xl93_m DOUBLE PRECISION,
+    #     yl93_m DOUBLE PRECISION,
+    #     lon_deg DOUBLE PRECISION,
+    #     lat_deg DOUBLE PRECISION,
+    #     surface_km2 DOUBLE PRECISION,
+    #     surface_ctrip_km2 DOUBLE PRECISION,
+    #     surface_eros_km2 DOUBLE PRECISION,
+    #     surface_grsd_km2 DOUBLE PRECISION,
+    #     surface_j2000_km2 DOUBLE PRECISION,
+    #     surface_mordor_sd_km2 DOUBLE PRECISION,
+    #     surface_mordor_ts_km2 DOUBLE PRECISION,
+    #     surface_orchidee_km2 DOUBLE PRECISION,
+    #     surface_sim2_km2 DOUBLE PRECISION,
+    #     surface_smash_km2 DOUBLE PRECISION,
+    #     n_ctrip INT,
+    #     n_eros INT,
+    #     n_grsd INT,
+    #     n_j2000 INT,
+    #     n_mordor_sd INT,
+    #     n_mordor_ts INT,
+    #     n_orchidee INT,
+    #     n_sim2 INT,
+    #     n_smash INT,
+    #     n_rcp26_ctrip INT,
+    #     n_rcp26_eros INT,
+    #     n_rcp26_grsd INT,
+    #     n_rcp26_j2000 INT,
+    #     n_rcp26_mordor_sd INT,
+    #     n_rcp26_mordor_ts INT,
+    #     n_rcp26_orchidee INT,
+    #     n_rcp26_sim2 INT,
+    #     n_rcp26_smash INT,
+    #     n_rcp45_ctrip INT,
+    #     n_rcp45_eros INT,
+    #     n_rcp45_grsd INT,
+    #     n_rcp45_j2000 INT,
+    #     n_rcp45_mordor_sd INT,
+    #     n_rcp45_mordor_ts INT,
+    #     n_rcp45_orchidee INT,
+    #     n_rcp45_sim2 INT,
+    #     n_rcp45_smash INT,
+    #     n_rcp85_ctrip INT,
+    #     n_rcp85_eros INT,
+    #     n_rcp85_grsd INT,
+    #     n_rcp85_j2000 INT,
+    #     n_rcp85_mordor_sd INT,
+    #     n_rcp85_mordor_ts INT,
+    #     n_rcp85_orchidee INT,
+    #     n_rcp85_sim2 INT,
+    #     n_rcp85_smash INT
+    # );
+    # '
+    #     dbExecute(con, query)
 
-#     # Table for projections
-#     query = '      
-# CREATE TABLE IF NOT EXISTS projections (
-#     chain VARCHAR(255) PRIMARY KEY,
-#     exp VARCHAR(255),    
-#     gcm VARCHAR(255),
-#     rcm VARCHAR(255),
-#     bc VARCHAR(255),
-#     hm VARCHAR(255),
-#     storylines VARCHAR(255)
-# );
-# '
-#     dbExecute(con, query)
+    #     # Table for projections
+    #     query = '      
+    # CREATE TABLE IF NOT EXISTS projections (
+    #     chain VARCHAR(255) PRIMARY KEY,
+    #     exp VARCHAR(255),    
+    #     gcm VARCHAR(255),
+    #     rcm VARCHAR(255),
+    #     bc VARCHAR(255),
+    #     hm VARCHAR(255),
+    #     storylines VARCHAR(255)
+    # );
+    # '
+    #     dbExecute(con, query)
     
     
-#     # Table for variables
-#     query = '      
-# CREATE TABLE IF NOT EXISTS variables (
-#     variable_en VARCHAR(255) PRIMARY KEY,
-#     unit_en VARCHAR(255),
-#     name_en VARCHAR(255),
-#     description_en VARCHAR(1000),
-#     method_en VARCHAR(1000),
-#     sampling_period_en VARCHAR(255),
-#     topic_en VARCHAR(255),
-#     variable_fr VARCHAR(255),
-#     unit_fr VARCHAR(255),
-#     name_fr VARCHAR(255),
-#     description_fr VARCHAR(1000),
-#     method_fr VARCHAR(1000),
-#     sampling_period_fr VARCHAR(255),
-#     topic_fr VARCHAR(255),
-#     is_date BOOLEAN,
-#     to_normalise BOOLEAN,
-#     palette VARCHAR(255)
-# );
-# '
-#     dbExecute(con, query)
+    #     # Table for variables
+    #     query = '      
+    # CREATE TABLE IF NOT EXISTS variables (
+    #     variable_en VARCHAR(255) PRIMARY KEY,
+    #     unit_en VARCHAR(255),
+    #     name_en VARCHAR(255),
+    #     description_en VARCHAR(1000),
+    #     method_en VARCHAR(1000),
+    #     sampling_period_en VARCHAR(255),
+    #     topic_en VARCHAR(255),
+    #     variable_fr VARCHAR(255),
+    #     unit_fr VARCHAR(255),
+    #     name_fr VARCHAR(255),
+    #     description_fr VARCHAR(1000),
+    #     method_fr VARCHAR(1000),
+    #     sampling_period_fr VARCHAR(255),
+    #     topic_fr VARCHAR(255),
+    #     is_date BOOLEAN,
+    #     to_normalise BOOLEAN,
+    #     palette VARCHAR(255)
+    # );
+    # '
+    #     dbExecute(con, query)
 
-#     ###
-#     names(Stations) = tolower(names(Stations))
-#     dbWriteTable(con, "stations", Stations,
-#                  append=TRUE, row.names=FALSE)
-#     ###
-#     names(Projections_tmp) = tolower(names(Projections_tmp))
-#     dbWriteTable(con, "projections", Projections_tmp,
-#                  append=TRUE, row.names=FALSE)
-#     ###
-#     names(Variables) = tolower(names(Variables))
-#     dbWriteTable(con, "variables", Variables,
-#                  append=TRUE, row.names=FALSE)
-#     ###
+    #     ###
+    #     names(Stations) = tolower(names(Stations))
+    #     dbWriteTable(con, "stations", Stations,
+    #                  append=TRUE, row.names=FALSE)
+    #     ###
+    #     names(Projections_tmp) = tolower(names(Projections_tmp))
+    #     dbWriteTable(con, "projections", Projections_tmp,
+    #                  append=TRUE, row.names=FALSE)
+    #     ###
+    #     names(Variables) = tolower(names(Variables))
+    #     dbWriteTable(con, "variables", Variables,
+    #                  append=TRUE, row.names=FALSE)
+    #     ###
     
 
 
@@ -286,7 +286,7 @@ CREATE TABLE IF NOT EXISTS ", table_name, " (
                         print(paste0(j, "/", nPath, " -> ",
                                      round(j/nPath*100, 1), " %"))
                         path = Paths[j]
-                        dataEX = read_tibble(path)
+                        dataEX = ASHE::read_tibble(path)
                         dataEX = dplyr::select(dataEX,
                                                EXP, GCM, RCM, BC, HM,
                                                code,
@@ -378,7 +378,7 @@ CREATE TABLE IF NOT EXISTS ", table_name, " (
                                  round(j/nPath*100, 1), " %"))
                     
                     path = Paths[j]
-                    dataEX = read_tibble(path)
+                    dataEX = ASHE::read_tibble(path)
                     dataEX = dplyr::select(dataEX,
                                            EXP, GCM, RCM, BC, HM,
                                            code, date,

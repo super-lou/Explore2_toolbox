@@ -128,19 +128,19 @@ if (type == "piezometrie") {
                    topic="Niveau piézométrique|Performance",
                    sampling_period="")
 
-    write_tibble(data,
+    ASHE::write_tibble(data,
                  filedir=tmppath,
                  filename="data.fst")
     
-    write_tibble(meta,
+    ASHE::write_tibble(meta,
                  filedir=tmppath,
                  filename="meta.fst")
 
-    write_tibble(dataEX_Explore2_criteria_diag_performance,
+    ASHE::write_tibble(dataEX_Explore2_criteria_diag_performance,
                  filedir=tmppath,
                  filename="dataEX_Explore2_criteria_diag_performance.fst")
     
-    write_tibble(metaEX_Explore2_criteria_diag_performance,
+    ASHE::write_tibble(metaEX_Explore2_criteria_diag_performance,
                  filedir=tmppath,
                  filename="metaEX_Explore2_criteria_diag_performance.fst")
 

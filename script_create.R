@@ -370,11 +370,11 @@ create_data = function () {
             names(data) = gsub("[_]sim", "", names(data))
         }
         
-        write_tibble(data,
-                     filedir=tmppath,
-                     filename=paste0("data_",
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
+        ASHE::write_tibble(data,
+                           filedir=tmppath,
+                           filename=paste0("data_",
+                                           files_name_opt.,
+                                           subset_name, ".fst"))
         rm ("data"); gc()
 
         meta = dplyr::arrange(meta, code)
@@ -382,11 +382,11 @@ create_data = function () {
 
         
 
-        write_tibble(meta,
-                     filedir=tmppath,
-                     filename=paste0("meta_",
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
+        ASHE::write_tibble(meta,
+                           filedir=tmppath,
+                           filename=paste0("meta_",
+                                           files_name_opt.,
+                                           subset_name, ".fst"))
         rm ("meta"); gc()
         
         res = TRUE

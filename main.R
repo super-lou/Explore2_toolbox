@@ -1346,9 +1346,9 @@ if (type == "hydrologie") {
 
 
     if (grepl("projection", mode)) {
-        Projections = read_tibble(file.path(
-            computer_data_path,
-            projs_selection_file))
+        Projections = ASHE::read_tibble(file.path(
+                                computer_data_path,
+                                projs_selection_file))
         EXP = c("historical", 'rcp26', 'rcp45', 'rcp85')
         names(Projections)[3:6] = EXP
         Projections =
@@ -1520,12 +1520,12 @@ if (type == "hydrologie") {
         files_to_use = Projections_nest$path
         names(files_to_use) = Projections_nest$Chain
 
-        write_tibble(dplyr::select(
-                                dplyr::filter(Projections,
-                                              !duplicated(Chain)),
-                                -"path"),
-                     filedir=today_resdir,
-                     filename="projections_selection.csv")
+        ASHE::write_tibble(dplyr::select(
+                                      dplyr::filter(Projections,
+                                                    !duplicated(Chain)),
+                                      -"path"),
+                           filedir=today_resdir,
+                           filename="projections_selection.csv")
 
     } else if (grepl("diagnostic", mode)) { #####
         diag_path = file.path(computer_data_path, type, mode)
@@ -1549,9 +1549,9 @@ if (type == "hydrologie") {
     if (projs_type != "extracted" |
         'find_chain_out' %in% to_do |
         'add_more_info_to_metadata' %in% to_do) {
-        codes_selection_data = read_tibble(file.path(
-            computer_data_path, type,
-            codes_hydro_selection_file))
+        codes_selection_data = ASHE::read_tibble(file.path(
+                                         computer_data_path, type,
+                                         codes_hydro_selection_file))
         codes_selection_data = dplyr::filter(codes_selection_data,
                                              !grepl("Supprimer",
                                                     PointsSupprimes))
@@ -1581,13 +1581,13 @@ if (type == "hydrologie") {
                                              )))))
     } else {
         codes_selection_data =
-            read_tibble(filedir=file.path(resdir,
-                                          mode, type),
-                        filename="stations_selection.csv")
+            ASHE::read_tibble(filedir=file.path(resdir,
+                                                mode, type),
+                              filename="stations_selection.csv")
         chain_to_remove =
-            read_tibble(filedir=file.path(resdir,
-                                          mode, type),
-                        filename="chain_to_remove_adjust.csv")
+            ASHE::read_tibble(filedir=file.path(resdir,
+                                                mode, type),
+                              filename="chain_to_remove_adjust.csv")
 
         if (any(c('plot_sheet', 'plot_doc',
                   'reshape_extracted_data_for_figure') %in% to_do)) {
@@ -1779,9 +1779,9 @@ if (type == "hydrologie") {
     Files_name = ""
     nFiles = 1
     
-    codes_selection_data = read_tibble(file.path(
-        computer_data_path, type,
-        codes_piezo_selection_file), sep=";")
+    codes_selection_data = ASHE::read_tibble(file.path(
+                                     computer_data_path, type,
+                                     codes_piezo_selection_file), sep=";")
     
     codes10_selection = codes_selection_data$code_bss
 
@@ -2040,16 +2040,16 @@ if (any(c('create_data', 'extract_data', 'save_extract',
             chain_to_remove = chain_to_remove[OK,]
             chain_to_remove = dplyr::bind_rows(chain_to_remove,
                                                chain_to_remove_dup)
-            write_tibble(chain_to_remove, today_resdir,
-                         "chain_to_remove.csv")
+            ASHE::write_tibble(chain_to_remove, today_resdir,
+                               "chain_to_remove.csv")
         }
         
     } else {
         warning ("No files")
     }
 
-    write_tibble(timer, today_resdir,
-                 paste0("timer_", rank, ".txt"))
+    ASHE::write_tibble(timer, today_resdir,
+                       paste0("timer_", rank, ".txt"))
 }
 
 

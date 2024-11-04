@@ -20,15 +20,15 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 CARD_extract_data = function () {
-    data = read_tibble(filedir=tmppath,
-                       filename=paste0("data", sep,
-                                       files_name_opt.,
-                                       subset_name, ".fst"))
+    data = ASHE::read_tibble(filedir=tmppath,
+                             filename=paste0("data", sep,
+                                             files_name_opt.,
+                                             subset_name, ".fst"))
     
-    meta = read_tibble(filedir=tmppath,
-                       filename=paste0("meta", sep,
-                                       files_name_opt.,
-                                       subset_name, ".fst"))
+    meta = ASHE::read_tibble(filedir=tmppath,
+                             filename=paste0("meta", sep,
+                                             files_name_opt.,
+                                             subset_name, ".fst"))
 
     if (type == "piezometrie") {
         data = dplyr::rename(data, Q_obs=H_obs, Q_sim=H_sim)
@@ -83,16 +83,16 @@ CARD_extract_data = function () {
                               dev=FALSE,
                               verbose=subverbose)
         
-        write_tibble(res$dataEX,
-                     filedir=tmppath,
-                     filename=paste0("dataEX_", extract$name, sep,
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
-        write_tibble(res$metaEX,
-                     filedir=tmppath,
-                     filename=paste0("metaEX_", extract$name, sep,
-                                     files_name_opt.,
-                                     subset_name, ".fst"))
+        ASHE::write_tibble(res$dataEX,
+                           filedir=tmppath,
+                           filename=paste0("dataEX_", extract$name, sep,
+                                           files_name_opt.,
+                                           subset_name, ".fst"))
+        ASHE::write_tibble(res$metaEX,
+                           filedir=tmppath,
+                           filename=paste0("metaEX_", extract$name, sep,
+                                           files_name_opt.,
+                                           subset_name, ".fst"))
         rm ("res")
         gc()
     }

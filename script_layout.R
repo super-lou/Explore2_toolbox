@@ -34,7 +34,7 @@ plot_sheet_diagnostic_station = function (dataEX_criteria_chunk,
     letterPaths = gsub("(.*[_])|([[:digit:]]+[.]fst)", "", Paths)
     Paths = Paths[letterPaths %in% substr(Code_to_plot, 1, 1)]
     for (path in Paths) {
-        data = read_tibble(filepath=path) 
+        data = ASHE::read_tibble(filepath=path) 
         Code_tmp = levels(factor(data$code))
 
         if (any(Code_tmp %in% Code_to_plot)) {
@@ -94,12 +94,12 @@ plot_sheet_projection_station = function (today_figdir_leaf,
                                        paste0("data_QUALYPSO_",
                                               subset_name, ".fst"))
         
-        meta_tmp = read_tibble(meta_path)
-        dataEX_serie_tmp = read_tibble(dataEX_serie_path)
-        metaEX_serie_tmp = read_tibble(metaEX_serie_path)
-        dataEX_criteria_tmp = read_tibble(dataEX_criteria_path)
-        metaEX_criteria_tmp = read_tibble(metaEX_criteria_path)
-        data_QUALYPSO_tmp = read_tibble(data_QUALYPSO_path)
+        meta_tmp = ASHE::read_tibble(meta_path)
+        dataEX_serie_tmp = ASHE::read_tibble(dataEX_serie_path)
+        metaEX_serie_tmp = ASHE::read_tibble(metaEX_serie_path)
+        dataEX_criteria_tmp = ASHE::read_tibble(dataEX_criteria_path)
+        metaEX_criteria_tmp = ASHE::read_tibble(metaEX_criteria_path)
+        data_QUALYPSO_tmp = ASHE::read_tibble(data_QUALYPSO_path)
 
         if (MPI == "code") {
             Shapefiles = load_shapefile(

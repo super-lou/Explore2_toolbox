@@ -48,8 +48,8 @@ manage_data = function () {
             filename = paste0("meta_", files_name_opt.,
                               subset_name, ".fst")
             if (file.exists(file.path(tmppath, filename))) {
-                meta_tmp = read_tibble(filedir=tmppath,
-                                       filename=filename)
+                meta_tmp = ASHE::read_tibble(filedir=tmppath,
+                                             filename=filename)
                 
                 if (!exists("meta")) {
                     meta = meta_tmp
@@ -65,8 +65,8 @@ manage_data = function () {
                                   files_name_opt.,
                                   subset_name, ".fst")
                 if (file.exists(file.path(tmppath, filename))) {
-                    metaEX = read_tibble(filedir=tmppath,
-                                         filename=filename)
+                    metaEX = ASHE::read_tibble(filedir=tmppath,
+                                               filename=filename)
                 }
             }
             
@@ -76,8 +76,8 @@ manage_data = function () {
             filename = paste0(dirname, ".fst")
             if (file.exists(file.path(tmppath, dirname)) |
                 file.exists(file.path(tmppath, filename))) {
-                dataEX_tmp = read_tibble(filedir=tmppath,
-                                         filename=filename)
+                dataEX_tmp = ASHE::read_tibble(filedir=tmppath,
+                                               filename=filename)
 
                 
                 if (!exists("dataEX")) {
@@ -225,27 +225,27 @@ manage_data = function () {
         
         if (exists("meta")) {
             meta = meta[order(meta$code),]
-            write_tibble(meta,
-                         filedir=tmppath,
-                         filename=paste0("meta_", extract$name,
-                                         .files_name_opt,
-                                         ".fst"))
+            ASHE::write_tibble(meta,
+                               filedir=tmppath,
+                               filename=paste0("meta_", extract$name,
+                                               .files_name_opt,
+                                               ".fst"))
             rm ("meta"); gc()
         }
         if (exists("dataEX")) {
-            write_tibble(dataEX,
-                         filedir=tmppath,
-                         filename=paste0("dataEX_", extract$name,
-                                         .files_name_opt,
-                                         ".fst"))
+            ASHE::write_tibble(dataEX,
+                               filedir=tmppath,
+                               filename=paste0("dataEX_", extract$name,
+                                               .files_name_opt,
+                                               ".fst"))
             rm ("dataEX"); gc()
         }
         if (exists("metaEX")) {
-            write_tibble(metaEX,
-                         filedir=tmppath,
-                         filename=paste0("metaEX_", extract$name,
-                                         .files_name_opt,
-                                         ".fst"))
+            ASHE::write_tibble(metaEX,
+                               filedir=tmppath,
+                               filename=paste0("metaEX_", extract$name,
+                                               .files_name_opt,
+                                               ".fst"))
             rm ("metaEX"); gc()
         }
     }
@@ -293,94 +293,94 @@ save_data = function () {
             file.exists(file.path(tmppath, filename))) {
 
             if ("meta" %in% variable2save) {
-                meta = read_tibble(filedir=tmppath,
-                                   filename=paste0(
-                                       "meta_",
-                                       extract$name,
-                                       .files_name_opt,
-                                       ".fst"))
+                meta = ASHE::read_tibble(filedir=tmppath,
+                                         filename=paste0(
+                                             "meta_",
+                                             extract$name,
+                                             .files_name_opt,
+                                             ".fst"))
                 
             }
             
             if ("metaEX" %in% variable2save) {
-                metaEX = read_tibble(filedir=tmppath,
-                                     filename=paste0(
-                                         "metaEX_",
-                                         extract$name,
-                                         .files_name_opt,
-                                         ".fst"))
+                metaEX = ASHE::read_tibble(filedir=tmppath,
+                                           filename=paste0(
+                                               "metaEX_",
+                                               extract$name,
+                                               .files_name_opt,
+                                               ".fst"))
                 
             }
             if ("dataEX" %in% variable2save) {
-                dataEX = read_tibble(filedir=tmppath,
-                                     filename=paste0(
-                                         "dataEX_",
-                                         extract$name,
-                                         .files_name_opt,
-                                         ".fst"))
+                dataEX = ASHE::read_tibble(filedir=tmppath,
+                                           filename=paste0(
+                                               "dataEX_",
+                                               extract$name,
+                                               .files_name_opt,
+                                               ".fst"))
             }
         } else {
             next
         }
 
         if ("meta" %in% variable2save) {
-            write_tibble(meta,
-                         filedir=today_resdir_tmp,
-                         filename="meta.fst")
+            ASHE::write_tibble(meta,
+                               filedir=today_resdir_tmp,
+                               filename="meta.fst")
             if ("Rdata" %in% saving_format) {
-                write_tibble(meta,
-                             filedir=today_resdir_tmp,
-                             filename="meta.Rdata")
+                ASHE::write_tibble(meta,
+                                   filedir=today_resdir_tmp,
+                                   filename="meta.Rdata")
             }
             if ("txt" %in% saving_format) {
-                write_tibble(meta,
-                             filedir=today_resdir_tmp,
-                             filename="meta.txt")
+                ASHE::write_tibble(meta,
+                                   filedir=today_resdir_tmp,
+                                   filename="meta.txt")
             }
         }
 
         if ("metaEX" %in% variable2save) {
-            write_tibble(metaEX,
-                         filedir=today_resdir_tmp,
-                         filename=paste0("metaEX_",
-                                         extract$name,
-                                         ".fst"))
+            ASHE::write_tibble(metaEX,
+                               filedir=today_resdir_tmp,
+                               filename=paste0("metaEX_",
+                                               extract$name,
+                                               ".fst"))
             if ("Rdata" %in% saving_format) {
-                write_tibble(metaEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("metaEX_",
-                                             extract$name,
-                                             ".Rdata"))
+                ASHE::write_tibble(metaEX,
+                                   filedir=today_resdir_tmp,
+                                   filename=paste0("metaEX_",
+                                                   extract$name,
+                                                   ".Rdata"))
             }
             if ("txt" %in% saving_format) {
-                write_tibble(metaEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("metaEX_",
-                                             extract$name,
-                                             ".txt"))
+                ASHE::write_tibble(metaEX,
+                                   filedir=today_resdir_tmp,
+                                   filename=paste0("metaEX_",
+                                                   extract$name,
+                                                   ".txt"))
             }
         }
 
 
         if ("dataEX" %in% variable2save) {
-            write_tibble(dataEX,
-                         filedir=today_resdir_tmp,
-                         filename=paste0("dataEX_",
-                                         extract$name,
-                                         ".fst"))
+            ASHE::write_tibble(dataEX,
+                               filedir=today_resdir_tmp,
+                               filename=paste0("dataEX_",
+                                               extract$name,
+                                               ".fst"))
             if ("Rdata" %in% saving_format) {
-                write_tibble(dataEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("dataEX_",
-                                             extract$name,
-                                             ".Rdata"))
+                ASHE::write_tibble(dataEX,
+                                   filedir=today_resdir_tmp,
+                                   filename=paste0("dataEX_",
+                                                   extract$name,
+                                                   ".Rdata"))
             }
             if ("txt" %in% saving_format) {
-                write_tibble(dataEX,
-                             filedir=today_resdir_tmp,
-                             filename=paste0("dataEX_",
-                                             extract$name,
-                                             ".txt"))
+                ASHE::write_tibble(dataEX,
+                                   filedir=today_resdir_tmp,
+                                   filename=paste0("dataEX_",
+                                                   extract$name,
+                                                   ".txt"))
             }
         }
         
@@ -527,9 +527,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     selection_before_reading_for_projection) {
                     print("selection before reading for projection")
 
-                    metaEX_tmp = read_tibble(filepath=gsub("dataEX",
-                                                           "metaEX",
-                                                           Paths[ii]))
+                    metaEX_tmp = ASHE::read_tibble(filepath=gsub("dataEX",
+                                                                 "metaEX",
+                                                                 Paths[ii]))
                     variables_to_read =
                         metaEX_tmp$variable_en[sapply(metaEX_tmp$variable_en,
                                                       any_grepl, pattern=variables_regexp)]
@@ -541,12 +541,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                         
                         for (j in 1:length(Paths_variable)) {
                             tmp = append(tmp,
-                                         list(read_tibble(filepath=Paths_variable[j])))
+                                         list(ASHE::read_tibble(filepath=Paths_variable[j])))
                             names(tmp)[length(tmp)] = variables_to_read[j]
                         }
                     }
                 } else {
-                    tmp = read_tibble(filepath=Paths[ii])
+                    tmp = ASHE::read_tibble(filepath=Paths[ii])
                 }
                 
 
@@ -1003,14 +1003,14 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         meta_ALL = dplyr::tibble()
         for (j in 1:nDirPath) {
             if (nrow(meta_ALL) == 0) {
-                meta_ALL = read_tibble(file.path(DirPaths[j],
-                                                 "meta.fst"))
+                meta_ALL = ASHE::read_tibble(file.path(DirPaths[j],
+                                                       "meta.fst"))
             } else {
                 meta_ALL =
                     dplyr::full_join(
                                meta_ALL,
-                               read_tibble(file.path(DirPaths[j],
-                                                     "meta.fst")))
+                               ASHE::read_tibble(file.path(DirPaths[j],
+                                                           "meta.fst")))
             }
         }
         meta_ALL = arrange(meta_ALL, code)
@@ -1080,10 +1080,10 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                    lat_deg,
                                    .after=lon_deg)
 
-        chain_to_remove = read_tibble(filedir=file.path(resdir,
-                                                        mode,
-                                                        type),
-                                      filename="chain_to_remove.csv")
+        chain_to_remove = ASHE::read_tibble(filedir=file.path(resdir,
+                                                              mode,
+                                                              type),
+                                            filename="chain_to_remove.csv")
 
 
         N_max = summarise(group_by(filter(Projections, EXP!="SAFRAN"),
@@ -1162,12 +1162,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                             chain_to_remove$Chain)
         chain_to_remove = filter(chain_to_remove, !duplicated(code_Chain))
         
-        write_tibble(chain_to_remove,
-                     filedir=today_resdir,
-                     filename="chain_to_remove_adjust.csv")
-        write_tibble(meta_ALL,
-                     filedir=today_resdir,
-                     filename="stations_selection.csv")
+        ASHE::write_tibble(chain_to_remove,
+                           filedir=today_resdir,
+                           filename="chain_to_remove_adjust.csv")
+        ASHE::write_tibble(meta_ALL,
+                           filedir=today_resdir,
+                           filename="stations_selection.csv")
     }
     
 
@@ -1187,22 +1187,22 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 dataEX_serie[[k]] = select(dataEX_serie[[k]], -code_Chain)
             }
             
-            write_tibble(dataEX_serie,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type),
-                         paste0("dataEX_serie_",
-                                subset_name, ".fst"))
-            write_tibble(metaEX_serie,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type), "metaEX_serie.fst")
+            ASHE::write_tibble(dataEX_serie,
+                               file.path(resdir,
+                                         paste0(mode, "_for_figure"),
+                                         type),
+                               paste0("dataEX_serie_",
+                                      subset_name, ".fst"))
+            ASHE::write_tibble(metaEX_serie,
+                               file.path(resdir,
+                                         paste0(mode, "_for_figure"),
+                                         type), "metaEX_serie.fst")
 
-            write_tibble(meta_tmp,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type),
-                         paste0("meta_", subset_name, ".fst"))
+            ASHE::write_tibble(meta_tmp,
+                               file.path(resdir,
+                                         paste0(mode, "_for_figure"),
+                                         type),
+                               paste0("meta_", subset_name, ".fst"))
 
             Paths_QUALYPSO = file.path(computer_data_path, type,
                                        QUALYPSO_dir,
@@ -1216,7 +1216,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
 
             for (path in Paths_QUALYPSO) {
                 code = gsub("[.].*", "", basename(path))
-                tmp = read_tibble(path)
+                tmp = ASHE::read_tibble(path)
                 tmp = tmp[c(1, 2, 4)]
                 for (k in 1:length(tmp)) {
                     names(tmp[[k]]) = c("spread", "signe")
@@ -1282,12 +1282,12 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 }
             }
 
-            write_tibble(data_QUALYPSO,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type),
-                         paste0("data_QUALYPSO_",
-                                subset_name, ".fst"))
+            ASHE::write_tibble(data_QUALYPSO,
+                               file.path(resdir,
+                                         paste0(mode, "_for_figure"),
+                                         type),
+                               paste0("data_QUALYPSO_",
+                                      subset_name, ".fst"))
         }
 
         if (any(grepl("criteria", extract_data)) & nrow(meta_tmp) > 0) {
@@ -1298,16 +1298,16 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                      !(code_Chain %in% chain_to_remove$code_Chain))
             dataEX_criteria = select(dataEX_criteria, -code_Chain)
 
-            write_tibble(dataEX_criteria,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type),
-                         paste0("dataEX_criteria_",
-                                subset_name, ".fst"))
-            write_tibble(metaEX_criteria,
-                         file.path(resdir,
-                                   paste0(mode, "_for_figure"),
-                                   type), "metaEX_criteria.fst")
+            ASHE::write_tibble(dataEX_criteria,
+                               file.path(resdir,
+                                         paste0(mode, "_for_figure"),
+                                         type),
+                               paste0("dataEX_criteria_",
+                                      subset_name, ".fst"))
+            ASHE::write_tibble(metaEX_criteria,
+                               file.path(resdir,
+                                         paste0(mode, "_for_figure"),
+                                         type), "metaEX_criteria.fst")
         }
     }
 
@@ -1374,9 +1374,9 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 
                 meta = dplyr::full_join(meta, regimeHydro, "code")
                 
-                write_tibble(meta,
-                             filedir=today_resdir,
-                             filename="meta.fst")
+                ASHE::write_tibble(meta,
+                                   filedir=today_resdir,
+                                   filename="meta.fst")
             }
         }
     }
@@ -1401,7 +1401,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
         nFile = length(Filenames)
         for (i in 1:nFile) {
             ASHE::post(paste0(Filenames[i], " reads in ", Paths[i]))
-            assign(Filenames[i], read_tibble(filepath=Paths[i]))
+            assign(Filenames[i], ASHE::read_tibble(filepath=Paths[i]))
         }
         read_tmp = FALSE
     }
@@ -1507,7 +1507,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     Code = ncdf4::ncvar_get(NC, "code")
 
                     if (file.exists(code_o_data_path)) {
-                        code_o_data = read_tibble(code_o_data_path)
+                        code_o_data = ASHE::read_tibble(code_o_data_path)
                         code_o = code_o_data$NouveauNom
                         code_o[is.na(code_o)] = Code[is.na(code_o)]
                         ncdf4::ncvar_put(NC, "code", code_o)
@@ -1519,8 +1519,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                     XL93 = ncdf4::ncvar_get(NC, "L93_X")
                     YL93 = ncdf4::ncvar_get(NC, "L93_Y")
 
-                    code_rm_data = read_tibble(code_rm_data_path)
-                    code_mv_data = read_tibble(code_mv_data_path)
+                    code_rm_data = ASHE::read_tibble(code_rm_data_path)
+                    code_mv_data = ASHE::read_tibble(code_mv_data_path)
 
                     if (nrow(code_mv_data) > 0 |
                         nrow(code_rm_data) > 0) {
@@ -1888,8 +1888,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             flag = tidyr::separate(flag, col="Chain",
                                    into=c("GCM", "EXP", "RCM",
                                           "BC", "HM"), sep="[|]")
-            write_tibble(flag, tmppath,
-                         paste0("flag_", rank , ".fst"))
+            ASHE::write_tibble(flag, tmppath,
+                               paste0("flag_", rank , ".fst"))
         }
 
         if (MPI == "file" & rank == 0) {
@@ -1915,18 +1915,18 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
             for (root in 0:(size-1)) {
                 path = file.path(tmppath, paste0("flag_", root , ".fst"))
                 if (file.exists(path)) {
-                    flag_tmp = read_tibble(path)
+                    flag_tmp = ASHE::read_tibble(path)
                     flag = dplyr::bind_rows(flag, flag_tmp)
                 }
             }
-            write_tibble(flag, today_resdir, "flag.txt")
+            ASHE::write_tibble(flag, today_resdir, "flag.txt")
             
         } else if (MPI == "file") {
             Rmpi::mpi.send(as.integer(1), type=1, dest=0, tag=1, comm=0)
             ASHE::post(paste0("End signal from rank ", rank))
 
         } else {
-            write_tibble(flag, today_resdir, "flag.txt")
+            ASHE::write_tibble(flag, today_resdir, "flag.txt")
         }
         
         merge_nc = FALSE

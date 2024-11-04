@@ -91,7 +91,7 @@
 #             } else {
 #                 EXP_tmp = EXP_merged
 #             }
-            
+
 #             for (exp in EXP_tmp) {
 #                 if (exp == "SAFRAN") {
 #                     for (hm in HM) {
@@ -275,7 +275,7 @@ meta_chains_climate = tidyr::separate(meta_chains_climate,
                                       sep="[|]")
 meta_chains_climate = dplyr::relocate(meta_chains_climate,
                                       climateChain, .before=path)
-    
+
 
 ## Tools _____________________________________________________________
 remove_empty_dirs = function(root_dir) {
@@ -923,20 +923,20 @@ if (archive_dir %in% to_archive) {
 # remove_empty_dirs(file.path(archive_base_dir, archive_dir))
 
 # for (dir in Types) {
-    # Paths_tmp = list.files(dir, pattern="meta[_]chains",
-    #                        full.names=TRUE, recursive=TRUE)
-    # for (path in Paths_tmp) {
-    #     ASHE::write_tibble(meta_projection,
-    #                        filedir=dirname(path),
-    #                        filename="meta_chains.csv")
-    # }
-    
-    # Paths_tmp = list.dirs(dir, full.names=TRUE, recursive=TRUE)
-    # file.copy(Paths_tmp, gsub("LSCE-IPSL-CDFt", "CDFt", Paths_tmp))
+# Paths_tmp = list.files(dir, pattern="meta[_]chains",
+#                        full.names=TRUE, recursive=TRUE)
+# for (path in Paths_tmp) {
+#     ASHE::write_tibble(meta_projection,
+#                        filedir=dirname(path),
+#                        filename="meta_chains.csv")
+# }
 
-    # Paths_tmp = list.files(dir, pattern="meta_projections", full.names=TRUE, recursive=TRUE)
-    # file.copy(Paths_tmp, gsub("meta_projections", "meta_chains", Paths_tmp))
-    # unlink(Paths_tmp)
+# Paths_tmp = list.dirs(dir, full.names=TRUE, recursive=TRUE)
+# file.copy(Paths_tmp, gsub("LSCE-IPSL-CDFt", "CDFt", Paths_tmp))
+
+# Paths_tmp = list.files(dir, pattern="meta_projections", full.names=TRUE, recursive=TRUE)
+# file.copy(Paths_tmp, gsub("meta_projections", "meta_chains", Paths_tmp))
+# unlink(Paths_tmp)
 # }
 
 
