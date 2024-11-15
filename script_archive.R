@@ -140,7 +140,7 @@ to_archive = c(
 
     ## proj
     ### climatological-projection
-    # "climatological-projection_daily-time-series_by-chain_netcdf" #B
+    "climatological-projection_daily-time-series_by-chain_netcdf" #B
     # "climatological-projection_hourly-time-series_by-chain_netcdf",
 
     ### hydrological-projection
@@ -587,7 +587,7 @@ get_meta_archive = function (archive_dir,
 if (download_DRIAS) {
     options(timeout=300)
     URLs = readLines(file.path(local_resources_dir, URL_DRIAS_file))
-    output_dir = file.path(archive_base_dir, output_DRIAS_dir)
+output_dir = file.path(archive_base_dir, output_DRIAS_dir)
     if (!dir.exists(output_dir)) {
         dir.create(output_dir, showWarnings=FALSE)
     }

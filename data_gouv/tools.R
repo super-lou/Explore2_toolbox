@@ -207,7 +207,7 @@ get_dataset_metadata = function(BASE_URL, API_TOKEN, dataset_DOI) {
 
 
 create_dataset_in_dataverse <- function(BASE_URL, API_TOKEN,
-                                        dataverse_name,
+                                        dataverse_name="root",
                                         metadata_path) {
     # Read the metadata JSON file
     metadata_json <- fromJSON(metadata_path,

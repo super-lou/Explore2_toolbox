@@ -177,9 +177,9 @@ lib_path =
 #       directory.
 
 mode =
-    # "diagnostic"
+    "diagnostic"
     # "diagnostic_ungauged"
-    "projection"
+    # "projection"
 
 type =
     "hydrologie"
@@ -196,7 +196,7 @@ to_do = c(
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'read_tmp'
-    # 'read_saving'
+    # 'read_saving',
     
     ## projection
     # 'delete_tmp',
@@ -214,19 +214,19 @@ to_do = c(
     # 'read_saving'
 
     ## all
-    'plot_sheet'
-    # 'plot_doc'
+    # 'plot_sheet'
+    'plot_doc'
 )
 
 extract_data = c(
     # 'WIP'
-    # 'Explore2_criteria_diagnostic_performance',
-    # 'Explore2_criteria_diagnostic_sensibility',
-    # 'Explore2_criteria_diagnostic_sensibility_RAT',
-    # 'Explore2_criteria_diagnostic_HF',
-    # 'Explore2_criteria_diagnostic_MF',
-    # 'Explore2_criteria_diagnostic_LF',
-    # 'Explore2_criteria_diagnostic_BF',
+    'Explore2_criteria_diagnostic_performance',
+    'Explore2_criteria_diagnostic_sensibility',
+    'Explore2_criteria_diagnostic_sensibility_RAT',
+    'Explore2_criteria_diagnostic_HF',
+    'Explore2_criteria_diagnostic_MF',
+    'Explore2_criteria_diagnostic_LF',
+    'Explore2_criteria_diagnostic_BF'
     # 'Explore2_serie_diagnostic_plot'
     # 'Explore2_criteria_diagnostic_SAFRAN',
     # 'Explore2_criteria_more_diagnostic_SAFRAN'
@@ -240,7 +240,7 @@ extract_data = c(
     # 'Explore2_serie_projection_FDC',
     # 'Explore2_serie_projection_medQJ',
     # 'Explore2_serie_projection_QM',
-    'Explore2_serie_projection_BF'
+    # 'Explore2_serie_projection_BF'
     
     # 'Explore2_criteria_projection_HF',
     # 'Explore2_criteria_projection_MF',
@@ -332,7 +332,7 @@ plot_doc = c(
     # "correlation_matrix"
     # "correlation_matrix_ungauged"
     
-    'fiche_diagnostic_region'
+    # 'fiche_diagnostic_region'
     # 'fiche_diagnostic_regime'
     # 'fiche_diagnostic_piezometre'
 
@@ -349,7 +349,7 @@ plot_doc = c(
     # "carte_critere_critere_ungauged_secteur"
 
     ## avertissement
-    # "carte_critere_hm_avertissement_secteur"
+    "carte_critere_hm_avertissement_secteur"
     
     ## piezo
     # "carte_piezo_critere_hm"
@@ -364,13 +364,13 @@ verbose =
     TRUE
 subverbose =
     FALSE
-# TRUE
+    # TRUE
 
 # Which type of MPI is used
 MPI =
-    # ""
-    "file"
-# "code"
+    ""
+    # "file"
+    # "code"
 
 
 #  ___  _                  
@@ -408,8 +408,8 @@ nCode4RAM = 25
 # - 'extracted' is for resdir/projection/
 projs_type =
     # "raw"
-    # "cleaned"
-    "merged"
+    "cleaned"
+    # "merged"
 # "extracted"
 
 projections_to_use =
@@ -453,15 +453,15 @@ storylines =
 
 HM_to_use = 
     c(
-        # "CTRIP" ok
-        # "EROS" ok
-        # "GRSD" ok
-        # "J2000" ok
-        # "MORDOR-SD" ok
-        # "MORDOR-TS" ok
-        "ORCHIDEE"
-        # "SIM2" ok
-        # "SMASH" ok
+        "CTRIP",
+        "EROS",
+        "GRSD",
+        "J2000",
+        "MORDOR-SD",
+        "MORDOR-TS",
+        "ORCHIDEE",
+        "SIM2",
+        "SMASH"
 
         # "AquiFR",
         # "EROS Bretagne",
@@ -530,7 +530,16 @@ variables_to_use =
         # ".*"
         # "^QA$",
 
-        ## Diagnostic ##
+        ## Diagnostic (old name) ##
+        "KGEracine", "Biais$",
+        "epsilon.*JJA$", "epsilon.*DJF$",
+        "RAT[_]T$", "RAT[_]R$",
+        "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$",
+        "^meanTA$", "^meanTA[_]DJF$", "^meanTA[_]MAM$", "^meanTA[_]JJA$", "^meanTA[_]SON$",
+        "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
+        "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
+        
+        ## Diagnostic (new name) ##
         # "KGEsqrt", "Bias$",
         # "epsilon.*JJA$", "epsilon.*DJF$",
         # "RAT[_]T$", "RAT[_]R$",
@@ -543,10 +552,10 @@ variables_to_use =
         # "^QA$", "^deltaQA_H3$"
         
         ## fiche resultats ##
-        "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
-        "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
-        "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
-        "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
+        # "^QJXA$", "^QA$", "^VCN10_summer", "medQJ", "nQJXA-10_H", "deltaQJXA-10_H",
+        # "deltaQ05A", "deltaQ10A", "deltaQJXA", "delta{tQJXA}", "deltaVCX3", "delta{tVCX3}", "deltaVCX10", "delta{tVCX10}", "delta{dtFlood}",
+        # "deltaQ50A", "deltaQA", "deltaQMA_jan", "deltaQMA_aug", "deltaQMA_sep", "deltaQSA_DJF", "deltaQSA_MAM", "deltaQSA_JJA", "deltaQSA_SON",
+        # "deltaQ95A", "deltaQ90A", "deltaQMNA_H[[:digit:]]$", "deltaVCN3_summer", "deltaVCN10_summer", "deltaVCN30_summer", "delta{startLF}_summer", "delta{centerLF}_summer", "delta{dtLF}_summer", "nVCN10-5_H", "deltaVCN10-5_H"
 
         ## MEANDRE ##
         # "medQJ", 
@@ -910,6 +919,10 @@ diag_station_selection =
 
 
 ## 6. PLOT_SHEET _____________________________________________________
+for_paper =
+    TRUE
+    # FALSE
+    
 n_projections_by_code = 4
 
 # If the hydrological network needs to be plot
@@ -929,8 +942,8 @@ river_length =
 
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
-    # 1000 # normal map
-    9000 # mini map
+    1000 # normal map
+    # 9000 # mini map
 
 # Which logo do you want to show in the footnote
 logo_info = list(
@@ -1230,7 +1243,7 @@ if (any(grepl("plot", to_do))) {
     library(gridExtra)
     library(gridtext)
     library(ggh4x)
-    # library(shadowtext)
+    library(shadowtext)
     # library(ggrepel)
     library(png)
     library(latex2exp)

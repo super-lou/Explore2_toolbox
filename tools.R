@@ -20,6 +20,12 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 
+clean_path = function (text) {
+    text = iconv(text, from = "UTF-8", to = "ASCII//TRANSLIT")
+    text = gsub("[()]", "", text)
+    return (text)
+}
+
 any_grepl = function (pattern, x, ...) {
     return (any(grepl(pattern=pattern, x=x, ...)))
 }

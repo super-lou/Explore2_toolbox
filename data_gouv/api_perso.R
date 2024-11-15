@@ -26,15 +26,60 @@ to_do = c(
 
 
 
+
+
+
+
+
+
+
+
+
+curl -H "X-Dataverse-key:81fa3612-6436-49c1-a702-4ed57691837f" \
+     -X POST "https://demo.recherche.data.gouv.fr/api/dataverses/explore2/datasets" \
+     --upload-file "RDG_metadata_template.json" \
+     -H 'Content-type:application/json' | jq .
+
+curl -H "X-Dataverse-key:f56f4009-5cce-43a8-8ac1-faa510b05af4" \
+     -X POST "https://entrepot.recherche.data.gouv.fr/api/dataverses/explore2/datasets" \
+     --upload-file "RDG_metadata_template.json" \
+     -H 'Content-type:application/json' | jq .
+
+
+
+
+
+curl -H "X-Dataverse-key:81fa3612-6436-49c1-a702-4ed57691837f" \
+     -X POST "https://demo.recherche.data.gouv.fr/api/dataverses/tp/datasets" \
+     --upload-file "RDG_metadata_template.json" \
+     -H 'Content-type:application/json' | jq .
+
+curl -H "X-Dataverse-key:81fa3612-6436-49c1-a702-4ed57691837f" \
+     -X POST "https://demo.recherche.data.gouv.fr/api/dataverses/inrae/datasets" \
+     --upload-file "RDG_metadata_template.json" \
+     -H 'Content-type:application/json' | jq .
+
+
+curl -H "X-Dataverse-key:f56f4009-5cce-43a8-8ac1-faa510b05af4" \
+     -X POST "https://entrepot.recherche.data.gouv.fr/api/dataverses/inrae/datasets" \
+     --upload-file "RDG_metadata_template.json" \
+     -H 'Content-type:application/json' | jq .
+
+curl -H "X-Dataverse-key:f56f4009-5cce-43a8-8ac1-faa510b05af4" \
+     -X POST "https://entrepot.recherche.data.gouv.fr/api/dataverses/explore2/datasets" \
+     --upload-file "RDG_metadata_template.json" \
+     -H 'Content-type:application/json' | jq .
+
+
 metadata_path = file.path("tests",
                           "RDG_metadata_template.json")
 
 metadata_path = file.path("inst", "extdata",
-                          "rechercheDataGouv-minimum-metadata.json")
+                          "RDG_full_metadata_template.json")
 
 
 create_dataset_in_dataverse(BASE_URL, API_TOKEN,
-                            "explore2",
+                            "inrae",
                             metadata_path)
 
 

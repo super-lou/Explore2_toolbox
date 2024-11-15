@@ -168,7 +168,7 @@ if (!exists("Shapefiles") & MPI != "code") {
         france_shp_path=france_shp_path,
         bassinHydro_shp_path=bassinHydro_shp_path,
         regionHydro_shp_path=regionHydro_shp_path,
-        # secteurHydro_shp_path=secteurHydro_shp_path,
+        secteurHydro_shp_path=secteurHydro_shp_path,
         entiteHydro_shp_path=entiteHydro_shp_path,
         entitePiezo_shp_path=entitePiezo_shp_path,
         river_shp_path=river_shp_path,
@@ -189,10 +189,9 @@ if (add_multi) {
     names(group_of_HM_to_use) = HM_to_use
     if (length(HM_to_use) > 2) {
         group_of_HM_to_use =
-            append(group_of_HM_to_use,
-                   list(HM_to_use))
-        names(group_of_HM_to_use)[
-            length(group_of_HM_to_use)] = "Multi-modèle"
+            append(list(HM_to_use),
+                   group_of_HM_to_use)
+        names(group_of_HM_to_use)[1] = "Multi-modèle"
     }
 } else {
     group_of_HM_to_use = as.list(HM_to_use)
@@ -282,15 +281,17 @@ for (i in 1:nChunk) {
         doc_chunkname = gsub(" ", "_",
                              gsub(" [-] ", "_",
                                   chunkname))
-        today_figdir_leaf = file.path(today_figdir,
-                                      mode,
-                                      doc_title_ns,
-                                      doc_chunkname, "PDF")
+        today_figdir_leaf = clean_path(
+            file.path(today_figdir,
+                      mode,
+                      doc_title_ns,
+                      doc_chunkname, "PDF"))
     } else if ('plot_doc' %in% to_do) {
-        today_figdir_leaf = file.path(today_figdir,
-                                      mode,
-                                      doc_title_ns,
-                                      "PDF")
+        today_figdir_leaf = clean_path(
+            file.path(today_figdir,
+                      mode,
+                      doc_title_ns,
+                      "PDF"))
     } else {
         today_figdir_leaf = file.path(today_figdir,
                                       mode)
@@ -412,9 +413,9 @@ for (i in 1:nChunk) {
             }
 
             if (grepl('shape', sheet)) {
-                hm_by_shape = TRUE
+                HM_by_shape = TRUE
             } else {
-                hm_by_shape = FALSE
+                HM_by_shape = FALSE
             }
 
             if (grepl('piezo', sheet)) {
@@ -455,7 +456,8 @@ for (i in 1:nChunk) {
                 is_foot=FALSE,
                 is_secteur=is_secteur,
                 is_warning=is_warning,
-                hm_by_shape=hm_by_shape,
+                for_paper=for_paper,
+                HM_by_shape=HM_by_shape,
                 remove_warning_lim=remove_warning_lim,
                 figdir=today_figdir_leaf,
                 Pages=Pages,
@@ -596,20 +598,24 @@ for (i in 1:nChunk) {
             listfile_path = c(summary_path, listfile_path)
         }
 
-        if (!is.null(chunkname)) {            
+        if (!is.null(chunkname)) {
+            output = clean_path(file.path(today_figdir,
+                                          mode,
+                                          doc_title_ns,
+                                          doc_chunkname,
+                                          paste0(doc_chunkname,
+                                                 ".pdf")))
             pdf_combine(input=listfile_path,
-                        output=file.path(today_figdir,
-                                         doc_title_ns,
-                                         doc_chunkname,
-                                         paste0(doc_chunkname,
-                                                ".pdf")))
+                        output=output)
             
         } else {
+            output = clean_path(file.path(today_figdir,
+                                          mode,
+                                          doc_title_ns,
+                                          paste0(doc_title_ns,
+                                                 ".pdf")))
             pdf_combine(input=listfile_path,
-                        output=file.path(today_figdir,
-                                         doc_title_ns,
-                                         paste0(doc_title_ns,
-                                                ".pdf")))
+                        output=output)
         }
     }
 }

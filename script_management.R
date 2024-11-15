@@ -505,7 +505,7 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                                                  extract$name),
                                             "[.]"),
                            pattern)
-            
+
             Paths = Paths[grepl(pattern, Paths)]
             Paths = Paths[grepl("[.]fst", Paths) | !grepl("?[.]", Paths)]
             Paths[!grepl("[.]", Paths)] =
@@ -564,6 +564,8 @@ if (!read_tmp & !clean_nc & !merge_nc & !delete_tmp) {
                 if (grepl("dataEX.*criteria", Filenames[ii])) {
                     tmp = dplyr::filter(tmp, code %in% Code_selection)
 
+                    print(names(tmp))
+                    
                     by = names(tmp)[sapply(tmp, is.character)]
                     pattern_by = paste0("(",
                                         paste0(by, collapse=")|("),
