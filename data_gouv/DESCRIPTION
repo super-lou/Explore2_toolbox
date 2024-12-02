@@ -1,0 +1,47 @@
+Package: RDGf
+Version: 2.4.0
+Date: 2024-09-16
+Title: RDGf
+Description: Provides an efficient and simple solution to aggregate and analyze the stationarity of time series.
+Authors@R: c(
+    person(given = "Benjamin",
+           family = "Renard",
+           role = c("aut"),
+           email = "benjamin.renard@inrae.fr"),
+    person(given = "Valentin",
+           family = "Mansanarez",
+           role = c("aut")),
+    person(given = "Louis",
+           family = "Héraut",
+           role = c("cre", "aut"),
+           email = "louis.heraut@inrae.fr"),
+    person(given = "Éric",
+           family = "Sauquet",
+           role = c("ctb"),
+           email = "eric.sauquet@inrae.fr"),
+    person(given = "Jean-Philippe",
+           family = "Vidal",
+           role = c("ctb"),
+           email = "jean-philippe.vidal@inrae.fr"),
+    person(given = "Nathan",
+           family = "Pellerin",
+           role = c("ctb"))
+	   )
+Maintainer: Louis Héraut <louis.heraut@inrae.fr>
+Encoding: UTF-8
+License: GPL-3 + file LICENSE
+Imports: 
+    dplyr,
+    tibble,
+    tidyr,
+    magrittr,
+    data.table,
+    lubridate,
+    stats,
+    rlang,
+    utils,
+    CircStats,
+    stringr,
+    purrr
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)

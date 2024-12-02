@@ -87,7 +87,8 @@ search = function(BASE_URL, API_TOKEN,
                   type="*", collection="",
                   n_search="10") {
 
-    q = paste0(paste0("q=", query), collapse="&")
+    query = gsub("[ ]", "+", query)
+    q = paste0(paste0("q=\"", query, "\""), collapse="&")
     
     if (publication_status == "DRAFT") {
         fq = "fq=publicationStatus:Draft"
@@ -205,30 +206,32 @@ get_dataset_metadata = function(BASE_URL, API_TOKEN, dataset_DOI) {
 
 
 
-
 create_dataset_in_dataverse <- function(BASE_URL, API_TOKEN,
-                                        dataverse_name="root",
+                                        dataverse_name = "root",
                                         metadata_path) {
     # Read the metadata JSON file
-    metadata_json <- fromJSON(metadata_path,
-                              simplifyDataFrame=FALSE,
-                              simplifyVector=FALSE)
+    metadata_json = fromJSON(metadata_path,
+                             simplifyDataFrame=FALSE,
+                             simplifyVector=FALSE)
 
     # Construct the URL for dataset creation
-    create_url <- paste0(BASE_URL, "/api/dataverses/",
-                         dataverse_name, "/datasets")
+    create_url = paste0(BASE_URL, "/api/dataverses/",
+                        dataverse_name, "/datasets")
 
     # Make the POST request to create the dataset
-    response <- POST(create_url,
-                     add_headers("X-Dataverse-key" = API_TOKEN),
-                     body = metadata_json,
-                     encode = "json")  # Use 'json' to encode the body as JSON
+    response = POST(create_url,
+                    add_headers("X-Dataverse-key" = API_TOKEN),
+                    body = metadata_json,
+                    encode = "json") 
 
     # Check the response status
-    if (status_code(response) == 200) {  # 201 Created
+    if (status_code(response) == 201) {
         cat("Dataset created successfully.\n")
         dataset_info <- content(response, "parsed")
-        return(dataset_info)
+        DOI <- content(response, "parsed")$data$persistentId
+        cat("Dataset DOI: ", DOI, "\n")
+        return (DOI)
+
     } else {
         cat("Failed to create dataset.\n")
         cat("Status code: ", status_code(response), "\n")
@@ -236,6 +239,64 @@ create_dataset_in_dataverse <- function(BASE_URL, API_TOKEN,
         stop("Error during dataset creation.")
     }
 }
+
+
+get_dataset_metadata <- function(BASE_URL, API_TOKEN, dataset_DOI) {
+    # Construct the URL
+    get_url <- paste0(BASE_URL, "/api/datasets/:persistentId/versions/:latest?persistentId=", dataset_DOI)
+    
+    # Make the GET request
+    response <- GET(get_url, add_headers("X-Dataverse-key" = API_TOKEN))
+    
+    if (status_code(response) == 200) {
+        cat("Metadata retrieved successfully.\n")
+        metadata <- content(response, "parsed")
+        return(metadata$data) # Return only the data object
+    } else {
+        cat("Failed to retrieve metadata.\n")
+        cat("Status code: ", status_code(response), "\n")
+        cat("Response content: ", content(response, as = "text", encoding = "UTF-8"), "\n")
+        stop("Error during metadata retrieval.")
+    }
+}
+
+
+
+modify_dataset_metadata = function(BASE_URL, API_TOKEN, dataset_DOI,
+                                    metadata_path) {
+
+    # Read the metadata JSON file
+    metadata_json = fromJSON(metadata_path,
+                             simplifyDataFrame = FALSE,
+                             simplifyVector = FALSE)
+
+    # Construct the URL for adding/updating dataset metadata
+    modify_url <- paste0(BASE_URL,
+                         "/api/datasets/:persistentId/versions/:draft?persistentId=",
+                         dataset_DOI)
+
+    # Make the PUT request to add metadata
+    response = PUT(modify_url,
+                   add_headers("X-Dataverse-key" = API_TOKEN),
+                   body = metadata_json$datasetVersion,
+                   encode = "json")
+
+    # Check the response status
+    if (status_code(response) == 200) {
+        cat("Metadata added/updated successfully.\n")
+        updated_metadata <- content(response, "parsed")
+        return (updated_metadata)
+    } else {
+        cat("Failed to add/update metadata.\n")
+        cat("Status code: ", status_code(response), "\n")
+        cat("Response content: ", content(response, as = "text", encoding = "UTF-8"), "\n")
+        stop("Error during metadata addition.")
+    }
+}
+
+
+
+
 
 # create_dataset_in_dataverse <- function(BASE_URL, API_TOKEN,
 #                                         dataverse_name,

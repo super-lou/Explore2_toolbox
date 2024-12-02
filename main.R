@@ -196,7 +196,7 @@ to_do = c(
     # 'write_warnings',
     # 'add_regime_hydro'
     # 'read_tmp'
-    # 'read_saving',
+    # 'read_saving'
     
     ## projection
     # 'delete_tmp',
@@ -533,20 +533,20 @@ variables_to_use =
         ## Diagnostic (old name) ##
         "KGEracine", "Biais$",
         "epsilon.*JJA$", "epsilon.*DJF$",
-        "RAT[_]T$", "RAT[_]R$",
-        "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^aCDC$", "Q90$", "med[{]tVCN10[}]$",
-        "^meanTA$", "^meanTA[_]DJF$", "^meanTA[_]MAM$", "^meanTA[_]JJA$", "^meanTA[_]SON$",
-        "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
-        "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
+        "RAT_T$", "RAT_R$",
+        "Q10$", "med{tQJXA}$", "^alphaQA$", "^aCDC$", "Q90$", "med{tVCN10}$",
+        "^meanTA$", "^meanTA_DJF$", "^meanTA_MAM$", "^meanTA_JJA$", "^meanTA_SON$",
+        "^meanRA$", "^meanRA_DJF$", "^meanRA_MAM$", "^meanRA_JJA$", "^meanRA_SON$",
+        "^CR$", "^CR_DJF$", "^CR_MAM$", "^CR_JJA$", "^CR_SON$"
         
         ## Diagnostic (new name) ##
         # "KGEsqrt", "Bias$",
         # "epsilon.*JJA$", "epsilon.*DJF$",
-        # "RAT[_]T$", "RAT[_]R$",
+        # "RAT_T$", "RAT_R$",
         # "Q10$", "med[{]tQJXA[}]$", "^alphaQA$", "^aFDC$", "Q90$", "med[{]tVCN10[}]$",
-        # "^meanTA$", "^meanTA[_]DJF$", "^meanTA[_]MAM$", "^meanTA[_]JJA$", "^meanTA[_]SON$",
-        # "^meanRA$", "^meanRA[_]DJF$", "^meanRA[_]MAM$", "^meanRA[_]JJA$", "^meanRA[_]SON$",
-        # "^CR$", "^CR[_]DJF$", "^CR[_]MAM$", "^CR[_]JJA$", "^CR[_]SON$"
+        # "^meanTA$", "^meanTA_DJF$", "^meanTA_MAM$", "^meanTA_JJA$", "^meanTA_SON$",
+        # "^meanRA$", "^meanRA_DJF$", "^meanRA_MAM$", "^meanRA_JJA$", "^meanRA_SON$",
+        # "^CR$", "^CR_DJF$", "^CR_MAM$", "^CR_JJA$", "^CR_SON$"
 
         ## to find out chain ##
         # "^QA$", "^deltaQA_H3$"
