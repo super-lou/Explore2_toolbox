@@ -42,7 +42,8 @@ if ("create_incertitude_fiche" %in% to_do) {
     notice_file = "Explore2_Notice_fiche_incertitude_VF.pdf"
 
     query = "Fiches de résultats des modèles hydrologiques"
-
+    # query = "Fiches incertitudes des modèles hydrologiques"
+    
     publication_status =
         "RELEASED"
         # "DRAFT"
@@ -56,27 +57,78 @@ if ("create_incertitude_fiche" %in% to_do) {
                       type=type,
                       collection=collection,
                       n_search=n_search)
+    
     Titles = unlist(lapply(datasets$items, "[[", "name"))
-    Titles = Titles[grepl("Explore2", Titles)]
-    Region = gsub(".*[:] ", "", Titles)
+    OK = grepl("[:]", Titles)
+    datasets$items = datasets$items[OK]
+    Titles = Titles[OK]
+    Letters_Regions = gsub(".*[:] ", "", Titles)
+    Letters = lapply(strsplit(substring(Letters_Regions, 1, 6),
+                              " et "),
+                     gsub, pattern=" .*", replacement="")
+    Letters_compact = unlist(lapply(Letters, paste0, collapse="/"))
+    Regions = sub("[[:alpha:]][ ]", "", Letters_Regions)
+    Regions = sub("^et[ ][[:alpha:]][ ]", "", Regions)
+    URLs = unlist(lapply(datasets$items, "[[", "url"))
+    DOIs = unlist(lapply(datasets$items, "[[", "global_id"))
+    Citations = gsub("[\"]", "",
+                     unlist(lapply(datasets$items, "[[", "citation")))
 
-    for (region in Region) {
+    # resultats
+    Info_resultats =
+        dplyr::tibble(letter=Letters_compact, region=Regions,
+                      title=Titles, citation=Citations,
+                      doi=DOIs, url=URLs)
+    ASHE::write_tibble(Info_resultats,
+                       "datasets_resultats.csv")
+    
+    content_resultats = c("<h2>Ensemble des fiches de résultats des modèles hydrologiques de surface du projet Explore2</h2>",
+                          "<p>citation :</p>",
+                          "<blockquote>
+Héraut, Louis; Vidal, Jean-Philippe; Évin, Guillaume; Sauquet, Éric, 2024, Ensemble des fiches de résultats des modèles hydrologiques de surface du projet Explore2, <a href='https://doi.org/10.57745/DMFUXW' target='_blank'>https://doi.org/10.57745/DMFUXW</a>, Recherche Data Gouv, V2, UNF:6:MqIZKPdt8Wfvw1CICxvI0g== [fileUNF]</blockquote>",
+"<p>datasets :</p>", "<ul>")
+    content_resultats = c(content_resultats,
+                          paste0("<li><a href='", URLs,
+                                 "' target='_blank'>",
+                                 Letters_Regions, "</a></li>"),
+                          "</ul>")
+    writeLines(content_resultats, "README_resultats.html")
+
+    # incertitudes
+    Info_incertitudes =
+        dplyr::tibble(letter=Letters_compact, region=Regions,
+                      title=Titles, citation=Citations,
+                      doi=DOIs, url=URLs)
+    ASHE::write_tibble(Info_incertitudes,
+                       "datasets_incertitudes.csv")
+    
+    content_incertitudes = c("<h2>Ensemble des fiches de résultats des modèles hydrologiques de surface du projet Explore2</h2>",
+                          "<p>citation :</p>",
+                          "<blockquote>Évin, Guillaume, 2024, Ensemble des fiches incertitudes des modèles hydrologiques de surface du projet Explore2, <a href='https://doi.org/10.57745/3LP5EN' target='_blank'>https://doi.org/10.57745/3LP5EN</a>, V2, UNF:6:g1WT+TGr7so2K4gvs+IvyA== [fileUNF]</blockquote>",
+"<p>datasets :</p>", "<ul>")
+    content_incertitudes = c(content_incertitudes,
+                          paste0("<li><a href='", URLs,
+                                 "' target='_blank'>",
+                                 Letters_Regions, "</a></li>"),
+                          "</ul>")
+    writeLines(content_incertitudes, "README_incertitudes.html")
+
+
+    for (i in 1:length(Letters_Regions)) {
+        letter_region = Letters_Regions[i]
         initialise_RDGf()
         source("template_fiche_incertitude.R")
-        RDGf$title = gsub("XXX", region, RDGf$title)
-        RDGf$dsDescriptionValue = gsub("XXX", region, RDGf$dsDescriptionValue)
+        RDGf$title = gsub("XXX", letter_region, RDGf$title)
+        RDGf$dsDescriptionValue = gsub("XXX", letter_region,
+                                       RDGf$dsDescriptionValue)
         res = generate_RDGf(dev=TRUE)
-
-        letter = gsub(" .*", "",
-                      unlist(strsplit(substring(region, 1, 6),
-                                      " et ")))
-
         dataset_DOI = create_dataset_in_dataverse(BASE_URL,
                                                   API_TOKEN,
                                                   "Explore2",
                                                   res$path)
 
-        pattern = paste0("(", paste0("^", letter, collapse=")|("), ")")
+        letters = Letters[[i]]
+        pattern = paste0("(", paste0("^", letters, collapse=")|("), ")")
         
         Paths = list.files(file.path(figure_path, fiche_dir),
                            pattern=pattern, full.names=TRUE)
